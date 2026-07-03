@@ -5,7 +5,7 @@ import pytest
 from textual.widgets import Button, Input, Markdown, Static
 
 from codecode.app import CodeCodeApp
-from codecode.core import AppState, save_state
+from codecode.core import AppState, Settings, save_state
 
 
 def output_text(app: CodeCodeApp) -> str:
@@ -38,6 +38,58 @@ async def test_next_key_loads_next_problem(tmp_path: Path):
         problem = app.query_one("#problem", Markdown)
 
     assert problem is not None
+    assert app.problem.title["ko"] == "모음 세기"
+
+
+@pytest.mark.asyncio
+async def test_codex_next_shows_loading_without_blocking(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    save_state(
+        tmp_path,
+        AppState(current_problem="001-running-sum", settings=Settings(next_source="codex")),
+    )
+
+    def slow_next(*args):
+        time.sleep(0.5)
+        return "Codex command finished"
+
+    monkeypatch.setattr("codecode.app.run_codex_next", slow_next)
+    app = CodeCodeApp(root=tmp_path)
+
+    async with app.run_test(size=(100, 35)) as pilot:
+        await pilot.pause()
+        await pilot.press("/")
+        await pilot.pause()
+        await pilot.press("n", "e", "x", "t", "enter")
+        await pilot.pause()
+        output = app.query_one("#output", Markdown)
+
+        assert output.loading
+        assert "Loading next problem..." in output_text(app)
+
+
+@pytest.mark.asyncio
+async def test_codex_next_falls_back_to_bank_when_current_problem_does_not_change(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    save_state(
+        tmp_path,
+        AppState(
+            current_problem="001-running-sum",
+            settings=Settings(next_source="codex"),
+            history=[{"id": "001-running-sum", "status": "assigned"}],
+        ),
+    )
+    monkeypatch.setattr("codecode.app.run_codex_next", lambda *args: "Codex command finished")
+    app = CodeCodeApp(root=tmp_path)
+
+    async with app.run_test(size=(100, 35)) as pilot:
+        await pilot.pause()
+        await pilot.press("/")
+        await pilot.pause()
+        await pilot.press("n", "e", "x", "t", "enter")
+        await pilot.pause(0.1)
+        assert "Codex command finished" in output_text(app)
+
     assert app.problem.title["ko"] == "모음 세기"
 
 

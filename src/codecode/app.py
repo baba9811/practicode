@@ -176,10 +176,25 @@ class CodeCodeApp(App[None]):
         self.refresh_view(result.output)
 
     def action_next(self) -> None:
-        output = ""
         old_problem = self.state.current_problem
         if self.state.settings.next_source == "codex":
+            self.start_next_problem(old_problem)
+            return
+        self.finish_next_problem("", old_problem)
+
+    def start_next_problem(self, old_problem: str) -> None:
+        self.write_output("Loading next problem...", loading=True)
+        self.run_worker(lambda: self.ask_next_problem(old_problem), thread=True, exclusive=True, exit_on_error=False)
+
+    def ask_next_problem(self, old_problem: str) -> None:
+        try:
             output = run_codex_next(self.root, self.state)
+        except Exception as error:
+            output = f"Codex next failed\n{error}"
+        self.call_from_thread(self.finish_next_problem, output, old_problem)
+
+    def finish_next_problem(self, output: str, old_problem: str) -> None:
+        if self.state.settings.next_source == "codex":
             self.bank = load_bank()
             self.state = load_state(self.root, self.bank)
         self.problem = problem_by_id(self.bank, self.state.current_problem)

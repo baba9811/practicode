@@ -1,0 +1,15 @@
+{
+  "current_problem": "001-running-sum",
+  "next_number": 2,
+  "suggested_next_difficulty": "easy",
+  "solved": [],
+  "history": [
+    {
+      "id": "001-running-sum",
+      "difficulty": "easy",
+      "topics": ["array", "prefix-sum"],
+      "status": "assigned"
+    }
+  ]
+}
+

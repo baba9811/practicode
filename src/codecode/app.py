@@ -4,15 +4,18 @@ import argparse
 from pathlib import Path
 import subprocess
 
+from textual import events
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Vertical
-from textual.widgets import Button, Footer, Input, Markdown, Static
+from textual.binding import Binding
+from textual.containers import Horizontal
+from textual.widgets import Input, Markdown, Static
 
 from codecode.core import (
     LANGUAGES,
     UI_LANGUAGES,
     edit_command,
     ensure_edit_files,
+    ensure_problem_files,
     ensure_submission,
     give_up,
     judge,
@@ -20,11 +23,31 @@ from codecode.core import (
     load_state,
     next_problem,
     problem_by_id,
+    previous_problem,
     record_pass,
     render_problem,
     run_codex_next,
+    run_codex_prompt,
     save_state,
 )
+
+
+HELP = """Commands
+/help                 show this help
+/vim                  Vim quick help
+/run                  judge current submission
+/edit                 open problem + solution in Vim
+/next                 next problem
+/prev                 previous problem
+/list                 show problem list
+/open 2               open a problem by number, id, or slug
+/giveup               show answer
+/lang python|ts|java|rust
+/ui ko|en
+/source bank|codex   choose next-problem source
+/next-command <cmd>   set custom Codex next command
+/codex <question>     ask Codex about current problem + code
+"""
 
 
 VIM_HELP = """Vim quick help
@@ -44,70 +67,54 @@ class CodeCodeApp(App[None]):
     CSS = """
     Screen {
         layout: vertical;
-        background: #111318;
-        color: #eef1f6;
-    }
-    #status {
-        height: 3;
-        padding: 1 2;
-        background: #161a22;
-        color: #70e1c8;
-        text-style: bold;
+        background: #0f1117;
+        color: #edf2f7;
     }
     #body {
         height: 1fr;
-        padding: 1 2 0 2;
+        padding: 1 2;
     }
     #problem {
         width: 58%;
         padding: 1 2;
-        border: round #3a4154;
-        background: #191d25;
-        color: #f3f5f7;
+        border: round #3e4658;
+        background: #151a22;
+        color: #f8fafc;
         overflow-y: auto;
-    }
-    #right {
-        width: 42%;
-        margin-left: 1;
-    }
-    #buttons {
-        height: 6;
-    }
-    .button-row {
-        height: 3;
-    }
-    Button {
-        min-width: 7;
-        margin: 0 1 0 0;
-        text-style: bold;
     }
     #output {
-        height: 1fr;
+        width: 42%;
+        margin-left: 1;
         padding: 1 2;
-        border: round #3a4154;
-        background: #151922;
-        color: #d9dee8;
+        border: round #3e4658;
+        background: #121821;
+        color: #dbe4f0;
         overflow-y: auto;
+    }
+    #status {
+        height: 1;
+        padding: 0 2;
+        background: #202637;
+        color: #7dd3fc;
+        text-style: bold;
     }
     #command {
         height: 3;
         margin: 0 2 1 2;
-        border: round #2f3544;
+        border: round #4b5568;
         background: #0d1016;
-    }
-    Footer {
-        background: #111318;
     }
     """
     BINDINGS = [
-        ("e", "edit", "Edit"),
-        ("r", "run", "Run"),
-        ("n", "next", "Next"),
-        ("g", "give_up", "Give up"),
-        ("l", "cycle_language", "Language"),
-        ("u", "toggle_ui_language", "UI"),
-        ("slash", "focus_command", "Command"),
-        ("q", "quit", "Quit"),
+        Binding("e", "edit", "Edit"),
+        Binding("r", "run", "Run"),
+        Binding("n", "next", "Next"),
+        Binding("p", "previous", "Prev"),
+        Binding("g", "give_up", "Give up"),
+        Binding("l", "cycle_language", "Language"),
+        Binding("u", "toggle_ui_language", "UI"),
+        Binding("slash", "focus_command", "Command"),
+        Binding("q", "quit", "Quit"),
     ]
 
     def __init__(self, root: Path | None = None) -> None:
@@ -118,50 +125,32 @@ class CodeCodeApp(App[None]):
         self.problem = problem_by_id(self.bank, self.state.current_problem)
 
     def compose(self) -> ComposeResult:
-        yield Static(id="status")
         with Horizontal(id="body"):
             yield Markdown(id="problem")
-            with Vertical(id="right"):
-                with Vertical(id="buttons"):
-                    with Horizontal(classes="button-row"):
-                        yield Button("Edit", id="edit")
-                        yield Button("Run", id="run", variant="success")
-                        yield Button("Next", id="next")
-                    with Horizontal(classes="button-row"):
-                        yield Button("Give", id="giveup", variant="error")
-                        yield Button("Lang", id="lang")
-                        yield Button("UI", id="ui")
-                        yield Button("Src", id="source")
-                yield Static(id="output")
-        yield Input(placeholder="/vim, /lang rust, /ui en, /source codex, /codex <command>", id="command")
-        yield Footer()
+            yield Static(id="output")
+        yield Static(id="status")
+        yield Input(placeholder="/help, /run, /edit, /next, /prev, /list, /open 2, /codex hint", id="command")
 
     def on_mount(self) -> None:
-        self.refresh_view("Ready\n\nPress e to edit, r to run, /vim for Vim help.")
+        self.refresh_view("Ready\n\nPress /help for commands.")
+        self.call_after_refresh(self.set_focus, None)
 
     def refresh_view(self, output: str | None = None) -> None:
         self.query_one("#status", Static).update(
-            f"CODECODE  {self.problem.id}  {self.problem.difficulty.upper()}  "
-            f"{self.state.settings.language}  {self.state.settings.ui_language}  "
-            f"next:{self.state.settings.next_source}"
+            f" CODECODE | {self.problem.id} | {self.problem.difficulty} | "
+            f"lang:{self.state.settings.language} | ui:{self.state.settings.ui_language} | "
+            f"next:{self.state.settings.next_source} | /help "
         )
         self.query_one("#problem", Markdown).update(render_problem(self.problem, self.state.settings.ui_language))
         if output is not None:
             self.query_one("#output", Static).update(output)
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        actions = {
-            "edit": self.action_edit,
-            "run": self.action_run,
-            "next": self.action_next,
-            "giveup": self.action_give_up,
-            "lang": self.action_cycle_language,
-            "ui": self.action_toggle_ui_language,
-            "source": self.action_toggle_next_source,
-        }
-        action = actions.get(event.button.id or "")
-        if action:
-            action()
+    def on_key(self, event: events.Key) -> None:
+        command = self.query_one("#command", Input)
+        if event.key == "escape" and self.focused is command:
+            command.value = ""
+            command.blur()
+            event.stop()
 
     def action_focus_command(self) -> None:
         self.query_one("#command", Input).focus()
@@ -190,6 +179,14 @@ class CodeCodeApp(App[None]):
             self.problem = next_problem(self.root, self.bank, self.state)
         self.refresh_view(output or f"Loaded {self.problem.id}")
 
+    def action_previous(self) -> None:
+        old_problem = self.state.current_problem
+        self.problem = previous_problem(self.root, self.bank, self.state)
+        if self.state.current_problem == old_problem:
+            self.refresh_view("Already at the first known problem.")
+        else:
+            self.refresh_view(f"Loaded {self.problem.id}")
+
     def action_give_up(self) -> None:
         answer = give_up(self.root, self.problem, self.state)
         self.refresh_view(f"Answer for {self.state.settings.language}:\n\n{answer}")
@@ -215,36 +212,100 @@ class CodeCodeApp(App[None]):
     def on_input_submitted(self, event: Input.Submitted) -> None:
         value = event.value.strip()
         event.input.value = ""
+        event.input.blur()
         if value.startswith("/"):
             value = value[1:].strip()
         self.handle_command(value)
 
     def handle_command(self, value: str) -> None:
-        if not value or value.startswith("vim"):
+        if not value or value in {"help", "h", "?"}:
+            self.refresh_view(HELP)
+            return
+        if value.startswith("vim"):
             self.refresh_view(VIM_HELP)
             return
         parts = value.split(maxsplit=1)
         command, arg = parts[0], parts[1] if len(parts) > 1 else ""
-        if command == "lang" and arg in LANGUAGES:
-            self.state.settings.language = arg
-            save_state(self.root, self.state)
-            ensure_submission(self.root, self.problem, self.state.settings)
-            self.refresh_view(f"Language: {arg}")
+        if command in {"run", "r"}:
+            self.action_run()
+        elif command in {"edit", "e"}:
+            self.action_edit()
+        elif command in {"next", "n"}:
+            self.action_next()
+        elif command in {"prev", "previous", "p"}:
+            self.action_previous()
+        elif command in {"giveup", "give", "g"}:
+            self.action_give_up()
+        elif command == "list":
+            self.refresh_view(self.render_problem_list())
+        elif command in {"open", "o"} and arg:
+            self.open_problem(arg)
+        elif command == "lang" and not arg:
+            self.action_cycle_language()
+        elif command == "lang" and arg in LANGUAGES:
+            self.set_language(arg)
+        elif command == "ui" and not arg:
+            self.action_toggle_ui_language()
         elif command == "ui" and arg in UI_LANGUAGES:
-            self.state.settings.ui_language = arg
-            save_state(self.root, self.state)
-            self.refresh_view(f"UI language: {arg}")
-        elif command == "source" and arg in ("bank", "codex"):
+            self.set_ui_language(arg)
+        elif command in {"source", "next-source"} and arg in ("bank", "codex"):
             self.state.settings.next_source = arg
             save_state(self.root, self.state)
             self.refresh_view(f"Next source: {arg}")
-        elif command == "codex" and arg:
+        elif command == "next-command" and arg:
             self.state.settings.codex_next_command = arg
             self.state.settings.next_source = "codex"
             save_state(self.root, self.state)
             self.refresh_view("Codex next command saved.")
+        elif command == "codex" and arg:
+            self.refresh_view(run_codex_prompt(self.root, self.problem, self.state.settings, arg))
         else:
             self.refresh_view(f"Unknown command: {value}")
+
+    def set_language(self, language: str) -> None:
+        self.state.settings.language = language
+        save_state(self.root, self.state)
+        ensure_submission(self.root, self.problem, self.state.settings)
+        self.refresh_view(f"Language: {language}")
+
+    def set_ui_language(self, language: str) -> None:
+        self.state.settings.ui_language = language
+        save_state(self.root, self.state)
+        self.refresh_view(f"UI language: {language}")
+
+    def render_problem_list(self) -> str:
+        status_by_id = {item.get("id"): item.get("status", "-") for item in self.state.history}
+        lines = ["Problems", "", "  ID                 Difficulty  Status    Title"]
+        for problem in self.bank:
+            marker = ">" if problem.id == self.problem.id else " "
+            title = problem.title[self.state.settings.ui_language]
+            lines.append(
+                f"{marker} {problem.id:<18} {problem.difficulty:<10} {status_by_id.get(problem.id, '-'):<8} {title}"
+            )
+        lines.append("\nOpen with /open 2, /open 002-running-sum, or /open running-sum.")
+        return "\n".join(lines)
+
+    def open_problem(self, query: str) -> None:
+        problem = self.find_problem(query)
+        if problem is None:
+            self.refresh_view(f"Problem not found: {query}")
+            return
+        self.problem = problem
+        self.state.current_problem = problem.id
+        if not any(item.get("id") == problem.id for item in self.state.history):
+            self.state.history.append({"id": problem.id, "status": "assigned"})
+        save_state(self.root, self.state)
+        ensure_problem_files(self.root, problem)
+        self.refresh_view(f"Opened {problem.id}")
+
+    def find_problem(self, query: str):
+        needle = query.strip().lower()
+        if needle.isdigit():
+            needle = f"{int(needle):03d}"
+        for problem in self.bank:
+            if needle in {problem.id.lower(), problem.slug.lower()} or problem.id.startswith(needle):
+                return problem
+        return None
 
 
 def main() -> None:

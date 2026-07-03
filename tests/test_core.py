@@ -1,6 +1,9 @@
 import json
 from pathlib import Path
+import subprocess
 import sys
+
+import pytest
 
 from codecode.core import (
     AppState,
@@ -13,8 +16,10 @@ from codecode.core import (
     load_bank,
     load_state,
     next_problem,
+    previous_problem,
     record_pass,
     run_codex_next,
+    run_codex_prompt,
     save_state,
 )
 
@@ -106,6 +111,23 @@ def test_next_problem_skips_history_and_saves_new_current(tmp_path: Path):
     assert "002 | count-vowels" in (tmp_path / "problems" / "INDEX.md").read_text()
 
 
+def test_previous_problem_uses_history_order(tmp_path: Path):
+    bank = load_bank()
+    state = AppState(
+        current_problem="002-count-vowels",
+        history=[
+            {"id": "001-running-sum", "status": "solved"},
+            {"id": "002-count-vowels", "status": "assigned"},
+        ],
+    )
+
+    problem = previous_problem(tmp_path, bank, state)
+    saved = load_state(tmp_path, bank)
+
+    assert problem.id == "001-running-sum"
+    assert saved.current_problem == "001-running-sum"
+
+
 def test_record_pass_marks_solved_and_raises_suggested_difficulty_after_two_solves(tmp_path: Path):
     bank = load_bank()
     state = AppState(current_problem="001-running-sum", solved=["000-warmup"])
@@ -132,3 +154,35 @@ def test_run_codex_next_executes_configured_command_in_repo_root(tmp_path: Path)
 
     assert "finished" in output
     assert (tmp_path / "codex-made.txt").read_text() == "ok"
+
+
+def test_run_codex_prompt_includes_problem_and_submission_context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    bank = load_bank()
+    problem = bank[0]
+    settings = Settings(language="python")
+    ensure_submission(tmp_path, problem, settings).write_text("print('work in progress')\n")
+    captured = {}
+
+    def fake_run(command, cwd, text, capture_output, timeout):
+        captured["command"] = command
+        captured["cwd"] = cwd
+        return subprocess.CompletedProcess(command, 0, stdout="hint response\n", stderr="")
+
+    monkeypatch.setattr("codecode.core.subprocess.run", fake_run)
+
+    output = run_codex_prompt(tmp_path, problem, settings, "give me a hint")
+
+    assert output == "hint response"
+    assert captured["cwd"] == tmp_path
+    assert captured["command"][:6] == [
+        "codex",
+        "exec",
+        "--cd",
+        str(tmp_path),
+        "--sandbox",
+        "read-only",
+    ]
+    prompt = captured["command"][-1]
+    assert "give me a hint" in prompt
+    assert "누적 합" in prompt
+    assert "print('work in progress')" in prompt

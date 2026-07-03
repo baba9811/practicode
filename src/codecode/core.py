@@ -219,6 +219,19 @@ def next_problem(root: Path, bank: list[Problem], state: AppState) -> Problem:
     return problem
 
 
+def previous_problem(root: Path, bank: list[Problem], state: AppState) -> Problem:
+    known_ids = {problem.id for problem in bank}
+    history = [item.get("id") for item in state.history if item.get("id") in known_ids]
+    if state.current_problem not in history:
+        return problem_by_id(bank, state.current_problem)
+    index = history.index(state.current_problem)
+    if index == 0:
+        return problem_by_id(bank, state.current_problem)
+    state.current_problem = history[index - 1]
+    save_state(root, state)
+    return problem_by_id(bank, state.current_problem)
+
+
 def record_pass(root: Path, problem: Problem, state: AppState) -> None:
     if problem.id not in state.solved:
         state.solved.append(problem.id)
@@ -226,6 +239,25 @@ def record_pass(root: Path, problem: Problem, state: AppState) -> None:
     upsert_problem_index(root, problem, "solved")
     state.suggested_next_difficulty = "medium" if len(state.solved) >= 2 else "easy"
     save_state(root, state)
+
+
+def run_codex_prompt(root: Path, problem: Problem, settings: Settings, prompt: str) -> str:
+    solution = ensure_submission(root, problem, settings)
+    code = solution.read_text()
+    full_prompt = (
+        "You are a concise coding-test coach. Help with the current problem and current submission. "
+        "Prefer hints over full answers unless the user explicitly asks for the answer.\n\n"
+        f"User request:\n{prompt}\n\n"
+        f"Problem:\n{render_problem(problem, settings.ui_language)}\n\n"
+        f"Current {settings.language} submission ({solution.relative_to(root)}):\n"
+        f"```{normalize_language(settings.language)}\n{code}\n```"
+    )
+    command = ["codex", "exec", "--cd", str(root), "--sandbox", "read-only", full_prompt]
+    result = subprocess.run(command, cwd=root, text=True, capture_output=True, timeout=600)
+    output = "\n".join(part for part in [result.stdout.strip(), result.stderr.strip()] if part)
+    if result.returncode != 0:
+        return f"Codex prompt failed ({result.returncode})\n{output}"
+    return output or "Codex returned no output."
 
 
 def run_codex_next(root: Path, state: AppState) -> str:
@@ -249,7 +281,7 @@ def default_codex_next_command(root: Path) -> str:
     return (
         "codex app-server daemon start >/dev/null 2>&1; "
         f"codex exec --cd {shlex.quote(str(root))} --sandbox workspace-write "
-        f"--ask-for-approval never {shlex.quote(prompt)}"
+        f"{shlex.quote(prompt)}"
     )
 
 

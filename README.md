@@ -5,21 +5,19 @@
 ![Local first](https://img.shields.io/badge/local--first-practice-14B8A6)
 ![Codex ready](https://img.shields.io/badge/Codex-ready-111827)
 
-![codecode terminal UI](assets/codecode-hero.png)
+![codecode terminal UI](assets/codecode-terminal.svg)
 
 Coding-test reps, right in your terminal.
 
 `codecode` is a small Rust TUI for stdin/stdout practice: problem on the left, code on the right, judge loop in the same terminal.
 No browser tab shuffle, no paste dance, just solve and run.
 
-It also keeps Korean command input inside the TUI: the command bar composes common Hangul jamo input like `ㅇㅏㄴㄴㅕㅇ` into `안녕`.
-
 ## Why It Exists
 
 - Fast local judging for Python, TypeScript, Java, and Rust
 - Gradual problem flow with local history
 - Codex-powered `/next <request>` when you want a custom problem
-- Korean statements and personal problem-generation notes
+- Personal problem-generation notes
 - Small stack: Rust, Ratatui, Crossterm, and plain process execution
 
 ## Quick Start
@@ -44,7 +42,7 @@ The code editor starts focused.
 ```text
 write code
 Esc, then /run
-Esc, then /next 문자열 쉬운 문제
+Esc, then /next easy string problem
 ```
 
 Submissions are saved as you type under `submissions/<problem-id>/solution.<ext>`.
@@ -57,7 +55,7 @@ Press `Esc`, then `/`, to focus the command bar.
 | --- | --- |
 | `/run` | Judge the current submission |
 | `/next` | Open the next local problem, or ask Codex to create one |
-| `/next 문자열 쉬운 문제` | Ask Codex for a custom next problem |
+| `/next easy string problem` | Ask Codex for a custom next problem |
 | `/prev` | Go back through problem history |
 | `/list` | Browse problems with `up/down` or `j/k`, open with `Enter` |
 | `/open 2` | Open by number, id, or slug |
@@ -77,15 +75,15 @@ Press `Esc`, then `/`, when you want the command bar.
 `/next <request>` passes your request into the Codex problem generator. Examples:
 
 ```text
-/next 문자열 뒤집기보다 조금 어려운 문제
-/next 해시맵 연습 easy
-/next 그래프는 아직 말고 정렬 문제
+/next a slightly harder string problem
+/next hashmap practice, easy
+/next sorting problem, no graph yet
 ```
 
 Codex reads [docs/problem-authoring-notes.md](docs/problem-authoring-notes.md) every time it creates a problem. Add personal preferences in `.codecode/problem_notes.md` when you want a standing note that stays local:
 
 ```text
-Prefer Korean statements.
+Prefer concise statements.
 I want more string and hashmap practice.
 Avoid DP until I ask for it.
 ```
@@ -125,7 +123,7 @@ Small on purpose: Ratatui for drawing, Crossterm for terminal events, and direct
 ## Discovery Notes
 
 Recommended GitHub topics for this repo:
-`coding-practice`, `competitive-programming`, `algorithms`, `ratatui`, `tui`, `rust`, `codex`, `local-first`, `korean`.
+`coding-practice`, `competitive-programming`, `algorithms`, `ratatui`, `tui`, `rust`, `codex`, `local-first`.
 
 ## References
 

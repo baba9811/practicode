@@ -1,0 +1,25 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" fill="#070b12"/>
+  <rect x="64" y="52" width="1072" height="616" rx="10" fill="#0b111a" stroke="#1f6f7a" stroke-width="2"/>
+  <rect x="88" y="78" width="594" height="440" rx="4" fill="#0f1720" stroke="#00c2d1" stroke-width="2"/>
+  <rect x="704" y="78" width="408" height="440" rx="4" fill="#0d141c" stroke="#31536b" stroke-width="2"/>
+  <text x="112" y="112" fill="#d7e1ec" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="700">Problem</text>
+  <text x="728" y="112" fill="#d7e1ec" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="700">solution.py</text>
+  <text x="112" y="158" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="700">001. Hello World</text>
+  <text x="112" y="204" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">Difficulty: easy</text>
+  <text x="112" y="232" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">Topics: io</text>
+  <text x="112" y="286" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">Print exactly Hello, World! to stdout.</text>
+  <text x="112" y="352" fill="#00a8ff" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17" text-decoration="underline">Input</text>
+  <text x="112" y="386" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">No input.</text>
+  <text x="112" y="442" fill="#00a8ff" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17" text-decoration="underline">Output</text>
+  <text x="112" y="476" fill="#f6c177" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">Hello, World!</text>
+  <text x="728" y="158" fill="#6b7280" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">  1</text>
+  <text x="776" y="158" fill="#7dd3fc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">print</text>
+  <text x="828" y="158" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">('Hello, World!')</text>
+  <rect x="64" y="536" width="1072" height="28" fill="#152033"/>
+  <text x="84" y="556" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16" font-weight="700">CODECODE | 001-hello-world | easy | idle | assigned | code:written | python | next:bank</text>
+  <rect x="64" y="586" width="1072" height="58" rx="2" fill="#0b1017" stroke="#008cff" stroke-width="2"/>
+  <text x="84" y="606" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">Command</text>
+  <text x="84" y="630" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">/next easy string problem</text>
+  <rect x="340" y="612" width="10" height="24" fill="#f6c177"/>
+</svg>

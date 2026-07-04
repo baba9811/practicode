@@ -2,7 +2,7 @@ use anyhow::{Context, Result, anyhow};
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use ratatui::{
     DefaultTerminal, Frame,
-    layout::{Constraint, Direction, Layout},
+    layout::{Constraint, Direction, Layout, Position, Rect},
     style::{Color, Modifier, Style},
     widgets::{Block, Borders, Paragraph, Wrap},
 };
@@ -17,6 +17,7 @@ use std::{
     thread,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
+use unicode_width::UnicodeWidthStr;
 use wait_timeout::ChildExt;
 
 const LANGUAGES: &[&str] = &["python", "ts", "java", "rust"];
@@ -993,6 +994,7 @@ struct CodeCodeApp {
     problem: Problem,
     editor: TextEditor,
     command: String,
+    command_cursor: usize,
     output: String,
     output_is_markdown: bool,
     show_output: bool,
@@ -1028,6 +1030,7 @@ impl CodeCodeApp {
             problem,
             editor: TextEditor::default(),
             command: String::new(),
+            command_cursor: 0,
             output: String::new(),
             output_is_markdown: false,
             show_output: false,
@@ -1123,12 +1126,13 @@ impl CodeCodeApp {
         let command_text = if self.focus == Focus::Command || !self.command.is_empty() {
             self.command.clone()
         } else {
-            "/run, /next 그래프 쉬운 문제, /codex hint, /help".to_string()
+            "/run, /next easy string problem, /codex hint, /help".to_string()
         };
         let command = Paragraph::new(command_text)
             .block(Self::block("Command", self.state.settings.theme == "light"))
             .wrap(Wrap { trim: false });
         frame.render_widget(command, vertical[2]);
+        self.set_terminal_cursor(frame, body[1], vertical[2]);
     }
 
     fn block(title: &str, light: bool) -> Block<'_> {
@@ -1154,26 +1158,42 @@ impl CodeCodeApp {
         match key.code {
             KeyCode::Esc => {
                 self.command.clear();
+                self.command_cursor = 0;
                 self.focus = Focus::None;
             }
             KeyCode::Enter => {
                 let value = self.command.trim().to_string();
                 self.command.clear();
+                self.command_cursor = 0;
                 self.focus = Focus::None;
                 self.submit_command(&value)?;
             }
             KeyCode::Backspace => {
-                self.command.pop();
-                self.command = compose_hangul_jamo(&self.command);
+                self.delete_command_before_cursor();
+            }
+            KeyCode::Delete => {
+                self.delete_command_at_cursor();
+            }
+            KeyCode::Left => {
+                self.command_cursor = self.command_cursor.saturating_sub(1);
+            }
+            KeyCode::Right => {
+                self.command_cursor = (self.command_cursor + 1).min(char_len(&self.command));
+            }
+            KeyCode::Home => {
+                self.command_cursor = 0;
+            }
+            KeyCode::End => {
+                self.command_cursor = char_len(&self.command);
             }
             KeyCode::Char('?') if self.command.trim().is_empty() || self.command.trim() == "/" => {
                 self.command.clear();
+                self.command_cursor = 0;
                 self.focus = Focus::None;
                 self.handle_command("help")?;
             }
             KeyCode::Char(char) if !key.modifiers.contains(KeyModifiers::CONTROL) => {
-                self.command.push(char);
-                self.command = compose_hangul_jamo(&self.command);
+                self.insert_command_char(char);
             }
             _ => {}
         }
@@ -1259,6 +1279,7 @@ impl CodeCodeApp {
     fn focus_command(&mut self) {
         if self.command.is_empty() {
             self.command.push('/');
+            self.command_cursor = 1;
         }
         self.focus = Focus::Command;
     }
@@ -1559,6 +1580,65 @@ impl CodeCodeApp {
         self.focus = Focus::Output;
     }
 
+    fn insert_command_char(&mut self, char: char) {
+        let byte = byte_index(&self.command, self.command_cursor);
+        self.command.insert(byte, char);
+        self.command_cursor += 1;
+        self.normalize_command_input();
+    }
+
+    fn delete_command_before_cursor(&mut self) {
+        if self.command_cursor == 0 {
+            return;
+        }
+        let start = byte_index(&self.command, self.command_cursor - 1);
+        let end = byte_index(&self.command, self.command_cursor);
+        self.command.replace_range(start..end, "");
+        self.command_cursor -= 1;
+        self.normalize_command_input();
+    }
+
+    fn delete_command_at_cursor(&mut self) {
+        if self.command_cursor >= char_len(&self.command) {
+            return;
+        }
+        let start = byte_index(&self.command, self.command_cursor);
+        let end = byte_index(&self.command, self.command_cursor + 1);
+        self.command.replace_range(start..end, "");
+        self.normalize_command_input();
+    }
+
+    fn normalize_command_input(&mut self) {
+        let normalized = compose_hangul_jamo(&self.command);
+        if normalized == self.command {
+            self.command_cursor = self.command_cursor.min(char_len(&self.command));
+            return;
+        }
+        let prefix = command_prefix(&self.command, self.command_cursor);
+        self.command = normalized;
+        self.command_cursor = char_len(&compose_hangul_jamo(&prefix)).min(char_len(&self.command));
+    }
+
+    fn set_terminal_cursor(&self, frame: &mut Frame, code_area: Rect, command_area: Rect) {
+        match self.focus {
+            Focus::Command => {
+                let prefix = command_prefix(&self.command, self.command_cursor);
+                let x = command_area
+                    .x
+                    .saturating_add(1)
+                    .saturating_add(display_width(&prefix) as u16)
+                    .min(command_area.right().saturating_sub(2));
+                frame.set_cursor_position(Position::new(x, command_area.y.saturating_add(1)));
+            }
+            Focus::Code if !self.show_output => {
+                if let Some(position) = self.editor.cursor_position(code_area) {
+                    frame.set_cursor_position(position);
+                }
+            }
+            _ => {}
+        }
+    }
+
     fn load_code_editor(&mut self) -> Result<()> {
         let path = ensure_submission(&self.root, &self.problem, &self.state.settings)?;
         let text = fs::read_to_string(path).unwrap_or_default();
@@ -1811,6 +1891,28 @@ impl TextEditor {
             .join("\n")
     }
 
+    fn cursor_position(&self, area: Rect) -> Option<Position> {
+        if self.row < self.scroll {
+            return None;
+        }
+        let visible_row = self.row - self.scroll;
+        let inner_height = area.height.saturating_sub(2) as usize;
+        if visible_row >= inner_height {
+            return None;
+        }
+        let line_width = ((self.lines.len().max(1)).to_string().len()).max(3);
+        let prefix_width = 1 + line_width + 1;
+        let line = self.lines.get(self.row)?;
+        let text_before_cursor = command_prefix(line, self.col);
+        let x = area
+            .x
+            .saturating_add(1)
+            .saturating_add((prefix_width + display_width(&text_before_cursor)) as u16)
+            .min(area.right().saturating_sub(2));
+        let y = area.y.saturating_add(1).saturating_add(visible_row as u16);
+        Some(Position::new(x, y))
+    }
+
     fn insert_char(&mut self, char: char) {
         self.ensure_cursor();
         let byte = byte_index(&self.lines[self.row], self.col);
@@ -1905,6 +2007,14 @@ fn byte_index(value: &str, char_index: usize) -> usize {
 
 fn char_len(value: &str) -> usize {
     value.chars().count()
+}
+
+fn command_prefix(value: &str, char_index: usize) -> String {
+    value.chars().take(char_index).collect()
+}
+
+fn display_width(value: &str) -> usize {
+    UnicodeWidthStr::width(value)
 }
 
 const CHO: &[char] = &[
@@ -2404,6 +2514,29 @@ mod tests {
         app.handle_command("next 해시맵 쉬운 문제").unwrap();
         assert!(app.task_rx.is_some());
         assert_eq!(app.busy_label, "next");
+    }
+
+    #[test]
+    fn command_input_tracks_cursor_after_hangul_composition() {
+        let root = tmp_root("command-cursor");
+        let mut app = CodeCodeApp::new(root).unwrap();
+        app.focus_command();
+        for char in "ㅇㅏㄴㄴㅕㅇ".chars() {
+            app.insert_command_char(char);
+        }
+        assert_eq!(app.command, "/안녕");
+        assert_eq!(app.command_cursor, 3);
+
+        app.command_cursor = 1;
+        app.insert_command_char('x');
+        assert_eq!(app.command, "/x안녕");
+        assert_eq!(app.command_cursor, 2);
+    }
+
+    #[test]
+    fn display_width_counts_hangul_as_wide() {
+        assert_eq!(display_width("abc"), 3);
+        assert_eq!(display_width("안녕"), 4);
     }
 
     #[test]

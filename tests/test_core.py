@@ -124,6 +124,30 @@ def test_judge_runs_python_solution_against_cases(tmp_path: Path):
     assert result.passed_cases == result.total_cases
 
 
+def test_judge_shows_debug_stdout_on_failure(tmp_path: Path):
+    bank = load_bank(tmp_path)
+    state = AppState(current_problem="001-hello-world", settings=Settings(language="python"))
+    path = ensure_submission(tmp_path, bank[0], state.settings)
+    path.write_text("print('debug')\nprint('Hello, World!')\n")
+
+    result = judge(tmp_path, bank[0], state.settings)
+
+    assert not result.passed
+    assert "stdout:\ndebug\nHello, World!" in result.output
+
+
+def test_judge_shows_debug_stderr_without_failing_case(tmp_path: Path):
+    bank = load_bank(tmp_path)
+    state = AppState(current_problem="001-hello-world", settings=Settings(language="python"))
+    path = ensure_submission(tmp_path, bank[0], state.settings)
+    path.write_text("import sys\nprint('debug', file=sys.stderr)\nprint('Hello, World!')\n")
+
+    result = judge(tmp_path, bank[0], state.settings)
+
+    assert result.passed
+    assert "stderr:\ndebug" in result.output
+
+
 def test_give_up_marks_problem_and_returns_answer(tmp_path: Path):
     bank = load_bank(tmp_path)
     state = AppState(current_problem="001-hello-world")

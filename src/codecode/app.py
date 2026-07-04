@@ -2,22 +2,18 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-import subprocess
 
 from textual import events
 from textual.app import App, ComposeResult
-from textual.binding import Binding
 from textual.timer import Timer
-from textual.containers import Horizontal
-from textual.widgets import Input, Markdown, Static
+from textual.containers import Container, Horizontal
+from textual.widgets import Markdown, Static, TextArea
 
 from codecode.core import (
     EXT,
     LANGUAGES,
     THEMES,
     UI_LANGUAGES,
-    edit_command,
-    ensure_edit_files,
     ensure_problem_files,
     ensure_submission,
     give_up,
@@ -37,37 +33,64 @@ from codecode.core import (
 )
 
 
-HELP = """Commands
-/help                 show this help
-/vim                  Vim quick help
-/run                  judge current submission
-/edit                 open problem + solution in Vim
-/next                 next problem
-/prev                 previous problem
-/list                 choose from problem list
-/open 2               open a problem by number, id, or slug
-/giveup               show answer
-/lang python|ts|java|rust
-/ui ko|en
-/theme dark|light
-/source bank|codex   choose next-problem source
-/next-command <cmd>   set custom Codex next command
-/codex <question>     ask Codex about current problem + code
-/exit                 quit
+HELP = """# Help
+
+## Daily loop
+
+1. Type code in the right pane.
+2. Press `Esc`, then `/run`.
+3. Use `/next` when it passes.
+
+## Commands
+
+- `/run` judge current submission
+- `/edit` focus the code editor
+- `/next` next problem
+- `/prev` previous problem
+- `/list` choose from problem list
+- `/open 2` open by number, id, or slug
+- `/giveup` show answer
+- `/codex hint` ask Codex about current problem + code
+- `/lang python|ts|java|rust`
+- `/ui ko|en`
+- `/theme dark|light`
+- `/source bank|codex`
+- `/exit` quit
+
+## Keys
+
+- `Esc` leaves the editor or output pane
+- `/` opens the command bar when the editor is not focused
+- `?` opens this help when the editor is not focused
+- `up/down` or `j/k` move in `/list`
+
+## Debug prints
+
+- stdout prints are shown when a case fails
+- stderr prints are shown without affecting the expected stdout
 """
 
 
-VIM_HELP = """Vim quick help
-i insert mode
-esc normal mode
-:w save
-:q quit
-:wq save and quit
-h/j/k/l move left/down/up/right
-/text search
-dd delete line
-u undo
-"""
+CODE_LANGUAGES = {"python": "python", "ts": "javascript", "java": "java", "rust": "rust"}
+
+
+class CommandBar(TextArea):
+    def _on_key(self, event: events.Key) -> None:
+        if event.key == "enter":
+            event.prevent_default()
+            event.stop()
+            getattr(self.app, "submit_command")()
+        elif event.key == "escape":
+            event.prevent_default()
+            event.stop()
+            self.load_text("")
+            self.blur()
+        elif event.key in {"?", "question_mark"} and self.text.strip() in {"", "/"}:
+            event.prevent_default()
+            event.stop()
+            self.load_text("")
+            self.blur()
+            getattr(self.app, "handle_command")("help")
 
 
 class CodeCodeApp(App[None]):
@@ -92,10 +115,14 @@ class CodeCodeApp(App[None]):
         scrollbar-color: #4fd1c5;
         scrollbar-background: #17202b;
     }
-    #output {
+    #side {
         width: 42%;
         height: 100%;
         margin-left: 1;
+    }
+    #code, #output {
+        width: 100%;
+        height: 100%;
         padding: 1 2;
         border: tall #31536b;
         background: #0d141c;
@@ -103,6 +130,12 @@ class CodeCodeApp(App[None]):
         overflow-y: auto;
         scrollbar-color: #f6c177;
         scrollbar-background: #17202b;
+    }
+    #code {
+        padding: 0 1;
+    }
+    .hidden {
+        display: none;
     }
     #status {
         height: 1;
@@ -130,7 +163,7 @@ class CodeCodeApp(App[None]):
         scrollbar-color: #0f766e;
         scrollbar-background: #dbe4ef;
     }
-    Screen.theme-light #output {
+    Screen.theme-light #code, Screen.theme-light #output {
         border: tall #2563eb;
         background: #f8fafc;
         color: #1f2937;
@@ -148,17 +181,7 @@ class CodeCodeApp(App[None]):
     }
     """
     BUSY_FRAMES = ("", ".", "..", "...")
-    BINDINGS = [
-        Binding("e", "edit", "Edit"),
-        Binding("r", "run", "Run"),
-        Binding("n", "next", "Next"),
-        Binding("p", "previous", "Prev"),
-        Binding("g", "give_up", "Give up"),
-        Binding("l", "cycle_language", "Language"),
-        Binding("u", "toggle_ui_language", "UI"),
-        Binding("slash", "focus_command", "Command"),
-        Binding("q", "quit", "Quit"),
-    ]
+    BINDINGS = []
 
     def __init__(self, root: Path | None = None) -> None:
         super().__init__()
@@ -171,36 +194,111 @@ class CodeCodeApp(App[None]):
         self.busy_frame = 0
         self.busy_timer: Timer | None = None
         self.list_cursor: int | None = None
+        self.loading_code = False
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="body"):
             yield Markdown(id="problem")
-            output = Markdown(id="output")
-            output.can_focus = True
-            yield output
+            with Container(id="side"):
+                yield TextArea(
+                    id="code",
+                    language=CODE_LANGUAGES[normalize_language(self.state.settings.language)],
+                    tab_behavior="indent",
+                    show_line_numbers=True,
+                    soft_wrap=False,
+                )
+                output = Markdown(id="output", classes="hidden")
+                output.can_focus = True
+                yield output
         yield Static(id="status")
-        yield Input(placeholder="/help, /run, /edit, /next, /prev, /list, /theme, /codex hint", id="command")
+        yield CommandBar(placeholder="/run, /next, /list, /codex hint, /help", id="command")
 
     def on_mount(self) -> None:
         self.apply_theme()
-        self.refresh_view("CODECODE\n\n`/help`")
-        self.call_after_refresh(self.set_focus, None)
+        self.refresh_view()
+        self.load_code_editor(focus=True)
+
+    def on_unmount(self) -> None:
+        if self.busy_timer is not None:
+            self.busy_timer.stop()
 
     def refresh_view(self, output: str | None = None) -> None:
-        self.query_one("#status", Static).update(
-            f" CODECODE | {self.problem.id} | {self.problem.difficulty} | {self.busy_status()} | "
-            f"status:{self.problem_status()} | code:{self.submission_status()[0]} | "
-            f"lang:{self.state.settings.language} | ui:{self.state.settings.ui_language} | "
-            f"theme:{self.state.settings.theme} | next:{self.state.settings.next_source} | /help "
-        )
+        self.query_one("#status", Static).update(self.status_text())
         self.query_one("#problem", Markdown).update(render_problem(self.problem, self.state.settings.ui_language))
         if output is not None:
             self.write_output(output)
 
+    def status_text(self) -> str:
+        return (
+            f" CODECODE | {self.problem.id} | {self.problem.difficulty} | {self.busy_status()} | "
+            f"{self.problem_status()} | code:{self.submission_status()[0]} | "
+            f"{self.state.settings.language} | next:{self.state.settings.next_source} | {self.mode_hint()} "
+        )
+
     def write_output(self, output: str) -> None:
+        self.show_output()
         markdown = self.query_one("#output", Markdown)
         markdown.loading = False
         markdown.update(output)
+
+    def write_text_output(self, output: str) -> None:
+        self.write_output(f"```text\n{output.rstrip()}\n```")
+
+    def mode_hint(self) -> str:
+        command = self.query_one("#command", TextArea)
+        code = self.query_one("#code", TextArea)
+        output = self.query_one("#output", Markdown)
+        if self.focused is command:
+            return "Enter submit | Esc cancel"
+        if self.list_cursor is not None:
+            return "up/down move | Enter open | Esc close"
+        if not output.has_class("hidden"):
+            return "Esc code | / command | ? help"
+        if self.focused is code:
+            return "Esc then / command"
+        return "/ command | ? help"
+
+    def load_code_editor(self, focus: bool = False) -> None:
+        path = ensure_submission(self.root, self.problem, self.state.settings)
+        editor = self.query_one("#code", TextArea)
+        self.loading_code = True
+        editor.language = CODE_LANGUAGES[normalize_language(self.state.settings.language)]
+        editor.load_text(path.read_text())
+        self.loading_code = False
+        self.query_one("#status", Static).update(self.status_text())
+        self.show_code(focus=focus)
+
+    def show_code(self, focus: bool = False) -> None:
+        code = self.query_one("#code", TextArea)
+        output = self.query_one("#output", Markdown)
+        code.set_class(False, "hidden")
+        output.set_class(True, "hidden")
+        if focus:
+            code.focus()
+
+    def show_output(self) -> None:
+        code = self.query_one("#code", TextArea)
+        output = self.query_one("#output", Markdown)
+        code.set_class(True, "hidden")
+        output.set_class(False, "hidden")
+        output.focus()
+
+    def save_code(self) -> None:
+        path = ensure_submission(self.root, self.problem, self.state.settings)
+        path.write_text(self.query_one("#code", TextArea).text)
+        self.query_one("#status", Static).update(self.status_text())
+
+    def on_text_area_changed(self, event: TextArea.Changed) -> None:
+        if event.text_area.id == "code" and not self.loading_code:
+            self.save_code()
+
+    def on_focus(self, event: events.Focus) -> None:
+        if getattr(event.control, "id", None) in {"code", "output", "command"}:
+            self.query_one("#status", Static).update(self.status_text())
+
+    def on_blur(self, event: events.Blur) -> None:
+        if getattr(event.control, "id", None) in {"code", "output", "command"}:
+            self.query_one("#status", Static).update(self.status_text())
 
     def busy_status(self) -> str:
         if not self.busy_label:
@@ -225,21 +323,50 @@ class CodeCodeApp(App[None]):
 
     def update_busy(self) -> None:
         self.busy_frame = (self.busy_frame + 1) % len(self.BUSY_FRAMES)
-        self.query_one("#status", Static).update(
-            f" CODECODE | {self.problem.id} | {self.problem.difficulty} | {self.busy_status()} | "
-            f"status:{self.problem_status()} | code:{self.submission_status()[0]} | "
-            f"lang:{self.state.settings.language} | ui:{self.state.settings.ui_language} | "
-            f"theme:{self.state.settings.theme} | next:{self.state.settings.next_source} | /help "
-        )
-        self.write_output(f"{self.busy_body}{self.BUSY_FRAMES[self.busy_frame]}")
+        self.query_one("#status", Static).update(self.status_text())
+        self.write_text_output(f"{self.busy_body}{self.BUSY_FRAMES[self.busy_frame]}")
 
     def on_key(self, event: events.Key) -> None:
-        command = self.query_one("#command", Input)
+        command = self.query_one("#command", TextArea)
+        code = self.query_one("#code", TextArea)
         if event.key == "escape" and self.focused is command:
-            command.value = ""
+            command.load_text("")
             command.blur()
             event.stop()
             return
+        if event.key == "escape" and self.focused is code:
+            self.set_focus(None)
+            event.stop()
+            return
+        if event.key == "escape" and not self.query_one("#output", Markdown).has_class("hidden"):
+            self.show_code(focus=True)
+            event.stop()
+            return
+        if self.focused not in {command, code}:
+            if event.key in {"?", "question_mark"} or event.character == "?":
+                event.prevent_default()
+                self.handle_command("help")
+                event.stop()
+                return
+            if event.key == "slash" or event.character == "/":
+                event.prevent_default()
+                self.action_focus_command()
+                event.stop()
+                return
+            shortcuts = {
+                "r": self.action_run,
+                "n": self.action_next,
+                "p": self.action_previous,
+                "g": self.action_give_up,
+                "e": self.action_edit,
+                "l": self.action_cycle_language,
+                "u": self.action_toggle_ui_language,
+                "q": self.exit,
+            }
+            if event.key in shortcuts:
+                shortcuts[event.key]()
+                event.stop()
+                return
         if self.list_cursor is not None and self.focused is not command:
             if event.key in {"up", "k"}:
                 self.move_list_cursor(-1)
@@ -256,19 +383,20 @@ class CodeCodeApp(App[None]):
                 event.stop()
 
     def action_focus_command(self) -> None:
-        self.query_one("#command", Input).focus()
+        self.query_one("#command", TextArea).focus()
 
     def action_edit(self) -> None:
-        statement, solution = ensure_edit_files(self.root, self.problem, self.state.settings)
-        with self.suspend():
-            subprocess.run(edit_command(self.state.settings.editor, statement, solution))
-        self.refresh_view(f"Edited {solution}")
+        self.load_code_editor(focus=True)
 
     def action_run(self) -> None:
+        self.save_code()
         result = judge(self.root, self.problem, self.state.settings)
         if result.passed:
             record_pass(self.root, self.problem, self.state)
-        self.refresh_view(result.output)
+        headline = ("PASS" if result.passed else "FAIL") + f" {result.passed_cases}/{result.total_cases}"
+        next_step = "Next: /next" if result.passed else "Fix code, then /run"
+        self.refresh_view()
+        self.write_text_output(f"{headline}\n{result.output}\n\n{next_step}")
 
     def action_next(self) -> None:
         old_problem = self.state.current_problem
@@ -280,7 +408,8 @@ class CodeCodeApp(App[None]):
             self.start_next_problem(old_problem, force=True)
             return
         self.problem = problem
-        self.refresh_view(f"Loaded {self.problem.id}")
+        self.refresh_view()
+        self.load_code_editor(focus=True)
 
     def start_next_problem(self, old_problem: str, force: bool) -> None:
         self.start_busy("next", "Generating next problem")
@@ -302,10 +431,12 @@ class CodeCodeApp(App[None]):
         if self.state.current_problem == old_problem:
             problem = next_problem(self.root, self.bank, self.state)
             if problem is None:
-                self.refresh_view((output + "\n\n" if output else "") + "No next problem is available yet.")
+                self.refresh_view()
+                self.write_text_output((output + "\n\n" if output else "") + "No next problem is available yet.")
                 return
             self.problem = problem
-        self.refresh_view(output or f"Loaded {self.problem.id}")
+        self.refresh_view()
+        self.load_code_editor(focus=True)
 
     def action_previous(self) -> None:
         old_problem = self.state.current_problem
@@ -313,18 +444,21 @@ class CodeCodeApp(App[None]):
         if self.state.current_problem == old_problem:
             self.refresh_view("Already at the first known problem.")
         else:
-            self.refresh_view(f"Loaded {self.problem.id}")
+            self.refresh_view()
+            self.load_code_editor(focus=True)
 
     def action_give_up(self) -> None:
         answer = give_up(self.root, self.problem, self.state)
-        self.refresh_view(f"Answer for {self.state.settings.language}:\n\n{answer}")
+        language = normalize_language(self.state.settings.language)
+        self.refresh_view()
+        self.write_output(f"Answer for {language}:\n\n```{language}\n{answer.rstrip()}\n```")
 
     def action_cycle_language(self) -> None:
         current = LANGUAGES.index(self.state.settings.language)
         self.state.settings.language = LANGUAGES[(current + 1) % len(LANGUAGES)]
         save_state(self.root, self.state)
-        ensure_submission(self.root, self.problem, self.state.settings)
-        self.refresh_view(f"Language: {self.state.settings.language}")
+        self.refresh_view()
+        self.load_code_editor(focus=True)
 
     def action_toggle_ui_language(self) -> None:
         current = UI_LANGUAGES.index(self.state.settings.ui_language)
@@ -341,10 +475,11 @@ class CodeCodeApp(App[None]):
         save_state(self.root, self.state)
         self.refresh_view(f"Next source: {self.state.settings.next_source}")
 
-    def on_input_submitted(self, event: Input.Submitted) -> None:
-        value = event.value.strip()
-        event.input.value = ""
-        event.input.blur()
+    def submit_command(self) -> None:
+        command = self.query_one("#command", TextArea)
+        value = command.text.strip()
+        command.load_text("")
+        command.blur()
         if value.startswith("/"):
             value = value[1:].strip()
         self.handle_command(value)
@@ -356,7 +491,8 @@ class CodeCodeApp(App[None]):
             return
         if value.startswith("vim"):
             self.list_cursor = None
-            self.refresh_view(VIM_HELP)
+            self.refresh_view()
+            self.write_text_output("The code editor is already open on the right.")
             return
         parts = value.split(maxsplit=1)
         command, arg = parts[0], parts[1] if len(parts) > 1 else ""
@@ -396,15 +532,18 @@ class CodeCodeApp(App[None]):
             self.state.settings.codex_next_command = arg
             self.state.settings.next_source = "codex"
             save_state(self.root, self.state)
-            self.refresh_view("Codex next command saved.")
+            self.refresh_view()
+            self.write_text_output("Codex next command saved.")
         elif command == "codex" and arg:
             self.start_codex_prompt(arg)
         elif command in {"exit", "quit", "q"}:
             self.exit()
         else:
-            self.refresh_view(f"Unknown command: {value}")
+            self.refresh_view()
+            self.write_text_output(f"Unknown command: {value}\nTry /help.")
 
     def start_codex_prompt(self, prompt: str) -> None:
+        self.save_code()
         self.start_busy("codex", "Codex is thinking")
         self.run_worker(lambda: self.ask_codex(prompt), thread=True, exclusive=True, exit_on_error=False)
 
@@ -422,8 +561,8 @@ class CodeCodeApp(App[None]):
     def set_language(self, language: str) -> None:
         self.state.settings.language = language
         save_state(self.root, self.state)
-        ensure_submission(self.root, self.problem, self.state.settings)
-        self.refresh_view(f"Language: {language}")
+        self.refresh_view()
+        self.load_code_editor(focus=True)
 
     def set_ui_language(self, language: str) -> None:
         self.state.settings.ui_language = language
@@ -457,7 +596,8 @@ class CodeCodeApp(App[None]):
 
     def start_problem_list(self) -> None:
         self.list_cursor = self.current_problem_index()
-        self.refresh_view(self.render_problem_list())
+        self.refresh_view()
+        self.write_text_output(self.render_problem_list())
 
     def current_problem_index(self) -> int:
         for index, problem in enumerate(self.bank):
@@ -470,7 +610,8 @@ class CodeCodeApp(App[None]):
             return
         cursor = self.list_cursor if self.list_cursor is not None else self.current_problem_index()
         self.list_cursor = (cursor + delta) % len(self.bank)
-        self.write_output(self.render_problem_list())
+        self.query_one("#status", Static).update(self.status_text())
+        self.write_text_output(self.render_problem_list())
 
     def open_selected_problem(self) -> None:
         if self.list_cursor is None:
@@ -483,7 +624,8 @@ class CodeCodeApp(App[None]):
         self.list_cursor = None
         problem = self.find_problem(query)
         if problem is None:
-            self.refresh_view(f"Problem not found: {query}")
+            self.refresh_view()
+            self.write_text_output(f"Problem not found: {query}\nTry /list.")
             return
         self.problem = problem
         self.state.current_problem = problem.id
@@ -491,7 +633,8 @@ class CodeCodeApp(App[None]):
             self.state.history.append({"id": problem.id, "status": "assigned"})
         save_state(self.root, self.state)
         ensure_problem_files(self.root, problem)
-        self.refresh_view(f"Opened {problem.id}\n\n{self.problem_summary(problem)}")
+        self.refresh_view()
+        self.load_code_editor(focus=True)
 
     def problem_summary(self, problem=None) -> str:
         problem = problem or self.problem

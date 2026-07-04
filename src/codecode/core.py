@@ -187,12 +187,19 @@ def judge(root: Path, problem: Problem, settings: Settings) -> JudgeResult:
         if run.returncode == 0 and got == expected:
             passed += 1
             lines.append(f"case {index}: PASS")
+            if run.stderr.strip():
+                lines.append("stderr:")
+                lines.append(run.stderr.rstrip())
         else:
             lines.append(f"case {index}: FAIL")
+            lines.append(f"input: {case['input']!r}")
             lines.append(f"expected: {expected!r}")
             lines.append(f"got: {got!r}")
+            lines.append("stdout:")
+            lines.append(run.stdout.rstrip() or "<empty>")
             if run.stderr.strip():
-                lines.append(run.stderr.strip())
+                lines.append("stderr:")
+                lines.append(run.stderr.rstrip())
             break
     return JudgeResult(passed == len(problem.cases), passed, len(problem.cases), "\n".join(lines))
 

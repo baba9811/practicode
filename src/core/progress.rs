@@ -75,6 +75,7 @@ pub fn record_pass(root: &Path, problem: &Problem, state: &mut AppState) -> Resu
     if !state.solved.contains(&problem.id) {
         state.solved.push(problem.id.clone());
     }
+    record_syntax_progress(state, problem);
     mark_history(state, &problem.id, "solved");
     upsert_problem_index(root, problem, "solved")?;
     state.suggested_next_difficulty = if state.solved.len() >= 2 {

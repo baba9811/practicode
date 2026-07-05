@@ -29,18 +29,14 @@ impl PracticodeApp {
 
         let light = self.state.settings.theme == "light";
         if !self.show_output {
-            let problem = Paragraph::new(problem_view::render(
-                &self.problem,
-                &self.state.settings.ui_language,
-                light,
-            ))
-            .style(Self::pane_style(light))
-            .block(Self::block(
-                ui_text(&self.state.settings.ui_language, "problem"),
-                light,
-                false,
-            ))
-            .wrap(Wrap { trim: false });
+            let problem = Paragraph::new(problem_view::render(&self.problem, &self.state, light))
+                .style(Self::pane_style(light))
+                .block(Self::block(
+                    ui_text(&self.state.settings.ui_language, "problem"),
+                    light,
+                    false,
+                ))
+                .wrap(Wrap { trim: false });
             frame.render_widget(problem, body[0]);
         }
 

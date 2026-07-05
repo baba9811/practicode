@@ -165,6 +165,26 @@ impl PracticodeApp {
         Ok(())
     }
 
+    pub(super) fn action_lesson(&mut self, language: &str) -> Result<()> {
+        let language = if language.trim().is_empty() {
+            self.state.settings.language.clone()
+        } else {
+            let language = language.trim();
+            if !LANGUAGES.contains(&language) {
+                self.write_text_output(ui_text(&self.state.settings.ui_language, "syntax_usage"));
+                return Ok(());
+            }
+            language.to_string()
+        };
+        self.write_output(&syntax_lesson_text(
+            &self.problem,
+            &language,
+            &self.state.settings.ui_language,
+            &self.state,
+        ));
+        Ok(())
+    }
+
     pub(super) fn action_cycle_language(&mut self) -> Result<()> {
         let current = LANGUAGES
             .iter()

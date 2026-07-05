@@ -18,6 +18,7 @@ mod profile;
 mod progress;
 mod render;
 mod state;
+mod syntax;
 
 pub use crate::i18n::{UI_LANGUAGES, normalize_ui_language, ui_text};
 pub use bank::*;
@@ -31,3 +32,4 @@ pub use profile::{
 pub use progress::*;
 pub use render::*;
 pub use state::*;
+pub use syntax::*;

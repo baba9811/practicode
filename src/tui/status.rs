@@ -75,6 +75,9 @@ impl PracticodeApp {
                 ui_text(lang, "hint_busy")
             };
         }
+        if self.editing_notes {
+            return "notes: type to edit, Esc profile";
+        }
         match (self.focus, self.list_cursor.is_some(), self.show_output) {
             (Focus::Command, _, _) => ui_text(lang, "hint_command"),
             (_, true, _) => ui_text(lang, "hint_list"),

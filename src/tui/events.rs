@@ -9,6 +9,9 @@ impl PracticodeApp {
         if self.handle_busy_key(key) {
             return Ok(());
         }
+        if self.editing_notes {
+            return self.handle_note_key(key);
+        }
         match self.focus {
             Focus::Command => self.handle_command_key(key),
             Focus::Code => self.handle_code_key(key),
@@ -107,6 +110,40 @@ impl PracticodeApp {
             KeyCode::Right => self.editor.move_right(),
             KeyCode::Up => self.editor.move_up(),
             KeyCode::Down => self.editor.move_down(),
+            _ => {}
+        }
+        Ok(())
+    }
+
+    pub(super) fn handle_note_key(&mut self, key: KeyEvent) -> Result<()> {
+        match key.code {
+            KeyCode::Esc => self.close_note_editor()?,
+            KeyCode::Char(char) if !key.modifiers.contains(KeyModifiers::CONTROL) => {
+                self.note_editor.insert_char(char);
+                self.save_notes()?;
+            }
+            KeyCode::Enter => {
+                self.note_editor.insert_newline();
+                self.save_notes()?;
+            }
+            KeyCode::Backspace => {
+                self.note_editor.backspace();
+                self.save_notes()?;
+            }
+            KeyCode::Delete => {
+                self.note_editor.delete();
+                self.save_notes()?;
+            }
+            KeyCode::Tab => {
+                for _ in 0..4 {
+                    self.note_editor.insert_char(' ');
+                }
+                self.save_notes()?;
+            }
+            KeyCode::Left => self.note_editor.move_left(),
+            KeyCode::Right => self.note_editor.move_right(),
+            KeyCode::Up => self.note_editor.move_up(),
+            KeyCode::Down => self.note_editor.move_down(),
             _ => {}
         }
         Ok(())

@@ -86,6 +86,7 @@ impl PracticodeApp {
             }
             "provider" | "ai-provider" if AI_PROVIDERS.contains(&arg) => {
                 self.state.settings.ai_provider = normalize_ai_provider(arg);
+                self.state.settings.ai_model = "auto".to_string();
                 self.state.settings.ai_effort = normalize_ai_effort(
                     &self.state.settings.ai_provider,
                     &self.state.settings.ai_effort,
@@ -126,7 +127,8 @@ impl PracticodeApp {
             }
             "hint" | "ask" | "ai" if !arg.is_empty() => self.start_ai_prompt(arg)?,
             "note" if !arg.is_empty() => self.append_note(arg)?,
-            "note" | "notes" => self.show_notes()?,
+            "note" => self.start_note_editor()?,
+            "notes" => self.show_notes()?,
             "update" => self.refresh_update_notice(),
             "exit" | "quit" | "q" => self.should_quit = true,
             _ => self.write_text_output(&format!("Unknown command: {value}\nTry /help.")),

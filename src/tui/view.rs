@@ -45,11 +45,22 @@ impl PracticodeApp {
         }
 
         if self.show_output {
-            let text = self.output_text();
+            let text = if self.editing_notes {
+                Text::from(
+                    self.note_editor
+                        .visible_text(self.output_area.height.saturating_sub(2) as usize),
+                )
+            } else {
+                self.output_text()
+            };
             let output = Paragraph::new(text)
                 .style(Self::pane_style(light))
                 .block(Self::block(
-                    ui_text(&self.state.settings.ui_language, "output"),
+                    if self.editing_notes {
+                        PROBLEM_NOTES_PATH
+                    } else {
+                        ui_text(&self.state.settings.ui_language, "output")
+                    },
                     light,
                     self.focus != Focus::Command,
                 ))
@@ -343,6 +354,11 @@ impl PracticodeApp {
             }
             Focus::Code if !self.show_output => {
                 if let Some(position) = self.editor.cursor_position(code_area) {
+                    frame.set_cursor_position(position);
+                }
+            }
+            Focus::Output if self.editing_notes => {
+                if let Some(position) = self.note_editor.cursor_position(self.output_area) {
                     frame.set_cursor_position(position);
                 }
             }

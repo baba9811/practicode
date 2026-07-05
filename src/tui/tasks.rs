@@ -134,6 +134,10 @@ impl PracticodeApp {
                 self.output = self.model_status_text();
                 self.output_is_markdown = false;
                 self.show_output = true;
+            } else if self.settings_cursor.is_some() {
+                self.output = self.profile_text();
+                self.output_is_markdown = false;
+                self.show_output = true;
             }
         }
     }
@@ -230,6 +234,7 @@ impl PracticodeApp {
 
     pub(super) fn write_output(&mut self, output: &str) {
         self.settings_cursor = None;
+        self.editing_notes = false;
         self.showing_model_status = false;
         self.output = output.to_string();
         self.output_is_markdown = true;
@@ -239,6 +244,7 @@ impl PracticodeApp {
 
     pub(super) fn write_text_output(&mut self, output: &str) {
         self.settings_cursor = None;
+        self.editing_notes = false;
         self.showing_model_status = false;
         self.output = output.trim_end().to_string();
         self.output_is_markdown = false;
@@ -288,7 +294,7 @@ impl PracticodeApp {
     pub(super) fn show_notes(&mut self) -> Result<()> {
         let notes = read_problem_notes(&self.root)?;
         if notes.is_empty() {
-            self.write_text_output("No notes yet. Use /topics or /avoid for standing preferences.");
+            self.write_text_output("No notes yet. Use /note to edit problem-generation notes.");
         } else {
             self.write_text_output(&format!("Problem notes ({PROBLEM_NOTES_PATH})\n\n{notes}"));
         }

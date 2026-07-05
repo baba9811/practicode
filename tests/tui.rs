@@ -232,7 +232,7 @@ fn profile_panel_toggles_generation_languages_with_keyboard() {
     let root = tmp_root("profile-keyboard-toggles");
     let mut app = PracticodeApp::new(root.clone()).unwrap();
     app.handle_command_for_test("profile").unwrap();
-    for _ in 0..4 {
+    for _ in 0..8 {
         app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
             .unwrap();
     }
@@ -253,6 +253,68 @@ fn profile_panel_toggles_generation_languages_with_keyboard() {
         .map(|value| value.as_str().unwrap())
         .collect::<Vec<_>>();
     assert_eq!(languages, vec!["ts", "java", "rust"]);
+}
+
+#[test]
+fn profile_panel_cycles_ai_settings_with_keyboard() {
+    let root = tmp_root("profile-ai-settings");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    app.handle_command_for_test("profile").unwrap();
+    for _ in 0..4 {
+        app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+            .unwrap();
+    }
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Char(' '), KeyModifiers::NONE))
+        .unwrap();
+    app.set_available_models_for_test(vec!["claude-test"]);
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Char(' '), KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Char(' '), KeyModifiers::NONE))
+        .unwrap();
+
+    let output = app.output_for_test();
+    assert!(output.contains("AI provider: claude"));
+    assert!(output.contains("AI model: claude-test"));
+    assert!(output.contains("AI effort: low"));
+    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    assert!(saved.contains("\"ai_provider\": \"claude\""));
+    assert!(saved.contains("\"ai_model\": \"claude-test\""));
+    assert!(saved.contains("\"ai_effort\": \"low\""));
+}
+
+#[test]
+fn profile_panel_opens_problem_notes_editor() {
+    let root = tmp_root("profile-notes-editor");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    app.handle_command_for_test("profile").unwrap();
+    for _ in 0..7 {
+        app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+            .unwrap();
+    }
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+    for char in "Prefer strings".chars() {
+        app.handle_key_for_test(KeyEvent::new(KeyCode::Char(char), KeyModifiers::NONE))
+            .unwrap();
+    }
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+    for char in "Avoid DP".chars() {
+        app.handle_key_for_test(KeyEvent::new(KeyCode::Char(char), KeyModifiers::NONE))
+            .unwrap();
+    }
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
+        .unwrap();
+
+    assert_eq!(
+        std::fs::read_to_string(root.join(".practicode/problem_notes.md")).unwrap(),
+        "Prefer strings\nAvoid DP"
+    );
+    assert!(app.output_for_test().contains("User profile"));
 }
 
 #[test]

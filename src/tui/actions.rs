@@ -2,6 +2,7 @@ use super::*;
 
 impl PracticodeApp {
     pub(super) fn action_edit(&mut self) -> Result<()> {
+        self.editing_notes = false;
         self.load_code_editor()?;
         self.settings_cursor = None;
         self.show_output = false;
@@ -275,6 +276,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn show_profile_with_intro(&mut self, intro: &str) {
+        self.editing_notes = false;
         self.showing_model_status = false;
         if self.settings_cursor.is_none() {
             self.settings_cursor = Some(0);
@@ -291,7 +293,12 @@ impl PracticodeApp {
     }
 
     pub(super) fn profile_text(&self) -> String {
-        settings_panel::render(&self.state, self.settings_cursor)
+        settings_panel::render(
+            &self.state,
+            self.settings_cursor,
+            &self.available_models,
+            self.model_rx.is_some(),
+        )
     }
 
     pub(super) fn settings_row_count(&self) -> usize {
@@ -309,11 +316,61 @@ impl PracticodeApp {
         let Some(row) = self.settings_cursor else {
             return Ok(());
         };
-        let change = settings_panel::apply_selected(&mut self.state, row);
+        if row == settings_panel::AI_MODEL_ROW
+            && self.available_models_provider != self.state.settings.ai_provider
+        {
+            self.start_model_check();
+            self.check_models();
+            if self.model_rx.is_some() {
+                self.show_profile();
+                return Ok(());
+            }
+        }
+        let change = settings_panel::apply_selected(&mut self.state, row, &self.available_models);
+        if change.edit_notes {
+            self.start_note_editor()?;
+            return Ok(());
+        }
+        if change.provider_changed {
+            self.model_rx = None;
+            self.available_models.clear();
+            self.available_models_provider.clear();
+            self.model_message = None;
+        }
         if change.reload_editor {
             self.load_code_editor()?;
         }
         save_state(&self.root, &self.state)?;
+        self.show_profile();
+        Ok(())
+    }
+
+    pub(super) fn start_note_editor(&mut self) -> Result<()> {
+        self.save_code()?;
+        self.note_editor
+            .set_text(&read_problem_notes(&self.root).unwrap_or_default());
+        self.settings_cursor = None;
+        self.showing_model_status = false;
+        self.editing_notes = true;
+        self.show_output = true;
+        self.focus = Focus::Output;
+        Ok(())
+    }
+
+    pub(super) fn save_notes(&self) -> Result<()> {
+        let path = self.root.join(PROBLEM_NOTES_PATH);
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        let text = self.note_editor.text();
+        let text = text.trim_end();
+        fs::write(path, if text.is_empty() { "" } else { text })?;
+        Ok(())
+    }
+
+    pub(super) fn close_note_editor(&mut self) -> Result<()> {
+        self.save_notes()?;
+        self.editing_notes = false;
         self.show_profile();
         Ok(())
     }

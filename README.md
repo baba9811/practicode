@@ -112,6 +112,8 @@ Submissions are saved as you type under `submissions/<problem-id>/solution.<ext>
 | `/provider codex` | Set AI provider and show local CLI/daemon status |
 | `/model auto` | Use the provider default model for `/hint` and AI-backed `/next` |
 | `/effort auto` | Use the provider default effort, or set `low`, `medium`, `high`, `xhigh`; Claude also supports `max` |
+| `/note` | Edit problem-generation notes used by AI-backed `/next` and `/generate` |
+| `/notes` | Show saved problem-generation notes |
 | `/language python` | Set code language: `python`, `ts`, `java`, `rust` |
 | `/ui en` | Set UI language: `en`, `ko`, `ja`, `zh`, `es` |
 | `/theme dark` | Set theme: `dark` or `light` |
@@ -124,7 +126,7 @@ The default UI language is English. Switch it any time with `/ui ko`, `/ui ja`, 
 
 Your user profile is saved in `.practicode/problem-state.json`. It keeps UI language, code language, theme, preferred difficulty, preferred topics, topics to avoid, and generation language scope. `auto` difficulty follows gradual progression; a fixed difficulty asks local selection and AI generation to prefer that level.
 
-Inside `/profile`, use `up/down` to move and `Space` or `Enter` to cycle common settings or enable/disable generated answer/UI languages. Use slash commands for free-form lists such as `/topics arrays, strings`.
+Inside `/profile`, use `up/down` to move and `Space` or `Enter` to cycle common settings, AI provider/model/effort, or generated answer/UI languages. The notes row opens an editor for `.practicode/problem_notes.md`. Use slash commands for free-form lists such as `/topics arrays, strings`.
 
 ## Problem Flow
 

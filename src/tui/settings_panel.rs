@@ -1,14 +1,30 @@
-use crate::core::{AppState, DIFFICULTIES, LANGUAGES, THEMES, UI_LANGUAGES};
+use crate::core::{
+    AI_PROVIDERS, AppState, CLAUDE_AI_EFFORTS, CODEX_AI_EFFORTS, DIFFICULTIES, LANGUAGES, THEMES,
+    UI_LANGUAGES, normalize_ai_effort,
+};
 
 pub(super) struct SettingsChange {
     pub reload_editor: bool,
+    pub provider_changed: bool,
+    pub edit_notes: bool,
 }
+
+const AI_PROVIDER_ROW: usize = 4;
+pub(super) const AI_MODEL_ROW: usize = 5;
+const AI_EFFORT_ROW: usize = 6;
+const NOTE_ROW: usize = 7;
+const TOGGLE_START: usize = 8;
 
 pub(super) fn row_count() -> usize {
-    4 + LANGUAGES.len() + UI_LANGUAGES.len()
+    TOGGLE_START + LANGUAGES.len() + UI_LANGUAGES.len()
 }
 
-pub(super) fn render(state: &AppState, cursor: Option<usize>) -> String {
+pub(super) fn render(
+    state: &AppState,
+    cursor: Option<usize>,
+    available_models: &[String],
+    models_loading: bool,
+) -> String {
     let settings = &state.settings;
     let ui_language = settings.ui_language.as_str();
     let topics = list_or_none(&settings.topics, ui_language);
@@ -63,28 +79,52 @@ pub(super) fn render(state: &AppState, cursor: Option<usize>) -> String {
             "{}: {generate_ui_languages}",
             label(ui_language, "generated_ui_languages")
         ),
-        format!("AI provider: {}", settings.ai_provider),
-        format!(
-            "AI model: {}",
-            if settings.ai_model == "auto" {
-                label(ui_language, "provider_default")
-            } else {
-                settings.ai_model.as_str()
-            }
+        row(
+            cursor,
+            AI_PROVIDER_ROW,
+            &format!("AI provider: {}", settings.ai_provider),
         ),
-        format!(
-            "AI effort: {}",
-            if settings.ai_effort == "auto" {
-                label(ui_language, "provider_default")
-            } else {
-                settings.ai_effort.as_str()
-            }
+        row(
+            cursor,
+            AI_MODEL_ROW,
+            &format!(
+                "AI model: {}{}",
+                if settings.ai_model == "auto" {
+                    label(ui_language, "provider_default")
+                } else {
+                    settings.ai_model.as_str()
+                },
+                if models_loading {
+                    " (loading)"
+                } else if available_models.is_empty() {
+                    " (/model to load)"
+                } else {
+                    ""
+                }
+            ),
+        ),
+        row(
+            cursor,
+            AI_EFFORT_ROW,
+            &format!(
+                "AI effort: {}",
+                if settings.ai_effort == "auto" {
+                    label(ui_language, "provider_default")
+                } else {
+                    settings.ai_effort.as_str()
+                }
+            ),
+        ),
+        row(
+            cursor,
+            NOTE_ROW,
+            &format!("{}: Enter", label(ui_language, "problem_notes")),
         ),
         String::new(),
         label(ui_language, "answer_toggles").to_string(),
     ];
     for (index, language) in LANGUAGES.iter().enumerate() {
-        let row_index = 4 + index;
+        let row_index = TOGGLE_START + index;
         let checked = generate_language_enabled(state, language);
         lines.push(row(
             cursor,
@@ -95,7 +135,7 @@ pub(super) fn render(state: &AppState, cursor: Option<usize>) -> String {
     lines.push(String::new());
     lines.push(label(ui_language, "ui_toggles").to_string());
     for (index, language) in UI_LANGUAGES.iter().enumerate() {
-        let row_index = 4 + LANGUAGES.len() + index;
+        let row_index = TOGGLE_START + LANGUAGES.len() + index;
         let checked = generate_ui_language_enabled(state, language);
         lines.push(row(
             cursor,
@@ -115,56 +155,22 @@ pub(super) fn render(state: &AppState, cursor: Option<usize>) -> String {
         "/provider codex|claude".to_string(),
         "/model auto".to_string(),
         "/effort auto|low|medium|high|xhigh|max".to_string(),
+        "/note".to_string(),
+        "/notes".to_string(),
     ]);
     lines.join("\n")
 }
 
-fn label<'a>(ui_language: &str, key: &'a str) -> &'a str {
-    if ui_language == "ko" {
-        match key {
-            "title" => "사용자 프로필",
-            "instructions" => "위/아래로 이동하고 Space 또는 Enter로 변경/토글",
-            "code_language" => "코드 언어",
-            "ui_language" => "UI 언어",
-            "theme" => "테마",
-            "difficulty" => "난이도",
-            "preferred_topics" => "선호 주제",
-            "avoid_topics" => "피할 주제",
-            "generated_answer_languages" => "생성 정답 언어",
-            "generated_ui_languages" => "생성 문제 언어",
-            "provider_default" => "auto (provider 기본값)",
-            "answer_toggles" => "생성 정답 언어 토글",
-            "ui_toggles" => "생성 문제 언어 토글",
-            "commands" => "명령",
-            "none" => "(없음)",
-            "all" => "전체",
-            _ => key,
-        }
-    } else {
-        match key {
-            "title" => "User profile",
-            "instructions" => "Use up/down to move. Press Space or Enter to cycle/toggle.",
-            "code_language" => "Code language",
-            "ui_language" => "UI language",
-            "theme" => "Theme",
-            "difficulty" => "Difficulty",
-            "preferred_topics" => "Preferred topics",
-            "avoid_topics" => "Avoid topics",
-            "generated_answer_languages" => "Generated answer languages",
-            "generated_ui_languages" => "Generated UI languages",
-            "provider_default" => "auto (provider default)",
-            "answer_toggles" => "Generated answer language toggles",
-            "ui_toggles" => "Generated problem text language toggles",
-            "commands" => "Commands",
-            "none" => "(none)",
-            "all" => "all",
-            _ => key,
-        }
-    }
-}
-
-pub(super) fn apply_selected(state: &mut AppState, selected: usize) -> SettingsChange {
-    let mut reload_editor = false;
+pub(super) fn apply_selected(
+    state: &mut AppState,
+    selected: usize,
+    available_models: &[String],
+) -> SettingsChange {
+    let mut change = SettingsChange {
+        reload_editor: false,
+        provider_changed: false,
+        edit_notes: false,
+    };
     match selected {
         0 => {
             let current = LANGUAGES
@@ -172,7 +178,7 @@ pub(super) fn apply_selected(state: &mut AppState, selected: usize) -> SettingsC
                 .position(|language| language == &state.settings.language)
                 .unwrap_or(0);
             state.settings.language = LANGUAGES[(current + 1) % LANGUAGES.len()].to_string();
-            reload_editor = true;
+            change.reload_editor = true;
         }
         1 => {
             let current = UI_LANGUAGES
@@ -200,15 +206,99 @@ pub(super) fn apply_selected(state: &mut AppState, selected: usize) -> SettingsC
                 state.suggested_next_difficulty = difficulty;
             }
         }
-        row if row < 4 + LANGUAGES.len() => {
-            toggle_generate_language(state, LANGUAGES[row - 4]);
+        AI_PROVIDER_ROW => {
+            let current = AI_PROVIDERS
+                .iter()
+                .position(|provider| provider == &state.settings.ai_provider)
+                .unwrap_or(0);
+            state.settings.ai_provider =
+                AI_PROVIDERS[(current + 1) % AI_PROVIDERS.len()].to_string();
+            state.settings.ai_model = "auto".to_string();
+            state.settings.ai_effort =
+                normalize_ai_effort(&state.settings.ai_provider, &state.settings.ai_effort);
+            change.provider_changed = true;
+        }
+        AI_MODEL_ROW => cycle_ai_model(state, available_models),
+        AI_EFFORT_ROW => cycle_ai_effort(state),
+        NOTE_ROW => change.edit_notes = true,
+        row if row < TOGGLE_START + LANGUAGES.len() => {
+            toggle_generate_language(state, LANGUAGES[row - TOGGLE_START]);
         }
         row if row < row_count() => {
-            toggle_generate_ui_language(state, UI_LANGUAGES[row - 4 - LANGUAGES.len()]);
+            toggle_generate_ui_language(state, UI_LANGUAGES[row - TOGGLE_START - LANGUAGES.len()]);
         }
         _ => {}
     }
-    SettingsChange { reload_editor }
+    change
+}
+
+fn label<'a>(ui_language: &str, key: &'a str) -> &'a str {
+    if ui_language == "ko" {
+        match key {
+            "title" => "사용자 프로필",
+            "instructions" => "위/아래로 이동하고 Space 또는 Enter로 변경/토글",
+            "code_language" => "코드 언어",
+            "ui_language" => "UI 언어",
+            "theme" => "테마",
+            "difficulty" => "난이도",
+            "preferred_topics" => "선호 주제",
+            "avoid_topics" => "피할 주제",
+            "generated_answer_languages" => "생성 정답 언어",
+            "generated_ui_languages" => "생성 문제 언어",
+            "provider_default" => "auto (provider 기본값)",
+            "problem_notes" => "문제 생성 메모 편집",
+            "answer_toggles" => "생성 정답 언어 토글",
+            "ui_toggles" => "생성 문제 언어 토글",
+            "commands" => "명령",
+            "none" => "(없음)",
+            "all" => "전체",
+            _ => key,
+        }
+    } else {
+        match key {
+            "title" => "User profile",
+            "instructions" => "Use up/down to move. Press Space or Enter to cycle/toggle.",
+            "code_language" => "Code language",
+            "ui_language" => "UI language",
+            "theme" => "Theme",
+            "difficulty" => "Difficulty",
+            "preferred_topics" => "Preferred topics",
+            "avoid_topics" => "Avoid topics",
+            "generated_answer_languages" => "Generated answer languages",
+            "generated_ui_languages" => "Generated UI languages",
+            "provider_default" => "auto (provider default)",
+            "problem_notes" => "Edit problem notes",
+            "answer_toggles" => "Generated answer language toggles",
+            "ui_toggles" => "Generated problem text language toggles",
+            "commands" => "Commands",
+            "none" => "(none)",
+            "all" => "all",
+            _ => key,
+        }
+    }
+}
+
+fn cycle_ai_model(state: &mut AppState, available_models: &[String]) {
+    let mut models = vec!["auto"];
+    models.extend(available_models.iter().map(String::as_str));
+    let current = models
+        .iter()
+        .position(|model| model == &state.settings.ai_model)
+        .unwrap_or(0);
+    state.settings.ai_model = models[(current + 1) % models.len()].to_string();
+}
+
+fn cycle_ai_effort(state: &mut AppState) {
+    let efforts = if state.settings.ai_provider == "claude" {
+        CLAUDE_AI_EFFORTS
+    } else {
+        CODEX_AI_EFFORTS
+    };
+    let current = efforts
+        .iter()
+        .position(|effort| effort == &state.settings.ai_effort)
+        .unwrap_or(0);
+    state.settings.ai_effort = efforts[(current + 1) % efforts.len()].to_string();
 }
 
 fn row(cursor: Option<usize>, index: usize, text: &str) -> String {

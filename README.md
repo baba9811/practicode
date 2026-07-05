@@ -7,6 +7,7 @@
 ![crates.io](https://img.shields.io/crates/v/practicode?logo=rust)
 ![npm](https://img.shields.io/npm/v/practicode?logo=npm)
 ![CI](https://github.com/baba9811/practicode/actions/workflows/ci.yml/badge.svg)
+[Socket.dev package health](https://socket.dev/npm/package/practicode)
 
 ![practicode terminal UI](assets/practicode-terminal.svg)
 
@@ -35,6 +36,8 @@ Personal coding practice, right in your terminal.
 npm install -g practicode
 practicode
 ```
+
+The npm package has a `postinstall` step that runs `cargo build --release --locked` from the package root so the Rust TUI binary is ready. Set `PRACTICODE_SKIP_BUILD=1` to skip that install-time build; the `practicode` launcher will try the same locked Cargo build on first run if the binary is missing.
 
 ### Cargo
 
@@ -176,6 +179,8 @@ cargo install --force practicode
 - `/run` executes your local submission as a normal process. practicode runs it from `.practicode/build/<problem-id>/run`, but this is not an OS sandbox. Only run code you trust.
 - `/hint` sends the current problem and submission to the selected AI provider CLI.
 - AI-backed `/next` and `/generate` can run a custom shell command from `settings.ai_next_command`; save only commands you trust.
+- npm installs run the package `postinstall` script described above. It only invokes Cargo with the checked-in lockfile from this package root; it does not read local `.env`/`.npmrc` files or contact the configured AI provider.
+- npm releases are published from GitHub Actions with registry signatures and provenance enabled in `package.json`. The release workflow is also prepared for npm Trusted Publishing/OIDC; maintainers should prefer that over long-lived publish tokens when the package setting is enabled on npm.
 - Local `.env`, `.npmrc`, `.practicode/`, `problems/`, and `submissions/` are ignored by git. Do not commit tokens, private prompts, or answer keys.
 
 ## Development Checks

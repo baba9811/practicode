@@ -90,6 +90,20 @@ fn slash_command_palette_uses_provider_models_when_available() {
 }
 
 #[test]
+fn model_command_explains_unavailable_provider_models() {
+    let root = tmp_root("model-status");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.set_model_message_for_test("provider does not expose model list");
+    app.handle_command_for_test("model").unwrap();
+    assert!(app.output_for_test().contains("AI provider:"));
+    assert!(
+        app.output_for_test()
+            .contains("provider does not expose model list")
+    );
+    assert!(app.output_for_test().contains("/model <name>"));
+}
+
+#[test]
 fn focused_pane_title_has_text_indicator() {
     assert_eq!(
         PracticodeApp::pane_title_for_test("Command", true),

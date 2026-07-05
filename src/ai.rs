@@ -15,6 +15,12 @@ use std::{
     time::Duration,
 };
 
+#[derive(Clone, Debug, Default)]
+pub struct ModelCatalog {
+    pub models: Vec<String>,
+    pub message: Option<String>,
+}
+
 pub fn run_ai_prompt(root: &Path, problem: &Problem, settings: &Settings, prompt: &str) -> String {
     let solution = match ensure_submission(root, problem, settings) {
         Ok(path) => path,
@@ -102,10 +108,17 @@ pub fn provider_status(provider: &str) -> String {
     }
 }
 
-pub fn available_models(provider: &str) -> Vec<String> {
+pub fn available_models(provider: &str) -> ModelCatalog {
     match normalize_ai_provider(provider).as_str() {
         "codex" => codex_models(),
-        _ => Vec::new(),
+        "claude" => ModelCatalog {
+            models: Vec::new(),
+            message: Some(
+                "Claude CLI does not expose a model list; use /model <name> for a known model."
+                    .to_string(),
+            ),
+        },
+        _ => ModelCatalog::default(),
     }
 }
 
@@ -139,20 +152,56 @@ pub fn read_problem_notes(root: &Path) -> Result<String> {
     }
 }
 
-fn codex_models() -> Vec<String> {
+fn codex_models() -> ModelCatalog {
     if which("codex").is_none() {
-        return Vec::new();
+        return ModelCatalog {
+            models: Vec::new(),
+            message: Some(
+                "Codex CLI not found; choose /provider claude or install Codex CLI.".to_string(),
+            ),
+        };
     }
+    if codex_daemon_path().is_none_or(|path| !path.exists()) {
+        return ModelCatalog {
+            models: Vec::new(),
+            message: Some("Codex app-server daemon is unavailable; install the standalone Codex app to list models, or use /model <name>.".to_string()),
+        };
+    }
+    let mut start = Command::new("codex");
+    start.args(["app-server", "daemon", "start"]);
+    let _ = run_capture(&mut start, "", Duration::from_secs(5));
     let mut command = Command::new("codex");
     command.args(["app-server", "proxy"]);
     let input = r#"{"id":1,"method":"model/list","params":{"limit":25}}"#;
     let Ok(run) = run_capture(&mut command, &format!("{input}\n"), Duration::from_secs(2)) else {
-        return Vec::new();
+        return ModelCatalog {
+            models: Vec::new(),
+            message: Some("Could not query Codex model list.".to_string()),
+        };
     };
     if run.code != Some(0) {
-        return Vec::new();
+        let detail = output_text(&run.stdout, &run.stderr);
+        return ModelCatalog {
+            models: Vec::new(),
+            message: Some(if detail.is_empty() {
+                "Could not query Codex model list.".to_string()
+            } else {
+                format!("Could not query Codex model list: {detail}")
+            }),
+        };
     }
-    parse_model_list(&run.stdout)
+    let models = parse_model_list(&run.stdout);
+    if models.is_empty() {
+        ModelCatalog {
+            models,
+            message: Some("Codex app-server returned no models.".to_string()),
+        }
+    } else {
+        ModelCatalog {
+            models,
+            message: None,
+        }
+    }
 }
 
 fn parse_model_list(output: &str) -> Vec<String> {

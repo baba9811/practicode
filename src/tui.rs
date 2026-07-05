@@ -1,7 +1,7 @@
 use crate::{
     ai::{
-        append_problem_note, available_models, provider_status, read_problem_notes, run_ai_next,
-        run_ai_prompt,
+        ModelCatalog, append_problem_note, available_models, provider_status, read_problem_notes,
+        run_ai_next, run_ai_prompt,
     },
     core::{
         AI_PROVIDERS, AppState, HistoryItem, LANGUAGES, PROBLEM_NOTES_PATH, Problem, THEMES,
@@ -282,6 +282,7 @@ pub struct PracticodeApp {
     command_palette_cursor: usize,
     output: String,
     output_is_markdown: bool,
+    showing_model_status: bool,
     show_output: bool,
     focus: Focus,
     list_cursor: Option<usize>,
@@ -290,9 +291,10 @@ pub struct PracticodeApp {
     busy_frame: usize,
     task_rx: Option<Receiver<TaskResult>>,
     update_rx: Option<Receiver<UpdateCheck>>,
-    model_rx: Option<Receiver<Vec<String>>>,
+    model_rx: Option<Receiver<ModelCatalog>>,
     available_models: Vec<String>,
     available_models_provider: String,
+    model_message: Option<String>,
     update_check: Option<UpdateCheck>,
     update_notice: Option<String>,
     should_quit: bool,
@@ -325,6 +327,7 @@ impl PracticodeApp {
             command_palette_cursor: 0,
             output: String::new(),
             output_is_markdown: false,
+            showing_model_status: false,
             show_output: false,
             focus: Focus::Code,
             list_cursor: None,
@@ -336,6 +339,7 @@ impl PracticodeApp {
             model_rx: None,
             available_models: Vec::new(),
             available_models_provider: String::new(),
+            model_message: None,
             update_check: None,
             update_notice: None,
             should_quit: false,
@@ -403,6 +407,10 @@ impl PracticodeApp {
         self.status_text()
     }
 
+    pub fn output_for_test(&self) -> &str {
+        &self.output
+    }
+
     pub fn command_suggestions_for_test(&self) -> Vec<String> {
         self.command_suggestions()
             .into_iter()
@@ -413,6 +421,13 @@ impl PracticodeApp {
     pub fn set_available_models_for_test(&mut self, models: Vec<&str>) {
         self.available_models = models.into_iter().map(str::to_string).collect();
         self.available_models_provider = self.state.settings.ai_provider.clone();
+        self.model_message = None;
+    }
+
+    pub fn set_model_message_for_test(&mut self, message: &str) {
+        self.available_models.clear();
+        self.available_models_provider = self.state.settings.ai_provider.clone();
+        self.model_message = Some(message.to_string());
     }
 
     pub fn pane_title_for_test(title: &str, active: bool) -> String {
@@ -910,6 +925,7 @@ impl PracticodeApp {
                 self.model_rx = None;
                 self.available_models.clear();
                 self.available_models_provider.clear();
+                self.model_message = None;
                 save_state(&self.root, &self.state)?;
                 self.write_text_output(&format!(
                     "AI provider: {}\n{}",
@@ -918,7 +934,9 @@ impl PracticodeApp {
                 ));
             }
             "model" if arg.is_empty() => {
-                self.write_text_output(&self.model_status_text());
+                self.start_model_check();
+                self.check_models();
+                self.write_model_status();
             }
             "model" => {
                 self.state.settings.ai_model = if arg == "auto" {
@@ -927,7 +945,9 @@ impl PracticodeApp {
                     arg.to_string()
                 };
                 save_state(&self.root, &self.state)?;
-                self.write_text_output(&self.model_status_text());
+                self.start_model_check();
+                self.check_models();
+                self.write_model_status();
             }
             "hint" if arg.is_empty() => {
                 self.start_ai_prompt("Give one concise hint for the current problem.")?
@@ -1195,14 +1215,21 @@ impl PracticodeApp {
 
     fn check_models(&mut self) {
         let models = self.model_rx.as_ref().and_then(|rx| rx.try_recv().ok());
-        if let Some(models) = models {
+        if let Some(catalog) = models {
             self.model_rx = None;
-            self.available_models = models;
+            self.available_models = catalog.models;
+            self.model_message = catalog.message;
+            if self.showing_model_status {
+                self.output = self.model_status_text();
+                self.output_is_markdown = false;
+                self.show_output = true;
+            }
         }
     }
 
     fn model_status_text(&self) -> String {
         let mut lines = vec![
+            format!("AI provider: {}", self.state.settings.ai_provider),
             format!(
                 "AI model: {}",
                 if self.state.settings.ai_model == "auto" {
@@ -1213,11 +1240,15 @@ impl PracticodeApp {
             ),
             "Use /model auto to let the provider choose its default.".to_string(),
         ];
-        if self.available_models.is_empty() {
+        if self.model_rx.is_some() {
+            lines.push("Loading provider model list...".to_string());
+        } else if self.available_models.is_empty() {
             lines.push(
-                "Provider model list is unavailable; use /model <name> for a known model."
-                    .to_string(),
+                self.model_message
+                    .clone()
+                    .unwrap_or_else(|| "Provider model list is unavailable.".to_string()),
             );
+            lines.push("Use /model <name> for a known model.".to_string());
         } else {
             lines.push("Available models:".to_string());
             lines.extend(
@@ -1244,6 +1275,7 @@ impl PracticodeApp {
     }
 
     fn write_output(&mut self, output: &str) {
+        self.showing_model_status = false;
         self.output = output.to_string();
         self.output_is_markdown = true;
         self.show_output = true;
@@ -1251,8 +1283,17 @@ impl PracticodeApp {
     }
 
     fn write_text_output(&mut self, output: &str) {
+        self.showing_model_status = false;
         self.output = output.trim_end().to_string();
         self.output_is_markdown = false;
+        self.show_output = true;
+        self.focus = Focus::Output;
+    }
+
+    fn write_model_status(&mut self) {
+        self.output = self.model_status_text();
+        self.output_is_markdown = false;
+        self.showing_model_status = true;
         self.show_output = true;
         self.focus = Focus::Output;
     }

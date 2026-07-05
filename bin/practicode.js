@@ -9,7 +9,7 @@ const exe = path.join(
   root,
   "target",
   "release",
-  process.platform === "win32" ? "codecode.exe" : "codecode",
+  process.platform === "win32" ? "practicode.exe" : "practicode",
 );
 
 if (!existsSync(exe)) {
@@ -19,7 +19,7 @@ if (!existsSync(exe)) {
     { stdio: "inherit" },
   );
   if (build.error) {
-    console.error(`codecode: failed to run cargo: ${build.error.message}`);
+    console.error(`practicode: failed to run cargo: ${build.error.message}`);
     process.exit(1);
   }
   if (build.status !== 0) {
@@ -33,7 +33,7 @@ const run = spawnSync(exe, process.argv.slice(2), {
 });
 
 if (run.error) {
-  console.error(`codecode: failed to run binary: ${run.error.message}`);
+  console.error(`practicode: failed to run binary: ${run.error.message}`);
   process.exit(1);
 }
 process.exit(run.status ?? 1);

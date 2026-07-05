@@ -50,9 +50,9 @@ pub fn run_ai_next(root: &Path, state: &AppState, force: bool, request: &str) ->
     let mut process = shell_process(&command);
     process
         .current_dir(root)
-        .env("CODECODE_NEXT_REQUEST", request)
-        .env("CODECODE_AI_PROVIDER", &provider)
-        .env("CODECODE_AI_MODEL", &state.settings.ai_model);
+        .env("PRACTICODE_NEXT_REQUEST", request)
+        .env("PRACTICODE_AI_PROVIDER", &provider)
+        .env("PRACTICODE_AI_MODEL", &state.settings.ai_model);
     match run_capture(&mut process, "", Duration::from_secs(900)) {
         Ok(run) if run.code == Some(0) => {
             let output = output_text(&run.stdout, &run.stderr);
@@ -80,7 +80,7 @@ pub fn default_ai_next_command(root: &Path, settings: &Settings, request: &str) 
 
 pub fn default_ai_next_prompt(request: &str) -> String {
     format!(
-        "Read AGENTS.md, docs/problem-authoring-notes.md if present, .codecode/problem_notes.md if present, problems/INDEX.md if present, .codecode/problem_bank.json if present, and .codex/problem-state.json. The app has a built-in starter problem 001-hello-world, so do not duplicate it. Create exactly one new non-duplicate coding practice problem. User request for this problem: {}. Update .codecode/problem_bank.json, the local problem files, the index, and state files. Do not include the answer in the problem statement.",
+        "Read AGENTS.md, docs/problem-authoring-notes.md if present, .practicode/problem_notes.md if present, problems/INDEX.md if present, .practicode/problem_bank.json if present, and .practicode/problem-state.json. The app has a built-in starter problem 001-hello-world, so do not duplicate it. Create exactly one new non-duplicate coding practice problem. User request for this problem: {}. Update .practicode/problem_bank.json, the local problem files, the index, and state files. Do not include the answer in the problem statement.",
         if request.is_empty() {
             "(none)"
         } else {
@@ -109,7 +109,7 @@ pub fn read_problem_notes(root: &Path) -> Result<String> {
 }
 
 fn run_codex_prompt(root: &Path, settings: &Settings, prompt: &str) -> String {
-    let output_path = unique_temp_path("codecode-last-message", "txt");
+    let output_path = unique_temp_path("practicode-last-message", "txt");
     let mut command = Command::new("codex");
     command
         .args([

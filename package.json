@@ -1,20 +1,20 @@
 {
-  "name": "@baba9811/codecode",
+  "name": "practicode",
   "version": "0.1.0",
   "description": "Local-first coding-test practice in a Rust terminal UI with optional AI help.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/baba9811/codecode.git"
+    "url": "git+https://github.com/baba9811/practicode.git"
   },
-  "homepage": "https://github.com/baba9811/codecode#readme",
+  "homepage": "https://github.com/baba9811/practicode#readme",
   "bin": {
-    "codecode": "bin/codecode.js"
+    "practicode": "bin/practicode.js"
   },
   "scripts": {
     "build": "cargo build --release --locked",
     "postinstall": "node scripts/npm-postinstall.js",
-    "smoke": "node bin/codecode.js --smoke"
+    "smoke": "node bin/practicode.js --smoke"
   },
   "files": [
     "assets/",

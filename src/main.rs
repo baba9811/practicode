@@ -1,3 +1,3 @@
 fn main() -> anyhow::Result<()> {
-    codecode::run_cli()
+    practicode::run_cli()
 }

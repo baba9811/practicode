@@ -1,16 +1,16 @@
-# codecode
+# practicode
 
 ![Rust](https://img.shields.io/badge/Rust-terminal%20app-000000?logo=rust&logoColor=white)
 ![Ratatui](https://img.shields.io/badge/Ratatui-TUI-00B4D8)
 ![Local first](https://img.shields.io/badge/local--first-practice-14B8A6)
 ![AI ready](https://img.shields.io/badge/AI-Codex%20%2B%20Claude-111827)
-![CI](https://github.com/baba9811/codecode/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/baba9811/practicode/actions/workflows/ci.yml/badge.svg)
 
-![codecode terminal UI](assets/codecode-terminal.svg)
+![practicode terminal UI](assets/practicode-terminal.svg)
 
-Coding-test reps, right in your terminal.
+Personal coding practice, right in your terminal.
 
-`codecode` is a small Rust TUI for stdin/stdout practice: problem on the left, code on the right, judge loop in the same terminal.
+`practicode` is a small Rust TUI for stdin/stdout practice: problem on the left, code on the right, judge loop in the same terminal.
 No browser tab shuffle, no paste dance, just solve and run.
 
 ## Why It Exists
@@ -24,8 +24,8 @@ No browser tab shuffle, no paste dance, just solve and run.
 ## Quick Start
 
 ```bash
-git clone https://github.com/baba9811/codecode.git
-cd codecode
+git clone https://github.com/baba9811/practicode.git
+cd practicode
 cargo run --
 ```
 
@@ -33,14 +33,14 @@ Want a local binary?
 
 ```bash
 cargo install --path .
-codecode
+practicode
 ```
 
 Prefer npm?
 
 ```bash
 npm install -g .
-codecode
+practicode
 ```
 
 The npm wrapper builds the Rust binary with Cargo, so Rust/Cargo is still required.
@@ -102,7 +102,7 @@ AI generation reads [docs/problem-authoring-notes.md](docs/problem-authoring-not
 /note Avoid DP until I ask for it.
 ```
 
-Those notes are stored in `.codecode/problem_notes.md`, so they stay local.
+Those notes are stored in `.practicode/problem_notes.md`, so they stay local.
 
 ## AI Providers
 
@@ -122,15 +122,15 @@ Claude Code is also supported:
 ```
 
 `/ai <prompt>` uses the current provider for coaching. AI-backed `/next` uses the same provider and model.
-If you want a custom daemon or wrapper script, set `/ai-next-command <shell command>`; codecode passes `CODECODE_NEXT_REQUEST`, `CODECODE_AI_PROVIDER`, and `CODECODE_AI_MODEL`.
+If you want a custom daemon or wrapper script, set `/ai-next-command <shell command>`; practicode passes `PRACTICODE_NEXT_REQUEST`, `PRACTICODE_AI_PROVIDER`, and `PRACTICODE_AI_MODEL`.
 
 Generated problem banks stay local:
 
 | Path | Purpose |
 | --- | --- |
-| `.codecode/problem_bank.json` | Local/custom/generated problem bank |
-| `.codecode/problem_notes.md` | Optional personal problem-generation notes |
-| `.codex/problem-state.json` | Current problem, history, settings |
+| `.practicode/problem_bank.json` | Local/custom/generated problem bank |
+| `.practicode/problem_notes.md` | Optional personal problem-generation notes |
+| `.practicode/problem-state.json` | Current problem, history, settings |
 | `problems/` | Generated problem markdown/index files |
 | `submissions/` | Your answer files |
 
@@ -138,7 +138,7 @@ Those paths are ignored by git, so your practice history stays yours.
 
 ## Safety
 
-`/run` executes your local submission as a normal process. codecode runs it from `.codex/build/<problem-id>/run`, but this is not an OS sandbox. Only run code you trust.
+`/run` executes your local submission as a normal process. practicode runs it from `.practicode/build/<problem-id>/run`, but this is not an OS sandbox. Only run code you trust.
 
 ## Debug Prints
 

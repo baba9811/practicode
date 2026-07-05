@@ -13,9 +13,9 @@ pub const LANGUAGES: &[&str] = &["python", "ts", "java", "rust"];
 pub const UI_LANGUAGES: &[&str] = &["ko", "en"];
 pub const THEMES: &[&str] = &["dark", "light"];
 pub const AI_PROVIDERS: &[&str] = &["codex", "claude"];
-pub const BANK_PATH: &str = ".codecode/problem_bank.json";
-pub const STATE_PATH: &str = ".codex/problem-state.json";
-pub const PROBLEM_NOTES_PATH: &str = ".codecode/problem_notes.md";
+pub const BANK_PATH: &str = ".practicode/problem_bank.json";
+pub const STATE_PATH: &str = ".practicode/problem-state.json";
+pub const PROBLEM_NOTES_PATH: &str = ".practicode/problem_notes.md";
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Settings {
@@ -499,7 +499,7 @@ pub fn judge(root: &Path, problem: &Problem, settings: &Settings) -> JudgeResult
             };
         }
     };
-    let run_dir = root.join(".codex/build").join(&problem.id).join("run");
+    let run_dir = root.join(".practicode/build").join(&problem.id).join("run");
     if let Err(error) = fs::create_dir_all(&run_dir) {
         return JudgeResult {
             passed: false,
@@ -590,7 +590,7 @@ fn compile_java(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
         return Ok(None);
     };
     let build = root
-        .join(".codex/build")
+        .join(".practicode/build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default())
         .join("java");
     fs::create_dir_all(&build)?;
@@ -621,7 +621,7 @@ fn compile_rust(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
         return Ok(None);
     };
     let build = root
-        .join(".codex/build")
+        .join(".practicode/build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default());
     fs::create_dir_all(&build)?;
     let exe = build.join(if cfg!(windows) {

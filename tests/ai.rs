@@ -1,20 +1,20 @@
 mod common;
 
-use codecode::{
+use common::tmp_root;
+use practicode::{
     ai::{
         append_problem_note, default_ai_next_command, default_ai_next_prompt, read_problem_notes,
         run_ai_next,
     },
     core::{AppState, Settings},
 };
-use common::tmp_root;
 use std::fs;
 
 #[test]
 fn default_ai_next_prompt_reads_notes_and_includes_request() {
     let prompt = default_ai_next_prompt("그래프 쉬운 문제");
     assert!(prompt.contains("docs/problem-authoring-notes.md"));
-    assert!(prompt.contains(".codecode/problem_notes.md"));
+    assert!(prompt.contains(".practicode/problem_notes.md"));
     assert!(prompt.contains("그래프 쉬운 문제"));
 }
 
@@ -65,7 +65,7 @@ fn run_ai_next_exposes_request_provider_and_model_to_custom_command() {
             ai_provider: "claude".to_string(),
             ai_model: "sonnet".to_string(),
             ai_next_command:
-                "printf '%s|%s|%s' \"$CODECODE_NEXT_REQUEST\" \"$CODECODE_AI_PROVIDER\" \"$CODECODE_AI_MODEL\" > request.txt"
+                "printf '%s|%s|%s' \"$PRACTICODE_NEXT_REQUEST\" \"$PRACTICODE_AI_PROVIDER\" \"$PRACTICODE_AI_MODEL\" > request.txt"
                     .to_string(),
             ..Settings::default()
         },

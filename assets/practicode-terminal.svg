@@ -17,7 +17,7 @@
   <text x="776" y="158" fill="#7dd3fc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">print</text>
   <text x="828" y="158" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">('Hello, World!')</text>
   <rect x="64" y="536" width="1072" height="28" fill="#152033"/>
-  <text x="84" y="556" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">CODECODE | 001-hello-world | easy | idle | solved | code:written | python | next:ai | ai:codex/auto</text>
+  <text x="84" y="556" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">PRACTICODE | 001-hello-world | easy | idle | solved | code:written | python | next:ai | ai:codex/auto</text>
   <rect x="64" y="586" width="1072" height="58" rx="2" fill="#0b1017" stroke="#008cff" stroke-width="2"/>
   <text x="84" y="606" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">Command</text>
   <text x="84" y="630" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">/ai hint about edge cases</text>

@@ -1,8 +1,9 @@
 target/
 node_modules/
 npm-debug.log*
+.practicode/
+.codecode/
 .codex/build/
 .codex/problem-state.json
-.codecode/
 problems/
 submissions/

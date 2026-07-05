@@ -1,4 +1,4 @@
-use codecode::text::{compose_hangul_jamo, display_width, render_markdown_plain};
+use practicode::text::{compose_hangul_jamo, display_width, render_markdown_plain};
 
 #[test]
 fn compose_hangul_jamo_handles_korean_command_text() {

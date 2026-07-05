@@ -1,6 +1,7 @@
 mod common;
 
-use codecode::{
+use common::{tmp_root, two_problem_bank};
+use practicode::{
     core::{
         AppState, HistoryItem, Settings, ensure_submission, judge, load_bank, load_state,
         localized, next_problem, problem_by_id, record_pass, render_problem, save_bank, save_state,
@@ -8,7 +9,6 @@ use codecode::{
     process::which,
     text::render_markdown_plain,
 };
-use common::{tmp_root, two_problem_bank};
 use std::fs;
 
 #[test]
@@ -28,7 +28,7 @@ fn save_bank_creates_local_custom_problem_bank() {
     let root = tmp_root("save-bank");
     let bank = two_problem_bank(&root);
     let loaded = load_bank(&root).unwrap();
-    assert!(root.join(".codecode/problem_bank.json").exists());
+    assert!(root.join(".practicode/problem_bank.json").exists());
     assert_eq!(
         loaded.iter().map(|problem| &problem.id).collect::<Vec<_>>(),
         bank.iter().map(|problem| &problem.id).collect::<Vec<_>>()
@@ -38,8 +38,8 @@ fn save_bank_creates_local_custom_problem_bank() {
 #[test]
 fn load_bank_rejects_empty_custom_bank() {
     let root = tmp_root("empty-bank");
-    fs::create_dir_all(root.join(".codecode")).unwrap();
-    fs::write(root.join(".codecode/problem_bank.json"), "[]").unwrap();
+    fs::create_dir_all(root.join(".practicode")).unwrap();
+    fs::write(root.join(".practicode/problem_bank.json"), "[]").unwrap();
     let error = load_bank(&root).unwrap_err().to_string();
     assert!(error.contains("at least one problem"));
 }
@@ -50,9 +50,9 @@ fn load_bank_rejects_invalid_problem_shape() {
     let mut problem = load_bank(&root).unwrap().remove(0);
     problem.id = "../bad".to_string();
     problem.cases.clear();
-    fs::create_dir_all(root.join(".codecode")).unwrap();
+    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".codecode/problem_bank.json"),
+        root.join(".practicode/problem_bank.json"),
         serde_json::to_string_pretty(&vec![problem]).unwrap(),
     )
     .unwrap();
@@ -64,9 +64,9 @@ fn load_bank_rejects_invalid_problem_shape() {
 fn load_state_keeps_next_source_to_current_values_only() {
     let root = tmp_root("state-source");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".codex")).unwrap();
+    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".codex/problem-state.json"),
+        root.join(".practicode/problem-state.json"),
         r#"{
   "current_problem": "001-hello-world",
   "settings": {
@@ -96,7 +96,7 @@ fn save_state_writes_ai_settings_without_deprecated_empty_field() {
         suggested_next_difficulty: "easy".to_string(),
     };
     save_state(&root, &state).unwrap();
-    let saved = fs::read_to_string(root.join(".codex/problem-state.json")).unwrap();
+    let saved = fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
     assert!(saved.contains("\"ai_provider\": \"claude\""));
     assert!(saved.contains("\"ai_model\": \"sonnet\""));
     assert_eq!(load_state(&root, &bank).unwrap().settings.next_source, "ai");
@@ -199,7 +199,7 @@ fn judge_runs_submission_from_build_directory() {
     assert!(result.passed, "{}", result.output);
     assert!(!root.join("touch.txt").exists());
     assert!(
-        root.join(".codex/build/001-hello-world/run/touch.txt")
+        root.join(".practicode/build/001-hello-world/run/touch.txt")
             .exists()
     );
 }

@@ -9,7 +9,7 @@ Use this when AI creates a new `/next` problem.
 - State input, output, examples, and constraints explicitly.
 - Make examples small enough to verify by hand.
 - Include enough hidden cases to catch empty/min/max, duplicates, ties, ordering, and whitespace mistakes.
-- Keep answers for `python`, `ts`, `java`, and `rust` in `.codecode/problem_bank.json`; never put answers in `README.md`.
+- Keep answers for `python`, `ts`, `java`, and `rust` in `.practicode/problem_bank.json`; never put answers in `README.md`.
 
 ## Difficulty
 
@@ -19,7 +19,7 @@ Use this when AI creates a new `/next` problem.
 
 ## Local Preferences
 
-If `.codecode/problem_notes.md` exists, read it too. That file is for personal themes like:
+If `.practicode/problem_notes.md` exists, read it too. That file is for personal themes like:
 
 ```text
 Prefer Korean statements.

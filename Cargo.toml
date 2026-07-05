@@ -1,12 +1,12 @@
 [package]
-name = "codecode"
+name = "practicode"
 version = "0.1.0"
 edition = "2024"
 description = "Local-first coding-test practice in a Rust terminal UI with optional AI help."
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/baba9811/codecode"
-homepage = "https://github.com/baba9811/codecode"
+repository = "https://github.com/baba9811/practicode"
+homepage = "https://github.com/baba9811/practicode"
 keywords = ["algorithms", "ai", "coding-practice", "competitive-programming", "tui"]
 categories = ["command-line-utilities", "development-tools", "text-editors"]
 

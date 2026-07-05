@@ -1,4 +1,4 @@
-use codecode::core::{IoCase, Problem, map2, save_bank, starter_problem};
+use practicode::core::{IoCase, Problem, map2, save_bank, starter_problem};
 use std::{
     collections::HashMap,
     env, fs,
@@ -11,7 +11,7 @@ pub fn tmp_root(name: &str) -> PathBuf {
         .duration_since(UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    let root = env::temp_dir().join(format!("codecode-{name}-{}-{nanos}", std::process::id()));
+    let root = env::temp_dir().join(format!("practicode-{name}-{}-{nanos}", std::process::id()));
     fs::create_dir_all(&root).unwrap();
     root
 }

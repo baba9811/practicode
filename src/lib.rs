@@ -21,7 +21,7 @@ pub fn run_cli() -> Result<()> {
         return Ok(());
     }
 
-    let mut app = tui::CodeCodeApp::new(root)?;
+    let mut app = tui::PracticodeApp::new(root)?;
     let mut terminal = ratatui::init();
     let _ = execute!(stdout(), SetCursorStyle::SteadyBar);
     let result = app.run(&mut terminal);

@@ -1,7 +1,7 @@
 const { spawnSync } = require("node:child_process");
 const path = require("node:path");
 
-if (process.env.CODECODE_SKIP_BUILD === "1") {
+if (process.env.PRACTICODE_SKIP_BUILD === "1") {
   process.exit(0);
 }
 
@@ -12,8 +12,8 @@ const build = spawnSync("cargo", ["build", "--release", "--locked"], {
 });
 
 if (build.error) {
-  console.warn(`codecode: cargo build skipped: ${build.error.message}`);
-  console.warn("codecode: install Rust/Cargo before first run, or set CODECODE_SKIP_BUILD=1.");
+  console.warn(`practicode: cargo build skipped: ${build.error.message}`);
+  console.warn("practicode: install Rust/Cargo before first run, or set PRACTICODE_SKIP_BUILD=1.");
   process.exit(0);
 }
 

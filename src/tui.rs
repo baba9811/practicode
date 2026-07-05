@@ -77,7 +77,7 @@ enum Focus {
     None,
 }
 
-pub struct CodeCodeApp {
+pub struct PracticodeApp {
     root: PathBuf,
     bank: Vec<Problem>,
     state: AppState,
@@ -106,7 +106,7 @@ enum TaskResult {
     },
 }
 
-impl CodeCodeApp {
+impl PracticodeApp {
     pub fn new(root: PathBuf) -> Result<Self> {
         let bank = load_bank(&root)?;
         let state = load_state(&root, &bank)?;
@@ -961,7 +961,7 @@ impl CodeCodeApp {
     fn status_text(&self) -> String {
         let code_status = self.submission_status(&self.problem).0;
         format!(
-            " CODECODE | {} | {} | {} | {} | code:{} | {} | next:{} | ai:{}/{} | {} ",
+            " PRACTICODE | {} | {} | {} | {} | code:{} | {} | next:{} | ai:{}/{} | {} ",
             self.problem.id,
             self.problem.difficulty,
             self.busy_status(),

@@ -1,6 +1,6 @@
 [package]
 name = "practicode"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 description = "Local-first coding-test practice in a Rust terminal UI with optional AI help."
 readme = "README.md"

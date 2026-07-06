@@ -12,7 +12,7 @@ use practicode::{
     process::which,
     text::render_markdown_plain,
 };
-use std::fs;
+use std::{fs, process::Command};
 
 #[test]
 fn load_state_uses_first_problem_when_state_file_is_missing() {
@@ -515,6 +515,98 @@ fn rust_lesson_copy_is_topic_specific() {
 }
 
 #[test]
+fn python_syntax_curriculum_covers_official_python_topics() {
+    let lessons = syntax_lessons_for("python");
+    let lesson_ids: Vec<_> = lessons.iter().map(|lesson| lesson.id).collect();
+
+    assert!(lesson_ids.len() >= 24, "python curriculum is too shallow");
+
+    for id in [
+        "py-output",
+        "py-variables",
+        "py-numbers",
+        "py-strings",
+        "py-control-flow",
+        "py-functions",
+        "py-input",
+        "py-lists-dicts",
+        "py-tuples-sets",
+        "py-comprehensions",
+        "py-errors",
+        "py-files-context",
+        "py-modules-imports",
+        "py-dataclasses",
+        "py-typing",
+        "py-generators",
+        "py-lambdas-closures",
+        "py-decorators",
+        "py-sorting-keys",
+        "py-counter-defaultdict",
+        "py-deque",
+        "py-itertools",
+        "py-pathlib",
+        "py-testing-assert",
+        "py-async",
+    ] {
+        assert!(lesson_ids.contains(&id), "missing {id}");
+    }
+
+    let refs = lessons
+        .iter()
+        .flat_map(|lesson| lesson.refs.iter().copied())
+        .collect::<Vec<_>>()
+        .join("\n");
+    for required_ref in [
+        "https://docs.python.org/3/tutorial/index.html",
+        "https://docs.python.org/3/reference/index.html",
+        "https://docs.python.org/3/library/index.html",
+        "https://peps.python.org/pep-0008/",
+        "https://docs.python.org/3/library/typing.html",
+        "https://docs.python.org/3/library/pathlib.html",
+        "https://docs.python.org/3/library/collections.html",
+        "https://docs.python.org/3/library/itertools.html",
+        "https://docs.python.org/3/library/contextlib.html",
+        "https://docs.python.org/3/library/dataclasses.html",
+        "https://docs.python.org/3/library/asyncio.html",
+    ] {
+        assert!(refs.contains(required_ref), "missing ref {required_ref}");
+    }
+}
+
+#[test]
+fn python_lesson_copy_is_topic_specific() {
+    let banned = [
+        "focuses on this Python skill",
+        "Complete the exercise around this skill",
+        "Keep the intended Python construct",
+        "locating three concrete pieces",
+        "edit only the part tied to this lesson's rule",
+        "この構文が実際の問題でどの値を読み",
+        "例は ",
+        "这一课关注解题时真实会遇到的用法",
+        "示例把",
+        "se practica con el uso que aparece",
+        "El ejemplo muestra",
+    ];
+    for path in [
+        "assets/lessons/python/en.json",
+        "assets/lessons/python/ko.json",
+        "assets/lessons/python/ja.json",
+        "assets/lessons/python/zh.json",
+        "assets/lessons/python/es.json",
+    ] {
+        let catalog: serde_json::Value =
+            serde_json::from_str(&fs::read_to_string(path).unwrap()).unwrap();
+        for (id, copy) in catalog["lessons"].as_object().unwrap() {
+            let text = copy.to_string();
+            for phrase in banned {
+                assert!(!text.contains(phrase), "{path}:{id}: generic copy");
+            }
+        }
+    }
+}
+
+#[test]
 fn rust_syntax_starters_compile_to_useful_failures() {
     if std::process::Command::new("rustc")
         .arg("--version")
@@ -721,6 +813,37 @@ fn python_syntax_starters_fail_by_output_not_runtime_error() {
             "{} starter should run without a runtime traceback:\n{}",
             lesson.id,
             result.output
+        );
+        assert!(
+            !result.passed,
+            "{} starter should still require the learner edit",
+            lesson.id
+        );
+    }
+}
+
+#[test]
+fn python_syntax_examples_run_cleanly() {
+    let Some(python) = which("python3").or_else(|| which("python")) else {
+        return;
+    };
+    let root = tmp_root("python-syntax-examples-run");
+    for lesson in syntax_lessons_for("python") {
+        let path = root.join(format!("{}.py", lesson.id));
+        fs::write(&path, lesson.example).unwrap();
+        let output = Command::new(&python).arg(&path).output().unwrap();
+        assert!(
+            output.status.success(),
+            "{} example should exit successfully\nstdout:\n{}\nstderr:\n{}",
+            lesson.id,
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(
+            String::from_utf8_lossy(&output.stderr).trim().is_empty(),
+            "{} example should not write stderr\n{}",
+            lesson.id,
+            String::from_utf8_lossy(&output.stderr)
         );
     }
 }

@@ -88,7 +88,12 @@ macro_rules! lesson {
     };
 }
 
-const PY_REFS: &[&str] = &["https://docs.python.org/3/tutorial/index.html"];
+const PY_CORE_REFS: &[&str] = &[
+    "https://docs.python.org/3/tutorial/index.html",
+    "https://docs.python.org/3/reference/index.html",
+    "https://docs.python.org/3/library/index.html",
+    "https://peps.python.org/pep-0008/",
+];
 const TS_REFS: &[&str] = &[
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
     "https://www.typescriptlang.org/docs/handbook/intro.html",
@@ -115,133 +120,375 @@ const PYTHON_LESSONS: &[SyntaxLesson] = &[
         "py-output",
         "python",
         "basic",
-        "Output",
-        "Use print for visible output.",
-        "print('ok')",
-        "# TODO: print exactly ok\n",
-        EMPTY_HELLO,
-        PY_REFS
+        "print and stdout",
+        "print converts values to text, writes them to stdout, and adds a newline unless told otherwise.",
+        "name = 'Ada'\nscore = 7\nprint(f'{name}:{score}')",
+        "name = 'Ada'\nscore = 7\n# TODO: print exactly Ada:7 using the variables above\nprint('TODO')\n",
+        &[SyntaxCase {
+            input: "",
+            output: "Ada:7\n",
+        }],
+        &[
+            "https://docs.python.org/3/library/functions.html#print",
+            "https://docs.python.org/3/tutorial/inputoutput.html",
+            "https://peps.python.org/pep-0008/",
+        ]
     ),
     lesson!(
         "py-variables",
         "python",
         "basic",
         "Variables",
-        "Names bind to values and can be rebound.",
-        "count = 1\nprint(count)",
-        "word = None\n# TODO: bind word to 'ok', then print word\n",
+        "Assignment binds a name to an object; rebinding changes what the name points at, not the old object.",
+        "count = 1\ncount = count + 2\nprint(count)",
+        "word = 'todo'\n# TODO: rebind word to the expected text\nprint(word)\n",
         EMPTY_HELLO,
-        PY_REFS
+        PY_CORE_REFS
+    ),
+    lesson!(
+        "py-numbers",
+        "python",
+        "basic",
+        "Numbers",
+        "int and float cover most numeric work; //, %, and ** are common in problem solutions.",
+        "total = 7\nsize = 2\nprint(f'{total // size}:{total % size}')",
+        "total = 7\nsize = 2\n# TODO: use integer division and remainder so the output is 3:1\nprint(f'{total / size}:0')\n",
+        &[SyntaxCase {
+            input: "",
+            output: "3:1\n",
+        }],
+        &[
+            "https://docs.python.org/3/tutorial/introduction.html#numbers",
+            "https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex",
+        ]
     ),
     lesson!(
         "py-strings",
         "python",
         "basic",
         "Strings",
-        "Strings support len, indexing, slicing, and iteration.",
-        "text = 'code'\nprint(text[:2])",
-        "text = 'xokx'\n# TODO: use a slice to print ok\n",
+        "Strings are immutable sequences, so indexing and slicing read characters without changing the original text.",
+        "text = 'python'\nprint(text[1:4])",
+        "text = 'xokx'\n# TODO: use a slice to print ok\nprint(text)\n",
         EMPTY_HELLO,
-        PY_REFS
+        &[
+            "https://docs.python.org/3/tutorial/introduction.html#text",
+            "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str",
+        ]
     ),
     lesson!(
         "py-control-flow",
         "python",
         "basic",
         "Control flow",
-        "Use if, for, and while to choose and repeat work.",
-        "for n in range(3):\n    print(n)",
-        "ready = True\n# TODO: print ok only when ready is true\n",
-        EMPTY_HELLO,
-        PY_REFS
+        "if chooses a block, for iterates over an iterable, and while repeats until its condition changes.",
+        "total = 0\nfor n in range(1, 4):\n    if n % 2 == 1:\n        total += n\nprint(total)",
+        "total = 0\nfor n in range(1, 4):\n    # TODO: add only odd numbers\n    total += 0\nprint(total)\n",
+        &[SyntaxCase {
+            input: "",
+            output: "4\n",
+        }],
+        &[
+            "https://docs.python.org/3/tutorial/controlflow.html",
+            "https://docs.python.org/3/reference/compound_stmts.html",
+        ]
     ),
     lesson!(
         "py-functions",
         "python",
         "basic",
         "Functions",
-        "def creates reusable behavior with parameters and returns.",
-        "def add(a, b):\n    return a + b",
-        "def word():\n    # TODO: return ok as a string\n    pass\n\nprint(word())\n",
-        EMPTY_HELLO,
-        PY_REFS
+        "def creates a callable object; parameters receive arguments and return sends a value back to the caller.",
+        "def area(width, height):\n    return width * height\n\nprint(area(3, 4))",
+        "def area(width, height):\n    # TODO: return rectangle area, not perimeter\n    return width + height\n\nprint(area(3, 4))\n",
+        &[SyntaxCase {
+            input: "",
+            output: "12\n",
+        }],
+        &[
+            "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+            "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
+        ]
     ),
     lesson!(
         "py-input",
         "python",
         "intermediate",
         "Input parsing",
-        "sys.stdin plus split handles contest-style input.",
-        "import sys\nnums = list(map(int, sys.stdin.read().split()))",
-        "import sys\ntext = sys.stdin.read()\n# TODO: write text back unchanged\n",
-        ECHO_CASE,
-        PY_REFS
+        "stdin starts as text; read it once, split into tokens when structure matters, then convert tokens explicitly.",
+        "import sys\nnums = [int(token) for token in sys.stdin.read().split()]\nprint(sum(nums))",
+        "import sys\nnums = []\n# TODO: parse all integers from stdin and print their sum\nprint(sum(nums))\n",
+        SUM_CASE,
+        &[
+            "https://docs.python.org/3/library/sys.html#sys.stdin",
+            "https://docs.python.org/3/tutorial/inputoutput.html",
+        ]
     ),
     lesson!(
         "py-lists-dicts",
         "python",
         "intermediate",
         "Lists and dicts",
-        "Lists keep order; dicts map keys to values.",
-        "counts = {'a': 2}\nprint(counts['a'])",
-        "nums = [2, 3]\n# TODO: print the sum of nums without hard-coding 5\n",
+        "Lists keep ordered values by position; dicts map keys to values for direct lookup and counting.",
+        "scores = {'Ada': [2, 3], 'Lin': [4]}\nprint(sum(scores['Ada']))",
+        "nums = [2, 3]\nscores = {'Ada': nums}\n# TODO: print the sum stored under Ada without hard-coding 5\nprint(len(scores['Ada']))\n",
         SUM_CASE,
-        PY_REFS
+        &[
+            "https://docs.python.org/3/tutorial/datastructures.html#more-on-lists",
+            "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+            "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        ]
+    ),
+    lesson!(
+        "py-tuples-sets",
+        "python",
+        "basic",
+        "Tuples and sets",
+        "Tuples group a fixed sequence of values; sets keep unique members and make membership checks cheap.",
+        "pair = ('o', 'k')\nseen = set(pair)\nprint(''.join(pair), len(seen))",
+        "pair = ('o', 'k')\nseen = set()\n# TODO: build a set from the tuple and print ok 2\nprint(''.join(pair[:1]), len(seen))\n",
+        &[SyntaxCase {
+            input: "",
+            output: "ok 2\n",
+        }],
+        &[
+            "https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences",
+            "https://docs.python.org/3/tutorial/datastructures.html#sets",
+            "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
+        ]
+    ),
+    lesson!(
+        "py-comprehensions",
+        "python",
+        "intermediate",
+        "Comprehensions",
+        "A comprehension combines an output expression, a loop, and optional filters into one collection-building expression.",
+        "nums = [1, 2, 3, 4]\nsquares = [n * n for n in nums if n % 2 == 0]\nprint(sum(squares))",
+        "letters = ['o', 'x', 'k']\n# TODO: keep only the letters needed for ok with a comprehension\nword = ''.join([ch for ch in letters if ch != 'x' and ch != 'k'])\nprint(word)\n",
+        EMPTY_HELLO,
+        &[
+            "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
+            "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+        ]
     ),
     lesson!(
         "py-errors",
         "python",
         "intermediate",
         "Exceptions",
-        "try and except handle recoverable failures.",
-        "try:\n    int('x')\nexcept ValueError:\n    print('bad')",
-        "try:\n    int('x')\nexcept ValueError:\n    # TODO: handle the expected error by printing ok\n    pass\n",
-        EMPTY_HELLO,
-        PY_REFS
+        "try isolates code that may fail; except handles a specific recoverable error without hiding unrelated bugs.",
+        "try:\n    value = int('12')\nexcept ValueError:\n    value = 0\nprint(value)",
+        "try:\n    value = int('bad')\nexcept ValueError:\n    # TODO: recover with the expected value\n    value = 0\nprint(value)\n",
+        &[SyntaxCase {
+            input: "",
+            output: "12\n",
+        }],
+        &[
+            "https://docs.python.org/3/tutorial/errors.html",
+            "https://docs.python.org/3/reference/compound_stmts.html#the-try-statement",
+        ]
     ),
     lesson!(
-        "py-comprehensions",
+        "py-files-context",
         "python",
-        "advanced",
-        "Comprehensions",
-        "Comprehensions build collections from expressions.",
-        "evens = [n for n in range(5) if n % 2 == 0]",
-        "letters = ['o', 'k']\n# TODO: build a word with a comprehension and print it\n",
+        "intermediate",
+        "Files and context managers",
+        "with enters a managed scope and calls cleanup automatically; file handles and contextlib helpers use this pattern.",
+        "from io import StringIO\n\nwith StringIO('ok') as handle:\n    text = handle.read()\nprint(text)",
+        "from io import StringIO\n\nwith StringIO('ok') as handle:\n    # TODO: read from the managed handle before it closes\n    text = ''\nprint(text)\n",
         EMPTY_HELLO,
-        PY_REFS
+        &[
+            "https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files",
+            "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+            "https://docs.python.org/3/library/contextlib.html",
+        ]
+    ),
+    lesson!(
+        "py-modules-imports",
+        "python",
+        "basic",
+        "Modules and imports",
+        "import binds a module or object name so code can reuse standard-library behavior instead of rewriting it.",
+        "import math\n\nprint(math.ceil(2.1))",
+        "import math\n\n# TODO: use the imported module to round upward\nprint(math.floor(2.1))\n",
+        &[SyntaxCase {
+            input: "",
+            output: "3\n",
+        }],
+        &[
+            "https://docs.python.org/3/tutorial/modules.html",
+            "https://docs.python.org/3/reference/import.html",
+            "https://peps.python.org/pep-0008/#imports",
+        ]
+    ),
+    lesson!(
+        "py-dataclasses",
+        "python",
+        "intermediate",
+        "Dataclasses",
+        "dataclass generates the routine class methods for simple data containers while leaving behavior explicit.",
+        "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\npoint = Point(2, 3)\nprint(point.x + point.y)",
+        "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\npoint = Point(2, 3)\n# TODO: use both fields\nprint(point.x)\n",
+        SUM_CASE,
+        &["https://docs.python.org/3/library/dataclasses.html"]
+    ),
+    lesson!(
+        "py-typing",
+        "python",
+        "intermediate",
+        "Type hints",
+        "Type hints document expected shapes for readers and tools; Python still executes values dynamically at runtime.",
+        "from typing import Iterable\n\ndef total(values: Iterable[int]) -> int:\n    return sum(values)\n\nprint(total([2, 3]))",
+        "from typing import Iterable\n\ndef total(values: Iterable[int]) -> int:\n    # TODO: return the sum of the iterable\n    return 0\n\nprint(total([2, 3]))\n",
+        SUM_CASE,
+        &[
+            "https://docs.python.org/3/library/typing.html",
+            "https://docs.python.org/3/tutorial/controlflow.html#function-annotations",
+        ]
     ),
     lesson!(
         "py-generators",
         "python",
         "advanced",
         "Iterators and generators",
-        "yield creates lazy sequences.",
-        "def ones():\n    yield 1",
-        "def words():\n    # TODO: yield ok as a string\n    yield ''\n\nprint(next(words()))\n",
+        "Iterators produce values one at a time; a generator function uses yield to pause and resume that production.",
+        "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nprint(next(countdown(3)))",
+        "def words():\n    # TODO: yield ok as the first generated value\n    yield ''\n\nprint(next(words()))\n",
         EMPTY_HELLO,
-        PY_REFS
+        &[
+            "https://docs.python.org/3/tutorial/classes.html#iterators",
+            "https://docs.python.org/3/tutorial/classes.html#generators",
+            "https://docs.python.org/3/reference/simple_stmts.html#the-yield-statement",
+        ]
+    ),
+    lesson!(
+        "py-lambdas-closures",
+        "python",
+        "advanced",
+        "Lambdas and closures",
+        "lambda makes a small expression function; a closure remembers names from the surrounding scope.",
+        "def make_adder(delta):\n    return lambda value: value + delta\n\nadd_two = make_adder(2)\nprint(add_two(3))",
+        "def make_suffix(suffix):\n    # TODO: return a lambda that appends suffix to word\n    return lambda word: word\n\nadd_ok = make_suffix('ok')\nprint(add_ok(''))\n",
+        EMPTY_HELLO,
+        &[
+            "https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions",
+            "https://docs.python.org/3/reference/expressions.html#lambda",
+            "https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces",
+        ]
     ),
     lesson!(
         "py-decorators",
         "python",
         "advanced",
         "Decorators",
-        "Decorators wrap functions at definition time.",
-        "def deco(fn):\n    return fn",
-        "def deco(fn):\n    # TODO: return fn unchanged\n    return lambda: ''\n\n@deco\ndef word():\n    return 'ok'\n\nprint(word())\n",
+        "A decorator receives a function at definition time and returns the function object that name should now refer to.",
+        "def identity(fn):\n    return fn\n\n@identity\ndef word():\n    return 'ok'\n\nprint(word())",
+        "def identity(fn):\n    # TODO: return the original function unchanged\n    return lambda: ''\n\n@identity\ndef word():\n    return 'ok'\n\nprint(word())\n",
         EMPTY_HELLO,
-        PY_REFS
+        &[
+            "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
+            "https://docs.python.org/3/glossary.html#term-decorator",
+        ]
     ),
     lesson!(
-        "py-context-types",
+        "py-sorting-keys",
+        "python",
+        "intermediate",
+        "Sorting and key functions",
+        "sorted returns a new ordered list; key functions choose the value used for each comparison.",
+        "users = [('Ada', 3), ('Lin', 5), ('Bo', 4)]\nbest = sorted(users, key=lambda item: item[1], reverse=True)[0]\nprint(f'{best[0]}:{best[1]}')",
+        "users = [('Ada', 3), ('Lin', 5), ('Bo', 4)]\n# TODO: sort by score descending, not by name\nbest = sorted(users)[0]\nprint(f'{best[0]}:{best[1]}')\n",
+        &[SyntaxCase {
+            input: "",
+            output: "Lin:5\n",
+        }],
+        &[
+            "https://docs.python.org/3/library/functions.html#sorted",
+            "https://docs.python.org/3/howto/sorting.html",
+        ]
+    ),
+    lesson!(
+        "py-counter-defaultdict",
+        "python",
+        "intermediate",
+        "Counter and defaultdict",
+        "Counter counts hashable values directly; defaultdict creates missing collection values when grouping.",
+        "from collections import Counter, defaultdict\n\nwords = ['red', 'blue', 'red']\ncounts = Counter(words)\ngroups = defaultdict(list)\nfor word in words:\n    groups[word[0]].append(word)\nprint(counts['red'], len(groups['r']))",
+        "from collections import Counter, defaultdict\n\nwords = ['red', 'blue', 'red']\ncounts = Counter()\ngroups = defaultdict(list)\n# TODO: count words and group them by first letter\nprint(counts['red'], len(groups['r']))\n",
+        &[SyntaxCase {
+            input: "",
+            output: "2 2\n",
+        }],
+        &["https://docs.python.org/3/library/collections.html"]
+    ),
+    lesson!(
+        "py-deque",
+        "python",
+        "intermediate",
+        "deque",
+        "deque supports efficient appends and pops on both ends, which is why it is the usual queue type.",
+        "from collections import deque\n\nqueue = deque(['middle'])\nqueue.appendleft('start')\nqueue.append('end')\nprint(queue.popleft(), queue.pop())",
+        "from collections import deque\n\nqueue = deque(['middle'])\n# TODO: add start on the left and end on the right\nprint(queue.popleft(), 'missing')\n",
+        &[SyntaxCase {
+            input: "",
+            output: "start end\n",
+        }],
+        &["https://docs.python.org/3/library/collections.html#collections.deque"]
+    ),
+    lesson!(
+        "py-itertools",
         "python",
         "advanced",
-        "Context managers and type hints",
-        "with manages scoped resources; annotations document expected types.",
-        "from typing import Iterable\n\ndef total(xs: Iterable[int]) -> int:\n    return sum(xs)",
-        "from typing import Final\nword: Final[str] = 'ok'\n# TODO: print word\n",
+        "itertools",
+        "itertools provides lazy iterator building blocks for pairing, chaining, slicing, and combinatorics.",
+        "import itertools\n\nparts = [['o'], ['k']]\nprint(''.join(itertools.chain.from_iterable(parts)))",
+        "import itertools\n\nparts = [['o'], ['k']]\n# TODO: flatten both inner lists lazily\nprint(''.join(itertools.chain.from_iterable(parts[:1])))\n",
         EMPTY_HELLO,
-        &["https://docs.python.org/3/library/contextlib.html"]
+        &["https://docs.python.org/3/library/itertools.html"]
+    ),
+    lesson!(
+        "py-pathlib",
+        "python",
+        "intermediate",
+        "pathlib",
+        "pathlib represents paths as objects, so code can ask for names, suffixes, and parents without manual string splitting.",
+        "from pathlib import PurePosixPath\n\npath = PurePosixPath('logs/app.txt')\nprint(f'{path.stem}:{path.suffix}')",
+        "from pathlib import PurePosixPath\n\npath = PurePosixPath('logs/app.txt')\n# TODO: print the stem and suffix as app:.txt\nprint(path.name)\n",
+        &[SyntaxCase {
+            input: "",
+            output: "app:.txt\n",
+        }],
+        &["https://docs.python.org/3/library/pathlib.html"]
+    ),
+    lesson!(
+        "py-testing-assert",
+        "python",
+        "intermediate",
+        "Testing and assert",
+        "assert checks an invariant in small examples; test frameworks build on the same idea with repeatable test functions.",
+        "def add_two(value):\n    return value + 2\n\nassert add_two(3) == 5\nprint('ok')",
+        "def add_two(value):\n    # TODO: make the assertion describe the intended behavior\n    return value\n\nassert add_two(3) == 3\nprint('todo')\n",
+        EMPTY_HELLO,
+        &[
+            "https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement",
+            "https://docs.python.org/3/library/unittest.html",
+            "https://docs.python.org/3/tutorial/stdlib.html#quality-control",
+        ]
+    ),
+    lesson!(
+        "py-async",
+        "python",
+        "advanced",
+        "Async concepts",
+        "async def creates a coroutine; await pauses until the awaited operation completes, and asyncio.run drives the top-level coroutine.",
+        "import asyncio\n\nasync def label():\n    return 'ok'\n\nasync def main():\n    print(await label())\n\nasyncio.run(main())",
+        "import asyncio\n\nasync def label():\n    return 'ok'\n\nasync def main():\n    # TODO: await the coroutine and print its result\n    result = 'pending'\n    print(result)\n\nasyncio.run(main())\n",
+        EMPTY_HELLO,
+        &[
+            "https://docs.python.org/3/library/asyncio.html",
+            "https://docs.python.org/3/reference/datamodel.html#coroutines",
+            "https://docs.python.org/3/reference/expressions.html#await",
+        ]
     ),
 ];
 

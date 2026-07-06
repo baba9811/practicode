@@ -492,10 +492,10 @@ fn learn_command_uses_korean_syntax_copy() {
 #[test]
 fn learn_command_uses_supported_ui_language_syntax_copy() {
     let cases = [
-        ("ko", "# 문법: 출력", "표준 출력"),
-        ("ja", "# 文法: 出力", "printで"),
-        ("zh", "# 语法: 输出", "使用 print"),
-        ("es", "# Sintaxis: Salida", "Usa print"),
+        ("ko", "# 문법: print와 표준 출력", "표준 출력"),
+        ("ja", "# 文法: print と標準出力", "`print` は"),
+        ("zh", "# 语法: print 与标准输出", "`print` 是"),
+        ("es", "# Sintaxis: print y stdout", "`print` es"),
     ];
 
     for (lang, title, body) in cases {

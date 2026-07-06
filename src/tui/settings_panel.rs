@@ -1,6 +1,6 @@
 use crate::core::{
     AI_PROVIDERS, AppState, CLAUDE_AI_EFFORTS, CODEX_AI_EFFORTS, DIFFICULTIES, LANGUAGES, THEMES,
-    UI_LANGUAGES, normalize_ai_effort, syntax_progress_count, ui_text,
+    UI_LANGUAGES, normalize_ai_effort,
 };
 
 pub(super) struct SettingsChange {
@@ -31,7 +31,6 @@ pub(super) fn render(
     let avoid = list_or_none(&settings.avoid_topics, ui_language);
     let generate_languages = list_or_all(&settings.generate_languages, ui_language);
     let generate_ui_languages = list_or_all(&settings.generate_ui_languages, ui_language);
-    let (syntax_done, syntax_total) = syntax_progress_count(state, &settings.language);
     let mut lines = vec![
         label(ui_language, "title").to_string(),
         String::new(),
@@ -80,12 +79,6 @@ pub(super) fn render(
             "{}: {generate_ui_languages}",
             label(ui_language, "generated_ui_languages")
         ),
-        format!(
-            "{}: {} {syntax_done}/{syntax_total}",
-            ui_text(ui_language, "syntax_progress"),
-            settings.language
-        ),
-        format!("{}: /lesson", ui_text(ui_language, "syntax_lesson")),
         row(
             cursor,
             AI_PROVIDER_ROW,

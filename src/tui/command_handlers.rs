@@ -39,7 +39,6 @@ impl PracticodeApp {
             "generate" | "gen" | "new" => self.action_generate(arg),
             "back" | "prev" | "previous" | "p" => self.action_previous()?,
             "answer" | "giveup" | "give" | "g" => self.action_give_up()?,
-            "lesson" | "syntax" => self.action_lesson(arg)?,
             "problems" | "list" => self.start_problem_list(),
             "open" | "o" if !arg.is_empty() => self.open_problem(arg)?,
             "language" | "lang" if arg.is_empty() => self.action_cycle_language()?,

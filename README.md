@@ -101,7 +101,6 @@ Submissions are saved as you type under `submissions/<problem-id>/solution.<ext>
 | `/problems` | Browse problems with `up/down` or `j/k`, open with `Enter` |
 | `/open 2` | Open by number, id, or slug |
 | `/answer` | Show the reference answer |
-| `/lesson` | Show syntax examples for the current problem and code language |
 | `/hint` | Ask the selected AI for a concise hint |
 | `/hint explain my bug` | Ask the selected AI about the current problem and submission |
 | `/profile` | Show your current user profile |
@@ -125,7 +124,7 @@ Older command names such as `/prev`, `/list`, `/giveup`, and `/lang` still work 
 
 The default UI language is English. Switch it any time with `/ui ko`, `/ui ja`, `/ui zh`, or `/ui es`.
 
-Your user profile is saved in `.practicode/problem-state.json`. It keeps UI language, code language, theme, preferred difficulty, preferred topics, topics to avoid, generation language scope, syntax progress, and AI provider/model/effort. `auto` difficulty follows gradual progression; a fixed difficulty asks local selection and AI generation to prefer that level.
+Your user profile is saved in `.practicode/problem-state.json`. It keeps UI language, code language, theme, preferred difficulty, preferred topics, topics to avoid, generation language scope, and AI provider/model/effort. `auto` difficulty follows gradual progression; a fixed difficulty asks local selection and AI generation to prefer that level.
 
 Inside `/profile`, use `up/down` to move and `Space` or `Enter` to cycle common settings, AI provider/model/effort, or generated answer/UI languages. The notes row opens an editor for `.practicode/problem_notes.md`. Use slash commands for free-form lists such as `/topics arrays, strings`.
 

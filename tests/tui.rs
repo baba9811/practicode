@@ -168,7 +168,6 @@ fn slash_command_palette_surfaces_settings_commands() {
     assert!(suggestions.contains(&"/answer".to_string()));
     assert!(suggestions.contains(&"/generate <request>".to_string()));
     assert!(suggestions.contains(&"/profile".to_string()));
-    assert!(suggestions.contains(&"/lesson".to_string()));
     assert!(suggestions.contains(&"/difficulty auto".to_string()));
     assert!(suggestions.contains(&"/topics <list>".to_string()));
     assert!(suggestions.contains(&"/avoid <list>".to_string()));
@@ -188,30 +187,6 @@ fn slash_command_palette_surfaces_settings_commands() {
     );
     assert!(!suggestions.contains(&"/lang python".to_string()));
     assert!(!suggestions.contains(&"/note <text>".to_string()));
-}
-
-#[test]
-fn lesson_command_shows_current_language_syntax() {
-    let root = tmp_root("lesson-command");
-    let mut app = PracticodeApp::new(root).unwrap();
-    app.handle_command_for_test("language rust").unwrap();
-    app.handle_command_for_test("lesson").unwrap();
-
-    let output = app.output_for_test();
-    assert!(output.contains("Rust"));
-    assert!(output.contains("read_to_string"));
-    assert!(output.contains("문법") || output.contains("Syntax"));
-}
-
-#[test]
-fn profile_panel_shows_syntax_progress() {
-    let root = tmp_root("profile-syntax-progress");
-    let mut app = PracticodeApp::new(root).unwrap();
-    app.handle_command_for_test("profile").unwrap();
-
-    let output = app.output_for_test();
-    assert!(output.contains("Syntax progress: python 0/5"));
-    assert!(output.contains("Syntax lesson: /lesson"));
 }
 
 #[test]

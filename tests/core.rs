@@ -5,8 +5,7 @@ use practicode::{
     core::{
         AppState, HistoryItem, Settings, ensure_submission, judge, load_bank, load_state,
         localized, next_problem, parse_language_list, parse_ui_language_list, problem_by_id,
-        record_pass, render_problem, render_problem_tui, save_bank, save_state, syntax_lesson_text,
-        syntax_progress_count,
+        record_pass, render_problem, render_problem_tui, save_bank, save_state,
     },
     process::which,
     text::render_markdown_plain,
@@ -146,7 +145,6 @@ fn save_state_writes_ai_settings_without_deprecated_empty_field() {
         solved: Vec::new(),
         history: Vec::new(),
         suggested_next_difficulty: "easy".to_string(),
-        syntax_progress: Default::default(),
     };
     save_state(&root, &state).unwrap();
     let saved = fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
@@ -174,27 +172,6 @@ fn load_state_normalizes_ai_effort_by_provider() {
     .unwrap();
     let state = load_state(&root, &bank).unwrap();
     assert_eq!(state.settings.ai_effort, "xhigh");
-}
-
-#[test]
-fn load_state_normalizes_syntax_progress() {
-    let root = tmp_root("state-syntax-progress");
-    let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
-    fs::write(
-        root.join(".practicode/problem-state.json"),
-        r#"{
-  "current_problem": "001-hello-world",
-  "syntax_progress": {
-    "python": ["io", "unknown", "io"],
-    "ruby": ["io"]
-  }
-}"#,
-    )
-    .unwrap();
-    let state = load_state(&root, &bank).unwrap();
-    assert_eq!(state.syntax_progress["python"], vec!["io"]);
-    assert!(!state.syntax_progress.contains_key("ruby"));
 }
 
 #[test]
@@ -333,7 +310,6 @@ fn next_problem_skips_history_and_saves_new_current() {
             status: "solved".to_string(),
         }],
         suggested_next_difficulty: "easy".to_string(),
-        syntax_progress: Default::default(),
     };
     save_state(&root, &state).unwrap();
     let problem = next_problem(&root, &bank, &mut state).unwrap().unwrap();
@@ -365,7 +341,6 @@ fn next_problem_prefers_profile_difficulty_when_fixed() {
             status: "solved".to_string(),
         }],
         suggested_next_difficulty: "easy".to_string(),
-        syntax_progress: Default::default(),
     };
     let next = next_problem(&root, &bank, &mut state).unwrap().unwrap();
     assert_eq!(next.difficulty, "medium");
@@ -381,56 +356,12 @@ fn record_pass_marks_solved_and_raises_suggested_difficulty_after_two_solves() {
         solved: vec!["000-warmup".to_string()],
         history: Vec::new(),
         suggested_next_difficulty: "easy".to_string(),
-        syntax_progress: Default::default(),
     };
     record_pass(&root, &bank[0], &mut state).unwrap();
     let saved = load_state(&root, &bank).unwrap();
     assert!(saved.solved.contains(&"001-hello-world".to_string()));
     assert_eq!(saved.history[0].status, "solved");
     assert_eq!(saved.suggested_next_difficulty, "medium");
-}
-
-#[test]
-fn record_pass_tracks_syntax_progress_for_current_language_topics() {
-    let root = tmp_root("record-pass-syntax");
-    let bank = two_problem_bank(&root);
-    let mut state = AppState {
-        current_problem: "002-echo".to_string(),
-        settings: Settings {
-            language: "rust".to_string(),
-            ..Settings::default()
-        },
-        solved: Vec::new(),
-        history: Vec::new(),
-        suggested_next_difficulty: "easy".to_string(),
-        syntax_progress: Default::default(),
-    };
-    record_pass(&root, &bank[1], &mut state).unwrap();
-    let saved = load_state(&root, &bank).unwrap();
-    assert_eq!(syntax_progress_count(&saved, "rust"), (2, 5));
-    assert_eq!(saved.syntax_progress["rust"], vec!["io", "strings"]);
-    assert!(!saved.syntax_progress.contains_key("python"));
-}
-
-#[test]
-fn syntax_lesson_text_uses_problem_topics_and_language_examples() {
-    let root = tmp_root("syntax-lesson-text");
-    let bank = two_problem_bank(&root);
-    let state = AppState {
-        current_problem: "002-echo".to_string(),
-        settings: Settings::default(),
-        solved: Vec::new(),
-        history: Vec::new(),
-        suggested_next_difficulty: "easy".to_string(),
-        syntax_progress: Default::default(),
-    };
-    let text = syntax_lesson_text(&bank[1], "rust", "ko", &state);
-    assert!(text.contains("Rust"));
-    assert!(text.contains("read_to_string"));
-    assert!(text.contains("문법"));
-    assert!(text.contains("표준 입출력"));
-    assert!(text.contains("문자열"));
-    assert!(text.contains("[ ]"));
 }
 
 #[test]

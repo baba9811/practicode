@@ -1,14 +1,11 @@
-use crate::core::{
-    AppState, Problem, localized, normalize_ui_language, syntax_code_for, syntax_language_name,
-    syntax_lesson_completed, syntax_lesson_title, syntax_lessons_for_problem, ui_text,
-};
+use crate::core::{Problem, localized, normalize_ui_language, ui_text};
 use ratatui::{
     style::{Color, Modifier, Style},
     text::{Line, Span, Text},
 };
 
-pub(super) fn render(problem: &Problem, state: &AppState, light: bool) -> Text<'static> {
-    let lang = normalize_ui_language(&state.settings.ui_language);
+pub(super) fn render(problem: &Problem, ui_language: &str, light: bool) -> Text<'static> {
+    let lang = normalize_ui_language(ui_language);
     let title_style = if light {
         Style::default()
             .fg(Color::Blue)
@@ -67,15 +64,6 @@ pub(super) fn render(problem: &Problem, state: &AppState, light: bool) -> Text<'
             meta_style,
         )),
     ];
-    push_syntax_section(
-        &mut lines,
-        problem,
-        state,
-        &lang,
-        section_style,
-        meta_style,
-        code_style,
-    );
     lines.push(Line::default());
     for line in localized(&problem.statement, &lang).trim_end().lines() {
         lines.push(Line::from(Span::styled(line.to_string(), body_style)));
@@ -116,43 +104,6 @@ pub(super) fn render(problem: &Problem, state: &AppState, light: bool) -> Text<'
         push_code_lines(&mut lines, &case.output, code_style);
     }
     Text::from(lines)
-}
-
-fn push_syntax_section(
-    lines: &mut Vec<Line<'static>>,
-    problem: &Problem,
-    state: &AppState,
-    lang: &str,
-    section_style: Style,
-    meta_style: Style,
-    code_style: Style,
-) {
-    let lessons = syntax_lessons_for_problem(problem);
-    if lessons.is_empty() {
-        return;
-    }
-    let language = &state.settings.language;
-    lines.push(Line::default());
-    lines.push(Line::from(Span::styled(
-        format!(
-            "{}: {}",
-            ui_text(lang, "syntax"),
-            syntax_language_name(language)
-        ),
-        section_style,
-    )));
-    for lesson in lessons {
-        let checked = if syntax_lesson_completed(state, language, lesson.id) {
-            "[x]"
-        } else {
-            "[ ]"
-        };
-        lines.push(Line::from(Span::styled(
-            format!("  {checked} {}", syntax_lesson_title(lesson, lang)),
-            meta_style.add_modifier(Modifier::BOLD),
-        )));
-        push_code_lines(lines, syntax_code_for(lesson, language), code_style);
-    }
 }
 
 fn push_problem_section(

@@ -4,196 +4,396 @@
   "ui_language": "en",
   "lessons": {
     "java-output": {
-      "title": "Output",
-      "concept": "System.out.println writes a line. In Java, study Output by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Output rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "title": "Stdout",
+      "concept": "This Java topic is useful when a judge compares every newline and character. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on building score=7 from an int before println adds the newline. Watch the line that concatenates the label with score; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Output changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Using print when the expected output needs the newline added by println.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Output?"
+        "Where is the integer converted into the text score=7?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Output exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses System.out.println with a computed value. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
-    "java-variables": {
-      "title": "Variables",
-      "concept": "Java variables have declared types. In Java, study Variables by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Variables rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+    "java-variables-types": {
+      "title": "Variables and types",
+      "concept": "This Java topic is useful when primitive values and object references must be declared before use. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on combining a String, int, and boolean into one report line. Watch the line that sets score and passed consistently; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Variables changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Changing only the boolean while leaving the numeric score at its old value.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Variables?"
+        "Which variables decide the three fields in Ada:7:true?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Variables exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses typed local variables that agree with the report. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-numbers-operators": {
+      "title": "Numbers and operators",
+      "concept": "This Java topic is useful when division and remainder must stay integer-based in many stdin problems. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on deriving quotient and remainder from the same total and size. Watch the line that uses / and % with the same operands; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Using a different divisor for the quotient than for the remainder.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Why does 17 / 5 produce 3 instead of 3.4?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses integer division and remainder. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-strings": {
       "title": "Strings",
-      "concept": "String methods expose length, chars, and substrings. In Java, study Strings by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Strings rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when text cleanup and substring extraction happen before comparison or output. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on trimming spaces before taking the ok prefix. Watch the line that calls trim before substring; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Strings changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Taking substring indexes before removing surrounding spaces.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Strings?"
+        "What value does raw still hold after cleaned is computed?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Strings exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses String methods without mutating the original text. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-control-flow": {
       "title": "Control flow",
-      "concept": "if, for, and while control execution. In Java, study Control flow by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Control flow rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when branches and loops decide which values enter an accumulator. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on looping over 1..3 and adding only odd numbers. Watch the line that guards the addition with n % 2 == 1; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Control flow changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Adding every loop value and hoping the final total still matches.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Control flow?"
+        "Which iterations enter the if body, and which are skipped?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Control flow exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses if inside a for loop. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-methods": {
       "title": "Methods",
-      "concept": "Methods group reusable behavior. In Java, study Methods by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Methods rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when a reusable calculation needs a named boundary. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on passing width and height into area. Watch the line that returns multiplication instead of printing inside the method; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Methods changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Returning perimeter from a method whose callers expect area.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Methods?"
+        "Which line sends the computed value back to main?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Methods exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses method parameters and return value. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-input": {
       "title": "Input parsing",
-      "concept": "System.in can be read directly for exercises. In Java, study Input parsing by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Input parsing rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when stdin arrives as bytes and must become typed tokens. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on reading System.in once and summing parsed integers. Watch the line that splits on whitespace before Integer.parseInt; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Input parsing changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Parsing only the first token when the judge can send many numbers.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Input parsing?"
+        "Where does text become an int rather than a String?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Input parsing exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses readAllBytes, split, and Integer.parseInt. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-arrays-collections": {
       "title": "Arrays and collections",
-      "concept": "Arrays are fixed size; collections add flexible containers. In Java, study Arrays and collections by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Arrays and collections rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when fixed arrays, growable List, keyed Map, and unique Set solve different container jobs. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on copying array values into List, Map, and Set views. Watch the line that uses merge for the Map total and add for the Set; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Arrays and collections changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Using nums.length when the problem asks for the numeric total.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Arrays and collections?"
+        "Which collection stores order, which stores lookup, and which removes duplicates?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Arrays and collections exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses List, Map, and Set APIs with an array source. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-classes-objects": {
+      "title": "Classes and objects",
+      "concept": "This Java topic is useful when objects need instance state plus behavior. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on creating Counter and calling add. Watch the line that updates this.value before returning; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing new, fields, and instance methods.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates new, fields, and instance methods?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses new, fields, and instance methods. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-constructors": {
+      "title": "Constructors",
+      "concept": "This Java topic is useful when new objects must start with valid field values. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on storing width and height before area runs. Watch the line that assigns constructor parameters into final fields; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing constructor parameters and this.field assignment.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates constructor parameters and this.field assignment?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses constructor parameters and this.field assignment. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-encapsulation": {
+      "title": "Encapsulation",
+      "concept": "This Java topic is useful when callers should update state through methods instead of touching fields. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on adding points through Score.add. Watch the line that changes the private points field only after validation; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing private fields with public methods.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates private fields with public methods?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses private fields with public methods. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-static-members": {
+      "title": "Static members",
+      "concept": "This Java topic is useful when a value belongs to the class rather than one instance. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on calling Scale.apply through the class. Watch the line that multiplies by the shared FACTOR; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing static final constants and static methods.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates static final constants and static methods?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses static final constants and static methods. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-enum-switch": {
+      "title": "Enum and switch",
+      "concept": "This Java topic is useful when a fixed set of states must map to explicit results. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on switching Status.DONE to ok. Watch the line that handles the DONE branch directly; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing enum constants and switch expression branches.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates enum constants and switch expression branches?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses enum constants and switch expression branches. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-exceptions": {
       "title": "Exceptions",
-      "concept": "try/catch handles failures; checked exceptions are part of signatures. In Java, study Exceptions by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Exceptions rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when bad input can be recovered without hiding unrelated failures. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on catching NumberFormatException and returning a fallback. Watch the line that catches the specific parse failure; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Exceptions changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Changing the printed literal instead of fixing try/catch around Integer.parseInt.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Exceptions?"
+        "Which expression demonstrates try/catch around Integer.parseInt?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Exceptions exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
-    },
-    "java-classes-interfaces": {
-      "title": "Classes and interfaces",
-      "concept": "Classes hold state and behavior; interfaces describe behavior. In Java, study Classes and interfaces by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Classes and interfaces rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
-      "common_mistakes": [
-        "Copying the shape of the example without explaining what Classes and interfaces changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
-      ],
-      "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Classes and interfaces?"
-      ],
-      "exercise_prompt": "Complete the Classes and interfaces exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses try/catch around Integer.parseInt. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
     "java-generics": {
       "title": "Generics",
-      "concept": "Generics reuse code with type parameters. In Java, study Generics by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Generics rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "This Java topic is useful when one method must keep the caller's element type. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on returning the last item from List<T>. Watch the line that uses T instead of Object; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Generics changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Changing the printed literal instead of fixing generic method <T> with List<T>.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Generics?"
+        "Which expression demonstrates generic method <T> with List<T>?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Generics exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses generic method <T> with List<T>. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
-    "java-lambda-streams": {
-      "title": "Lambda and streams",
-      "concept": "Lambdas pass behavior; streams process sequences. In Java, study Lambda and streams by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Lambda and streams rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+    "java-interfaces": {
+      "title": "Interfaces",
+      "concept": "This Java topic is useful when callers should depend on behavior rather than a concrete class. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on passing User as Named. Watch the line that implements name with the public signature; changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Lambda and streams changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Changing the printed literal instead of fixing implements and interface-typed parameters.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Lambda and streams?"
+        "Which expression demonstrates implements and interface-typed parameters?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Lambda and streams exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses implements and interface-typed parameters. Keep the single-file judge shape and make the existing case pass through that syntax."
     },
-    "java-records-sealed": {
-      "title": "Records and sealed types",
-      "concept": "Records reduce data boilerplate; sealed types bound inheritance. In Java, study Records and sealed types by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Records and sealed types rule inside real Java code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+    "java-inheritance-composition": {
+      "title": "Inheritance and composition",
+      "concept": "This Java topic is useful when a subclass also needs a helper object to finish behavior. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on PremiumUser combining inherited baseScore with Bonus. Watch the line that calls bonus.apply(baseScore()); changing that line changes the judged output for a concrete reason.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Records and sealed types changes.",
-        "Editing the Java starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Changing the printed literal instead of fixing extends plus a composed field.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Records and sealed types?"
+        "Which expression demonstrates extends plus a composed field?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
       ],
-      "exercise_prompt": "Complete the Records and sealed types exercise in Java. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Edit the Solution.java exercise so it uses extends plus a composed field. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-records": {
+      "title": "Records",
+      "concept": "This Java topic is useful when immutable data carriers need less boilerplate. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on using generated accessors x() and y(). Watch the line that adds both record components; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing record components and generated accessors.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates record components and generated accessors?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses record components and generated accessors. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-optional": {
+      "title": "Optional",
+      "concept": "This Java topic is useful when a missing value must be handled explicitly. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on filtering an Optional before orElse. Watch the line that keeps ok present instead of empty; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing Optional.of, filter, and orElse.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates Optional.of, filter, and orElse?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses Optional.of, filter, and orElse. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-streams-lambdas": {
+      "title": "Streams and lambdas",
+      "concept": "This Java topic is useful when collection processing is clearer as a pipeline. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on filtering even numbers then squaring them. Watch the line that uses filter before mapToInt; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing lambda predicates and terminal sum.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates lambda predicates and terminal sum?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses lambda predicates and terminal sum. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-comparators-sorting": {
+      "title": "Comparators and sorting",
+      "concept": "This Java topic is useful when objects need ordering separate from their data shape. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on sorting users by score descending. Watch the line that builds a Comparator from User::score; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing Comparator.comparingInt and reversed.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates Comparator.comparingInt and reversed?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses Comparator.comparingInt and reversed. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-try-with-resources": {
+      "title": "Try-with-resources",
+      "concept": "This Java topic is useful when resources must close even when code exits early. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on reading bytes inside a managed block. Watch the line that declares the resource in the try header; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing AutoCloseable in a try header.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates AutoCloseable in a try header?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses AutoCloseable in a try header. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-packages-imports": {
+      "title": "Packages and imports",
+      "concept": "This Java topic is useful when single-file exercises still need classes from JDK packages. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on importing List and ArrayList. Watch the line that uses imported names without package qualification; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing import declarations in a package-free Solution.java.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates import declarations in a package-free Solution.java?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses import declarations in a package-free Solution.java. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-annotations": {
+      "title": "Annotations",
+      "concept": "This Java topic is useful when metadata belongs on declarations rather than in runtime logic. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on defining @Audit and annotating a method. Watch the line that keeps normal method return behavior; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing @interface and annotated method declarations.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates @interface and annotated method declarations?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses @interface and annotated method declarations. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-sealed-classes": {
+      "title": "Sealed classes",
+      "concept": "This Java topic is useful when a domain hierarchy should list its permitted implementations. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on restricting Shape to Rect and Dot. Watch the line that computes measure in a permitted record; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing sealed interface, permits, and final records.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates sealed interface, permits, and final records?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses sealed interface, permits, and final records. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-testing-assert": {
+      "title": "Testing and assert",
+      "concept": "This Java topic is useful when small checks should fail near the broken method. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on checking addTwo before printing. Watch the line that throws AssertionError when behavior disagrees; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing pure helper plus explicit assertion.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates pure helper plus explicit assertion?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses pure helper plus explicit assertion. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-equality-hashcode": {
+      "title": "equals and hashCode",
+      "concept": "This Java topic is useful when HashSet must recognize equal value objects. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on adding two equal Point objects. Watch the line that compares fields and hashes the same fields; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing equals(Object) with matching hashCode.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates equals(Object) with matching hashCode?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses equals(Object) with matching hashCode. Keep the single-file judge shape and make the existing case pass through that syntax."
+    },
+    "java-overloading-varargs": {
+      "title": "Overloading and varargs",
+      "concept": "This Java topic is useful when method calls can choose among signatures and collect extra arguments. The lesson stays inside one Solution.java file, so the syntax is visible in the value setup, the Java API call, and the exact stdout line.",
+      "worked_example": "The example focuses on summing first plus the rest array. Watch the line that loops through every varargs value; changing that line changes the judged output for a concrete reason.",
+      "common_mistakes": [
+        "Changing the printed literal instead of fixing int... rest and overloaded label.",
+        "Printing the final answer literally skips the Java construct this lesson is meant to practice."
+      ],
+      "self_check": [
+        "Which expression demonstrates int... rest and overloaded label?",
+        "If the input value or object state changed, which expression would need to change before stdout is printed?"
+      ],
+      "exercise_prompt": "Edit the Solution.java exercise so it uses int... rest and overloaded label. Keep the single-file judge shape and make the existing case pass through that syntax."
     }
   }
 }

@@ -23,8 +23,8 @@ fn compose_hangul_jamo_handles_korean_command_text() {
 fn render_markdown_plain_preserves_fenced_code_body() {
     let rendered = render_markdown_plain("## Answer\n\n```python\n# keep comment\nprint('x')\n```");
     assert!(rendered.contains("Answer"));
-    assert!(rendered.contains("# keep comment"));
-    assert!(rendered.contains("print('x')"));
+    assert!(rendered.contains("  # keep comment"));
+    assert!(rendered.contains("  print('x')"));
     assert!(!rendered.contains("```"));
 }
 

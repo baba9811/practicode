@@ -4,196 +4,396 @@
   "ui_language": "ko",
   "lessons": {
     "java-output": {
-      "title": "출력",
-      "concept": "System.out.println으로 한 줄을 출력합니다. Java에서 출력을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 출력 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "title": "표준 출력",
+      "concept": "표준 출력는 judge가 줄바꿈과 문자를 그대로 비교할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 int 값으로 score=7을 만든 뒤 println이 줄바꿈을 붙이는 흐름에 집중한다. label과 score를 연결하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "출력의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "예상 출력에 줄바꿈이 필요한데 print를 써서 마지막 줄이 맞지 않는다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 출력 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "정수 값이 score=7 텍스트로 바뀌는 지점은 어디인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 출력 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 계산된 값을 System.out.println으로 출력하는 방식를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
-    "java-variables": {
-      "title": "변수",
-      "concept": "Java 변수는 선언된 타입을 가집니다. Java에서 변수을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 변수 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+    "java-variables-types": {
+      "title": "변수와 타입",
+      "concept": "변수와 타입는 primitive 값과 객체 참조를 쓰기 전에 선언해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 String, int, boolean을 한 줄 보고서로 합치는 흐름에 집중한다. score와 passed를 일관되게 맞추는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "변수의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "boolean만 바꾸고 숫자 score는 이전 값으로 남겨 둔다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 변수 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "Ada:7:true의 세 칸을 결정하는 변수는 각각 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 변수 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 출력 보고서와 일치하는 타입 있는 지역 변수를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-numbers-operators": {
+      "title": "숫자와 연산자",
+      "concept": "숫자와 연산자는 많은 stdin 문제에서 나눗셈과 나머지를 정수 기준으로 유지해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 같은 total과 size에서 몫과 나머지를 구하는 흐름에 집중한다. 같은 피연산자에 /와 %를 쓰는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "몫과 나머지에 서로 다른 나누는 값을 사용한다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "17 / 5가 3.4가 아니라 3이 되는 이유는 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 정수 나눗셈과 나머지 연산를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-strings": {
       "title": "문자열",
-      "concept": "String 메서드는 길이, 문자, 부분 문자열을 제공합니다. Java에서 문자열을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 문자열 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "문자열는 비교나 출력 전에 텍스트 정리와 부분 문자열 추출이 필요할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 공백을 제거한 뒤 ok 접두사를 꺼내는 흐름에 집중한다. substring 전에 trim을 호출하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "문자열의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "앞뒤 공백을 제거하기 전에 substring 인덱스를 잡는다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 문자열 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "cleaned를 만든 뒤 raw에는 어떤 값이 남아 있는가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 문자열 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 원본 텍스트를 바꾸지 않는 String 메서드를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-control-flow": {
       "title": "제어 흐름",
-      "concept": "if, for, while로 실행 흐름을 제어합니다. Java에서 제어 흐름을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 제어 흐름 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "제어 흐름는 분기와 반복문이 누적값에 들어갈 값을 결정할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 1부터 3까지 반복하며 홀수만 더하는 흐름에 집중한다. n % 2 == 1 조건으로 더하기를 지키는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "제어 흐름의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "반복되는 모든 값을 더해 놓고 최종 합이 우연히 맞기를 기대한다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 제어 흐름 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "어떤 반복이 if 본문에 들어가고 어떤 반복은 건너뛰는가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 제어 흐름 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 for 반복문 안의 if 조건를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-methods": {
       "title": "메서드",
-      "concept": "메서드는 재사용 가능한 동작을 묶습니다. Java에서 메서드을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 메서드 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "메서드는 재사용 계산에 이름 있는 경계가 필요할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 width와 height를 area에 전달하는 흐름에 집중한다. 메서드 안에서 출력하지 않고 곱셈 결과를 반환하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "메서드의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "호출자가 넓이를 기대하는 메서드에서 둘레를 반환한다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 메서드 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "계산된 값을 main으로 돌려보내는 줄은 어디인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 메서드 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 메서드 매개변수와 반환값를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-input": {
       "title": "입력 파싱",
-      "concept": "예제에서는 System.in을 직접 읽어 입력을 처리할 수 있습니다. Java에서 입력 파싱을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 입력 파싱 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "입력 파싱는 stdin 바이트를 타입 있는 토큰으로 바꿔야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 System.in을 한 번 읽고 파싱한 정수를 합산하는 흐름에 집중한다. Integer.parseInt 전에 공백 기준으로 나누는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "입력 파싱의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "judge가 여러 숫자를 줄 수 있는데 첫 토큰만 파싱한다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 입력 파싱 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "텍스트가 String이 아니라 int가 되는 지점은 어디인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 입력 파싱 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 readAllBytes, split, Integer.parseInt를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-arrays-collections": {
       "title": "배열과 컬렉션",
-      "concept": "배열은 크기가 고정되고 컬렉션은 더 유연한 컨테이너를 제공합니다. Java에서 배열과 컬렉션을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 배열과 컬렉션 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "배열과 컬렉션는 고정 길이 배열, 늘어나는 List, 키 기반 Map, 유일값 Set이 서로 다른 컨테이너 역할을 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 배열 값을 List, Map, Set 관점으로 옮기는 흐름에 집중한다. Map 합계에는 merge를, Set에는 add를 쓰는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "배열과 컬렉션의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "문제가 숫자 합계를 요구하는데 nums.length를 출력한다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 배열과 컬렉션 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "순서, 조회, 중복 제거를 각각 담당하는 컬렉션은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 배열과 컬렉션 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 배열을 출발점으로 한 List, Map, Set API를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-classes-objects": {
+      "title": "클래스와 객체",
+      "concept": "클래스와 객체는 객체가 인스턴스 상태와 동작을 함께 가져야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 Counter를 만들고 add를 호출하는 흐름에 집중한다. 반환 전에 this.value를 갱신하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "new, 필드, 인스턴스 메서드를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "new, 필드, 인스턴스 메서드를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 new, 필드, 인스턴스 메서드를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-constructors": {
+      "title": "생성자",
+      "concept": "생성자는 새 객체가 올바른 필드값으로 시작해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 area가 실행되기 전에 width와 height를 저장하는 흐름에 집중한다. 생성자 매개변수를 final 필드에 대입하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "생성자 매개변수와 this.field 대입를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "생성자 매개변수와 this.field 대입를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 생성자 매개변수와 this.field 대입를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-encapsulation": {
+      "title": "캡슐화",
+      "concept": "캡슐화는 호출자가 필드를 직접 만지지 않고 메서드로 상태를 바꿔야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 Score.add를 통해 점수를 더하는 흐름에 집중한다. 검증 뒤 private points 필드만 바꾸는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "private 필드와 public 메서드를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "private 필드와 public 메서드를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 private 필드와 public 메서드를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-static-members": {
+      "title": "static 멤버",
+      "concept": "static 멤버는 값이 특정 객체가 아니라 클래스에 속해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 클래스를 통해 Scale.apply를 호출하는 흐름에 집중한다. 공유 FACTOR를 곱하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "static final 상수와 static 메서드를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "static final 상수와 static 메서드를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 static final 상수와 static 메서드를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-enum-switch": {
+      "title": "enum과 switch",
+      "concept": "enum과 switch는 정해진 상태 집합을 명시적 결과로 바꿔야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 Status.DONE을 ok로 switch하는 흐름에 집중한다. DONE 분기를 직접 처리하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "enum 상수와 switch 표현식 분기를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "enum 상수와 switch 표현식 분기를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 enum 상수와 switch 표현식 분기를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-exceptions": {
       "title": "예외",
-      "concept": "try/catch는 실패를 처리하고 checked exception은 시그니처에 드러납니다. Java에서 예외을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 예외 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "예외는 잘못된 입력을 관련 없는 실패까지 숨기지 않고 복구해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 NumberFormatException을 잡아 fallback을 반환하는 흐름에 집중한다. 구체적인 파싱 실패만 catch하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "예외의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "Integer.parseInt 주변의 try/catch를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 예외 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "Integer.parseInt 주변의 try/catch를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 예외 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
-    },
-    "java-classes-interfaces": {
-      "title": "클래스와 인터페이스",
-      "concept": "클래스는 상태와 동작을 담고 인터페이스는 동작 계약을 설명합니다. Java에서 클래스와 인터페이스을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 클래스와 인터페이스 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
-      "common_mistakes": [
-        "클래스와 인터페이스의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
-      ],
-      "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 클래스와 인터페이스 규칙과 직접 연결된 한 줄은 무엇인가요?"
-      ],
-      "exercise_prompt": "Java의 클래스와 인터페이스 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 Integer.parseInt 주변의 try/catch를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
     "java-generics": {
       "title": "제네릭",
-      "concept": "제네릭은 타입 매개변수로 코드를 재사용하게 합니다. Java에서 제네릭을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 제네릭 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+      "concept": "제네릭는 하나의 메서드가 호출자의 원소 타입을 보존해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 List<T>에서 마지막 원소를 반환하는 흐름에 집중한다. Object 대신 T를 쓰는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "제네릭의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "List<T>를 받는 제네릭 메서드 <T>를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 제네릭 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "List<T>를 받는 제네릭 메서드 <T>를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 제네릭 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 List<T>를 받는 제네릭 메서드 <T>를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
-    "java-lambda-streams": {
-      "title": "람다와 스트림",
-      "concept": "람다는 동작을 값처럼 넘기고 스트림은 시퀀스를 처리합니다. Java에서 람다와 스트림을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 람다와 스트림 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+    "java-interfaces": {
+      "title": "인터페이스",
+      "concept": "인터페이스는 호출자가 구체 클래스보다 동작 계약에 기대야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 User를 Named로 전달하는 흐름에 집중한다. public 시그니처로 name을 구현하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "람다와 스트림의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "implements와 인터페이스 타입 매개변수를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 람다와 스트림 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "implements와 인터페이스 타입 매개변수를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 람다와 스트림 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 implements와 인터페이스 타입 매개변수를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     },
-    "java-records-sealed": {
-      "title": "레코드와 sealed 타입",
-      "concept": "레코드는 데이터 보일러플레이트를 줄이고 sealed 타입은 상속 범위를 제한합니다. Java에서 레코드와 sealed 타입을 익힐 때는 예제의 어느 줄이 값을 만들고 어느 줄이 그 값을 출력으로 연결하는지 표시해 보세요. 시작 코드를 고치기 전에는 현재 코드가 무엇을 출력할지 먼저 적어야 합니다.",
-      "worked_example": "이 풀이 예제는 Java의 레코드와 sealed 타입 규칙이 실제 코드에서 어디에 놓이는지 보여줍니다. 값이 준비되는 줄, 그 값을 읽는 표현식, 출력으로 이어지는 줄을 분리해서 읽어 보세요.",
+    "java-inheritance-composition": {
+      "title": "상속과 합성",
+      "concept": "상속과 합성는 하위 클래스가 동작을 완성하려면 도움 객체도 필요할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 PremiumUser가 상속받은 baseScore와 Bonus를 합치는 흐름에 집중한다. bonus.apply(baseScore())를 호출하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
       "common_mistakes": [
-        "레코드와 sealed 타입의 역할을 보지 않고 예제 모양만 복사하는 것",
-        "Java 시작 코드의 현재 출력을 확인하지 않고 바로 수정하는 것",
-        "이번 단원이 연습하는 규칙보다 괄호나 철자만 먼저 고치는 것"
+        "extends와 합성 필드를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
       ],
       "self_check": [
-        "예제에서 출력될 값을 만드는 표현식은 어디인가요?",
-        "그 값이 비어 있거나 타입이 다르면 어떤 결과가 나올까요?",
-        "시작 코드에서 레코드와 sealed 타입 규칙과 직접 연결된 한 줄은 무엇인가요?"
+        "extends와 합성 필드를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
       ],
-      "exercise_prompt": "Java의 레코드와 sealed 타입 실습을 완성하세요. 시작 코드의 현재 출력을 먼저 예측한 뒤, 이 단원의 규칙과 연결된 부분만 수정하세요. 기대 출력을 상수로 붙여 넣지 마세요."
+      "exercise_prompt": "Solution.java 실습을 고쳐 extends와 합성 필드를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-records": {
+      "title": "record",
+      "concept": "record는 불변 데이터 묶음에 반복 코드가 적어야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 생성된 접근자 x()와 y()를 쓰는 흐름에 집중한다. 두 record 컴포넌트를 모두 더하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "record 컴포넌트와 생성 접근자를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "record 컴포넌트와 생성 접근자를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 record 컴포넌트와 생성 접근자를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-optional": {
+      "title": "Optional",
+      "concept": "Optional는 없는 값을 명시적으로 처리해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 orElse 전에 Optional을 filter하는 흐름에 집중한다. empty 대신 ok를 가진 상태로 유지하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "Optional.of, filter, orElse를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "Optional.of, filter, orElse를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 Optional.of, filter, orElse를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-streams-lambdas": {
+      "title": "stream과 lambda",
+      "concept": "stream과 lambda는 컬렉션 처리가 파이프라인으로 더 분명할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 짝수만 filter한 뒤 제곱하는 흐름에 집중한다. mapToInt 전에 filter를 쓰는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "lambda 조건과 terminal sum를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "lambda 조건과 terminal sum를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 lambda 조건과 terminal sum를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-comparators-sorting": {
+      "title": "Comparator와 정렬",
+      "concept": "Comparator와 정렬는 객체의 데이터 모양과 별도로 정렬 기준이 필요할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 사용자를 점수 내림차순으로 정렬하는 흐름에 집중한다. User::score로 Comparator를 만드는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "Comparator.comparingInt와 reversed를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "Comparator.comparingInt와 reversed를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 Comparator.comparingInt와 reversed를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-try-with-resources": {
+      "title": "try-with-resources",
+      "concept": "try-with-resources는 코드가 일찍 끝나도 리소스가 닫혀야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 관리되는 블록 안에서 byte를 읽는 흐름에 집중한다. try 헤더에 리소스를 선언하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "try 헤더의 AutoCloseable를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "try 헤더의 AutoCloseable를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 try 헤더의 AutoCloseable를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-packages-imports": {
+      "title": "package와 import",
+      "concept": "package와 import는 단일 파일 실습에서도 JDK 패키지의 클래스가 필요할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 List와 ArrayList를 import하는 흐름에 집중한다. 패키지 전체 이름 없이 import된 이름을 쓰는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "package 없는 Solution.java의 import 선언를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "package 없는 Solution.java의 import 선언를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 package 없는 Solution.java의 import 선언를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-annotations": {
+      "title": "annotation",
+      "concept": "annotation는 메타데이터가 실행 로직이 아니라 선언에 붙어야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 @Audit를 정의하고 메서드에 붙이는 흐름에 집중한다. 일반 메서드 반환 동작은 유지하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "@interface와 annotation이 붙은 메서드 선언를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "@interface와 annotation이 붙은 메서드 선언를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 @interface와 annotation이 붙은 메서드 선언를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-sealed-classes": {
+      "title": "sealed 클래스",
+      "concept": "sealed 클래스는 도메인 계층이 허용된 구현을 나열해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 Shape를 Rect와 Dot으로 제한하는 흐름에 집중한다. 허용된 record 안에서 measure를 계산하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "sealed interface, permits, final record를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "sealed interface, permits, final record를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 sealed interface, permits, final record를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-testing-assert": {
+      "title": "테스트와 assert",
+      "concept": "테스트와 assert는 작은 검사가 깨진 메서드 가까이에서 실패해야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 출력 전에 addTwo를 검사하는 흐름에 집중한다. 동작이 다르면 AssertionError를 던지는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "순수 helper와 명시적 assertion를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "순수 helper와 명시적 assertion를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 순수 helper와 명시적 assertion를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-equality-hashcode": {
+      "title": "equals와 hashCode",
+      "concept": "equals와 hashCode는 HashSet이 같은 값 객체를 알아봐야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 같은 Point 객체 두 개를 추가하는 흐름에 집중한다. 필드를 비교하고 같은 필드를 hash하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "hashCode와 맞는 equals(Object)를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "hashCode와 맞는 equals(Object)를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 hashCode와 맞는 equals(Object)를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
+    },
+    "java-overloading-varargs": {
+      "title": "overloading과 varargs",
+      "concept": "overloading과 varargs는 메서드 호출이 시그니처를 고르고 추가 인자를 모아야 할 때 필요하다. 이 레슨은 단일 Solution.java 안에서 값 준비, Java API 호출, 정확한 stdout 출력이 어떻게 이어지는지 보여 준다.",
+      "worked_example": "예제는 first와 나머지 배열을 더하는 흐름에 집중한다. 모든 varargs 값을 반복하는 줄을 확인하면 출력이 왜 바뀌는지 코드 경로로 설명할 수 있다.",
+      "common_mistakes": [
+        "int... rest와 overloaded label를 고치지 않고 출력 문자열만 바꾼다.",
+        "최종 답을 문자열로만 출력하면 이 레슨에서 연습해야 할 Java 문법을 건너뛰게 된다."
+      ],
+      "self_check": [
+        "int... rest와 overloaded label를 보여 주는 표현식은 무엇인가?",
+        "입력값이나 객체 상태가 바뀌면 stdout 전에 어느 표현식을 바꿔야 하는가?"
+      ],
+      "exercise_prompt": "Solution.java 실습을 고쳐 int... rest와 overloaded label를 사용하라. 단일 파일 judge 구조를 유지하고 그 문법을 통해 케이스를 통과시켜라."
     }
   }
 }

@@ -9,7 +9,7 @@ pub fn render_markdown_plain(markdown: &str) -> String {
             continue;
         }
         if in_fence {
-            out.push(line.to_string());
+            out.push(format!("  {line}"));
             continue;
         }
         let trimmed = line.trim_start();

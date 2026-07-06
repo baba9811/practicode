@@ -4,196 +4,379 @@
   "ui_language": "es",
   "lessons": {
     "py-output": {
-      "title": "Salida",
-      "concept": "Usa print para mostrar un valor como una línea en pantalla. En Python, estudia Salida ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Salida dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "print y stdout",
+      "concept": "`print` es el punto donde un cálculo se convierte en salida visible para el juez. Convierte sus argumentos a texto, separa argumentos con espacios y añade salto de línea por defecto, así que stdout debe coincidir exactamente.",
+      "worked_example": "El f-string usa `name` y `score` para formar `Ada:7`; los nombres de variables y las comillas no aparecen en stdout.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Salida",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Dejar un print de depuración en la salida final.",
+        "Imprimir la representación de una lista cuando se espera texto plano.",
+        "Usar `return` en el nivel superior en vez de imprimir la respuesta."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Salida?"
+        "¿Qué añade `print` al final por defecto?",
+        "¿Qué compara el juez si hay una línea extra?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Salida en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Usa `name` y `score` para imprimir solamente `Ada:7`."
     },
     "py-variables": {
       "title": "Variables",
-      "concept": "Un nombre apunta a un valor y puede volver a vincularse a otro. En Python, estudia Variables ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Variables dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Una variable es un nombre enlazado a un objeto. Asignar con `=` no compara igualdad; cambia qué objeto leerá ese nombre a partir de ese punto.",
+      "worked_example": "`count = count + 2` lee el valor anterior, crea un entero nuevo y vuelve a enlazar `count` antes de imprimir `3`.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Variables",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Leer `=` como comparación matemática.",
+        "Reutilizar el mismo nombre corto para significados distintos.",
+        "Esperar que un reenlace modifique automáticamente objetos anteriores."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Variables?"
+        "Después de `x = 1; x = x + 2`, ¿qué vale `x`?",
+        "¿Qué valor temporal merece un nombre claro?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Variables en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Reenlaza `word` con el texto esperado e imprime ese nombre."
+    },
+    "py-numbers": {
+      "title": "Números",
+      "concept": "Los enteros de Python no tienen límite práctico de tamaño, y los operadores numéricos expresan ideas distintas. `/` produce float, `//` produce cociente entero, `%` produce resto y `**` potencia.",
+      "worked_example": "`7 // 2` calcula el cociente `3`; `7 % 2` calcula el resto `1`, que juntos describen la división entera.",
+      "common_mistakes": [
+        "Usar `/` cuando la respuesta pide división entera.",
+        "Tratar `%` como porcentaje en vez de resto.",
+        "Mezclar una salida float en un formato esperado de enteros."
+      ],
+      "self_check": [
+        "¿Qué producen `7 // 2` y `7 % 2`?",
+        "¿Por qué `round` no reemplaza a `//`?"
+      ],
+      "exercise_prompt": "Cambia la aritmética para imprimir el cociente y el resto como `3:1`."
     },
     "py-strings": {
       "title": "Cadenas",
-      "concept": "Las cadenas admiten longitud, índice, cortes y recorrido. En Python, estudia Cadenas ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Cadenas dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Una cadena es una secuencia inmutable de caracteres Unicode. El índice lee un carácter y el slice lee un rango semiabierto sin cambiar la cadena original.",
+      "worked_example": "`text[1:4]` lee los índices 1, 2 y 3 de `python`; el índice final 4 marca el límite y no se incluye.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Cadenas",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Incluir mentalmente el índice final del slice.",
+        "Intentar asignar en `text[0]` aunque la cadena sea inmutable.",
+        "Contar posiciones desde 1 en vez de 0."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Cadenas?"
+        "¿Qué lee `'code'[1]`?",
+        "¿Por qué `'xokx'[1:3]` tiene dos caracteres?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Cadenas en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Usa un slice para imprimir solo `ok`, sin los marcadores alrededor."
     },
     "py-control-flow": {
       "title": "Flujo de control",
-      "concept": "Usa if, for y while para expresar decisiones y repetición. En Python, estudia Flujo de control ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Flujo de control dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "`if` elige un bloque, `for` consume un iterable y `while` repite mientras cambie una condición. La indentación es sintaxis, por lo que una línea movida cambia el flujo real.",
+      "worked_example": "El código visita 1, 2 y 3, suma solo los impares y emite el total después de terminar el bucle.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Flujo de control",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Indentar la acumulación fuera del bucle.",
+        "Esperar que `range(n)` incluya `n`.",
+        "Crear un `while` cuya condición nunca cambia."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Flujo de control?"
+        "¿Qué líneas se ejecutan una vez por iteración?",
+        "¿Qué valores genera `range(1, 4)`?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Flujo de control en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el cuerpo del bucle para sumar solo los impares."
     },
     "py-functions": {
       "title": "Funciones",
-      "concept": "def crea comportamiento reutilizable con parámetros y retorno. En Python, estudia Funciones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Funciones dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "`def` crea un objeto invocable. Los parámetros reciben argumentos y `return` entrega un valor al llamador; imprimir dentro de la función no es lo mismo que devolver el cálculo.",
+      "worked_example": "`area(3, 4)` pasa dos argumentos, la función los multiplica y el llamador imprime el `12` devuelto.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Funciones",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Definir una función y olvidar llamarla.",
+        "Imprimir cuando el llamador necesita un valor devuelto.",
+        "Retornar demasiado pronto dentro de un bucle."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Funciones?"
+        "¿Qué devuelve una función que llega al final sin `return`?",
+        "¿Dónde debería estar el print final?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Funciones en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Haz que la función devuelva área, no perímetro."
     },
     "py-input": {
-      "title": "Análisis de entrada",
-      "concept": "sys.stdin y split manejan entradas típicas de concursos. En Python, estudia Análisis de entrada ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Análisis de entrada dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Lectura de entrada",
+      "concept": "La entrada de concursos llega como texto en stdin. El patrón común es leer una vez, separar tokens, convertir tipos y resolver después con valores normales.",
+      "worked_example": "`sys.stdin.read().split()` produce tokens de texto; aplicar `int` a cada token permite sumar números reales, no cadenas.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Análisis de entrada",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Usar muchas llamadas `input()` cuando una lectura completa es más simple.",
+        "Olvidar que `split()` devuelve cadenas.",
+        "Mezclar parsing con el algoritmo hasta hacerlo difícil de probar."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Análisis de entrada?"
+        "¿Qué tipo devuelve `sys.stdin.read()`?",
+        "¿Dónde manejarías una entrada vacía?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Análisis de entrada en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Convierte todos los enteros de stdin y muestra su suma."
     },
     "py-lists-dicts": {
       "title": "Listas y diccionarios",
-      "concept": "Las listas guardan valores en orden y se leen por índice. En Python, estudia Listas y diccionarios ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Listas y diccionarios dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Las listas guardan valores en orden y los diccionarios conectan claves con valores. En problemas reales, esa diferencia decide si conviene recorrer posiciones o buscar directamente por nombre, letra o identificador.",
+      "worked_example": "El acceso `scores['Ada']` obtiene solo la lista de Ada y `sum` calcula ese total sin revisar otros nombres.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Listas y diccionarios",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Usar un índice de lista cuando los datos tienen una clave clara.",
+        "Consultar una clave sin decidir qué pasa si falta.",
+        "Imprimir la longitud cuando el problema pide la suma."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Listas y diccionarios?"
+        "¿Cuándo conviene una clave de diccionario en vez de una posición?",
+        "¿Qué valor devuelve `scores['Ada']`?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Listas y diccionarios en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Usa la lista guardada bajo `Ada` para imprimir la suma sin escribir `5` directamente."
     },
-    "py-errors": {
-      "title": "Excepciones",
-      "concept": "try y except manejan fallos recuperables. En Python, estudia Excepciones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Excepciones dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "py-tuples-sets": {
+      "title": "Tuplas y conjuntos",
+      "concept": "Una tupla agrupa valores en posiciones fijas; un conjunto guarda miembros únicos y permite pruebas de pertenencia rápidas. No uses conjunto si el orden de salida importa.",
+      "worked_example": "La tupla `('o', 'k')` conserva el orden para `join`, mientras `set(pair)` confirma que hay dos letras distintas.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Excepciones",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Usar un conjunto cuando el orden de salida importa.",
+        "Intentar modificar una posición de una tupla.",
+        "Creer que insertar duplicados aumenta el tamaño del conjunto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Excepciones?"
+        "¿Qué parte necesita el orden de la tupla?",
+        "¿Qué vale `len(set(['a', 'a']))`?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Excepciones en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Construye el conjunto desde la tupla e imprime el texto unido y el conteo único."
     },
     "py-comprehensions": {
       "title": "Comprensiones",
-      "concept": "Las comprensiones crean colecciones de forma compacta desde expresiones. En Python, estudia Comprensiones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Comprensiones dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Una comprensión combina expresión de salida, bucle y filtros opcionales para construir una colección. Sirve para mapas y filtros simples que se leen de izquierda a derecha.",
+      "worked_example": "`[n * n for n in nums if n % 2 == 0]` conserva pares, los eleva al cuadrado y deja una lista lista para sumar.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Comprensiones",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Meter demasiadas condiciones en una sola comprensión.",
+        "Olvidar que la expresión de salida va antes del `for`.",
+        "Usar comprensión solo por efectos secundarios como imprimir."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Comprensiones?"
+        "¿Qué parte elige el valor producido?",
+        "¿Qué condición elimina la letra no deseada?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Comprensiones en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Ajusta el filtro para conservar las letras que forman `ok`."
+    },
+    "py-errors": {
+      "title": "Excepciones",
+      "concept": "Las excepciones separan el camino normal de un fallo recuperable. Mantén pequeño el `try`, captura una excepción concreta y asigna una recuperación que tenga sentido.",
+      "worked_example": "El código intenta convertir texto a entero y usa `except ValueError` solo para esa falla de conversión.",
+      "common_mistakes": [
+        "Atrapar todo con `except:` y ocultar errores reales.",
+        "Poner código no relacionado dentro del `try`.",
+        "Usar excepciones para ramas normales que caben en un `if`."
+      ],
+      "self_check": [
+        "¿Por qué `except ValueError` es más claro que un catch amplio?",
+        "¿Qué valor debe usarse después del fallo?"
+      ],
+      "exercise_prompt": "Recupérate del fallo de conversión con el valor que permite imprimir `12`."
+    },
+    "py-files-context": {
+      "title": "Archivos y context managers",
+      "concept": "`with` entra en un contexto administrado y ejecuta la limpieza al salir. Archivos y utilidades de contextlib usan este patrón para cerrar recursos aunque el bloque termine antes.",
+      "worked_example": "`StringIO` actúa como un archivo pequeño; leer dentro del bloque guarda `ok` antes de que el manejador se cierre.",
+      "common_mistakes": [
+        "Leer un manejador después de que el contexto lo cerró.",
+        "Abrir archivos sin `with` y olvidar cerrarlos.",
+        "Ocultar errores de limpieza con una captura demasiado amplia."
+      ],
+      "self_check": [
+        "¿Qué línea debe ejecutarse antes del cierre?",
+        "¿Qué limpieza aporta normalmente `with open(...)`?"
+      ],
+      "exercise_prompt": "Lee dentro del bloque `with` y luego imprime el texto guardado."
+    },
+    "py-modules-imports": {
+      "title": "Módulos e import",
+      "concept": "Un módulo agrupa código reutilizable bajo un espacio de nombres. `import math` hace visible la biblioteca estándar y PEP 8 recomienda ubicar imports arriba para mostrar dependencias temprano.",
+      "worked_example": "`math.ceil(2.1)` llama la función de redondeo hacia arriba del módulo importado y produce `3`.",
+      "common_mistakes": [
+        "Reescribir una utilidad que ya está en la biblioteca estándar.",
+        "Sobrescribir el nombre de un módulo importado con una variable.",
+        "Esconder imports dentro de código sin necesidad."
+      ],
+      "self_check": [
+        "¿Qué nombre queda disponible tras `import math`?",
+        "¿Por qué PEP 8 coloca imports cerca del inicio?"
+      ],
+      "exercise_prompt": "Usa el módulo `math` importado para redondear hacia arriba."
+    },
+    "py-dataclasses": {
+      "title": "Dataclasses",
+      "concept": "`@dataclass` genera métodos rutinarios para clases que principalmente contienen datos. Mantiene campos, type hints y construcción juntos sin escribir boilerplate manual.",
+      "worked_example": "`Point(2, 3)` usa el constructor generado y permite leer `x` e `y` como atributos normales.",
+      "common_mistakes": [
+        "Usar dataclass antes de diseñar comportamiento importante.",
+        "Olvidar el `@` del decorador.",
+        "Poner valores mutables por defecto sin factory adecuada."
+      ],
+      "self_check": [
+        "¿Qué constructor se genera para `Point`?",
+        "¿Qué campos hay que leer para sumar coordenadas?"
+      ],
+      "exercise_prompt": "Lee ambos campos para imprimir la suma del punto."
+    },
+    "py-typing": {
+      "title": "Type hints",
+      "concept": "Los type hints describen formas esperadas para lectores, editores y verificadores. Python sigue ejecutando valores dinámicamente, así que el cuerpo debe cumplir el contrato anotado.",
+      "worked_example": "`Iterable[int]` comunica que la función acepta cualquier iterable de enteros y devuelve un `int` calculado con `sum`.",
+      "common_mistakes": [
+        "Creer que las anotaciones validan todo en runtime.",
+        "Escribir tipos complejos antes de estabilizar la forma de datos.",
+        "Devolver algo que contradice la anotación."
+      ],
+      "self_check": [
+        "¿Qué promete `Iterable[int]` sobre el argumento?",
+        "¿Qué línea prueba que se devuelve un total entero?"
+      ],
+      "exercise_prompt": "Haz que la función anotada devuelva la suma del iterable recibido."
     },
     "py-generators": {
       "title": "Iteradores y generadores",
-      "concept": "yield crea secuencias que producen valores bajo demanda. En Python, estudia Iteradores y generadores ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Iteradores y generadores dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Un iterador produce valores uno a uno. Una función generadora usa `yield`, devuelve primero un objeto generador y ejecuta su cuerpo cuando el llamador pide el siguiente valor.",
+      "worked_example": "`next(countdown(3))` inicia el generador, llega al primer `yield` y recibe `3` sin construir una lista.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Iteradores y generadores",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Esperar que el cuerpo corra al llamar la función generadora.",
+        "Olvidar que `next` puede lanzar `StopIteration`.",
+        "Construir una lista grande cuando bastaba un flujo perezoso."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Iteradores y generadores?"
+        "¿Cuándo se ejecuta realmente `words()`?",
+        "¿Cuál debe ser el primer valor yielded?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Iteradores y generadores en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Haz que el primer `yield` produzca `ok`. No fijes la respuesta; conserva el patrón practicado."
+    },
+    "py-lambdas-closures": {
+      "title": "Lambdas y closures",
+      "concept": "`lambda` crea una función de una expresión. Si esa función usa un nombre de una función externa, forma un closure y recuerda ese valor después de que la llamada externa termina.",
+      "worked_example": "`make_adder(2)` devuelve una lambda que recuerda `delta = 2`; al llamarla con `3` imprime `5`.",
+      "common_mistakes": [
+        "Poner lógica de varios pasos dentro de lambda.",
+        "Esperar que un closure copie automáticamente un valor antiguo de una variable cambiante.",
+        "Olvidar devolver la función interna."
+      ],
+      "self_check": [
+        "¿Qué valor recuerda la lambda de `make_suffix`?",
+        "¿Por qué `make_suffix('ok')` devuelve una función?"
+      ],
+      "exercise_prompt": "Devuelve una lambda que añada el sufijo capturado."
     },
     "py-decorators": {
       "title": "Decoradores",
-      "concept": "Los decoradores envuelven funciones al definirlas para ampliar su comportamiento. En Python, estudia Decoradores ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Decoradores dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Un decorador se ejecuta cuando se define la función. Recibe el objeto función original y devuelve el objeto que quedará enlazado al nombre de la función.",
+      "worked_example": "El decorador identidad devuelve `fn` sin cambios, por eso `word()` sigue llamando la función original y produce `ok`.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Decoradores",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Devolver `fn()` en vez del objeto función.",
+        "Creer que el decorador se ejecuta solo al llamar la función.",
+        "Añadir decorador cuando una llamada auxiliar sería más legible."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Decoradores?"
+        "¿Qué argumento recibe `identity`?",
+        "¿Qué debe devolverse para que `word` siga siendo invocable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Decoradores en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Devuelve la función original desde el decorador."
     },
-    "py-context-types": {
-      "title": "Context managers y type hints",
-      "concept": "with gestiona recursos acotados; las anotaciones muestran tipos esperados. En Python, estudia Context managers y type hints ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Context managers y type hints dentro de código real de Python. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "py-sorting-keys": {
+      "title": "Ordenación y funciones key",
+      "concept": "`sorted` crea una lista ordenada nueva. Una función `key` extrae el valor que se comparará para cada elemento, por ejemplo una puntuación dentro de una tupla.",
+      "worked_example": "La ordenación usa `key=lambda item: item[1]` para comparar puntuaciones y `reverse=True` para poner primero la mayor.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Context managers y type hints",
-        "Editar el código inicial de Python sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Ordenar tuplas por el primer campo cuando se pide otro campo.",
+        "Usar `.sort()` aunque se necesite conservar el orden original.",
+        "Devolver texto desde key para una comparación numérica."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Context managers y type hints?"
+        "¿Qué campo de la tupla es la puntuación?",
+        "¿Por qué hace falta `reverse=True`?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Context managers y type hints en Python. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Ordena por puntuación descendente para seleccionar `Lin:5`."
+    },
+    "py-counter-defaultdict": {
+      "title": "Counter y defaultdict",
+      "concept": "`Counter` cuenta valores hashables y `defaultdict(list)` crea listas vacías para grupos nuevos. Juntos eliminan mucha inicialización manual en conteo y agrupación.",
+      "worked_example": "Counter cuenta colores y defaultdict agrupa palabras por inicial; después se imprimen el conteo de `red` y el tamaño del grupo `r`.",
+      "common_mistakes": [
+        "Repetir inicialización manual en lugar de usar Counter.",
+        "Hacer append sobre una lista ausente en un dict normal.",
+        "Agrupar por la palabra completa cuando se pide la inicial."
+      ],
+      "self_check": [
+        "¿Qué devuelve `Counter(words)['red']`?",
+        "¿Qué contiene `groups['r']` tras agrupar?"
+      ],
+      "exercise_prompt": "Completa conteo y agrupación por inicial para imprimir `2 2`."
+    },
+    "py-deque": {
+      "title": "deque",
+      "concept": "`deque` es una cola de dos extremos con append y pop eficientes a ambos lados. Es la estructura habitual para BFS y ventanas donde se elimina por el frente.",
+      "worked_example": "El código agrega `start` a la izquierda y `end` a la derecha, luego quita un valor de cada extremo.",
+      "common_mistakes": [
+        "Usar `list.pop(0)` repetidamente para una cola.",
+        "Confundir `append` con `appendleft`.",
+        "Sacar de un deque vacío sin comprobarlo."
+      ],
+      "self_check": [
+        "¿Qué método agrega por la izquierda?",
+        "¿Qué deben devolver `popleft` y `pop` después de agregar ambos extremos?"
+      ],
+      "exercise_prompt": "Agrega los valores faltantes y muestra los dos extremos removidos."
+    },
+    "py-itertools": {
+      "title": "itertools",
+      "concept": "`itertools` ofrece bloques perezosos como `chain`, `islice`, `product` y `pairwise`. Describen pipelines de iteración sin listas intermedias salvo que se consuman.",
+      "worked_example": "`chain.from_iterable(parts)` aplana las listas internas de letras y `join` consume ese iterador para formar `ok`.",
+      "common_mistakes": [
+        "Tratar resultados de itertools como listas reutilizables.",
+        "Recortar la entrada antes de que el iterador vea todos los valores.",
+        "Ocultar una intención simple detrás de bucles anidados."
+      ],
+      "self_check": [
+        "¿Qué aplana `chain.from_iterable`?",
+        "¿Por qué el código inicial pierde la segunda letra?"
+      ],
+      "exercise_prompt": "Aplana ambas listas internas de forma perezosa para formar `ok`."
+    },
+    "py-pathlib": {
+      "title": "pathlib",
+      "concept": "`pathlib` representa rutas como objetos. Propiedades como `name`, `stem`, `suffix` y `parent` evitan cortar strings a mano y aclaran qué parte de la ruta se necesita.",
+      "worked_example": "`PurePosixPath('logs/app.txt')` obtiene `stem` y `suffix` sin abrir ningún archivo real.",
+      "common_mistakes": [
+        "Dividir rutas siempre con `/` manualmente.",
+        "Confundir `name`, `stem` y `suffix`.",
+        "Tocar el sistema de archivos cuando solo se requiere parsear la ruta."
+      ],
+      "self_check": [
+        "¿Cuál es el stem de `logs/app.txt`?",
+        "¿Por qué `PurePosixPath` evita acceso al sistema de archivos?"
+      ],
+      "exercise_prompt": "Usa propiedades de la ruta para imprimir `app:.txt`."
+    },
+    "py-testing-assert": {
+      "title": "Pruebas y assert",
+      "concept": "`assert` comprueba una condición en ejemplos pequeños. Los frameworks de pruebas organizan esas comprobaciones para repetirlas, pero la idea central sigue siendo comparar comportamiento esperado y real.",
+      "worked_example": "El código verifica `add_two(3) == 5` antes de imprimir `ok`; una función rota falla antes de aparentar éxito.",
+      "common_mistakes": [
+        "Cambiar la aserción para que acepte código roto.",
+        "Depender de assert para validación de usuarios en producción.",
+        "Probar solo el print final y no la función pequeña."
+      ],
+      "self_check": [
+        "¿Qué debe garantizar `add_two`?",
+        "¿Qué línea fallaría si la función devuelve la entrada sin cambios?"
+      ],
+      "exercise_prompt": "Arregla la función y la aserción para proteger el comportamiento `+2`."
+    },
+    "py-async": {
+      "title": "Conceptos async",
+      "concept": "`async def` crea una función de corrutina. Llamarla produce un objeto corrutina; `await` obtiene su resultado dentro de otra corrutina y `asyncio.run` ejecuta la corrutina superior.",
+      "worked_example": "`main` espera `label()` con await, recibe `ok` y `asyncio.run` arranca la corrutina superior.",
+      "common_mistakes": [
+        "Imprimir el objeto corrutina sin hacer await.",
+        "Llamar `asyncio.run` dentro de un bucle de eventos ya activo.",
+        "Usar async para trabajo solo de CPU que no espera nada."
+      ],
+      "self_check": [
+        "¿Qué expresión espera a que termine `label()`?",
+        "¿Por qué `asyncio.run` está en el borde del archivo?"
+      ],
+      "exercise_prompt": "Haz await dentro de `main` e imprime el resultado recibido."
     }
   }
 }

@@ -12,7 +12,7 @@ use practicode::{
     process::which,
     text::render_markdown_plain,
 };
-use std::fs;
+use std::{fs, process::Command};
 
 #[test]
 fn load_state_uses_first_problem_when_state_file_is_missing() {
@@ -307,6 +307,21 @@ fn judge_runs_python_solution_against_cases() {
 }
 
 #[test]
+fn judge_shows_stdout_on_pass() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("judge-pass-stdout");
+    let bank = load_bank(&root).unwrap();
+    let settings = Settings::default();
+    let path = ensure_submission(&root, &bank[0], &settings).unwrap();
+    fs::write(path, "print('Hello, World!')\n").unwrap();
+    let result = judge(&root, &bank[0], &settings);
+    assert!(result.passed, "{}", result.output);
+    assert!(result.output.contains("Stdout\n  Hello, World!"));
+}
+
+#[test]
 fn judge_shows_debug_stdout_on_failure() {
     if which("python3").or_else(|| which("python")).is_none() {
         return;
@@ -319,6 +334,7 @@ fn judge_shows_debug_stdout_on_failure() {
     let result = judge(&root, &bank[0], &settings);
     assert!(!result.passed);
     assert!(result.output.contains("Got\n  debug\n  Hello, World!"));
+    assert!(result.output.find("Got").unwrap() < result.output.find("Expected").unwrap());
 }
 
 #[test]
@@ -458,6 +474,389 @@ fn syntax_curriculum_covers_basic_to_advanced_for_every_supported_language() {
 }
 
 #[test]
+fn rust_syntax_curriculum_covers_core_book_topics() {
+    let lesson_ids: Vec<_> = syntax_lessons_for("rust")
+        .into_iter()
+        .map(|lesson| lesson.id)
+        .collect();
+
+    assert!(lesson_ids.len() >= 28, "rust curriculum is too shallow");
+
+    for id in [
+        "rust-numbers-tuples",
+        "rust-structs-impl",
+        "rust-modules-use",
+        "rust-option",
+        "rust-borrowing-slices",
+        "rust-generics",
+        "rust-traits",
+        "rust-lifetimes",
+        "rust-testing",
+        "rust-smart-pointers",
+        "rust-interior-mutability",
+        "rust-concurrency",
+        "rust-shared-state",
+        "rust-async-await",
+        "rust-macros",
+        "rust-unsafe",
+        "rust-cargo-workspaces",
+    ] {
+        assert!(lesson_ids.contains(&id), "missing {id}");
+    }
+}
+
+#[test]
+fn rust_lesson_copy_is_topic_specific() {
+    let banned = [
+        "locating three concrete pieces",
+        "Use this example to place",
+        "edit only the part tied to this lesson's rule",
+    ];
+    for path in [
+        "assets/lessons/rust/en.json",
+        "assets/lessons/rust/ko.json",
+        "assets/lessons/rust/ja.json",
+        "assets/lessons/rust/zh.json",
+        "assets/lessons/rust/es.json",
+    ] {
+        let catalog: serde_json::Value =
+            serde_json::from_str(&fs::read_to_string(path).unwrap()).unwrap();
+        for (id, copy) in catalog["lessons"].as_object().unwrap() {
+            let text = copy.to_string();
+            for phrase in banned {
+                assert!(!text.contains(phrase), "{path}:{id}: generic copy");
+            }
+        }
+    }
+}
+
+#[test]
+fn java_syntax_curriculum_covers_official_java_topics() {
+    let lessons = syntax_lessons_for("java");
+    let lesson_ids: Vec<_> = lessons.iter().map(|lesson| lesson.id).collect();
+
+    assert!(lesson_ids.len() >= 27, "java curriculum is too shallow");
+
+    for id in [
+        "java-output",
+        "java-variables-types",
+        "java-strings",
+        "java-control-flow",
+        "java-methods",
+        "java-input",
+        "java-arrays-collections",
+        "java-classes-objects",
+        "java-constructors",
+        "java-encapsulation",
+        "java-static-members",
+        "java-enum-switch",
+        "java-exceptions",
+        "java-generics",
+        "java-interfaces",
+        "java-inheritance-composition",
+        "java-records",
+        "java-optional",
+        "java-streams-lambdas",
+        "java-comparators-sorting",
+        "java-try-with-resources",
+        "java-packages-imports",
+        "java-annotations",
+        "java-sealed-classes",
+        "java-testing-assert",
+    ] {
+        assert!(lesson_ids.contains(&id), "missing {id}");
+    }
+
+    let refs = lessons
+        .iter()
+        .flat_map(|lesson| lesson.refs.iter().copied())
+        .collect::<Vec<_>>()
+        .join("\n");
+    for required_ref in [
+        "https://dev.java/learn/",
+        "https://docs.oracle.com/javase/tutorial/",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Comparator.html",
+    ] {
+        assert!(refs.contains(required_ref), "missing ref {required_ref}");
+    }
+}
+
+#[test]
+fn java_lesson_copy_is_topic_specific() {
+    let banned = [
+        "locating three concrete pieces",
+        "Use this example to place",
+        "Copying the shape of the example",
+        "edit only the part tied to this lesson's rule",
+        "Do not write the expected output as a constant",
+        "matters when",
+        "세 가지 구체적인 부분",
+        "이 예제를 사용해",
+        "三つの具体的な部分",
+        "この例を使って",
+        "三个具体部分",
+        "用这个例子",
+        "tres piezas concretas",
+        "Usa este ejemplo",
+    ];
+    for path in [
+        "assets/lessons/java/en.json",
+        "assets/lessons/java/ko.json",
+        "assets/lessons/java/ja.json",
+        "assets/lessons/java/zh.json",
+        "assets/lessons/java/es.json",
+    ] {
+        let catalog: serde_json::Value =
+            serde_json::from_str(&fs::read_to_string(path).unwrap()).unwrap();
+        for (id, copy) in catalog["lessons"].as_object().unwrap() {
+            let text = copy.to_string();
+            for phrase in banned {
+                assert!(!text.contains(phrase), "{path}:{id}: generic copy");
+            }
+        }
+    }
+}
+
+#[test]
+fn python_syntax_curriculum_covers_official_python_topics() {
+    let lessons = syntax_lessons_for("python");
+    let lesson_ids: Vec<_> = lessons.iter().map(|lesson| lesson.id).collect();
+
+    assert!(lesson_ids.len() >= 24, "python curriculum is too shallow");
+
+    for id in [
+        "py-output",
+        "py-variables",
+        "py-numbers",
+        "py-strings",
+        "py-control-flow",
+        "py-functions",
+        "py-input",
+        "py-lists-dicts",
+        "py-tuples-sets",
+        "py-comprehensions",
+        "py-errors",
+        "py-files-context",
+        "py-modules-imports",
+        "py-dataclasses",
+        "py-typing",
+        "py-generators",
+        "py-lambdas-closures",
+        "py-decorators",
+        "py-sorting-keys",
+        "py-counter-defaultdict",
+        "py-deque",
+        "py-itertools",
+        "py-pathlib",
+        "py-testing-assert",
+        "py-async",
+    ] {
+        assert!(lesson_ids.contains(&id), "missing {id}");
+    }
+
+    let refs = lessons
+        .iter()
+        .flat_map(|lesson| lesson.refs.iter().copied())
+        .collect::<Vec<_>>()
+        .join("\n");
+    for required_ref in [
+        "https://docs.python.org/3/tutorial/index.html",
+        "https://docs.python.org/3/reference/index.html",
+        "https://docs.python.org/3/library/index.html",
+        "https://peps.python.org/pep-0008/",
+        "https://docs.python.org/3/library/typing.html",
+        "https://docs.python.org/3/library/pathlib.html",
+        "https://docs.python.org/3/library/collections.html",
+        "https://docs.python.org/3/library/itertools.html",
+        "https://docs.python.org/3/library/contextlib.html",
+        "https://docs.python.org/3/library/dataclasses.html",
+        "https://docs.python.org/3/library/asyncio.html",
+    ] {
+        assert!(refs.contains(required_ref), "missing ref {required_ref}");
+    }
+}
+
+#[test]
+fn typescript_syntax_curriculum_covers_ts_and_node_topics() {
+    let lessons = syntax_lessons_for("ts");
+    let lesson_ids: Vec<_> = lessons.iter().map(|lesson| lesson.id).collect();
+
+    assert!(
+        lesson_ids.len() >= 28,
+        "typescript curriculum is too shallow"
+    );
+
+    for id in [
+        "ts-output",
+        "ts-let-const",
+        "ts-primitives",
+        "ts-strings-templates",
+        "ts-arrays-tuples",
+        "ts-objects",
+        "ts-functions",
+        "ts-input",
+        "ts-control-flow",
+        "ts-union-narrowing",
+        "ts-literal-types",
+        "ts-optional-nullish",
+        "ts-interfaces-aliases",
+        "ts-generics",
+        "ts-keyof-typeof",
+        "ts-indexed-access",
+        "ts-mapped-types",
+        "ts-conditional-types",
+        "ts-utility-types",
+        "ts-discriminated-unions",
+        "ts-async-promise",
+        "ts-error-handling",
+        "ts-modules",
+        "ts-classes",
+        "ts-readonly",
+        "ts-satisfies-as-const",
+        "ts-iterables",
+        "ts-array-methods",
+    ] {
+        assert!(lesson_ids.contains(&id), "missing {id}");
+    }
+
+    let refs = lessons
+        .iter()
+        .flat_map(|lesson| lesson.refs.iter().copied())
+        .collect::<Vec<_>>()
+        .join("\n");
+    for required_ref in [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
+        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
+        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
+        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
+        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
+        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
+        "https://nodejs.org/api/typescript.html",
+        "https://nodejs.org/api/fs.html#fsreadfilesyncpath-options",
+        "https://nodejs.org/api/process.html#processstdout",
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce",
+    ] {
+        assert!(refs.contains(required_ref), "missing ref {required_ref}");
+    }
+}
+
+#[test]
+fn typescript_lesson_copy_is_topic_specific() {
+    let banned = [
+        "locating three concrete pieces",
+        "Use this example to place",
+        "Copying the shape of the example",
+        "edit only the part tied to this lesson's rule",
+        "Do not write the expected output as a constant",
+        "세 가지 구체적인 부분",
+        "이 예제를 사용해",
+        "三つの具体的な部分",
+        "この例を使って",
+        "三个具体部分",
+        "用这个例子",
+        "tres piezas concretas",
+        "Usa este ejemplo",
+    ];
+    for path in [
+        "assets/lessons/typescript/en.json",
+        "assets/lessons/typescript/ko.json",
+        "assets/lessons/typescript/ja.json",
+        "assets/lessons/typescript/zh.json",
+        "assets/lessons/typescript/es.json",
+    ] {
+        let catalog: serde_json::Value =
+            serde_json::from_str(&fs::read_to_string(path).unwrap()).unwrap();
+        for (id, copy) in catalog["lessons"].as_object().unwrap() {
+            let text = copy.to_string();
+            for phrase in banned {
+                assert!(!text.contains(phrase), "{path}:{id}: generic copy");
+            }
+        }
+    }
+}
+
+#[test]
+fn python_lesson_copy_is_topic_specific() {
+    let banned = [
+        "focuses on this Python skill",
+        "Complete the exercise around this skill",
+        "Keep the intended Python construct",
+        "locating three concrete pieces",
+        "edit only the part tied to this lesson's rule",
+        "この構文が実際の問題でどの値を読み",
+        "例は ",
+        "这一课关注解题时真实会遇到的用法",
+        "示例把",
+        "se practica con el uso que aparece",
+        "El ejemplo muestra",
+    ];
+    for path in [
+        "assets/lessons/python/en.json",
+        "assets/lessons/python/ko.json",
+        "assets/lessons/python/ja.json",
+        "assets/lessons/python/zh.json",
+        "assets/lessons/python/es.json",
+    ] {
+        let catalog: serde_json::Value =
+            serde_json::from_str(&fs::read_to_string(path).unwrap()).unwrap();
+        for (id, copy) in catalog["lessons"].as_object().unwrap() {
+            let text = copy.to_string();
+            for phrase in banned {
+                assert!(!text.contains(phrase), "{path}:{id}: generic copy");
+            }
+        }
+    }
+}
+
+#[test]
+fn rust_syntax_starters_compile_to_useful_failures() {
+    if std::process::Command::new("rustc")
+        .arg("--version")
+        .output()
+        .is_err()
+    {
+        return;
+    }
+
+    let root = tmp_root("rust-syntax-starters-compile");
+    for lesson in syntax_lessons_for("rust") {
+        let path = ensure_syntax_submission(&root, lesson).unwrap();
+        let result = judge_path(
+            &root,
+            lesson.id,
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            !result.output.contains("compile failed"),
+            "{} starter should compile:\n{}",
+            lesson.id,
+            result.output
+        );
+        assert!(
+            !result.passed,
+            "{} starter should still require the learner edit",
+            lesson.id
+        );
+    }
+}
+
+#[test]
 fn render_syntax_lesson_uses_exercise_copy() {
     let lesson = syntax_lessons_for("python")[0];
     let state = AppState {
@@ -501,8 +900,8 @@ fn lessons_use_rich_split_copy_for_all_code_languages() {
         (
             "ko",
             "ts",
-            "ts-arrays-objects",
-            "# 문법: 배열과 객체",
+            "ts-arrays-tuples",
+            "# 문법: 배열과 튜플",
             "배열은 순서가 있는 값의 묶음",
             "흔한 실수",
             "자가 점검",
@@ -520,8 +919,8 @@ fn lessons_use_rich_split_copy_for_all_code_languages() {
             "zh",
             "rust",
             "rust-vec-hashmap",
-            "# 语法: Vec 和 HashMap",
-            "Vec 保存有顺序的值",
+            "# 语法: Vec 与 HashMap",
+            "有顺序的数据使用 Vec",
             "常见错误",
             "自我检查",
         ),
@@ -596,7 +995,7 @@ fn split_lesson_copy_covers_every_lesson_in_every_ui_language() {
 
 #[test]
 fn syntax_exercise_starters_require_user_edit_for_every_language() {
-    for language in LANGUAGES {
+    for &language in LANGUAGES {
         for lesson in syntax_lessons_for(language) {
             assert!(
                 lesson.exercise.starter.contains("TODO"),
@@ -630,6 +1029,183 @@ fn python_syntax_starters_fail_by_output_not_runtime_error() {
             "{} starter should run without a runtime traceback:\n{}",
             lesson.id,
             result.output
+        );
+        assert!(
+            !result.passed,
+            "{} starter should still require the learner edit",
+            lesson.id
+        );
+    }
+}
+
+#[test]
+fn typescript_syntax_starters_run_under_node_strip_types() {
+    if which("node").is_none() {
+        return;
+    }
+
+    let root = tmp_root("typescript-syntax-starters-run-cleanly");
+    for lesson in syntax_lessons_for("ts") {
+        let path = ensure_syntax_submission(&root, lesson).unwrap();
+        let result = judge_path(
+            &root,
+            lesson.id,
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            !result.output.contains("Stderr"),
+            "{} starter should run without a Node/TypeScript runtime error:\n{}",
+            lesson.id,
+            result.output
+        );
+        assert!(
+            !result.passed,
+            "{} starter should still require the learner edit",
+            lesson.id
+        );
+    }
+}
+
+#[test]
+fn java_syntax_starters_compile_to_useful_failures() {
+    if which("javac").is_none() || which("java").is_none() {
+        return;
+    }
+
+    let root = tmp_root("java-syntax-starters-compile");
+    for lesson in syntax_lessons_for("java") {
+        let path = ensure_syntax_submission(&root, lesson).unwrap();
+        let result = judge_path(
+            &root,
+            lesson.id,
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            !result.output.contains("compile failed"),
+            "{} starter should compile:\n{}",
+            lesson.id,
+            result.output
+        );
+        assert!(
+            !result.output.contains("Stderr"),
+            "{} starter should fail by expected output, not runtime stderr:\n{}",
+            lesson.id,
+            result.output
+        );
+        assert!(
+            !result.passed,
+            "{} starter should still require the learner edit",
+            lesson.id
+        );
+    }
+}
+
+#[test]
+fn python_syntax_examples_run_cleanly() {
+    let Some(python) = which("python3").or_else(|| which("python")) else {
+        return;
+    };
+    let root = tmp_root("python-syntax-examples-run");
+    for lesson in syntax_lessons_for("python") {
+        let path = root.join(format!("{}.py", lesson.id));
+        fs::write(&path, lesson.example).unwrap();
+        let output = Command::new(&python).arg(&path).output().unwrap();
+        assert!(
+            output.status.success(),
+            "{} example should exit successfully\nstdout:\n{}\nstderr:\n{}",
+            lesson.id,
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(
+            String::from_utf8_lossy(&output.stderr).trim().is_empty(),
+            "{} example should not write stderr\n{}",
+            lesson.id,
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+}
+
+#[test]
+fn typescript_syntax_examples_run_under_node_strip_types() {
+    let Some(node) = which("node") else {
+        return;
+    };
+    let root = tmp_root("typescript-syntax-examples-run");
+    for lesson in syntax_lessons_for("ts") {
+        let path = root.join(format!("{}.ts", lesson.id));
+        fs::write(&path, lesson.example).unwrap();
+        let output = Command::new(&node)
+            .arg("--experimental-strip-types")
+            .arg(&path)
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{} example should exit successfully\nstdout:\n{}\nstderr:\n{}",
+            lesson.id,
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(
+            String::from_utf8_lossy(&output.stderr).trim().is_empty(),
+            "{} example should not write stderr\n{}",
+            lesson.id,
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+}
+
+#[test]
+fn java_syntax_examples_pass_lesson_cases() {
+    if which("javac").is_none() || which("java").is_none() {
+        return;
+    }
+
+    let root = tmp_root("java-syntax-examples-run");
+    for lesson in syntax_lessons_for("java") {
+        let path = root.join(format!("{}.java", lesson.id));
+        fs::write(&path, lesson.example).unwrap();
+        let result = judge_path(
+            &root,
+            &format!("{}-example", lesson.id),
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            result.passed,
+            "{} example should pass its lesson cases:\n{}",
+            lesson.id, result.output
+        );
+    }
+}
+
+#[test]
+fn rust_syntax_examples_pass_lesson_cases() {
+    if which("rustc").is_none() {
+        return;
+    }
+
+    let root = tmp_root("rust-syntax-examples-run");
+    for lesson in syntax_lessons_for("rust") {
+        let path = root.join(format!("{}.rs", lesson.id));
+        fs::write(&path, lesson.example).unwrap();
+        let result = judge_path(
+            &root,
+            &format!("{}-example", lesson.id),
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            result.passed,
+            "{} example should pass its lesson cases:\n{}",
+            lesson.id, result.output
         );
     }
 }

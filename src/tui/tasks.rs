@@ -139,10 +139,12 @@ impl PracticodeApp {
             self.model_message = catalog.message;
             if self.showing_model_status {
                 self.output = self.model_status_text();
+                self.output_scroll = 0;
                 self.output_is_markdown = false;
                 self.show_output = true;
             } else if self.settings_cursor.is_some() {
                 self.output = self.profile_text();
+                self.output_scroll = 0;
                 self.output_is_markdown = false;
                 self.show_output = true;
             }
@@ -244,6 +246,7 @@ impl PracticodeApp {
         self.editing_notes = false;
         self.showing_model_status = false;
         self.output = output.to_string();
+        self.output_scroll = 0;
         self.output_is_markdown = true;
         self.show_output = true;
         self.focus = Focus::Output;
@@ -254,6 +257,7 @@ impl PracticodeApp {
         self.editing_notes = false;
         self.showing_model_status = false;
         self.output = output.trim_end().to_string();
+        self.output_scroll = 0;
         self.output_is_markdown = false;
         self.show_output = true;
         self.focus = Focus::Output;
@@ -261,6 +265,7 @@ impl PracticodeApp {
 
     pub(super) fn write_model_status(&mut self) {
         self.output = self.model_status_text();
+        self.output_scroll = 0;
         self.output_is_markdown = false;
         self.showing_model_status = true;
         self.show_output = true;

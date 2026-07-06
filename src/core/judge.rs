@@ -101,6 +101,9 @@ pub fn judge_path(
         if !run.timed_out && run.code == Some(0) && got == expected {
             passed += 1;
             lines.push(format!("Case {}: PASS", index + 1));
+            if !run.stdout.trim().is_empty() {
+                push_labeled_block(&mut lines, "Stdout", run.stdout.trim_end());
+            }
             if !run.stderr.trim().is_empty() {
                 push_labeled_block(&mut lines, "Stderr", run.stderr.trim_end());
             }
@@ -109,9 +112,9 @@ pub fn judge_path(
             if run.timed_out {
                 push_labeled_block(&mut lines, "Error", "timeout: 5s");
             }
+            push_labeled_block(&mut lines, "Got", run.stdout.trim_end());
             push_labeled_block(&mut lines, "Input", case.input.trim_end());
             push_labeled_block(&mut lines, "Expected", expected);
-            push_labeled_block(&mut lines, "Got", run.stdout.trim_end());
             if !run.stderr.trim().is_empty() {
                 push_labeled_block(&mut lines, "Stderr", run.stderr.trim_end());
             }
@@ -208,6 +211,7 @@ fn compile_rust(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
     let mut compile = Command::new(rustc);
     compile
         .args([
+            "--edition=2024".to_string(),
             path.display().to_string(),
             "-o".to_string(),
             exe.display().to_string(),

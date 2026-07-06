@@ -4,196 +4,396 @@
   "ui_language": "zh",
   "lessons": {
     "java-output": {
-      "title": "输出",
-      "concept": "System.out.println 输出一行。 在Java中学习输出时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里输出规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "title": "标准输出",
+      "concept": "标准输出用于评测逐字符比较换行和文本。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示先用 int 组成 score=7，再由 println 添加换行。跟着把 label 和 score 拼接起来这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清输出在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "需要 println 的换行时却使用 print，导致末尾不匹配。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和输出规则直接相关？"
+        "整数在哪里变成 score=7 这段文本？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的输出练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用用 System.out.println 输出计算出的值。保持单文件评测结构，并让现有用例通过这项语法。"
     },
-    "java-variables": {
-      "title": "变量",
-      "concept": "Java 变量有声明的类型。 在Java中学习变量时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里变量规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+    "java-variables-types": {
+      "title": "变量与类型",
+      "concept": "变量与类型用于使用基本值和对象引用前必须声明类型。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示把 String、int 和 boolean 合成一行报告。跟着让 score 和 passed 保持一致这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清变量在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "只改 boolean，却把数字 score 留成旧值。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和变量规则直接相关？"
+        "Ada:7:true 的三个部分分别由哪些变量决定？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的变量练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用与报告输出一致的带类型局部变量。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-numbers-operators": {
+      "title": "数字与运算符",
+      "concept": "数字与运算符用于许多 stdin 题目需要保持整数除法和取余。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示从同一个 total 和 size 得到商与余数。跟着对同一组操作数使用 / 和 %这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "商和余数使用了不同的除数。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "为什么 17 / 5 得到 3 而不是 3.4？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用整数除法和取余。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-strings": {
       "title": "字符串",
-      "concept": "String 方法提供长度、字符和子字符串操作。 在Java中学习字符串时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里字符串规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "concept": "字符串用于比较或输出前需要清理文本并提取子串。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示先去掉空格再取 ok 前缀。跟着在 substring 之前调用 trim这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清字符串在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "在去掉首尾空格之前就取 substring 下标。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和字符串规则直接相关？"
+        "计算 cleaned 后 raw 仍然保存什么值？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的字符串练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用不会修改原文本的 String 方法。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-control-flow": {
       "title": "控制流",
-      "concept": "if、for、while 控制执行流程。 在Java中学习控制流时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里控制流规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "concept": "控制流用于分支和循环决定哪些值进入累加器。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示遍历 1 到 3 并只累加奇数。跟着用 n % 2 == 1 保护累加这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清控制流在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "把每个循环值都加上，却希望总和碰巧正确。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和控制流规则直接相关？"
+        "哪些迭代会进入 if 主体，哪些会跳过？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的控制流练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用for 循环中的 if 条件。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-methods": {
       "title": "方法",
-      "concept": "方法组织可复用行为。 在Java中学习方法时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里方法规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "concept": "方法用于可复用计算需要命名边界。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示把 width 和 height 传入 area。跟着返回乘积而不是在方法里打印这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清方法在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "调用方期望面积时却返回周长。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和方法规则直接相关？"
+        "哪一行把计算值返回给 main？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的方法练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用方法参数和返回值。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-input": {
       "title": "输入解析",
-      "concept": "练习中可以直接读取 System.in 处理输入。 在Java中学习输入解析时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里输入解析规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "concept": "输入解析用于stdin 字节必须变成带类型的 token。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示读取一次 System.in 并累加解析出的整数。跟着在 Integer.parseInt 前按空白分割这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清输入解析在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "评测可能给多个数字，却只解析第一个 token。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和输入解析规则直接相关？"
+        "文本在哪里从 String 变成 int？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的输入解析练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用readAllBytes、split 和 Integer.parseInt。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-arrays-collections": {
-      "title": "数组和集合",
-      "concept": "数组大小固定，集合提供更灵活的容器。 在Java中学习数组和集合时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里数组和集合规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "title": "数组与集合",
+      "concept": "数组与集合用于固定数组、可增长 List、键值 Map 和唯一 Set 负责不同容器任务。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示把数组值放入 List、Map 和 Set 的视角。跟着Map 总和用 merge，Set 用 add这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清数组和集合在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "题目要求数值总和时却输出 nums.length。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和数组和集合规则直接相关？"
+        "哪个集合保存顺序、哪个负责查找、哪个去重？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的数组和集合练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用以数组为来源使用 List、Map、Set API。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-classes-objects": {
+      "title": "类与对象",
+      "concept": "类与对象用于对象需要同时拥有实例状态和行为。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示创建 Counter 并调用 add。跟着返回前更新 this.value这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正new、字段和实例方法，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现new、字段和实例方法？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用new、字段和实例方法。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-constructors": {
+      "title": "构造器",
+      "concept": "构造器用于新对象必须以有效字段值开始。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示在 area 运行前保存 width 和 height。跟着把构造器参数赋给 final 字段这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正构造器参数和 this.field 赋值，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现构造器参数和 this.field 赋值？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用构造器参数和 this.field 赋值。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-encapsulation": {
+      "title": "封装",
+      "concept": "封装用于调用方应通过方法更新状态而不是直接访问字段。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示通过 Score.add 增加分数。跟着验证后只修改 private points 字段这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正private 字段和 public 方法，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现private 字段和 public 方法？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用private 字段和 public 方法。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-static-members": {
+      "title": "static 成员",
+      "concept": "static 成员用于值属于类而不是某个实例。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示通过类调用 Scale.apply。跟着乘以共享的 FACTOR这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正static final 常量和 static 方法，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现static final 常量和 static 方法？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用static final 常量和 static 方法。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-enum-switch": {
+      "title": "enum 与 switch",
+      "concept": "enum 与 switch用于固定状态集合需要映射为明确结果。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示将 Status.DONE switch 成 ok。跟着直接处理 DONE 分支这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正enum 常量和 switch 表达式分支，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现enum 常量和 switch 表达式分支？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用enum 常量和 switch 表达式分支。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-exceptions": {
       "title": "异常",
-      "concept": "try/catch 处理失败，受检异常会体现在签名中。 在Java中学习异常时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里异常规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "concept": "异常用于坏输入需要恢复但不能隐藏无关失败。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示捕获 NumberFormatException 并返回 fallback。跟着只捕获具体解析失败这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清异常在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "不修正围绕 Integer.parseInt 的 try/catch，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和异常规则直接相关？"
+        "哪个表达式体现围绕 Integer.parseInt 的 try/catch？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的异常练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
-    },
-    "java-classes-interfaces": {
-      "title": "类和接口",
-      "concept": "类保存状态和行为，接口描述行为契约。 在Java中学习类和接口时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里类和接口规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
-      "common_mistakes": [
-        "只复制示例形状，却说不清类和接口在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
-      ],
-      "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和类和接口规则直接相关？"
-      ],
-      "exercise_prompt": "完成Java的类和接口练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用围绕 Integer.parseInt 的 try/catch。保持单文件评测结构，并让现有用例通过这项语法。"
     },
     "java-generics": {
       "title": "泛型",
-      "concept": "泛型通过类型参数复用代码。 在Java中学习泛型时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里泛型规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+      "concept": "泛型用于一个方法需要保留调用方的元素类型。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示从 List<T> 返回最后一个元素。跟着使用 T 而不是 Object这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清泛型在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "不修正接收 List<T> 的泛型方法 <T>，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和泛型规则直接相关？"
+        "哪个表达式体现接收 List<T> 的泛型方法 <T>？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的泛型练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用接收 List<T> 的泛型方法 <T>。保持单文件评测结构，并让现有用例通过这项语法。"
     },
-    "java-lambda-streams": {
-      "title": "Lambda 和流",
-      "concept": "Lambda 传递行为，流处理序列。 在Java中学习Lambda 和流时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里Lambda 和流规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+    "java-interfaces": {
+      "title": "接口",
+      "concept": "接口用于调用方应依赖行为契约而不是具体类。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示把 User 当作 Named 传入。跟着用 public 签名实现 name这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清Lambda 和流在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "不修正implements 和接口类型参数，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和Lambda 和流规则直接相关？"
+        "哪个表达式体现implements 和接口类型参数？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的Lambda 和流练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用implements 和接口类型参数。保持单文件评测结构，并让现有用例通过这项语法。"
     },
-    "java-records-sealed": {
-      "title": "记录和 sealed 类型",
-      "concept": "记录减少数据样板代码，sealed 类型限制继承范围。 在Java中学习记录和 sealed 类型时，先分清示例中哪一行创建值，哪个表达式读取它，哪一行把结果送到输出。修改起始代码前，先写下当前代码会输出什么。",
-      "worked_example": "这个讲解示例用来定位Java里记录和 sealed 类型规则出现的位置。按顺序观察创建值的行、读取值的表达式，以及产生输出的语句。",
+    "java-inheritance-composition": {
+      "title": "继承与组合",
+      "concept": "继承与组合用于子类还需要辅助对象来完成行为。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示PremiumUser 结合继承的 baseScore 和 Bonus。跟着调用 bonus.apply(baseScore())这一行看，就能解释为什么输出会随代码路径变化。",
       "common_mistakes": [
-        "只复制示例形状，却说不清记录和 sealed 类型在代码中的作用",
-        "没有确认Java起始代码当前输出，就直接开始修改",
-        "只改括号或标点，而没有应用本课真正练习的规则"
+        "不修正extends 加组合字段，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
       ],
       "self_check": [
-        "示例中哪个表达式创建了最终要输出的值？",
-        "如果这个值为空、缺失或类型不对，会发生什么？",
-        "起始代码中哪一行和记录和 sealed 类型规则直接相关？"
+        "哪个表达式体现extends 加组合字段？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
       ],
-      "exercise_prompt": "完成Java的记录和 sealed 类型练习。先预测起始代码当前会输出什么，再只修改和本课规则相关的部分。不要把期望输出直接写成常量。"
+      "exercise_prompt": "修改 Solution.java 练习，使用extends 加组合字段。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-records": {
+      "title": "record",
+      "concept": "record用于不可变数据载体需要减少样板代码。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示使用生成的访问器 x() 和 y()。跟着累加两个 record 组件这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正record 组件和生成访问器，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现record 组件和生成访问器？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用record 组件和生成访问器。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-optional": {
+      "title": "Optional",
+      "concept": "Optional用于缺失值必须显式处理。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示在 orElse 前过滤 Optional。跟着保持 ok 存在而不是 empty这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正Optional.of、filter 和 orElse，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现Optional.of、filter 和 orElse？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用Optional.of、filter 和 orElse。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-streams-lambdas": {
+      "title": "Stream 与 lambda",
+      "concept": "Stream 与 lambda用于集合处理用流水线更清晰。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示先过滤偶数再平方。跟着在 mapToInt 前使用 filter这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正lambda 谓词和终端 sum，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现lambda 谓词和终端 sum？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用lambda 谓词和终端 sum。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-comparators-sorting": {
+      "title": "Comparator 与排序",
+      "concept": "Comparator 与排序用于对象需要与数据形状分离的排序规则。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示按分数降序排序用户。跟着从 User::score 构建 Comparator这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正Comparator.comparingInt 和 reversed，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现Comparator.comparingInt 和 reversed？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用Comparator.comparingInt 和 reversed。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-try-with-resources": {
+      "title": "try-with-resources",
+      "concept": "try-with-resources用于代码提前退出时资源也必须关闭。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示在托管块中读取字节。跟着在 try 头部声明资源这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正try 头部中的 AutoCloseable，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现try 头部中的 AutoCloseable？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用try 头部中的 AutoCloseable。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-packages-imports": {
+      "title": "package 与 import",
+      "concept": "package 与 import用于单文件练习仍需要 JDK 包中的类。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示导入 List 和 ArrayList。跟着无需全限定名即可使用导入名称这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正无 package 的 Solution.java 中的 import 声明，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现无 package 的 Solution.java 中的 import 声明？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用无 package 的 Solution.java 中的 import 声明。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-annotations": {
+      "title": "注解",
+      "concept": "注解用于元数据应附着在声明而不是运行逻辑中。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示定义 @Audit 并标注方法。跟着保持普通方法返回行为这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正@interface 和带注解的方法声明，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现@interface 和带注解的方法声明？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用@interface 和带注解的方法声明。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-sealed-classes": {
+      "title": "sealed 类",
+      "concept": "sealed 类用于领域层次需要列出允许的实现。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示将 Shape 限制为 Rect 和 Dot。跟着在允许的 record 中计算 measure这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正sealed interface、permits 和 final record，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现sealed interface、permits 和 final record？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用sealed interface、permits 和 final record。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-testing-assert": {
+      "title": "测试与 assert",
+      "concept": "测试与 assert用于小检查应在出错方法附近失败。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示打印前检查 addTwo。跟着行为不一致时抛出 AssertionError这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正纯 helper 加显式断言，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现纯 helper 加显式断言？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用纯 helper 加显式断言。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-equality-hashcode": {
+      "title": "equals 与 hashCode",
+      "concept": "equals 与 hashCode用于HashSet 必须识别相等的值对象。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示加入两个相等的 Point 对象。跟着比较字段并哈希同一组字段这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正与 hashCode 匹配的 equals(Object)，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现与 hashCode 匹配的 equals(Object)？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用与 hashCode 匹配的 equals(Object)。保持单文件评测结构，并让现有用例通过这项语法。"
+    },
+    "java-overloading-varargs": {
+      "title": "重载与 varargs",
+      "concept": "重载与 varargs用于方法调用会选择签名并收集额外参数。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
+      "worked_example": "示例重点展示累加 first 和 rest 数组。跟着遍历每个 varargs 值这一行看，就能解释为什么输出会随代码路径变化。",
+      "common_mistakes": [
+        "不修正int... rest 和重载的 label，只改输出字符串。",
+        "只把最终答案写进 println 会绕过本课要练习的 Java 语法。"
+      ],
+      "self_check": [
+        "哪个表达式体现int... rest 和重载的 label？",
+        "如果输入值或对象状态改变，stdout 前的哪个表达式也必须改变？"
+      ],
+      "exercise_prompt": "修改 Solution.java 练习，使用int... rest 和重载的 label。保持单文件评测结构，并让现有用例通过这项语法。"
     }
   }
 }

@@ -4,185 +4,379 @@
   "ui_language": "en",
   "lessons": {
     "py-output": {
-      "title": "Output",
-      "concept": "Output is how a program makes a result visible. In Python, `print(value)` writes the text form of `value` and then adds a newline.\n\nIn practice problems, your program is judged by exact stdout. That means extra debug lines, missing newlines, or printing the wrong type shape can fail even when the calculation is correct.",
-      "worked_example": "`print('ok')` sends the characters `ok` to stdout. The quotes create the string; the quotes themselves are not printed.",
+      "title": "print and stdout",
+      "concept": "`print` is the boundary between a Python calculation and judge-visible output. It converts each argument to text, inserts spaces between arguments, and ends with a newline by default, so exact stdout matters.",
+      "worked_example": "`name = 'Ada'; score = 7; print(f'{name}:{score}')` uses an f-string to format existing values as `Ada:7` without adding debug text.",
       "common_mistakes": [
-        "Leaving debug prints in the final answer.",
-        "Using `return` at top level when the judge expects printed output.",
-        "Printing a list representation when the expected output is plain text."
+        "Leaving extra debug prints in a submission that is judged by exact stdout.",
+        "Printing a container such as `['Ada', 7]` when the expected output is plain text.",
+        "Using `return` at top level instead of printing the final answer."
       ],
       "self_check": [
-        "What is the difference between a string literal and the text that gets printed?",
-        "Why can one extra print line make a correct algorithm fail?"
+        "Which characters does `print` add when you do not pass `end=`?",
+        "If the value is correct but stdout has one extra line, what will the judge compare?"
       ],
-      "exercise_prompt": "Make the starter print exactly `ok`. Predict the output before running."
+      "exercise_prompt": "Use the given `name` and `score` variables to print exactly `Ada:7`, with no extra labels or debug output."
     },
     "py-variables": {
       "title": "Variables",
-      "concept": "A variable name is a label bound to a value. Assignment with `=` creates or rebinds that label; it does not mean mathematical equality.\n\nUse variables to give intermediate results names. Good names reduce the amount you have to keep in your head while reading code.",
-      "worked_example": "`count = 1` binds the name `count` to the integer `1`; `print(count)` reads the current value of that name.",
+      "concept": "A variable name is bound to an object by assignment. Rebinding the same name changes what future reads see, while any previous object keeps existing until no references need it.",
+      "worked_example": "`count = 1; count = count + 2` reads the old integer, creates a new integer, and binds `count` to that new value before printing `3`.",
       "common_mistakes": [
-        "Reading `=` as equality instead of assignment.",
-        "Reusing one vague name for unrelated values.",
-        "Expecting old values to remain after rebinding a name."
+        "Reading `=` as a mathematical equality test instead of assignment.",
+        "Reusing a short name for unrelated meanings in the same solution.",
+        "Expecting a rebinding to mutate every earlier value automatically."
       ],
       "self_check": [
-        "After `x = 1` and `x = x + 2`, what value is bound to `x`?",
-        "When would a named intermediate value make code easier to check?"
+        "After `x = 1` and `x = x + 2`, what does `x` refer to?",
+        "Which temporary value deserves a name in the code you are reading?"
       ],
-      "exercise_prompt": "Bind a value to a name, then print that name so the output is exactly `ok`."
+      "exercise_prompt": "Rebind `word` to the expected text, then print the name rather than hard-coding a second literal in `print`."
+    },
+    "py-numbers": {
+      "title": "Numbers",
+      "concept": "Python integers have arbitrary precision, and numeric operators choose different meanings: `/` returns a float, `//` floors, `%` gives the remainder, and `**` powers. Problems often need the integer operators, not decimal division.",
+      "worked_example": "`total // size` and `total % size` split `7` items into groups of `2`, producing quotient `3` and remainder `1`.",
+      "common_mistakes": [
+        "Using `/` when the task expects integer division.",
+        "Forgetting that `%` is the remainder after division, not a percentage.",
+        "Mixing float output into a judge answer that expects integers."
+      ],
+      "self_check": [
+        "What are the values of `7 // 2` and `7 % 2`?",
+        "When would `round` be the wrong replacement for `//`?"
+      ],
+      "exercise_prompt": "Change the arithmetic so the starter prints the integer quotient and remainder as `3:1`."
     },
     "py-strings": {
       "title": "Strings",
-      "concept": "A string is an ordered sequence of characters. `len(text)` gives its length, `text[i]` reads one character by zero-based index, and `text[a:b]` slices a half-open range.\n\nStrings are immutable: operations create new strings or views of characters, rather than changing the original text in place.",
-      "worked_example": "`text = 'code'` followed by `text[:2]` reads characters from index 0 up to, but not including, index 2, producing `co`.",
+      "concept": "A string is an immutable sequence of Unicode characters. Indexing reads one character, slicing reads a half-open range, and operations such as concatenation create a new string instead of editing the old one.",
+      "worked_example": "`text = 'python'; text[1:4]` reads indexes 1, 2, and 3, so the printed slice is `yth`.",
       "common_mistakes": [
-        "Forgetting that indexes start at 0.",
-        "Expecting the end index in a slice to be included.",
-        "Trying to assign into a string character."
+        "Expecting the stop index in a slice to be included.",
+        "Trying to assign into `text[0]` even though strings are immutable.",
+        "Counting indexes from 1 instead of 0."
       ],
       "self_check": [
         "What does `'code'[1]` read?",
-        "Why does `'code'[:2]` produce two characters?"
+        "Why does `'xokx'[1:3]` produce exactly two characters?"
       ],
-      "exercise_prompt": "Use indexing or slicing to print exactly `ok`."
+      "exercise_prompt": "Use a slice of `text` so the output is exactly `ok`, not the surrounding marker characters."
     },
     "py-control-flow": {
       "title": "Control flow",
-      "concept": "Control flow decides which statements run and how often. `if` chooses a branch from a condition, `for` repeats over a sequence, and `while` repeats while a condition stays true.\n\nIndentation is part of Python syntax. The indented block belongs to the nearest control statement above it.",
-      "worked_example": "`for n in range(3): print(n)` repeats the body with `n` as 0, 1, then 2.",
+      "concept": "`if` selects a block, `for` consumes an iterable, and `while` repeats until a condition changes. Python uses indentation as syntax, so moving one line changes which branch or loop owns it.",
+      "worked_example": "The example visits `1`, `2`, and `3`, adds only odd values, and prints `4` after the loop finishes.",
       "common_mistakes": [
-        "Putting a statement at the wrong indentation level.",
-        "Creating a `while` loop whose condition never changes.",
-        "Using `range(n)` and expecting it to include `n`."
+        "Putting accumulation code outside the loop by one indentation level.",
+        "Using `range(n)` while expecting it to include `n`.",
+        "Writing a `while` loop whose condition never changes."
       ],
       "self_check": [
-        "How many times does `range(3)` run?",
-        "Which lines belong to an `if` block?"
+        "Which lines run once per item in the loop?",
+        "What values are produced by `range(1, 4)`?"
       ],
-      "exercise_prompt": "Use a branch or loop to print exactly `ok`. First predict the output, then make the smallest edit that matches the checker."
+      "exercise_prompt": "Edit the loop body so it adds only the odd numbers and prints the final total after the loop."
     },
     "py-functions": {
       "title": "Functions",
-      "concept": "A function packages reusable behavior behind a name. `def name(parameters):` defines it; calling `name(arguments)` runs its body.\n\n`return` sends a value back to the caller. Printing inside a function and returning from a function are different actions; coding-test solutions often calculate with returns and print only at the boundary.",
-      "worked_example": "`def add(a, b): return a + b` creates a function that combines two arguments and gives the sum back to the caller.",
+      "concept": "`def` creates a callable object with parameters and a body. `return` sends a value to the caller; printing inside the function is separate from returning the calculation for later use.",
+      "worked_example": "`area(3, 4)` passes two arguments, the function multiplies them, and the caller prints the returned `12`.",
       "common_mistakes": [
-        "Forgetting to call the function after defining it.",
-        "Using `print` where the caller needs a returned value.",
-        "Returning inside a loop too early."
+        "Forgetting to call a function after defining it.",
+        "Printing a value where the caller needs it returned.",
+        "Returning too early from inside a loop."
       ],
       "self_check": [
-        "What happens when a function reaches the end without `return`?",
-        "Where should the final output usually be printed?"
+        "What value is returned if execution reaches the end of a function without `return`?",
+        "Which part of this program should own the final `print`?"
       ],
-      "exercise_prompt": "Complete a small function and print its returned value."
+      "exercise_prompt": "Fix the function body so it returns rectangle area, then let the existing call print the result."
     },
     "py-input": {
       "title": "Input parsing",
-      "concept": "Most coding-test programs read stdin, transform text into useful values, then print stdout. `sys.stdin.read()` gets all input as one string; `.split()` separates it by whitespace.\n\nParsing is a boundary step. Keep it small: read text, convert types once, then solve with normal variables and collections.",
-      "worked_example": "`list(map(int, sys.stdin.read().split()))` reads all whitespace-separated tokens and converts each token to an integer.",
+      "concept": "Coding-test input arrives as text on stdin. A common pattern is to read once, split whitespace into tokens, convert the tokens, and keep the solving logic separate from parsing.",
+      "worked_example": "`[int(token) for token in sys.stdin.read().split()]` converts all whitespace-separated input tokens into integers before summing them.",
       "common_mistakes": [
-        "Using `input()` when the problem has many lines and bulk read is simpler.",
-        "Forgetting that stdin starts as text.",
-        "Dropping spaces or newlines when the task asks to echo input exactly."
+        "Calling `input()` repeatedly when one bulk read is simpler for unknown line counts.",
+        "Forgetting that `split()` produces strings until `int` is applied.",
+        "Mixing parsing code into the middle of the algorithm so it is hard to test."
       ],
       "self_check": [
-        "Why does `split()` return strings before `int` is applied?",
-        "When should you preserve input exactly instead of splitting it?"
+        "What does `sys.stdin.read()` return before conversion?",
+        "Where would you handle an empty input string?"
       ],
-      "exercise_prompt": "Read stdin and write it back unchanged. First predict the output, then make the smallest edit that matches the checker."
+      "exercise_prompt": "Parse all integers from stdin and print their sum for the provided judge case."
     },
     "py-lists-dicts": {
       "title": "Lists and dicts",
-      "concept": "A list is an ordered group of values. You use an index such as `nums[0]` when position matters, and you can iterate through the list in order.\n\nA dict maps keys to values. Use a dict when you want to look up a value by a meaningful key such as a name, id, or character, rather than by position.\n\nFor sums, counts, grouping, and lookup tables, choosing the right collection is often the difference between direct code and tangled code.",
-      "worked_example": "`counts = {'a': 2}` creates a dict with key `'a'` and value `2`. `counts['a']` looks up the value for that key and prints `2`.",
+      "concept": "Lists store ordered values and are read by index or iteration. Dicts map keys to values, which makes lookup, grouping, and counting clearer than searching a list by hand.",
+      "worked_example": "`scores['Ada']` finds Ada's list of scores, and `sum(...)` calculates the total for that key without scanning unrelated names.",
       "common_mistakes": [
-        "Using a list index when the data is identified by a key.",
-        "Looking up a missing dict key without checking whether it exists.",
-        "Forgetting that list order matters but dict lookup is by key."
+        "Using a list index when the data is identified by a meaningful key.",
+        "Looking up a dict key before deciding what should happen if it is missing.",
+        "Printing `len(nums)` when the problem asks for the sum of the numbers."
       ],
       "self_check": [
-        "When should you use a dict instead of a list?",
-        "What does `nums[0]` mean, and what does `counts['a']` mean?",
-        "How would you store counts for many different words?"
+        "When should a value become a dict key instead of a list position?",
+        "What does `scores['Ada']` retrieve in the example?"
       ],
-      "exercise_prompt": "Use the list in the starter to print the sum of its numbers. Do not hard-code the expected output."
+      "exercise_prompt": "Use the list stored under `Ada` to print the sum of its numbers without hard-coding `5`."
     },
-    "py-errors": {
-      "title": "Exceptions",
-      "concept": "An exception is a controlled way for code to report that normal execution cannot continue. `try` runs code that might fail; `except SomeError` handles a specific failure.\n\nCatch only errors you can recover from. Broad catches can hide real bugs and make practice failures harder to understand.",
-      "worked_example": "`int('x')` raises `ValueError`; the `except ValueError` block can print a fallback message instead of crashing.",
+    "py-tuples-sets": {
+      "title": "Tuples and sets",
+      "concept": "A tuple is a fixed-position sequence, useful for small records such as coordinates or pairs. A set stores unique hashable values and is the usual tool for deduplication and membership tests.",
+      "worked_example": "`pair = ('o', 'k')` keeps order for joining, while `set(pair)` records that there are two distinct letters.",
       "common_mistakes": [
-        "Catching every exception with bare `except:`.",
-        "Putting too much code inside `try` so the failing line is unclear.",
-        "Treating exceptions as a substitute for normal condition checks."
+        "Using a set when output order matters.",
+        "Trying to change a tuple item in place.",
+        "Forgetting that duplicate set inserts do not increase its length."
       ],
       "self_check": [
-        "Why is `except ValueError` clearer than bare `except` here?",
-        "What should happen after a recoverable parse failure?"
+        "Which part of the example needs tuple order?",
+        "What would `len(set(['a', 'a']))` return?"
       ],
-      "exercise_prompt": "Handle the expected conversion error and print exactly `ok`."
+      "exercise_prompt": "Build a set from the tuple and print both the joined tuple text and the count of unique items."
     },
     "py-comprehensions": {
       "title": "Comprehensions",
-      "concept": "A comprehension builds a collection from an expression and a loop. `[expr for item in items if condition]` means: visit each item, keep the ones that match, and store the expression result.\n\nUse comprehensions for simple transformations and filters. If the logic needs several steps or side effects, a normal loop is usually clearer.",
-      "worked_example": "`[n for n in range(5) if n % 2 == 0]` creates `[0, 2, 4]` by keeping only even numbers.",
+      "concept": "A comprehension builds a collection from an expression, a loop, and optional filters. It is best for a simple map or filter that can be read in one pass.",
+      "worked_example": "`[n * n for n in nums if n % 2 == 0]` squares only even numbers, producing values that can be summed immediately.",
       "common_mistakes": [
-        "Making a comprehension so dense that it is harder than a loop.",
-        "Forgetting that the expression comes before `for`.",
-        "Using a comprehension only for side effects."
+        "Putting so much logic in a comprehension that a normal loop would be clearer.",
+        "Forgetting that the output expression appears before the `for`.",
+        "Using a comprehension only for side effects such as printing."
       ],
       "self_check": [
-        "Which part chooses the output value?",
-        "Which part filters items out?"
+        "Which part of the comprehension chooses the output value?",
+        "Which condition removes the unwanted item in the starter?"
       ],
-      "exercise_prompt": "Use a comprehension to build the text needed to print exactly `ok`."
+      "exercise_prompt": "Adjust the filter so the comprehension keeps the letters needed to print `ok`."
+    },
+    "py-errors": {
+      "title": "Exceptions",
+      "concept": "Exceptions separate normal flow from recoverable failure. Keep the `try` block small, catch a specific exception such as `ValueError`, and recover only when you know the replacement behavior.",
+      "worked_example": "The example tries to parse text as an integer and uses `except ValueError` only for the parse failure path.",
+      "common_mistakes": [
+        "Catching every exception with bare `except:` and hiding bugs.",
+        "Putting unrelated code inside the `try` block.",
+        "Using exceptions for ordinary branches that an `if` could express directly."
+      ],
+      "self_check": [
+        "Why is `except ValueError` better than a bare catch here?",
+        "What value should the program use after the parse fails?"
+      ],
+      "exercise_prompt": "Handle the expected conversion error by assigning the recovery value that makes the output `12`."
+    },
+    "py-files-context": {
+      "title": "Files and context managers",
+      "concept": "`with` enters a context manager, runs the block, and guarantees cleanup afterward. File objects and contextlib utilities use this to close resources even if the block exits early.",
+      "worked_example": "The `StringIO` handle behaves like a small file; reading inside the `with` block captures `ok` before the handle is closed.",
+      "common_mistakes": [
+        "Trying to read a handle after the context manager has already closed it.",
+        "Opening files without a `with` block and forgetting cleanup.",
+        "Catching cleanup errors by accident with an overly broad exception handler."
+      ],
+      "self_check": [
+        "Which line must run before the handle closes?",
+        "What cleanup does `with open(...)` normally give you?"
+      ],
+      "exercise_prompt": "Read from the managed handle inside the `with` block, then print the saved text outside the block."
+    },
+    "py-modules-imports": {
+      "title": "Modules and imports",
+      "concept": "A module groups reusable code behind a namespace. `import math` binds the module name, while style guides put imports at the top so dependencies are visible before the program logic starts.",
+      "worked_example": "`math.ceil(2.1)` calls the standard-library function through the imported module and prints `3`.",
+      "common_mistakes": [
+        "Rewriting a standard-library helper instead of importing it.",
+        "Shadowing an imported module with a variable of the same name.",
+        "Putting imports deep inside code without a reason."
+      ],
+      "self_check": [
+        "What name becomes available after `import math`?",
+        "Why does PEP 8 prefer imports near the top of the file?"
+      ],
+      "exercise_prompt": "Use the imported `math` module to round upward so the result is `3`."
+    },
+    "py-dataclasses": {
+      "title": "Dataclasses",
+      "concept": "`@dataclass` generates routine methods for classes that mainly hold data. It keeps field names, type hints, construction, and representation close together without hand-written boilerplate.",
+      "worked_example": "`Point(2, 3)` creates an object with `x` and `y` fields, and the example adds those fields like any other attributes.",
+      "common_mistakes": [
+        "Using a dataclass for behavior-heavy objects that need explicit methods first.",
+        "Forgetting the `@` when applying the decorator.",
+        "Changing mutable default fields without using the right default factory."
+      ],
+      "self_check": [
+        "Which constructor call is generated for `Point`?",
+        "What fields should be read to calculate the sum?"
+      ],
+      "exercise_prompt": "Use both dataclass fields so the point prints the sum of its coordinates."
+    },
+    "py-typing": {
+      "title": "Type hints",
+      "concept": "Type hints describe expected shapes for readers, editors, and type checkers. They do not automatically prevent a wrong runtime value, so the function body still has to implement the contract.",
+      "worked_example": "`Iterable[int]` tells the reader that `total` can consume any iterable of integers and returns an `int` after calling `sum`.",
+      "common_mistakes": [
+        "Assuming annotations enforce every value at runtime by themselves.",
+        "Writing a complex type before the data shape is stable.",
+        "Letting the implementation contradict the annotated return type."
+      ],
+      "self_check": [
+        "What does `Iterable[int]` promise about the argument?",
+        "Which line proves the function actually returns an integer total?"
+      ],
+      "exercise_prompt": "Make the annotated function return the sum of the iterable it receives."
     },
     "py-generators": {
       "title": "Iterators and generators",
-      "concept": "An iterator produces values one at a time. A generator function uses `yield` to produce a value and pause until the next value is requested.\n\nGenerators are useful when a sequence may be large or naturally streamed. They let you describe how to produce values without building the whole list first.",
-      "worked_example": "`def ones(): yield 1` returns a generator object; `next(ones())` asks it for the first produced value.",
+      "concept": "An iterator produces values one at a time. A generator function uses `yield`, which returns a generator object first and runs the body only when the caller asks for the next value.",
+      "worked_example": "`next(countdown(3))` starts the generator, reaches the first `yield`, and receives `3` without building a whole list.",
       "common_mistakes": [
         "Calling a generator function and expecting the body to run immediately.",
-        "Forgetting that `next` can raise `StopIteration`.",
-        "Using a generator when a short list would be simpler."
+        "Forgetting that `next` can raise `StopIteration` after values are exhausted.",
+        "Building a list when a lazy stream would avoid unnecessary memory."
       ],
       "self_check": [
-        "What is the difference between `return` and `yield`?",
-        "When does a generator body actually run?"
+        "When does the body of `words()` actually run?",
+        "What is the first value yielded by the fixed starter?"
       ],
-      "exercise_prompt": "Complete a generator so asking for its first value prints exactly `ok`."
+      "exercise_prompt": "Yield `ok` as the first generated value so the existing `next` call prints it."
+    },
+    "py-lambdas-closures": {
+      "title": "Lambdas and closures",
+      "concept": "`lambda` creates a small expression function. When that function uses a name from an outer function, it forms a closure and remembers that outer value after the outer call returns.",
+      "worked_example": "`make_adder(2)` returns a lambda that remembers `delta = 2`, so calling it with `3` prints `5`.",
+      "common_mistakes": [
+        "Using lambda for multi-step logic that deserves a named function.",
+        "Expecting a closure to copy a changing variable's old value automatically.",
+        "Forgetting to return the inner function from the outer function."
+      ],
+      "self_check": [
+        "Which value is remembered by the lambda in `make_suffix`?",
+        "Why does `make_suffix('ok')` return a function instead of a string?"
+      ],
+      "exercise_prompt": "Return a lambda that appends the captured suffix to its argument."
     },
     "py-decorators": {
       "title": "Decorators",
-      "concept": "A decorator is a function applied to another function at definition time. `@decorator` above a function is shorthand for replacing that function with `decorator(function)`.\n\nDecorators are common for logging, caching, validation, and framework hooks. First learn that the original function is a value being passed to another function.",
-      "worked_example": "`def deco(fn): return fn` is an identity decorator: it receives a function and gives the same function back unchanged.",
+      "concept": "A decorator is called when a function is defined. It receives the original function object and returns the object that the function name should refer to afterward.",
+      "worked_example": "The identity decorator returns `fn` unchanged, so `word()` still calls the original function and prints `ok`.",
       "common_mistakes": [
-        "Forgetting that decorators run when the function is defined, not when it is later called.",
-        "Returning the result of calling the function instead of returning a wrapper function.",
-        "Adding a decorator when a normal helper function would be clearer."
+        "Returning the result of calling `fn()` instead of returning a function object.",
+        "Forgetting that decorator code runs at definition time.",
+        "Adding a decorator when a simple helper call would be easier to read."
       ],
       "self_check": [
-        "What value does a decorator receive?",
-        "What must a decorator return?"
+        "What argument does `identity` receive?",
+        "What must be returned for `word` to stay callable?"
       ],
-      "exercise_prompt": "Use the provided decorator shape and print exactly `ok`."
+      "exercise_prompt": "Make the decorator return the original function so the decorated call prints `ok`."
     },
-    "py-context-types": {
-      "title": "Context managers and type hints",
-      "concept": "`with` opens a managed scope. The context manager sets something up before the block and cleans it up after the block, even if the block exits early.\n\nType hints document expected value shapes for readers and tools. Python still runs dynamically, but hints make interfaces easier to check before execution.",
-      "worked_example": "`def total(xs: Iterable[int]) -> int: return sum(xs)` says the function expects something iterable over integers and returns an integer.",
+    "py-sorting-keys": {
+      "title": "Sorting and key functions",
+      "concept": "`sorted` returns a new list and leaves the original iterable alone. A `key` function computes the comparison value for each item, which is how records are sorted by one field.",
+      "worked_example": "The example sorts users by the score field with `key=lambda item: item[1]` and uses `reverse=True` to put the highest score first.",
       "common_mistakes": [
-        "Thinking type hints enforce every value at runtime by themselves.",
-        "Forgetting that `with` is mainly about setup and cleanup.",
-        "Adding complicated hints before the data shape is clear."
+        "Sorting tuples by their default first field when the task asks for a later field.",
+        "Mutating with `.sort()` when the original order is still needed elsewhere.",
+        "Writing a key function that returns text for numeric ordering."
       ],
       "self_check": [
-        "What problem does `with open(...)` solve?",
-        "What does `Iterable[int]` tell a reader?"
+        "Which tuple field is the score?",
+        "Why does `reverse=True` matter for choosing the best user?"
       ],
-      "exercise_prompt": "Use a simple type hint constant and print exactly `ok`."
+      "exercise_prompt": "Sort by score descending so the selected user is `Lin:5`."
+    },
+    "py-counter-defaultdict": {
+      "title": "Counter and defaultdict",
+      "concept": "`Counter` is a dict subclass for counts, and `defaultdict(list)` creates a new list for missing groups. They remove the noisy `if key not in dict` code from common counting and grouping tasks.",
+      "worked_example": "The example counts each color and also groups words by first letter, then prints the count and group size for `red`.",
+      "common_mistakes": [
+        "Manually initializing every count when `Counter` can count the iterable.",
+        "Using a normal dict and then appending to a missing list key.",
+        "Grouping by the wrong key, such as the whole word instead of its first letter."
+      ],
+      "self_check": [
+        "What does `Counter(words)['red']` return?",
+        "What list does `groups['r']` contain after grouping?"
+      ],
+      "exercise_prompt": "Fill both the counter and the first-letter groups so the output is `2 2`."
+    },
+    "py-deque": {
+      "title": "deque",
+      "concept": "`deque` is a double-ended queue with efficient append and pop operations on both ends. It is the standard-library choice for BFS queues and sliding-window front removal.",
+      "worked_example": "The example adds `start` on the left and `end` on the right, then removes one value from each end.",
+      "common_mistakes": [
+        "Using `list.pop(0)` repeatedly for queue behavior.",
+        "Mixing up `append` and `appendleft`.",
+        "Reading from an empty deque without checking whether work remains."
+      ],
+      "self_check": [
+        "Which method adds a value to the left side?",
+        "After adding both ends, what should `popleft` and `pop` return?"
+      ],
+      "exercise_prompt": "Add the missing left and right values, then print the two removed end values."
+    },
+    "py-itertools": {
+      "title": "itertools",
+      "concept": "`itertools` contains lazy iterator building blocks such as `chain`, `islice`, `product`, and `pairwise`. They describe iteration pipelines without building intermediate lists unless you ask for them.",
+      "worked_example": "`chain.from_iterable(parts)` flattens the nested one-letter lists lazily, and `join` consumes that iterator to print `ok`.",
+      "common_mistakes": [
+        "Forgetting that many itertools results are iterators, not reusable lists.",
+        "Slicing the input before the iterator sees all needed values.",
+        "Using a nested loop when a small itertools helper states the intent clearly."
+      ],
+      "self_check": [
+        "What does `chain.from_iterable` flatten in the example?",
+        "Why does the starter lose the second letter?"
+      ],
+      "exercise_prompt": "Flatten both inner lists lazily so the joined result is `ok`."
+    },
+    "py-pathlib": {
+      "title": "pathlib",
+      "concept": "`pathlib` models paths as objects instead of raw strings. Properties such as `name`, `stem`, `suffix`, and `parent` make file-path code clearer and less dependent on manual separators.",
+      "worked_example": "`PurePosixPath('logs/app.txt')` can report `stem` as `app` and `suffix` as `.txt` without touching the real filesystem.",
+      "common_mistakes": [
+        "Splitting paths by `/` even when path rules differ by platform.",
+        "Confusing `name`, `stem`, and `suffix`.",
+        "Using `Path` filesystem methods in a judge exercise that only needs pure path parsing."
+      ],
+      "self_check": [
+        "What is the stem of `logs/app.txt`?",
+        "Why does `PurePosixPath` avoid filesystem access here?"
+      ],
+      "exercise_prompt": "Use path properties to print the stem and suffix as `app:.txt`."
+    },
+    "py-testing-assert": {
+      "title": "Testing and assert",
+      "concept": "`assert` is a compact check for an invariant in examples and small tests. Real projects usually put those checks in repeatable test functions, but the core idea is still expected versus actual behavior.",
+      "worked_example": "The example checks `add_two(3) == 5` before printing `ok`, so a broken function fails before producing success output.",
+      "common_mistakes": [
+        "Changing the assertion to match broken code instead of fixing the code.",
+        "Depending on assert for user-facing validation in optimized runtime modes.",
+        "Testing only the final print and not the small function that does the work."
+      ],
+      "self_check": [
+        "What behavior should `add_two` guarantee?",
+        "Which line would fail if the function returned the input unchanged?"
+      ],
+      "exercise_prompt": "Fix the function and the assertion so the check protects the intended `+2` behavior before printing `ok`."
+    },
+    "py-async": {
+      "title": "Async concepts",
+      "concept": "`async def` creates a coroutine function. Calling it creates a coroutine object, `await` waits for its result inside another coroutine, and `asyncio.run` drives the top-level coroutine in this single-file exercise.",
+      "worked_example": "`main` awaits `label()`, receives `ok`, prints it, and `asyncio.run(main())` starts the event loop for that coroutine.",
+      "common_mistakes": [
+        "Printing a coroutine object instead of awaiting it.",
+        "Calling `asyncio.run` from code that is already inside a running event loop.",
+        "Using async syntax for CPU-only work that has no waiting point."
+      ],
+      "self_check": [
+        "Which expression actually waits for `label()` to finish?",
+        "Why does this exercise use `asyncio.run(main())` at the file boundary?"
+      ],
+      "exercise_prompt": "Await the coroutine inside `main` and print the awaited result."
     }
   }
 }

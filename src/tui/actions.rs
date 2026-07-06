@@ -26,6 +26,8 @@ impl PracticodeApp {
         self.state.settings.start_mode = "home".to_string();
         save_state(&self.root, &self.state)?;
         self.learn_result.clear();
+        self.left_scroll = 0;
+        self.output_scroll = 0;
         self.show_output = false;
         self.settings_cursor = None;
         self.list_cursor = None;
@@ -69,6 +71,8 @@ impl PracticodeApp {
         self.editing_notes = false;
         self.load_code_editor()?;
         self.settings_cursor = None;
+        self.left_scroll = 0;
+        self.output_scroll = 0;
         self.show_output = false;
         self.focus = Focus::Code;
         Ok(())
@@ -161,6 +165,8 @@ impl PracticodeApp {
         self.generate_notice = Some("Generating in background.".to_string());
         self.generate_rx = Some(rx);
         self.settings_cursor = None;
+        self.left_scroll = 0;
+        self.output_scroll = 0;
         self.show_output = false;
         self.focus = Focus::Code;
     }
@@ -274,6 +280,8 @@ impl PracticodeApp {
         self.mode = AppMode::Learn;
         self.state.settings.start_mode = "learn".to_string();
         self.learn_result.clear();
+        self.left_scroll = 0;
+        self.output_scroll = 0;
         let language = self.state.settings.language.clone();
         let lesson = current_syntax_lesson(&self.state, &language);
         set_current_syntax_lesson(&mut self.state, &language, lesson.id);
@@ -302,6 +310,7 @@ impl PracticodeApp {
             record_syntax_pass(&mut self.state, lesson.language, lesson.id);
             save_state(&self.root, &self.state)?;
         }
+        self.output_scroll = 0;
         let headline = format!(
             "{} {}/{}",
             if result.passed { "PASS" } else { "FAIL" },
@@ -320,6 +329,8 @@ impl PracticodeApp {
         save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
         self.learn_result.clear();
+        self.left_scroll = 0;
+        self.output_scroll = 0;
         self.show_current_syntax_lesson();
         Ok(())
     }
@@ -331,6 +342,8 @@ impl PracticodeApp {
         save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
         self.learn_result.clear();
+        self.left_scroll = 0;
+        self.output_scroll = 0;
         self.show_current_syntax_lesson();
         Ok(())
     }
@@ -338,6 +351,7 @@ impl PracticodeApp {
     pub(super) fn show_current_syntax_lesson(&mut self) {
         let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
         self.output = render_syntax_lesson(lesson, &self.state);
+        self.left_scroll = 0;
         self.output_is_markdown = true;
         self.show_output = false;
         self.settings_cursor = None;
@@ -376,6 +390,8 @@ impl PracticodeApp {
         self.settings_cursor = None;
         if self.mode == AppMode::Learn {
             self.learn_result.clear();
+            self.left_scroll = 0;
+            self.output_scroll = 0;
             self.show_current_syntax_lesson();
         } else {
             self.show_output = false;
@@ -388,6 +404,7 @@ impl PracticodeApp {
         self.state.settings.ui_language = normalize_ui_language(language);
         save_state(&self.root, &self.state)?;
         if self.mode == AppMode::Learn {
+            self.left_scroll = 0;
             self.show_current_syntax_lesson();
         } else {
             self.write_text_output(&format!("UI language: {}", self.state.settings.ui_language));
@@ -476,6 +493,7 @@ impl PracticodeApp {
         } else {
             format!("{}\n\n{profile}", intro.trim_end())
         };
+        self.output_scroll = 0;
         self.output_is_markdown = false;
         self.show_output = true;
         self.focus = Focus::Output;
@@ -541,6 +559,7 @@ impl PracticodeApp {
         self.settings_cursor = None;
         self.showing_model_status = false;
         self.editing_notes = true;
+        self.output_scroll = 0;
         self.show_output = true;
         self.focus = Focus::Output;
         Ok(())

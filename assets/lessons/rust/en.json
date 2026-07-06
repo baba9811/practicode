@@ -5,195 +5,467 @@
   "lessons": {
     "rust-output": {
       "title": "Output",
-      "concept": "println! In Rust, study Output by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Output rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "Output focuses on this Rust skill: formatting values with println! and matching judge-exact stdout. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: formatting values with println! and matching judge-exact stdout. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Output changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: formatting values with println! and matching judge-exact stdout.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Output."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Output?"
+        "Which expression or item demonstrates this skill: formatting values with println! and matching judge-exact stdout?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Output exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: formatting values with println! and matching judge-exact stdout. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
     "rust-variables": {
-      "title": "Variables",
-      "concept": "let binds values; mut allows mutation. In Rust, study Variables by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Variables rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "title": "Bindings and mutability",
+      "concept": "Bindings and mutability focuses on this Rust skill: choosing immutable let bindings first and using mut only where a value really changes. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: choosing immutable let bindings first and using mut only where a value really changes. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Variables changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: choosing immutable let bindings first and using mut only where a value really changes.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Bindings and mutability."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Variables?"
+        "Which expression or item demonstrates this skill: choosing immutable let bindings first and using mut only where a value really changes?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Variables exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: choosing immutable let bindings first and using mut only where a value really changes. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-numbers-tuples": {
+      "title": "Numbers and tuples",
+      "concept": "Numbers and tuples focuses on this Rust skill: combining explicit numeric types with tuple field access such as pair.0 and pair.1. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: combining explicit numeric types with tuple field access such as pair.0 and pair.1. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: combining explicit numeric types with tuple field access such as pair.0 and pair.1.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Numbers and tuples."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: combining explicit numeric types with tuple field access such as pair.0 and pair.1?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: combining explicit numeric types with tuple field access such as pair.0 and pair.1. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
     "rust-strings": {
       "title": "Strings",
-      "concept": "String owns text; &str borrows text. In Rust, study Strings by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Strings rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "Strings focuses on this Rust skill: deciding when owned String is needed and when a borrowed &str slice is enough. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: deciding when owned String is needed and when a borrowed &str slice is enough. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Strings changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: deciding when owned String is needed and when a borrowed &str slice is enough.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Strings."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Strings?"
+        "Which expression or item demonstrates this skill: deciding when owned String is needed and when a borrowed &str slice is enough?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Strings exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: deciding when owned String is needed and when a borrowed &str slice is enough. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
     "rust-control-flow": {
       "title": "Control flow",
-      "concept": "if is an expression; for iterates ranges and collections. In Rust, study Control flow by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Control flow rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "Control flow focuses on this Rust skill: using if as an expression and for ranges to build a value instead of branching by habit. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: using if as an expression and for ranges to build a value instead of branching by habit. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Control flow changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: using if as an expression and for ranges to build a value instead of branching by habit.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Control flow."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Control flow?"
+        "Which expression or item demonstrates this skill: using if as an expression and for ranges to build a value instead of branching by habit?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Control flow exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: using if as an expression and for ranges to build a value instead of branching by habit. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
     "rust-functions": {
       "title": "Functions",
-      "concept": "Functions declare parameter and return types. In Rust, study Functions by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Functions rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "Functions focuses on this Rust skill: writing signatures whose parameter and return types document the calculation boundary. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: writing signatures whose parameter and return types document the calculation boundary. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Functions changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: writing signatures whose parameter and return types document the calculation boundary.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Functions."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Functions?"
+        "Which expression or item demonstrates this skill: writing signatures whose parameter and return types document the calculation boundary?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Functions exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: writing signatures whose parameter and return types document the calculation boundary. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
-    "rust-input": {
-      "title": "Input parsing",
-      "concept": "Read stdin into a String, then split or print it. In Rust, study Input parsing by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Input parsing rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+    "rust-structs-impl": {
+      "title": "Structs and impl",
+      "concept": "Structs and impl focuses on this Rust skill: grouping domain fields in a struct and putting behavior that needs those fields in impl. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: grouping domain fields in a struct and putting behavior that needs those fields in impl. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Input parsing changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: grouping domain fields in a struct and putting behavior that needs those fields in impl.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Structs and impl."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Input parsing?"
+        "Which expression or item demonstrates this skill: grouping domain fields in a struct and putting behavior that needs those fields in impl?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Input parsing exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
-    },
-    "rust-vec-hashmap": {
-      "title": "Vec and HashMap",
-      "concept": "Vec stores sequences; HashMap stores key/value pairs. In Rust, study Vec and HashMap by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Vec and HashMap rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
-      "common_mistakes": [
-        "Copying the shape of the example without explaining what Vec and HashMap changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
-      ],
-      "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Vec and HashMap?"
-      ],
-      "exercise_prompt": "Complete the Vec and HashMap exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
-    },
-    "rust-result": {
-      "title": "Result and ?",
-      "concept": "Result models recoverable errors; ? In Rust, study Result and ? by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Result and ? rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
-      "common_mistakes": [
-        "Copying the shape of the example without explaining what Result and ? changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
-      ],
-      "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Result and ??"
-      ],
-      "exercise_prompt": "Complete the Result and ? exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
-    },
-    "rust-ownership": {
-      "title": "Ownership and borrowing",
-      "concept": "A value has one owner; references borrow without moving. In Rust, study Ownership and borrowing by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Ownership and borrowing rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
-      "common_mistakes": [
-        "Copying the shape of the example without explaining what Ownership and borrowing changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
-      ],
-      "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Ownership and borrowing?"
-      ],
-      "exercise_prompt": "Complete the Ownership and borrowing exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: grouping domain fields in a struct and putting behavior that needs those fields in impl. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
     "rust-enum-match": {
       "title": "Enums and match",
-      "concept": "Enums model alternatives; match handles them exhaustively. In Rust, study Enums and match by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Enums and match rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "Enums and match focuses on this Rust skill: modeling alternatives with enum variants and handling each variant exhaustively with match. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: modeling alternatives with enum variants and handling each variant exhaustively with match. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Enums and match changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: modeling alternatives with enum variants and handling each variant exhaustively with match.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Enums and match."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Enums and match?"
+        "Which expression or item demonstrates this skill: modeling alternatives with enum variants and handling each variant exhaustively with match?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Enums and match exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: modeling alternatives with enum variants and handling each variant exhaustively with match. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
-    "rust-traits-lifetimes": {
-      "title": "Traits, generics, and lifetimes",
-      "concept": "Traits define shared behavior; lifetimes describe borrowed relationships. In Rust, study Traits, generics, and lifetimes by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Traits, generics, and lifetimes rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+    "rust-option": {
+      "title": "Option and if let",
+      "concept": "Option and if let focuses on this Rust skill: making missing values explicit with Option<T> and unpacking the Some case safely. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: making missing values explicit with Option<T> and unpacking the Some case safely. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Traits, generics, and lifetimes changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: making missing values explicit with Option<T> and unpacking the Some case safely.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Option and if let."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Traits, generics, and lifetimes?"
+        "Which expression or item demonstrates this skill: making missing values explicit with Option<T> and unpacking the Some case safely?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Traits, generics, and lifetimes exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: making missing values explicit with Option<T> and unpacking the Some case safely. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-modules-use": {
+      "title": "Modules and use",
+      "concept": "Modules and use focuses on this Rust skill: controlling namespace, privacy, and local paths with mod, pub, and use. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: controlling namespace, privacy, and local paths with mod, pub, and use. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: controlling namespace, privacy, and local paths with mod, pub, and use.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Modules and use."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: controlling namespace, privacy, and local paths with mod, pub, and use?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: controlling namespace, privacy, and local paths with mod, pub, and use. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-input": {
+      "title": "Input parsing",
+      "concept": "Input parsing focuses on this Rust skill: reading stdin once, splitting text into tokens, and converting tokens into typed values. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: reading stdin once, splitting text into tokens, and converting tokens into typed values. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: reading stdin once, splitting text into tokens, and converting tokens into typed values.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Input parsing."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: reading stdin once, splitting text into tokens, and converting tokens into typed values?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: reading stdin once, splitting text into tokens, and converting tokens into typed values. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-vec-hashmap": {
+      "title": "Vec and HashMap",
+      "concept": "Vec and HashMap focuses on this Rust skill: choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Vec and HashMap."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-borrowing-slices": {
+      "title": "Borrowing and slices",
+      "concept": "Borrowing and slices focuses on this Rust skill: passing borrowed slices so functions can read data without taking ownership. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: passing borrowed slices so functions can read data without taking ownership. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: passing borrowed slices so functions can read data without taking ownership.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Borrowing and slices."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: passing borrowed slices so functions can read data without taking ownership?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: passing borrowed slices so functions can read data without taking ownership. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-result": {
+      "title": "Result and ?",
+      "concept": "Result and ? focuses on this Rust skill: returning recoverable errors with Result<T, E> and propagating them with the ? operator. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: returning recoverable errors with Result<T, E> and propagating them with the ? operator. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: returning recoverable errors with Result<T, E> and propagating them with the ? operator.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Result and ?."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: returning recoverable errors with Result<T, E> and propagating them with the ? operator?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: returning recoverable errors with Result<T, E> and propagating them with the ? operator. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-ownership": {
+      "title": "Ownership and borrowing",
+      "concept": "Ownership and borrowing focuses on this Rust skill: tracking when a String moves, when it is returned, and when a reference only borrows it. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: tracking when a String moves, when it is returned, and when a reference only borrows it. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: tracking when a String moves, when it is returned, and when a reference only borrows it.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Ownership and borrowing."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: tracking when a String moves, when it is returned, and when a reference only borrows it?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: tracking when a String moves, when it is returned, and when a reference only borrows it. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     },
     "rust-iterators": {
       "title": "Iterators and closures",
-      "concept": "Iterators compose lazy transformations. In Rust, study Iterators and closures by locating three concrete pieces in the example: the line that prepares the value, the expression that reads it, and the statement that reaches stdout. Before editing the starter, predict its current output.",
-      "worked_example": "Use this example to place the Iterators and closures rule inside real Rust code. Follow the line that prepares the data, the expression that uses it, and the statement that produces output.",
+      "concept": "Iterators and closures focuses on this Rust skill: composing lazy iterator adapters with closures and consuming them with sum or collect. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: composing lazy iterator adapters with closures and consuming them with sum or collect. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
       "common_mistakes": [
-        "Copying the shape of the example without explaining what Iterators and closures changes.",
-        "Editing the Rust starter before checking its current output.",
-        "Fixing only punctuation while missing the main rule this lesson practices."
+        "Hard-coding the final output instead of exercising this skill: composing lazy iterator adapters with closures and consuming them with sum or collect.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Iterators and closures."
       ],
       "self_check": [
-        "Which expression in the example creates the value that will be printed?",
-        "What would happen if that value were empty, missing, or the wrong type?",
-        "Which starter line is directly connected to Iterators and closures?"
+        "Which expression or item demonstrates this skill: composing lazy iterator adapters with closures and consuming them with sum or collect?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
       ],
-      "exercise_prompt": "Complete the Iterators and closures exercise in Rust. First predict the starter's current output, then edit only the part tied to this lesson's rule. Do not write the expected output as a constant."
+      "exercise_prompt": "Complete the exercise around this skill: composing lazy iterator adapters with closures and consuming them with sum or collect. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-generics": {
+      "title": "Generics",
+      "concept": "Generics focuses on this Rust skill: writing one function over T while preserving concrete type checking at compile time. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: writing one function over T while preserving concrete type checking at compile time. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: writing one function over T while preserving concrete type checking at compile time.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Generics."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: writing one function over T while preserving concrete type checking at compile time?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: writing one function over T while preserving concrete type checking at compile time. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-traits": {
+      "title": "Traits and bounds",
+      "concept": "Traits and bounds focuses on this Rust skill: describing required behavior with traits and using bounds to call that behavior generically. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: describing required behavior with traits and using bounds to call that behavior generically. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: describing required behavior with traits and using bounds to call that behavior generically.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Traits and bounds."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: describing required behavior with traits and using bounds to call that behavior generically?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: describing required behavior with traits and using bounds to call that behavior generically. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-lifetimes": {
+      "title": "Lifetimes",
+      "concept": "Lifetimes focuses on this Rust skill: annotating relationships between borrowed inputs and borrowed outputs without extending storage. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: annotating relationships between borrowed inputs and borrowed outputs without extending storage. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: annotating relationships between borrowed inputs and borrowed outputs without extending storage.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Lifetimes."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: annotating relationships between borrowed inputs and borrowed outputs without extending storage?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: annotating relationships between borrowed inputs and borrowed outputs without extending storage. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-traits-lifetimes": {
+      "title": "Trait objects and dyn dispatch",
+      "concept": "Trait objects and dyn dispatch focuses on this Rust skill: using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Trait objects and dyn dispatch."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-testing": {
+      "title": "Tests and assertions",
+      "concept": "Tests and assertions focuses on this Rust skill: separating pure logic from main so #[test] functions and assert macros can verify behavior. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: separating pure logic from main so #[test] functions and assert macros can verify behavior. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: separating pure logic from main so #[test] functions and assert macros can verify behavior.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Tests and assertions."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: separating pure logic from main so #[test] functions and assert macros can verify behavior?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: separating pure logic from main so #[test] functions and assert macros can verify behavior. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-smart-pointers": {
+      "title": "Smart pointers",
+      "concept": "Smart pointers focuses on this Rust skill: using Box<T> to own heap data while still working through pointer-like deref behavior. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: using Box<T> to own heap data while still working through pointer-like deref behavior. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: using Box<T> to own heap data while still working through pointer-like deref behavior.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Smart pointers."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: using Box<T> to own heap data while still working through pointer-like deref behavior?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: using Box<T> to own heap data while still working through pointer-like deref behavior. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-interior-mutability": {
+      "title": "Interior mutability",
+      "concept": "Interior mutability focuses on this Rust skill: using RefCell<T> when runtime borrow checking is the simplest correct model. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: using RefCell<T> when runtime borrow checking is the simplest correct model. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: using RefCell<T> when runtime borrow checking is the simplest correct model.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Interior mutability."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: using RefCell<T> when runtime borrow checking is the simplest correct model?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: using RefCell<T> when runtime borrow checking is the simplest correct model. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-concurrency": {
+      "title": "Threads and join",
+      "concept": "Threads and join focuses on this Rust skill: moving work into thread::spawn and using join to recover the worker result safely. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: moving work into thread::spawn and using join to recover the worker result safely. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: moving work into thread::spawn and using join to recover the worker result safely.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Threads and join."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: moving work into thread::spawn and using join to recover the worker result safely?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: moving work into thread::spawn and using join to recover the worker result safely. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-shared-state": {
+      "title": "Shared state with Arc and Mutex",
+      "concept": "Shared state with Arc and Mutex focuses on this Rust skill: combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Shared state with Arc and Mutex."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-async-await": {
+      "title": "Async and await",
+      "concept": "Async and await focuses on this Rust skill: recognizing that async creates a Future and that running it requires an executor or runtime. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: recognizing that async creates a Future and that running it requires an executor or runtime. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: recognizing that async creates a Future and that running it requires an executor or runtime.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Async and await."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: recognizing that async creates a Future and that running it requires an executor or runtime?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: recognizing that async creates a Future and that running it requires an executor or runtime. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-macros": {
+      "title": "macro_rules!",
+      "concept": "macro_rules! focuses on this Rust skill: matching token patterns with macro_rules! and expanding repeated Rust code at compile time. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: matching token patterns with macro_rules! and expanding repeated Rust code at compile time. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: matching token patterns with macro_rules! and expanding repeated Rust code at compile time.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in macro_rules!."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: matching token patterns with macro_rules! and expanding repeated Rust code at compile time?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: matching token patterns with macro_rules! and expanding repeated Rust code at compile time. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-unsafe": {
+      "title": "Unsafe Rust",
+      "concept": "Unsafe Rust focuses on this Rust skill: placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Unsafe Rust."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
+    },
+    "rust-cargo-workspaces": {
+      "title": "Cargo packages and workspaces",
+      "concept": "Cargo packages and workspaces focuses on this Rust skill: understanding when Cargo package structure and cargo check --workspace matter beyond one file. Learn it by tracing the typed value through the example, from creation through move or borrow decisions to the expression that reaches stdout.",
+      "worked_example": "The example turns that skill into a complete, compiling Rust program: understanding when Cargo package structure and cargo check --workspace matter beyond one file. Read the signature or item definition first, then follow the value into println! so syntax stays tied to behavior.",
+      "common_mistakes": [
+        "Hard-coding the final output instead of exercising this skill: understanding when Cargo package structure and cargo check --workspace matter beyond one file.",
+        "Deleting the Rust construct that the lesson is meant to practice just to silence a compiler error.",
+        "Ignoring the type, ownership, lifetime, path, or thread boundary involved in Cargo packages and workspaces."
+      ],
+      "self_check": [
+        "Which expression or item demonstrates this skill: understanding when Cargo package structure and cargo check --workspace matter beyond one file?",
+        "What type, borrow, lifetime, module path, or thread boundary must be valid before stdout is printed?",
+        "If the input value changes, which line should change and which line should stay stable?"
+      ],
+      "exercise_prompt": "Complete the exercise around this skill: understanding when Cargo package structure and cargo check --workspace matter beyond one file. Keep the intended Rust construct in the solution; do not bypass the lesson by printing the expected line directly."
     }
   }
 }

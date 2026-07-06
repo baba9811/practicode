@@ -5,195 +5,467 @@
   "lessons": {
     "rust-output": {
       "title": "Salida",
-      "concept": "println! En Rust, estudia Salida ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Salida dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Salida se centra en esta habilidad de Rust: formatear valores con println! y producir stdout exacto para el juez. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: formatear valores con println! y producir stdout exacto para el juez. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Salida",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: formatear valores con println! y producir stdout exacto para el juez.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Salida."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Salida?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: formatear valores con println! y producir stdout exacto para el juez?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Salida en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: formatear valores con println! y producir stdout exacto para el juez. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
     "rust-variables": {
-      "title": "Variables",
-      "concept": "let vincula valores; mut permite cambiarlos. En Rust, estudia Variables ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Variables dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Vinculaciones y mutabilidad",
+      "concept": "Vinculaciones y mutabilidad se centra en esta habilidad de Rust: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Variables",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Vinculaciones y mutabilidad."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Variables?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Variables en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-numbers-tuples": {
+      "title": "Números y tuplas",
+      "concept": "Números y tuplas se centra en esta habilidad de Rust: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Números y tuplas."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
     "rust-strings": {
       "title": "Cadenas",
-      "concept": "String posee texto; &str toma texto prestado. En Rust, estudia Cadenas ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Cadenas dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Cadenas se centra en esta habilidad de Rust: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Cadenas",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Cadenas."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Cadenas?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Cadenas en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
     "rust-control-flow": {
       "title": "Flujo de control",
-      "concept": "if es una expresión; for recorre rangos y colecciones. En Rust, estudia Flujo de control ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Flujo de control dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Flujo de control se centra en esta habilidad de Rust: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Flujo de control",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Flujo de control."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Flujo de control?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Flujo de control en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
     "rust-functions": {
       "title": "Funciones",
-      "concept": "Las funciones declaran parámetros y tipo de retorno. En Rust, estudia Funciones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Funciones dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Funciones se centra en esta habilidad de Rust: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Funciones",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Funciones."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Funciones?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Funciones en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
-    "rust-input": {
-      "title": "Análisis de entrada",
-      "concept": "Lee stdin en un String, luego divide o imprime. En Rust, estudia Análisis de entrada ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Análisis de entrada dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "rust-structs-impl": {
+      "title": "Structs e impl",
+      "concept": "Structs e impl se centra en esta habilidad de Rust: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Análisis de entrada",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Structs e impl."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Análisis de entrada?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Análisis de entrada en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
-    },
-    "rust-vec-hashmap": {
-      "title": "Vec y HashMap",
-      "concept": "Vec guarda secuencias; HashMap guarda pares clave/valor. En Rust, estudia Vec y HashMap ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Vec y HashMap dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
-      "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Vec y HashMap",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Vec y HashMap?"
-      ],
-      "exercise_prompt": "Completa el ejercicio de Vec y HashMap en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
-    },
-    "rust-result": {
-      "title": "Result y ?",
-      "concept": "Result modela errores recuperables; ? En Rust, estudia Result y ? ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Result y ? dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
-      "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Result y ?",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Result y ??"
-      ],
-      "exercise_prompt": "Completa el ejercicio de Result y ? en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
-    },
-    "rust-ownership": {
-      "title": "Propiedad y préstamos",
-      "concept": "Un valor tiene un propietario; las referencias toman prestado sin mover. En Rust, estudia Propiedad y préstamos ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Propiedad y préstamos dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
-      "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Propiedad y préstamos",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Propiedad y préstamos?"
-      ],
-      "exercise_prompt": "Completa el ejercicio de Propiedad y préstamos en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
     "rust-enum-match": {
       "title": "Enums y match",
-      "concept": "Los enum modelan alternativas; match las cubre exhaustivamente. En Rust, estudia Enums y match ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Enums y match dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Enums y match se centra en esta habilidad de Rust: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Enums y match",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Enums y match."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Enums y match?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Enums y match en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
-    "rust-traits-lifetimes": {
-      "title": "Traits, genéricos y lifetimes",
-      "concept": "Los traits definen comportamiento común; los lifetimes describen relaciones prestadas. En Rust, estudia Traits, genéricos y lifetimes ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Traits, genéricos y lifetimes dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "rust-option": {
+      "title": "Option e if let",
+      "concept": "Option e if let se centra en esta habilidad de Rust: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Traits, genéricos y lifetimes",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Option e if let."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Traits, genéricos y lifetimes?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Traits, genéricos y lifetimes en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-modules-use": {
+      "title": "Módulos y use",
+      "concept": "Módulos y use se centra en esta habilidad de Rust: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Módulos y use."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-input": {
+      "title": "Parseo de entrada",
+      "concept": "Parseo de entrada se centra en esta habilidad de Rust: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Parseo de entrada."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-vec-hashmap": {
+      "title": "Vec y HashMap",
+      "concept": "Vec y HashMap se centra en esta habilidad de Rust: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Vec y HashMap."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-borrowing-slices": {
+      "title": "Préstamos y slices",
+      "concept": "Préstamos y slices se centra en esta habilidad de Rust: pasar slices prestados para que las funciones lean datos sin tomar propiedad. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: pasar slices prestados para que las funciones lean datos sin tomar propiedad. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: pasar slices prestados para que las funciones lean datos sin tomar propiedad.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Préstamos y slices."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: pasar slices prestados para que las funciones lean datos sin tomar propiedad?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: pasar slices prestados para que las funciones lean datos sin tomar propiedad. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-result": {
+      "title": "Result y ?",
+      "concept": "Result y ? se centra en esta habilidad de Rust: devolver errores recuperables con Result<T, E> y propagarlos con el operador ?. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: devolver errores recuperables con Result<T, E> y propagarlos con el operador ?. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: devolver errores recuperables con Result<T, E> y propagarlos con el operador ?.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Result y ?."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: devolver errores recuperables con Result<T, E> y propagarlos con el operador ??",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: devolver errores recuperables con Result<T, E> y propagarlos con el operador ?. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-ownership": {
+      "title": "Propiedad y préstamos",
+      "concept": "Propiedad y préstamos se centra en esta habilidad de Rust: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Propiedad y préstamos."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     },
     "rust-iterators": {
       "title": "Iteradores y closures",
-      "concept": "Los iteradores componen transformaciones perezosas. En Rust, estudia Iteradores y closures ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Iteradores y closures dentro de código real de Rust. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Iteradores y closures se centra en esta habilidad de Rust: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Iteradores y closures",
-        "Editar el código inicial de Rust sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Iteradores y closures."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Iteradores y closures?"
+        "Qué expresión o item del ejemplo demuestra esta habilidad: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Iteradores y closures en Rust. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-generics": {
+      "title": "Genéricos",
+      "concept": "Genéricos se centra en esta habilidad de Rust: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Genéricos."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-traits": {
+      "title": "Traits y bounds",
+      "concept": "Traits y bounds se centra en esta habilidad de Rust: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Traits y bounds."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-lifetimes": {
+      "title": "Lifetimes",
+      "concept": "Lifetimes se centra en esta habilidad de Rust: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Lifetimes."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-traits-lifetimes": {
+      "title": "Objetos trait y despacho dyn",
+      "concept": "Objetos trait y despacho dyn se centra en esta habilidad de Rust: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Objetos trait y despacho dyn."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-testing": {
+      "title": "Pruebas y aserciones",
+      "concept": "Pruebas y aserciones se centra en esta habilidad de Rust: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Pruebas y aserciones."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-smart-pointers": {
+      "title": "Smart pointers",
+      "concept": "Smart pointers se centra en esta habilidad de Rust: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Smart pointers."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-interior-mutability": {
+      "title": "Mutabilidad interior",
+      "concept": "Mutabilidad interior se centra en esta habilidad de Rust: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Mutabilidad interior."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-concurrency": {
+      "title": "Hilos y join",
+      "concept": "Hilos y join se centra en esta habilidad de Rust: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Hilos y join."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-shared-state": {
+      "title": "Estado compartido con Arc y Mutex",
+      "concept": "Estado compartido con Arc y Mutex se centra en esta habilidad de Rust: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Estado compartido con Arc y Mutex."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-async-await": {
+      "title": "Async y await",
+      "concept": "Async y await se centra en esta habilidad de Rust: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Async y await."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-macros": {
+      "title": "macro_rules!",
+      "concept": "macro_rules! se centra en esta habilidad de Rust: emparejar patrones de tokens con macro_rules! y expandir código Rust repetido en compilación. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: emparejar patrones de tokens con macro_rules! y expandir código Rust repetido en compilación. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: emparejar patrones de tokens con macro_rules! y expandir código Rust repetido en compilación.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en macro_rules!."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: emparejar patrones de tokens con macro_rules! y expandir código Rust repetido en compilación?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: emparejar patrones de tokens con macro_rules! y expandir código Rust repetido en compilación. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-unsafe": {
+      "title": "Rust unsafe",
+      "concept": "Rust unsafe se centra en esta habilidad de Rust: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Rust unsafe."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
+    },
+    "rust-cargo-workspaces": {
+      "title": "Paquetes Cargo y workspaces",
+      "concept": "Paquetes Cargo y workspaces se centra en esta habilidad de Rust: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
+      "worked_example": "El ejemplo convierte esa habilidad en un programa Rust completo que compila: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo. Lee primero la firma o la definición del item y sigue el valor hasta println! para unir sintaxis y comportamiento.",
+      "common_mistakes": [
+        "Escribir directamente la salida final en vez de ejercitar esta habilidad: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo.",
+        "Borrar la construcción de Rust que esta lección quiere practicar solo para callar un error del compilador.",
+        "Ignorar el límite de tipo, propiedad, lifetime, ruta o hilo que aparece en Paquetes Cargo y workspaces."
+      ],
+      "self_check": [
+        "Qué expresión o item del ejemplo demuestra esta habilidad: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo?",
+        "Qué tipo, préstamo, lifetime, ruta de módulo o frontera de hilo debe ser válido antes de imprimir stdout?",
+        "Si cambia el valor de entrada, qué línea debería cambiar y cuál debería permanecer estable?"
+      ],
+      "exercise_prompt": "Completa el ejercicio alrededor de esta habilidad: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo. Mantén la construcción Rust prevista; no esquives la lección imprimiendo directamente la salida esperada."
     }
   }
 }

@@ -24,10 +24,42 @@ impl PracticodeApp {
             self.focus = Focus::Output;
             return Ok(());
         }
+        let position = Position::new(mouse.column, mouse.row);
+        if matches!(
+            mouse.kind,
+            MouseEventKind::ScrollUp | MouseEventKind::ScrollDown
+        ) {
+            let delta = if matches!(mouse.kind, MouseEventKind::ScrollUp) {
+                -3
+            } else {
+                3
+            };
+            if self.show_output && self.output_area.contains(position) {
+                self.focus = Focus::Output;
+                self.scroll_output(delta);
+            } else if !self.show_output && self.left_area.contains(position) {
+                self.focus = Focus::Left;
+                self.scroll_left(delta);
+            } else if !self.show_output
+                && self.mode == AppMode::Learn
+                && !self.learn_result.is_empty()
+                && self.output_area.contains(position)
+            {
+                self.focus = Focus::Output;
+                self.scroll_output(delta);
+            } else if !self.show_output && self.code_area.contains(position) {
+                self.focus = Focus::Code;
+                if delta < 0 {
+                    self.editor.move_page_up(delta.unsigned_abs());
+                } else {
+                    self.editor.move_page_down(delta as usize);
+                }
+            }
+            return Ok(());
+        }
         if !matches!(mouse.kind, MouseEventKind::Down(MouseButton::Left)) {
             return Ok(());
         }
-        let position = Position::new(mouse.column, mouse.row);
         if self.command_area.contains(position) {
             self.focus_command();
         } else if self.mode == AppMode::Home && self.home_learn_area.contains(position) {
@@ -44,6 +76,17 @@ impl PracticodeApp {
         {
             self.focus = Focus::Home;
         } else if self.show_output && self.output_area.contains(position) {
+            self.focus = Focus::Output;
+        } else if !self.show_output
+            && self.mode != AppMode::Home
+            && self.left_area.contains(position)
+        {
+            self.focus = Focus::Left;
+        } else if !self.show_output
+            && self.mode == AppMode::Learn
+            && !self.learn_result.is_empty()
+            && self.output_area.contains(position)
+        {
             self.focus = Focus::Output;
         } else if self.code_area.contains(position) {
             self.action_edit()?;
@@ -123,6 +166,12 @@ impl PracticodeApp {
             KeyCode::Right => self.editor.move_right(),
             KeyCode::Up => self.editor.move_up(),
             KeyCode::Down => self.editor.move_down(),
+            KeyCode::PageUp => self
+                .editor
+                .move_page_up(self.code_area.height.saturating_sub(2) as usize),
+            KeyCode::PageDown => self
+                .editor
+                .move_page_down(self.code_area.height.saturating_sub(2) as usize),
             _ => {}
         }
         Ok(())
@@ -157,6 +206,12 @@ impl PracticodeApp {
             KeyCode::Right => self.note_editor.move_right(),
             KeyCode::Up => self.note_editor.move_up(),
             KeyCode::Down => self.note_editor.move_down(),
+            KeyCode::PageUp => self
+                .note_editor
+                .move_page_up(self.output_area.height.saturating_sub(2) as usize),
+            KeyCode::PageDown => self
+                .note_editor
+                .move_page_down(self.output_area.height.saturating_sub(2) as usize),
             _ => {}
         }
         Ok(())
@@ -191,6 +246,9 @@ impl PracticodeApp {
                     self.handle_global_shortcut(key)?;
                 }
             }
+            return Ok(());
+        }
+        if self.handle_scroll_key(key) {
             return Ok(());
         }
         if key.code == KeyCode::Esc && self.show_output {
@@ -234,6 +292,63 @@ impl PracticodeApp {
         Ok(())
     }
 
+    fn handle_scroll_key(&mut self, key: KeyEvent) -> bool {
+        let Some(delta) = self.scroll_delta_for_key(key) else {
+            return false;
+        };
+        match self.focus {
+            Focus::Left => self.scroll_left(delta),
+            Focus::Output => self.scroll_output(delta),
+            _ => return false,
+        }
+        true
+    }
+
+    fn scroll_delta_for_key(&self, key: KeyEvent) -> Option<isize> {
+        let page = match self.focus {
+            Focus::Left => self.left_area.height.saturating_sub(2).max(1) as isize,
+            Focus::Output => self.output_area.height.saturating_sub(2).max(1) as isize,
+            _ => 1,
+        };
+        match key.code {
+            KeyCode::Up | KeyCode::Char('k') if key.modifiers.is_empty() => Some(-1),
+            KeyCode::Down | KeyCode::Char('j') if key.modifiers.is_empty() => Some(1),
+            KeyCode::PageUp => Some(-page),
+            KeyCode::PageDown => Some(page),
+            _ => None,
+        }
+    }
+
+    fn scroll_left(&mut self, delta: isize) {
+        let text = if self.mode == AppMode::Learn {
+            render_markdown_plain(&self.output)
+        } else {
+            render_problem_tui(&self.problem, &self.state.settings.ui_language)
+        };
+        self.left_scroll = scrolled(
+            self.left_scroll,
+            delta,
+            text.lines().count(),
+            self.left_area,
+        );
+    }
+
+    fn scroll_output(&mut self, delta: isize) {
+        let text = if !self.show_output && self.mode == AppMode::Learn {
+            self.learn_result.clone()
+        } else if self.output_is_markdown {
+            render_markdown_plain(&self.output)
+        } else {
+            self.output.clone()
+        };
+        self.output_scroll = scrolled(
+            self.output_scroll,
+            delta,
+            text.lines().count(),
+            self.output_area,
+        );
+    }
+
     pub(super) fn focus_command(&mut self) {
         if self.command.is_empty() {
             self.command.push('/');
@@ -259,4 +374,15 @@ impl PracticodeApp {
             .trim();
         self.handle_command(value)
     }
+}
+
+fn scrolled(current: u16, delta: isize, lines: usize, area: Rect) -> u16 {
+    let viewport = area.height.saturating_sub(2).max(1) as usize;
+    let max = lines.saturating_sub(viewport).min(u16::MAX as usize) as u16;
+    let next = if delta < 0 {
+        current.saturating_sub(delta.unsigned_abs() as u16)
+    } else {
+        current.saturating_add(delta as u16)
+    };
+    next.min(max)
 }

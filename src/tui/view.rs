@@ -37,6 +37,7 @@ impl PracticodeApp {
             .constraints([Constraint::Percentage(58), Constraint::Percentage(42)])
             .split(vertical[0]);
         if self.mode == AppMode::Home {
+            self.left_area = Rect::default();
             self.home_area = body[0];
             let choices = Layout::default()
                 .direction(Direction::Vertical)
@@ -48,6 +49,10 @@ impl PracticodeApp {
                 .split(body[0]);
             self.home_learn_area = choices[0];
             self.home_problems_area = choices[1];
+        } else if self.show_output {
+            self.left_area = Rect::default();
+        } else {
+            self.left_area = body[0];
         }
         let right_panes = if !self.show_output
             && self.mode == AppMode::Learn
@@ -116,8 +121,9 @@ impl PracticodeApp {
                 };
                 let problem = Paragraph::new(left)
                     .style(Self::pane_style(light))
-                    .block(Self::block(title, light, false))
-                    .wrap(Wrap { trim: false });
+                    .block(Self::block(title, light, self.focus == Focus::Left))
+                    .wrap(Wrap { trim: false })
+                    .scroll((self.left_scroll, 0));
                 frame.render_widget(problem, body[0]);
             }
         }
@@ -142,7 +148,8 @@ impl PracticodeApp {
                     light,
                     self.focus != Focus::Command,
                 ))
-                .wrap(Wrap { trim: false });
+                .wrap(Wrap { trim: false })
+                .scroll((self.output_scroll, 0));
             frame.render_widget(output, self.output_area);
         } else if self.mode != AppMode::Home {
             let code = self
@@ -167,7 +174,8 @@ impl PracticodeApp {
                         light,
                         false,
                     ))
-                    .wrap(Wrap { trim: false });
+                    .wrap(Wrap { trim: false })
+                    .scroll((self.output_scroll, 0));
                 frame.render_widget(result, self.output_area);
             }
         }
@@ -465,6 +473,9 @@ impl PracticodeApp {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crossterm::event::{
+        KeyCode, KeyEvent, KeyModifiers, MouseButton, MouseEvent, MouseEventKind,
+    };
     use ratatui::{Terminal, backend::TestBackend};
 
     fn tmp_root(name: &str) -> PathBuf {
@@ -473,6 +484,16 @@ mod tests {
         let _ = fs::remove_dir_all(&root);
         fs::create_dir_all(&root).unwrap();
         root
+    }
+
+    fn buffer_text(terminal: &Terminal<TestBackend>) -> String {
+        terminal
+            .backend()
+            .buffer()
+            .content()
+            .iter()
+            .map(|cell| cell.symbol())
+            .collect()
     }
 
     #[test]
@@ -503,6 +524,47 @@ mod tests {
         assert_ne!(app.output_area, Rect::new(0, 0, 80, 20));
         assert!(app.output_area.y > app.code_area.y);
         assert_eq!(app.output_area.x, app.code_area.x);
+    }
+
+    #[test]
+    fn lesson_pane_scrolls_vertically() {
+        let mut app = PracticodeApp::new(tmp_root("lesson-scroll")).unwrap();
+        app.handle_command("learn python").unwrap();
+
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+        assert!(buffer_text(&terminal).contains("Language: Python"));
+
+        app.handle_mouse(MouseEvent {
+            kind: MouseEventKind::Down(MouseButton::Left),
+            column: 2,
+            row: 2,
+            modifiers: KeyModifiers::NONE,
+        })
+        .unwrap();
+        app.handle_key(KeyEvent::new(KeyCode::PageDown, KeyModifiers::NONE))
+            .unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+
+        assert!(!buffer_text(&terminal).contains("Language: Python"));
+    }
+
+    #[test]
+    fn output_pane_scrolls_vertically() {
+        let mut app = PracticodeApp::new(tmp_root("output-scroll")).unwrap();
+        app.handle_command("help").unwrap();
+
+        let backend = TestBackend::new(80, 12);
+        let mut terminal = Terminal::new(backend).unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+        assert!(buffer_text(&terminal).contains("Help"));
+
+        app.handle_key(KeyEvent::new(KeyCode::PageDown, KeyModifiers::NONE))
+            .unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+
+        assert!(!buffer_text(&terminal).contains("Help"));
     }
 
     #[test]

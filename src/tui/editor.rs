@@ -159,6 +159,16 @@ impl TextEditor {
         }
     }
 
+    pub(super) fn move_page_up(&mut self, height: usize) {
+        self.row = self.row.saturating_sub(height.max(1));
+        self.col = self.col.min(char_len(&self.lines[self.row]));
+    }
+
+    pub(super) fn move_page_down(&mut self, height: usize) {
+        self.row = (self.row + height.max(1)).min(self.lines.len().saturating_sub(1));
+        self.col = self.col.min(char_len(&self.lines[self.row]));
+    }
+
     fn ensure_cursor(&mut self) {
         if self.lines.is_empty() {
             self.lines.push(String::new());

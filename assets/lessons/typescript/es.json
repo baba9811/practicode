@@ -4,196 +4,396 @@
   "ui_language": "es",
   "lessons": {
     "ts-output": {
-      "title": "Salida",
-      "concept": "console.log escribe una línea. En TypeScript, estudia Salida ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Salida dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Consola y stdout",
+      "concept": "La salida de consola es el contrato que compara el juez, por eso se distingue el salto de console.log de la escritura exacta con process.stdout.write. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Salida",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Consola y stdout, imprimir el texto esperado mientras se omite esta regla: La salida de consola es el contrato que compara el juez, por eso se distingue el salto de console.log de la escritura exacta con process.stdout.write.",
+        "Usar any o una conversión forzada donde Consola y stdout debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Salida?"
+        "¿Qué variable o expresión demuestra Consola y stdout, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Consola y stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Salida en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Consola y stdout. Conserva esta regla de valores en la ruta del código: La salida de consola es el contrato que compara el juez, por eso se distingue el salto de console.log de la escritura exacta con process.stdout.write. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-variables": {
-      "title": "Variables",
-      "concept": "let permite reasignar; const no se reasigna. En TypeScript, estudia Variables ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Variables dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "ts-let-const": {
+      "title": "let y const",
+      "concept": "const marca enlaces que no se reasignan, mientras let deja visible el acumulador que cambia en la solución. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Variables",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En let y const, imprimir el texto esperado mientras se omite esta regla: const marca enlaces que no se reasignan, mientras let deja visible el acumulador que cambia en la solución.",
+        "Usar any o una conversión forzada donde let y const debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Variables?"
+        "¿Qué variable o expresión demuestra let y const, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de let y const?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Variables en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de let y const. Conserva esta regla de valores en la ruta del código: const marca enlaces que no se reasignan, mientras let deja visible el acumulador que cambia en la solución. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-strings": {
-      "title": "Cadenas",
-      "concept": "Las cadenas exponen length y recorrido. En TypeScript, estudia Cadenas ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Cadenas dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "ts-primitives": {
+      "title": "Tipos primitivos",
+      "concept": "Las anotaciones string, number y boolean describen los escalares que esperan el parseo y las ramas. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Cadenas",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Tipos primitivos, imprimir el texto esperado mientras se omite esta regla: Las anotaciones string, number y boolean describen los escalares que esperan el parseo y las ramas.",
+        "Usar any o una conversión forzada donde Tipos primitivos debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Cadenas?"
+        "¿Qué variable o expresión demuestra Tipos primitivos, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos primitivos?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Cadenas en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Tipos primitivos. Conserva esta regla de valores en la ruta del código: Las anotaciones string, number y boolean describen los escalares que esperan el parseo y las ramas. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-control-flow": {
-      "title": "Flujo de control",
-      "concept": "if y los bucles controlan la ejecución. En TypeScript, estudia Flujo de control ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Flujo de control dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "ts-strings-templates": {
+      "title": "Cadenas y plantillas",
+      "concept": "Las plantillas literales formatean junto al valor, y métodos como trim devuelven una cadena nueva. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Flujo de control",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Cadenas y plantillas, imprimir el texto esperado mientras se omite esta regla: Las plantillas literales formatean junto al valor, y métodos como trim devuelven una cadena nueva.",
+        "Usar any o una conversión forzada donde Cadenas y plantillas debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Flujo de control?"
+        "¿Qué variable o expresión demuestra Cadenas y plantillas, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Cadenas y plantillas?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Flujo de control en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Cadenas y plantillas. Conserva esta regla de valores en la ruta del código: Las plantillas literales formatean junto al valor, y métodos como trim devuelven una cadena nueva. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-arrays-tuples": {
+      "title": "Arreglos y tuplas",
+      "concept": "Los arreglos guardan valores ordenados de un tipo; las tuplas fijan posición y tipo en registros pequeños. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
+      "common_mistakes": [
+        "En Arreglos y tuplas, imprimir el texto esperado mientras se omite esta regla: Los arreglos guardan valores ordenados de un tipo; las tuplas fijan posición y tipo en registros pequeños.",
+        "Usar any o una conversión forzada donde Arreglos y tuplas debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Arreglos y tuplas, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Arreglos y tuplas?"
+      ],
+      "exercise_prompt": "Completa el TODO de Arreglos y tuplas. Conserva esta regla de valores en la ruta del código: Los arreglos guardan valores ordenados de un tipo; las tuplas fijan posición y tipo en registros pequeños. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-objects": {
+      "title": "Tipos de objeto",
+      "concept": "Los tipos de objeto nombran campos requeridos para no omitir width, height u otra propiedad en el cálculo. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
+      "common_mistakes": [
+        "En Tipos de objeto, imprimir el texto esperado mientras se omite esta regla: Los tipos de objeto nombran campos requeridos para no omitir width, height u otra propiedad en el cálculo.",
+        "Usar any o una conversión forzada donde Tipos de objeto debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Tipos de objeto, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos de objeto?"
+      ],
+      "exercise_prompt": "Completa el TODO de Tipos de objeto. Conserva esta regla de valores en la ruta del código: Los tipos de objeto nombran campos requeridos para no omitir width, height u otra propiedad en el cálculo. Produce la salida esperada sin reemplazarla por un print literal."
     },
     "ts-functions": {
       "title": "Funciones",
-      "concept": "Los tipos de parámetros y retorno hacen explícita la intención. En TypeScript, estudia Funciones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Funciones dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Las anotaciones de parámetros y retorno hacen explícito el límite entre entrada parseada, cálculo y salida. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Funciones",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Funciones, imprimir el texto esperado mientras se omite esta regla: Las anotaciones de parámetros y retorno hacen explícito el límite entre entrada parseada, cálculo y salida.",
+        "Usar any o una conversión forzada donde Funciones debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Funciones?"
+        "¿Qué variable o expresión demuestra Funciones, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Funciones?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Funciones en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Funciones. Conserva esta regla de valores en la ruta del código: Las anotaciones de parámetros y retorno hacen explícito el límite entre entrada parseada, cálculo y salida. Produce la salida esperada sin reemplazarla por un print literal."
     },
     "ts-input": {
-      "title": "Análisis de entrada",
-      "concept": "En Node puedes leer stdin para ejercicios pequeños. En TypeScript, estudia Análisis de entrada ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Análisis de entrada dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Parseo de stdin en Node",
+      "concept": "Las soluciones en Node suelen leer una vez el descriptor 0, separar por espacios y convertir tokens antes de calcular. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Análisis de entrada",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Parseo de stdin en Node, imprimir el texto esperado mientras se omite esta regla: Las soluciones en Node suelen leer una vez el descriptor 0, separar por espacios y convertir tokens antes de calcular.",
+        "Usar any o una conversión forzada donde Parseo de stdin en Node debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Análisis de entrada?"
+        "¿Qué variable o expresión demuestra Parseo de stdin en Node, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Parseo de stdin en Node?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Análisis de entrada en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Parseo de stdin en Node. Conserva esta regla de valores en la ruta del código: Las soluciones en Node suelen leer una vez el descriptor 0, separar por espacios y convertir tokens antes de calcular. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-arrays-objects": {
-      "title": "Arreglos y objetos",
-      "concept": "Los arreglos guardan secuencias; los tipos de objeto describen formas. En TypeScript, estudia Arreglos y objetos ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Arreglos y objetos dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "ts-control-flow": {
+      "title": "Flujo de control",
+      "concept": "if y los bucles deciden qué valores se acumulan, así que la condición debe coincidir con la regla de datos. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Arreglos y objetos",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Flujo de control, imprimir el texto esperado mientras se omite esta regla: if y los bucles deciden qué valores se acumulan, así que la condición debe coincidir con la regla de datos.",
+        "Usar any o una conversión forzada donde Flujo de control debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Arreglos y objetos?"
+        "¿Qué variable o expresión demuestra Flujo de control, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Flujo de control?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Arreglos y objetos en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Flujo de control. Conserva esta regla de valores en la ruta del código: if y los bucles deciden qué valores se acumulan, así que la condición debe coincidir con la regla de datos. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-errors-async": {
-      "title": "Errores y async",
-      "concept": "try/catch maneja errores; async envuelve flujos con Promise. En TypeScript, estudia Errores y async ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Errores y async dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "ts-union-narrowing": {
+      "title": "Uniones y estrechamiento",
+      "concept": "Los valores union necesitan una comprobación en runtime antes de usar operaciones solo de string o solo de number. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Errores y async",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Uniones y estrechamiento, imprimir el texto esperado mientras se omite esta regla: Los valores union necesitan una comprobación en runtime antes de usar operaciones solo de string o solo de number.",
+        "Usar any o una conversión forzada donde Uniones y estrechamiento debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Errores y async?"
+        "¿Qué variable o expresión demuestra Uniones y estrechamiento, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Uniones y estrechamiento?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Errores y async en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Uniones y estrechamiento. Conserva esta regla de valores en la ruta del código: Los valores union necesitan una comprobación en runtime antes de usar operaciones solo de string o solo de number. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-narrowing": {
-      "title": "Estrechamiento de tipos",
-      "concept": "Los type guards refinan valores union a tipos más concretos. En TypeScript, estudia Estrechamiento de tipos ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Estrechamiento de tipos dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "ts-literal-types": {
+      "title": "Tipos literales",
+      "concept": "Las uniones literales limitan comandos y modos a valores exactos como 'left' o 'right'. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Estrechamiento de tipos",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Tipos literales, imprimir el texto esperado mientras se omite esta regla: Las uniones literales limitan comandos y modos a valores exactos como 'left' o 'right'.",
+        "Usar any o una conversión forzada donde Tipos literales debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Estrechamiento de tipos?"
+        "¿Qué variable o expresión demuestra Tipos literales, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos literales?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Estrechamiento de tipos en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Tipos literales. Conserva esta regla de valores en la ruta del código: Las uniones literales limitan comandos y modos a valores exactos como 'left' o 'right'. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-optional-nullish": {
+      "title": "Opcional y nullish",
+      "concept": "Los campos opcionales pueden ser undefined, y ?? conserva datos falsy válidos como la puntuación 0. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
+      "common_mistakes": [
+        "En Opcional y nullish, imprimir el texto esperado mientras se omite esta regla: Los campos opcionales pueden ser undefined, y ?? conserva datos falsy válidos como la puntuación 0.",
+        "Usar any o una conversión forzada donde Opcional y nullish debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Opcional y nullish, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Opcional y nullish?"
+      ],
+      "exercise_prompt": "Completa el TODO de Opcional y nullish. Conserva esta regla de valores en la ruta del código: Los campos opcionales pueden ser undefined, y ?? conserva datos falsy válidos como la puntuación 0. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-interfaces-aliases": {
+      "title": "Interfaces y alias de tipo",
+      "concept": "Las interfaces nombran contratos de objeto; los alias también nombran uniones, tuplas y expresiones compuestas. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
+      "common_mistakes": [
+        "En Interfaces y alias de tipo, imprimir el texto esperado mientras se omite esta regla: Las interfaces nombran contratos de objeto; los alias también nombran uniones, tuplas y expresiones compuestas.",
+        "Usar any o una conversión forzada donde Interfaces y alias de tipo debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Interfaces y alias de tipo, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Interfaces y alias de tipo?"
+      ],
+      "exercise_prompt": "Completa el TODO de Interfaces y alias de tipo. Conserva esta regla de valores en la ruta del código: Las interfaces nombran contratos de objeto; los alias también nombran uniones, tuplas y expresiones compuestas. Produce la salida esperada sin reemplazarla por un print literal."
     },
     "ts-generics": {
       "title": "Genéricos",
-      "concept": "Los genéricos conservan información de tipos en código reutilizable. En TypeScript, estudia Genéricos ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Genéricos dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Los genéricos conservan el tipo de elemento del llamador cuando el código reusable lee arreglos o devuelve valores. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Genéricos",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Genéricos, imprimir el texto esperado mientras se omite esta regla: Los genéricos conservan el tipo de elemento del llamador cuando el código reusable lee arreglos o devuelve valores.",
+        "Usar any o una conversión forzada donde Genéricos debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Genéricos?"
+        "¿Qué variable o expresión demuestra Genéricos, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Genéricos?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Genéricos en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Genéricos. Conserva esta regla de valores en la ruta del código: Los genéricos conservan el tipo de elemento del llamador cuando el código reusable lee arreglos o devuelve valores. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-mapped": {
+    "ts-keyof-typeof": {
+      "title": "keyof y typeof",
+      "concept": "typeof captura la forma estática de un valor, y keyof la convierte en la unión de claves permitidas. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
+      "common_mistakes": [
+        "En keyof y typeof, imprimir el texto esperado mientras se omite esta regla: typeof captura la forma estática de un valor, y keyof la convierte en la unión de claves permitidas.",
+        "Usar any o una conversión forzada donde keyof y typeof debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra keyof y typeof, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de keyof y typeof?"
+      ],
+      "exercise_prompt": "Completa el TODO de keyof y typeof. Conserva esta regla de valores en la ruta del código: typeof captura la forma estática de un valor, y keyof la convierte en la unión de claves permitidas. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-indexed-access": {
+      "title": "Tipos de acceso indexado",
+      "concept": "Los tipos de acceso indexado reutilizan tipos de propiedad y elemento de un modelo existente sin repetirlos. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
+      "common_mistakes": [
+        "En Tipos de acceso indexado, imprimir el texto esperado mientras se omite esta regla: Los tipos de acceso indexado reutilizan tipos de propiedad y elemento de un modelo existente sin repetirlos.",
+        "Usar any o una conversión forzada donde Tipos de acceso indexado debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Tipos de acceso indexado, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos de acceso indexado?"
+      ],
+      "exercise_prompt": "Completa el TODO de Tipos de acceso indexado. Conserva esta regla de valores en la ruta del código: Los tipos de acceso indexado reutilizan tipos de propiedad y elemento de un modelo existente sin repetirlos. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-mapped-types": {
       "title": "Tipos mapeados",
-      "concept": "Los tipos mapeados transforman propiedades de objetos. En TypeScript, estudia Tipos mapeados ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Tipos mapeados dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Los tipos mapeados transforman cada clave de un objeto y mantienen las formas derivadas alineadas. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Tipos mapeados",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Tipos mapeados, imprimir el texto esperado mientras se omite esta regla: Los tipos mapeados transforman cada clave de un objeto y mantienen las formas derivadas alineadas.",
+        "Usar any o una conversión forzada donde Tipos mapeados debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Tipos mapeados?"
+        "¿Qué variable o expresión demuestra Tipos mapeados, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos mapeados?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Tipos mapeados en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Tipos mapeados. Conserva esta regla de valores en la ruta del código: Los tipos mapeados transforman cada clave de un objeto y mantienen las formas derivadas alineadas. Produce la salida esperada sin reemplazarla por un print literal."
     },
-    "ts-conditional": {
+    "ts-conditional-types": {
       "title": "Tipos condicionales",
-      "concept": "Los tipos condicionales eligen un tipo a partir de otro. En TypeScript, estudia Tipos condicionales ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Tipos condicionales dentro de código real de TypeScript. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Los tipos condicionales eligen una rama según la relación de tipos, e infer extrae la parte coincidente. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Tipos condicionales",
-        "Editar el código inicial de TypeScript sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "En Tipos condicionales, imprimir el texto esperado mientras se omite esta regla: Los tipos condicionales eligen una rama según la relación de tipos, e infer extrae la parte coincidente.",
+        "Usar any o una conversión forzada donde Tipos condicionales debería impedir una clave, rama, campo o retorno incorrecto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Tipos condicionales?"
+        "¿Qué variable o expresión demuestra Tipos condicionales, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos condicionales?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Tipos condicionales en TypeScript. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Completa el TODO de Tipos condicionales. Conserva esta regla de valores en la ruta del código: Los tipos condicionales eligen una rama según la relación de tipos, e infer extrae la parte coincidente. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-utility-types": {
+      "title": "Tipos utilitarios",
+      "concept": "Tipos como Pick y Partial expresan transformaciones comunes de objetos sin crear otro tipo auxiliar. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
+      "common_mistakes": [
+        "En Tipos utilitarios, imprimir el texto esperado mientras se omite esta regla: Tipos como Pick y Partial expresan transformaciones comunes de objetos sin crear otro tipo auxiliar.",
+        "Usar any o una conversión forzada donde Tipos utilitarios debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Tipos utilitarios, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Tipos utilitarios?"
+      ],
+      "exercise_prompt": "Completa el TODO de Tipos utilitarios. Conserva esta regla de valores en la ruta del código: Tipos como Pick y Partial expresan transformaciones comunes de objetos sin crear otro tipo auxiliar. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-discriminated-unions": {
+      "title": "Uniones discriminadas",
+      "concept": "Una etiqueta literal compartida permite que switch estreche cada variante y use campos de rectángulo solo allí. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
+      "common_mistakes": [
+        "En Uniones discriminadas, imprimir el texto esperado mientras se omite esta regla: Una etiqueta literal compartida permite que switch estreche cada variante y use campos de rectángulo solo allí.",
+        "Usar any o una conversión forzada donde Uniones discriminadas debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Uniones discriminadas, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Uniones discriminadas?"
+      ],
+      "exercise_prompt": "Completa el TODO de Uniones discriminadas. Conserva esta regla de valores en la ruta del código: Una etiqueta literal compartida permite que switch estreche cada variante y use campos de rectángulo solo allí. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-async-promise": {
+      "title": "async y Promise",
+      "concept": "Las funciones async devuelven Promise, y await es donde el número resuelto vuelve al flujo normal. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
+      "common_mistakes": [
+        "En async y Promise, imprimir el texto esperado mientras se omite esta regla: Las funciones async devuelven Promise, y await es donde el número resuelto vuelve al flujo normal.",
+        "Usar any o una conversión forzada donde async y Promise debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra async y Promise, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de async y Promise?"
+      ],
+      "exercise_prompt": "Completa el TODO de async y Promise. Conserva esta regla de valores en la ruta del código: Las funciones async devuelven Promise, y await es donde el número resuelto vuelve al flujo normal. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-error-handling": {
+      "title": "Manejo de errores",
+      "concept": "catch recibe un fallo unknown, así que conviene estrecharlo antes de elegir un valor de recuperación. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
+      "common_mistakes": [
+        "En Manejo de errores, imprimir el texto esperado mientras se omite esta regla: catch recibe un fallo unknown, así que conviene estrecharlo antes de elegir un valor de recuperación.",
+        "Usar any o una conversión forzada donde Manejo de errores debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Manejo de errores, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Manejo de errores?"
+      ],
+      "exercise_prompt": "Completa el TODO de Manejo de errores. Conserva esta regla de valores en la ruta del código: catch recibe un fallo unknown, así que conviene estrecharlo antes de elegir un valor de recuperación. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-modules": {
+      "title": "Módulos y exports",
+      "concept": "export marca los valores que un archivo ofrece a otros; Node sigue decidiendo el sistema de módulos. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
+      "common_mistakes": [
+        "En Módulos y exports, imprimir el texto esperado mientras se omite esta regla: export marca los valores que un archivo ofrece a otros; Node sigue decidiendo el sistema de módulos.",
+        "Usar any o una conversión forzada donde Módulos y exports debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Módulos y exports, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Módulos y exports?"
+      ],
+      "exercise_prompt": "Completa el TODO de Módulos y exports. Conserva esta regla de valores en la ruta del código: export marca los valores que un archivo ofrece a otros; Node sigue decidiendo el sistema de módulos. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-classes": {
+      "title": "Clases y modificadores",
+      "concept": "Las clases unen métodos al estado, y private documenta qué estado debe quedar detrás del límite del método. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
+      "common_mistakes": [
+        "En Clases y modificadores, imprimir el texto esperado mientras se omite esta regla: Las clases unen métodos al estado, y private documenta qué estado debe quedar detrás del límite del método.",
+        "Usar any o una conversión forzada donde Clases y modificadores debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Clases y modificadores, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Clases y modificadores?"
+      ],
+      "exercise_prompt": "Completa el TODO de Clases y modificadores. Conserva esta regla de valores en la ruta del código: Las clases unen métodos al estado, y private documenta qué estado debe quedar detrás del límite del método. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-readonly": {
+      "title": "readonly",
+      "concept": "readonly permite leer datos de configuración y evita reemplazarlos o mutarlos a través de ese tipo. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
+      "common_mistakes": [
+        "En readonly, imprimir el texto esperado mientras se omite esta regla: readonly permite leer datos de configuración y evita reemplazarlos o mutarlos a través de ese tipo.",
+        "Usar any o una conversión forzada donde readonly debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra readonly, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de readonly?"
+      ],
+      "exercise_prompt": "Completa el TODO de readonly. Conserva esta regla de valores en la ruta del código: readonly permite leer datos de configuración y evita reemplazarlos o mutarlos a través de ese tipo. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-satisfies-as-const": {
+      "title": "satisfies y as const",
+      "concept": "as const conserva literales de rutas, mientras satisfies comprueba el contrato Record sin ampliarlos. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
+      "worked_example": "En el ejemplo, el valor importante queda limitado antes de imprimirse, así una clave, rama o retorno incorrecto no queda escondido en la salida.",
+      "common_mistakes": [
+        "En satisfies y as const, imprimir el texto esperado mientras se omite esta regla: as const conserva literales de rutas, mientras satisfies comprueba el contrato Record sin ampliarlos.",
+        "Usar any o una conversión forzada donde satisfies y as const debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra satisfies y as const, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de satisfies y as const?"
+      ],
+      "exercise_prompt": "Completa el TODO de satisfies y as const. Conserva esta regla de valores en la ruta del código: as const conserva literales de rutas, mientras satisfies comprueba el contrato Record sin ampliarlos. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-iterables": {
+      "title": "Iterables",
+      "concept": "for...of consume cualquier iterable, así que arreglos, cadenas y sets comparten la misma forma de bucle. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
+      "worked_example": "El ejemplo es un único archivo .ts ejecutable por Node: la parte de tipos desaparece en runtime y el valor JavaScript demuestra el uso correcto.",
+      "common_mistakes": [
+        "En Iterables, imprimir el texto esperado mientras se omite esta regla: for...of consume cualquier iterable, así que arreglos, cadenas y sets comparten la misma forma de bucle.",
+        "Usar any o una conversión forzada donde Iterables debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra Iterables, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de Iterables?"
+      ],
+      "exercise_prompt": "Completa el TODO de Iterables. Conserva esta regla de valores en la ruta del código: for...of consume cualquier iterable, así que arreglos, cadenas y sets comparten la misma forma de bucle. Produce la salida esperada sin reemplazarla por un print literal."
+    },
+    "ts-array-methods": {
+      "title": "map, filter y reduce",
+      "concept": "filter selecciona elementos, map los transforma y reduce pliega la secuencia hasta la respuesta final. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
+      "worked_example": "El código de ejemplo deja el valor relevante en un enlace con nombre, aplica el constructo de TypeScript y lo imprime por la ruta que revisa el juez.",
+      "common_mistakes": [
+        "En map, filter y reduce, imprimir el texto esperado mientras se omite esta regla: filter selecciona elementos, map los transforma y reduce pliega la secuencia hasta la respuesta final.",
+        "Usar any o una conversión forzada donde map, filter y reduce debería impedir una clave, rama, campo o retorno incorrecto."
+      ],
+      "self_check": [
+        "¿Qué variable o expresión demuestra map, filter y reduce, y qué valor llega después a stdout?",
+        "¿Qué entrada, clave, rama o campo incorrecto debería detener la regla de tipos de map, filter y reduce?"
+      ],
+      "exercise_prompt": "Completa el TODO de map, filter y reduce. Conserva esta regla de valores en la ruta del código: filter selecciona elementos, map los transforma y reduce pliega la secuencia hasta la respuesta final. Produce la salida esperada sin reemplazarla por un print literal."
     }
   }
 }

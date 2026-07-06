@@ -178,6 +178,7 @@ impl PracticodeApp {
             self.state.settings.language = language.to_string();
         }
         self.mode = AppMode::Learn;
+        self.learn_result.clear();
         let language = self.state.settings.language.clone();
         let lesson = current_syntax_lesson(&self.state, &language);
         set_current_syntax_lesson(&mut self.state, &language, lesson.id);
@@ -212,7 +213,8 @@ impl PracticodeApp {
             result.passed_cases,
             result.total_cases
         );
-        self.write_text_output(&format!("{headline}\n{}", result.output));
+        self.learn_result = format!("{headline}\n{}", result.output.trim_end());
+        self.show_current_syntax_lesson();
         Ok(())
     }
 
@@ -222,6 +224,7 @@ impl PracticodeApp {
         next_syntax_lesson(&mut self.state, &language, 1);
         save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
+        self.learn_result.clear();
         self.show_current_syntax_lesson();
         Ok(())
     }
@@ -232,6 +235,7 @@ impl PracticodeApp {
         next_syntax_lesson(&mut self.state, &language, -1);
         save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
+        self.learn_result.clear();
         self.show_current_syntax_lesson();
         Ok(())
     }
@@ -276,6 +280,7 @@ impl PracticodeApp {
         self.load_code_editor()?;
         self.settings_cursor = None;
         if self.mode == AppMode::Learn {
+            self.learn_result.clear();
             self.show_current_syntax_lesson();
         } else {
             self.show_output = false;
@@ -287,7 +292,11 @@ impl PracticodeApp {
     pub(super) fn set_ui_language(&mut self, language: &str) -> Result<()> {
         self.state.settings.ui_language = normalize_ui_language(language);
         save_state(&self.root, &self.state)?;
-        self.write_text_output(&format!("UI language: {}", self.state.settings.ui_language));
+        if self.mode == AppMode::Learn {
+            self.show_current_syntax_lesson();
+        } else {
+            self.write_text_output(&format!("UI language: {}", self.state.settings.ui_language));
+        }
         Ok(())
     }
 

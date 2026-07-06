@@ -755,22 +755,30 @@ pub fn syntax_cases(lesson: &SyntaxLesson) -> Vec<IoCase> {
 }
 
 pub fn render_syntax_lesson(lesson: &SyntaxLesson, state: &AppState) -> String {
+    let ui_language = &state.settings.ui_language;
     let (done, total) = syntax_progress_count(state, lesson.language);
     let completed = if syntax_lesson_completed(state, lesson.language, lesson.id) {
-        "complete"
+        ui_text(ui_language, "syntax_complete")
     } else {
-        "open"
+        ui_text(ui_language, "syntax_open")
     };
     let refs = lesson.refs.join("\n");
     format!(
-        "# Syntax: {}\n\nLanguage: {}\nLevel: {}\nProgress: {done}/{total} ({completed})\n\n{}\n\nExample\n```{}\n{}\n```\n\nDrill\n{}\n\nReferences\n{}",
-        lesson.title,
+        "# {}: {}\n\n{}: {}\n{}: {}\n{}: {done}/{total} ({completed})\n\n{}\n\n{}\n```{}\n{}\n```\n\n{}\n{}\n\n{}\n{}",
+        ui_text(ui_language, "syntax"),
+        localized_syntax_title(lesson, ui_language),
+        ui_text(ui_language, "syntax_language"),
         syntax_language_name(lesson.language),
-        lesson.level,
-        lesson.body,
+        ui_text(ui_language, "syntax_level"),
+        localized_syntax_level(lesson.level, ui_language),
+        ui_text(ui_language, "syntax_progress"),
+        localized_syntax_body(lesson, ui_language),
+        ui_text(ui_language, "example"),
         lesson.language,
         lesson.example,
-        lesson.drill.prompt,
+        ui_text(ui_language, "syntax_drill"),
+        localized_syntax_drill_prompt(lesson, ui_language),
+        ui_text(ui_language, "syntax_references"),
         refs
     )
 }
@@ -782,6 +790,41 @@ pub fn syntax_language_name(language: &str) -> &'static str {
         "rust" => "Rust",
         _ => "Python",
     }
+}
+
+fn localized_syntax_level(level: &'static str, ui_language: &str) -> &'static str {
+    match level {
+        "basic" => ui_text(ui_language, "syntax_basic"),
+        "intermediate" => ui_text(ui_language, "syntax_intermediate"),
+        "advanced" => ui_text(ui_language, "syntax_advanced"),
+        _ => level,
+    }
+}
+
+fn localized_syntax_drill_prompt(lesson: &SyntaxLesson, ui_language: &str) -> &'static str {
+    if normalize_ui_language(ui_language) == "en" {
+        lesson.drill.prompt
+    } else {
+        ui_text(ui_language, "syntax_drill_prompt")
+    }
+}
+
+fn localized_syntax_title(lesson: &SyntaxLesson, ui_language: &str) -> &'static str {
+    localized_syntax_copy(lesson, ui_language, "title").unwrap_or(lesson.title)
+}
+
+fn localized_syntax_body(lesson: &SyntaxLesson, ui_language: &str) -> &'static str {
+    localized_syntax_copy(lesson, ui_language, "body").unwrap_or(lesson.body)
+}
+
+fn localized_syntax_copy(
+    lesson: &SyntaxLesson,
+    ui_language: &str,
+    field: &str,
+) -> Option<&'static str> {
+    let key = format!("syntax_{}_{}", lesson.id.replace('-', "_"), field);
+    let copy = ui_text(ui_language, &key);
+    if copy.is_empty() { None } else { Some(copy) }
 }
 
 fn normalize_syntax_ids_for(language: &str, ids: &[String]) -> Vec<String> {

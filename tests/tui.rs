@@ -212,22 +212,59 @@ fn drill_command_validates_current_syntax_lesson() {
     let mut app = PracticodeApp::new(root.clone()).unwrap();
     app.handle_command_for_test("learn python").unwrap();
     app.handle_command_for_test("drill").unwrap();
-    assert!(app.output_for_test().contains("PASS"));
+    assert!(app.output_for_test().contains("Syntax"));
+    assert!(app.learn_result_for_test().contains("PASS"));
     let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
     assert!(saved.contains("\"syntax_progress\""));
     assert!(saved.contains("py-output"));
 }
 
 #[test]
-fn closing_drill_output_restores_lesson_pane() {
-    let root = tmp_root("drill-close-restores-lesson");
+fn run_in_learn_keeps_lesson_pane_visible() {
+    let root = tmp_root("learn-run-keeps-lesson");
     let mut app = PracticodeApp::new(root).unwrap();
     app.handle_command_for_test("learn python").unwrap();
-    app.handle_command_for_test("drill").unwrap();
-    app.handle_key_for_test(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
-        .unwrap();
+    app.handle_command_for_test("run").unwrap();
     assert!(app.output_for_test().contains("Syntax"));
+    assert!(app.learn_result_for_test().contains("PASS"));
     assert!(app.status_text_for_test().contains("learn"));
+}
+
+#[test]
+fn learn_command_uses_korean_syntax_copy() {
+    let root = tmp_root("learn-korean-copy");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("ui ko").unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+
+    let output = app.output_for_test();
+    assert!(output.contains("문법"));
+    assert!(output.contains("언어"));
+    assert!(output.contains("진도"));
+    assert!(output.contains("출력"));
+    assert!(!output.contains("# Syntax: Output"));
+}
+
+#[test]
+fn learn_command_uses_supported_ui_language_syntax_copy() {
+    let cases = [
+        ("ko", "# 문법: 출력", "print로"),
+        ("ja", "# 文法: 出力", "printで"),
+        ("zh", "# 语法: 输出", "使用 print"),
+        ("es", "# Sintaxis: Salida", "Usa print"),
+    ];
+
+    for (lang, title, body) in cases {
+        let root = tmp_root(&format!("learn-{lang}-copy"));
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.handle_command_for_test(&format!("ui {lang}")).unwrap();
+        app.handle_command_for_test("learn python").unwrap();
+
+        let output = app.output_for_test();
+        assert!(output.contains(title), "{lang}: {output}");
+        assert!(output.contains(body), "{lang}: {output}");
+        assert!(!output.contains("# Syntax: Output"), "{lang}: {output}");
+    }
 }
 
 #[test]

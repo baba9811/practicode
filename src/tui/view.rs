@@ -15,13 +15,31 @@ impl PracticodeApp {
             .direction(Direction::Horizontal)
             .constraints([Constraint::Percentage(58), Constraint::Percentage(42)])
             .split(vertical[0]);
+        let right_panes = if !self.show_output
+            && self.mode == AppMode::Learn
+            && !self.learn_result.is_empty()
+            && body[1].height >= 6
+        {
+            let result_height = (body[1].height / 3).clamp(3, 7);
+            let panes = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([Constraint::Min(3), Constraint::Length(result_height)])
+                .split(body[1]);
+            Some((panes[0], panes[1]))
+        } else {
+            None
+        };
         self.code_area = if self.show_output {
             Rect::default()
+        } else if let Some((code_area, _)) = right_panes {
+            code_area
         } else {
             body[1]
         };
         self.output_area = if self.show_output {
             vertical[0]
+        } else if let Some((_, result_area)) = right_panes {
+            result_area
         } else {
             self.code_area
         };
@@ -35,7 +53,7 @@ impl PracticodeApp {
                 problem_view::render(&self.problem, &self.state.settings.ui_language, light)
             };
             let title = if self.mode == AppMode::Learn {
-                "Syntax"
+                ui_text(&self.state.settings.ui_language, "syntax")
             } else {
                 ui_text(&self.state.settings.ui_language, "problem")
             };
@@ -71,7 +89,7 @@ impl PracticodeApp {
         } else {
             let code = self
                 .editor
-                .visible_text(body[1].height.saturating_sub(2) as usize);
+                .visible_text(self.code_area.height.saturating_sub(2) as usize);
             let title = if self.mode == AppMode::Learn {
                 format!("drill.{}", ext_for(&self.state.settings.language))
             } else {
@@ -80,7 +98,20 @@ impl PracticodeApp {
             let code = Paragraph::new(code)
                 .style(Self::pane_style(light))
                 .block(Self::block(&title, light, self.focus == Focus::Code));
-            frame.render_widget(code, body[1]);
+            frame.render_widget(code, self.code_area);
+
+            if self.mode == AppMode::Learn && !self.learn_result.is_empty() && right_panes.is_some()
+            {
+                let result = Paragraph::new(self.learn_result.clone())
+                    .style(Self::pane_style(light))
+                    .block(Self::block(
+                        ui_text(&self.state.settings.ui_language, "drill_result"),
+                        light,
+                        false,
+                    ))
+                    .wrap(Wrap { trim: false });
+                frame.render_widget(result, self.output_area);
+            }
         }
 
         let status = Paragraph::new(self.status_text()).style(if light {
@@ -397,5 +428,22 @@ mod tests {
 
         assert_eq!(app.output_area, Rect::new(0, 0, 80, 20));
         assert_eq!(app.code_area, Rect::default());
+    }
+
+    #[test]
+    fn learn_result_keeps_lesson_and_splits_right_pane() {
+        let mut app = PracticodeApp::new(tmp_root("learn-result-split")).unwrap();
+        app.handle_command("learn python").unwrap();
+        app.handle_command("run").unwrap();
+
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+
+        assert!(app.output.contains("Syntax"));
+        assert!(app.learn_result.contains("PASS"));
+        assert_ne!(app.output_area, Rect::new(0, 0, 80, 20));
+        assert!(app.output_area.y > app.code_area.y);
+        assert_eq!(app.output_area.x, app.code_area.x);
     }
 }

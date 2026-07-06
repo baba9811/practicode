@@ -92,6 +92,7 @@ pub struct PracticodeApp {
     command_cursor: usize,
     command_palette_cursor: usize,
     output: String,
+    learn_result: String,
     output_is_markdown: bool,
     showing_model_status: bool,
     editing_notes: bool,
@@ -154,6 +155,7 @@ impl PracticodeApp {
             command_cursor: 0,
             command_palette_cursor: 0,
             output: String::new(),
+            learn_result: String::new(),
             output_is_markdown: false,
             showing_model_status: false,
             editing_notes: false,
@@ -293,6 +295,10 @@ impl PracticodeApp {
 
     pub fn output_for_test(&self) -> &str {
         &self.output
+    }
+
+    pub fn learn_result_for_test(&self) -> &str {
+        &self.learn_result
     }
 
     pub fn command_suggestions_for_test(&self) -> Vec<String> {

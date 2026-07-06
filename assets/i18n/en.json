@@ -18,6 +18,7 @@
   "hint_output": "Esc/e edit | drag select to copy | / command",
   "hint_settings": "up/down move | Space/Enter toggle | Esc close",
   "hint_code": "Esc then / command",
+  "hint_learn": "edit drill | /drill validate | /problems",
   "hint_idle": "/ command | ? help",
   "hint_busy": "Working | q quit",
   "hint_busy_next": "Space warmup | q quit",
@@ -74,5 +75,18 @@
   "hits": "Hits",
   "misses": "Misses",
   "run_pass_next": "Next: /next",
-  "run_fail_next": "Fix: press Esc or e to edit, then /run"
+  "run_fail_next": "Fix: press Esc or e to edit, then /run",
+  "syntax": "Syntax",
+  "syntax_language": "Language",
+  "syntax_level": "Level",
+  "syntax_progress": "Progress",
+  "syntax_complete": "complete",
+  "syntax_open": "open",
+  "syntax_drill": "Drill",
+  "syntax_drill_prompt": "Run the starter, then edit it until the expected output matches.",
+  "syntax_references": "References",
+  "syntax_basic": "basic",
+  "syntax_intermediate": "intermediate",
+  "syntax_advanced": "advanced",
+  "drill_result": "Drill result"
 }

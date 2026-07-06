@@ -90,7 +90,7 @@ impl PracticodeApp {
             return "notes: type to edit, Esc profile";
         }
         if self.mode == AppMode::Learn && self.focus == Focus::Code {
-            return "learn: edit drill | /drill validate | /problems";
+            return ui_text(lang, "hint_learn");
         }
         match (self.focus, self.list_cursor.is_some(), self.show_output) {
             (Focus::Command, _, _) => ui_text(lang, "hint_command"),

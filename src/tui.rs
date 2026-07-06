@@ -69,6 +69,7 @@ struct CommandChoice {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Focus {
+    Home,
     Code,
     Command,
     Output,
@@ -107,6 +108,7 @@ pub struct PracticodeApp {
     focus: Focus,
     mode: AppMode,
     home_choice: HomeChoice,
+    home_area: Rect,
     home_learn_area: Rect,
     home_problems_area: Rect,
     list_cursor: Option<usize>,
@@ -172,6 +174,7 @@ impl PracticodeApp {
             focus: Focus::Code,
             mode: AppMode::Problems,
             home_choice: HomeChoice::Learn,
+            home_area: Rect::default(),
             home_learn_area: Rect::default(),
             home_problems_area: Rect::default(),
             list_cursor: None,
@@ -276,6 +279,10 @@ impl PracticodeApp {
     pub fn set_home_choice_areas_for_test(&mut self, learn: Rect, problems: Rect) {
         self.home_learn_area = learn;
         self.home_problems_area = problems;
+    }
+
+    pub fn set_home_area_for_test(&mut self, area: Rect) {
+        self.home_area = area;
     }
 
     pub fn busy_label(&self) -> &str {

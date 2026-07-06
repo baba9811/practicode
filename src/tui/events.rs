@@ -31,11 +31,18 @@ impl PracticodeApp {
         if self.command_area.contains(position) {
             self.focus_command();
         } else if self.mode == AppMode::Home && self.home_learn_area.contains(position) {
+            self.focus = Focus::Home;
             self.home_choice = HomeChoice::Learn;
             self.open_home_choice()?;
         } else if self.mode == AppMode::Home && self.home_problems_area.contains(position) {
+            self.focus = Focus::Home;
             self.home_choice = HomeChoice::Problems;
             self.open_home_choice()?;
+        } else if self.mode == AppMode::Home
+            && !self.show_output
+            && self.home_area.contains(position)
+        {
+            self.focus = Focus::Home;
         } else if self.show_output && self.output_area.contains(position) {
             self.focus = Focus::Output;
         } else if self.code_area.contains(position) {
@@ -50,7 +57,7 @@ impl PracticodeApp {
                 self.command.clear();
                 self.command_cursor = 0;
                 self.command_palette_cursor = 0;
-                self.focus = Focus::None;
+                self.focus = self.resting_focus();
             }
             KeyCode::Enter => {
                 if !self.accept_command_palette()? {
@@ -186,20 +193,24 @@ impl PracticodeApp {
             }
             return Ok(());
         }
-        if self.mode == AppMode::Home {
-            match key.code {
-                KeyCode::Left | KeyCode::Right => self.move_home_choice(),
-                KeyCode::Enter | KeyCode::Char(' ') => self.open_home_choice()?,
-                _ => self.handle_global_shortcut(key)?,
-            }
-            return Ok(());
-        }
         if key.code == KeyCode::Esc && self.show_output {
-            if self.mode == AppMode::Learn {
+            if self.mode == AppMode::Home {
+                self.action_home()?;
+            } else if self.mode == AppMode::Learn {
                 self.show_current_syntax_lesson();
             } else {
                 self.show_output = false;
                 self.focus = Focus::Code;
+            }
+            return Ok(());
+        }
+        if self.mode == AppMode::Home {
+            match key.code {
+                KeyCode::Up | KeyCode::Down | KeyCode::Left | KeyCode::Right => {
+                    self.move_home_choice()
+                }
+                KeyCode::Enter | KeyCode::Char(' ') => self.open_home_choice()?,
+                _ => self.handle_global_shortcut(key)?,
             }
             return Ok(());
         }
@@ -230,6 +241,14 @@ impl PracticodeApp {
         }
         self.command_palette_cursor = 0;
         self.focus = Focus::Command;
+    }
+
+    pub(super) fn resting_focus(&self) -> Focus {
+        if self.mode == AppMode::Home && !self.show_output {
+            Focus::Home
+        } else {
+            Focus::None
+        }
     }
 
     pub(super) fn submit_command(&mut self, value: &str) -> Result<()> {

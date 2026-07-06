@@ -15,7 +15,7 @@
   "home_preview": "プレビュー",
   "home_learn_choice": "文法学習",
   "home_practice_choice": "コーディングテスト練習",
-  "home_help": "左/右 選択 | Enter/Space 開く | / コマンド",
+  "home_help": "矢印 選択 | Enter/Space 開く | / コマンド",
   "command_placeholder": "/ を入力し上下で選択、Enter で実行",
   "palette_hint": "上下 選択 | Enter 実行 | Esc キャンセル",
   "hint_command": "Enter 実行 | Esc キャンセル",

@@ -120,7 +120,7 @@ impl PracticodeApp {
             .join("\n");
         let daily_loop = match self.mode {
             AppMode::Home => {
-                "1. Choose Learn syntax or Practice coding tests.\n2. Use Left/Right to move and Enter/Space to open.\n3. Press `/` for commands."
+                "1. Choose Learn syntax or Practice coding tests.\n2. Use arrow keys to move and Enter/Space to open.\n3. Press `/` for commands."
             }
             AppMode::Learn => {
                 "1. Read the lesson on the left.\n2. Edit the drill on the right.\n3. Use `/run`, then `/next` or `/back`."

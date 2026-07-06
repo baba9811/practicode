@@ -37,6 +37,7 @@ impl PracticodeApp {
             .constraints([Constraint::Percentage(58), Constraint::Percentage(42)])
             .split(vertical[0]);
         if self.mode == AppMode::Home {
+            self.home_area = body[0];
             let choices = Layout::default()
                 .direction(Direction::Vertical)
                 .constraints([
@@ -88,7 +89,7 @@ impl PracticodeApp {
                     .block(Self::block(
                         ui_text(&self.state.settings.ui_language, "home"),
                         light,
-                        false,
+                        self.focus == Focus::Home,
                     ))
                     .wrap(Wrap { trim: false });
                 frame.render_widget(left, body[0]);
@@ -502,5 +503,23 @@ mod tests {
         assert_ne!(app.output_area, Rect::new(0, 0, 80, 20));
         assert!(app.output_area.y > app.code_area.y);
         assert_eq!(app.output_area.x, app.code_area.x);
+    }
+
+    #[test]
+    fn home_pane_title_is_active_when_home_has_focus() {
+        let mut app = PracticodeApp::new(tmp_root("home-active-title")).unwrap();
+
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+
+        let text = terminal
+            .backend()
+            .buffer()
+            .content()
+            .iter()
+            .map(|cell| cell.symbol())
+            .collect::<String>();
+        assert!(text.contains("> Home"));
     }
 }

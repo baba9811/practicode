@@ -15,7 +15,7 @@
   "home_preview": "미리보기",
   "home_learn_choice": "문법 학습",
   "home_practice_choice": "코딩테스트 연습",
-  "home_help": "좌/우 선택 | Enter/Space 열기 | / 명령",
+  "home_help": "방향키 선택 | Enter/Space 열기 | / 명령",
   "command_placeholder": "/ 입력 후 위/아래로 선택, Enter 실행",
   "palette_hint": "위/아래 선택 | Enter 실행 | Esc 취소",
   "hint_command": "Enter 실행 | Esc 취소",

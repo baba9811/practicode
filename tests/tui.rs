@@ -72,6 +72,33 @@ fn home_arrows_and_enter_open_selected_mode() {
 }
 
 #[test]
+fn home_vertical_arrows_and_enter_open_selected_mode() {
+    let root = tmp_root("home-keyboard-down");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(app.status_text_for_test().contains("001-hello-world"));
+    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    assert!(saved.contains("\"start_mode\": \"problems\""));
+
+    let root = tmp_root("home-keyboard-up");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Up, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(app.status_text_for_test().contains("001-hello-world"));
+    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    assert!(saved.contains("\"start_mode\": \"problems\""));
+}
+
+#[test]
 fn home_space_opens_learn_mode() {
     let root = tmp_root("home-keyboard-space");
     let mut app = PracticodeApp::new(root.clone()).unwrap();
@@ -82,6 +109,74 @@ fn home_space_opens_learn_mode() {
     assert!(app.status_text_for_test().contains("learn"));
     let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"learn\""));
+}
+
+#[test]
+fn home_command_escape_returns_to_home_focus() {
+    let root = tmp_root("home-command-escape");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Char('/'), KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(app.status_text_for_test().contains("001-hello-world"));
+    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    assert!(saved.contains("\"start_mode\": \"problems\""));
+}
+
+#[test]
+fn home_output_escape_returns_to_home_focus() {
+    let root = tmp_root("home-output-escape");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+
+    app.handle_command_for_test("help").unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(app.status_text_for_test().contains("001-hello-world"));
+    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    assert!(saved.contains("\"start_mode\": \"problems\""));
+}
+
+#[test]
+fn clicking_home_area_returns_to_home_focus() {
+    let root = tmp_root("home-click-focus");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    app.set_home_area_for_test(Rect::new(0, 0, 20, 10));
+    app.set_home_choice_areas_for_test(Rect::new(0, 2, 20, 2), Rect::new(0, 5, 20, 2));
+    app.set_pane_areas_for_test(
+        Rect::default(),
+        Rect::new(20, 0, 20, 10),
+        Rect::new(0, 11, 40, 3),
+    );
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Char('/'), KeyModifiers::NONE))
+        .unwrap();
+    app.handle_mouse_for_test(MouseEvent {
+        kind: MouseEventKind::Down(MouseButton::Left),
+        column: 1,
+        row: 1,
+        modifiers: KeyModifiers::NONE,
+    })
+    .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(app.status_text_for_test().contains("001-hello-world"));
+    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
 #[test]

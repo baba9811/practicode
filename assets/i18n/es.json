@@ -15,7 +15,7 @@
   "home_preview": "Vista previa",
   "home_learn_choice": "Aprender sintaxis",
   "home_practice_choice": "Practicar pruebas de codigo",
-  "home_help": "Izquierda/Derecha elegir | Enter/Space abrir | / comandos",
+  "home_help": "Flechas elegir | Enter/Space abrir | / comandos",
   "command_placeholder": "Escribe /, elige con arriba/abajo, Enter ejecuta",
   "palette_hint": "arriba/abajo elegir | Enter ejecutar | Esc cancelar",
   "hint_command": "Enter ejecutar | Esc cancelar",

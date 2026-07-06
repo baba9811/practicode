@@ -15,7 +15,7 @@
   "home_preview": "预览",
   "home_learn_choice": "语法学习",
   "home_practice_choice": "编程测试练习",
-  "home_help": "左/右 选择 | Enter/Space 打开 | / 命令",
+  "home_help": "方向键 选择 | Enter/Space 打开 | / 命令",
   "command_placeholder": "输入 / 后用上下键选择，Enter 执行",
   "palette_hint": "上下 选择 | Enter 执行 | Esc 取消",
   "hint_command": "Enter 执行 | Esc 取消",

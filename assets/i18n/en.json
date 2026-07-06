@@ -15,7 +15,7 @@
   "home_preview": "Preview",
   "home_learn_choice": "Learn syntax",
   "home_practice_choice": "Practice coding tests",
-  "home_help": "Left/Right choose | Enter/Space open | / commands",
+  "home_help": "Arrows choose | Enter/Space open | / commands",
   "command_placeholder": "Type /, move with up/down, Enter runs",
   "palette_hint": "up/down select | Enter run | Esc cancel",
   "hint_command": "Enter submit | Esc cancel",

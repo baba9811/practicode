@@ -29,7 +29,7 @@ impl PracticodeApp {
         self.show_output = false;
         self.settings_cursor = None;
         self.list_cursor = None;
-        self.focus = Focus::None;
+        self.focus = Focus::Home;
         self.output = self.home_text();
         self.output_is_markdown = false;
         Ok(())

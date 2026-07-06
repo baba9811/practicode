@@ -2,6 +2,8 @@ target/
 node_modules/
 npm-debug.log*
 .practicode/
+.superpowers/
+docs/superpowers/
 .codecode/
 .codex/build/
 .codex/problem-state.json

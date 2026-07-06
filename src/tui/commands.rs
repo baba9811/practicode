@@ -30,6 +30,13 @@ pub(super) const COMMAND_HINTS: &[CommandHint] = &[
         help: true,
     },
     CommandHint {
+        insert: "doctor",
+        display: "/doctor",
+        desc_key: "cmd_doctor",
+        keep_open: false,
+        help: true,
+    },
+    CommandHint {
         insert: "next",
         display: "/next",
         desc_key: "cmd_next",

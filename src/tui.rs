@@ -46,6 +46,7 @@ mod actions;
 mod command_handlers;
 mod command_input;
 mod commands;
+mod doctor;
 mod editor;
 mod events;
 mod problem_list;

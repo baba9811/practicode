@@ -57,7 +57,7 @@ impl PracticodeApp {
 
     pub(super) fn default_command_inserts(&self) -> &'static [&'static str] {
         match self.mode {
-            AppMode::Home => &["learn", "problems", "profile", "help", "quit"],
+            AppMode::Home => &["learn", "problems", "doctor", "profile", "help", "quit"],
             AppMode::Problems => &[
                 "run",
                 "next",
@@ -67,10 +67,11 @@ impl PracticodeApp {
                 "hint ",
                 "generate ",
                 "profile",
+                "doctor",
                 "home",
             ],
             AppMode::Learn => &[
-                "run", "next", "back", "learn", "problems", "profile", "home",
+                "run", "next", "back", "learn", "problems", "profile", "doctor", "home",
             ],
         }
     }

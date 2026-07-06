@@ -11,6 +11,7 @@ Type `/` outside the editor to open the command palette. Use `up/down` to move, 
 | `/code` | Return to the code editor |
 | `/next` | In practice, open the next problem; in learn mode, open the next lesson |
 | `/back` | In practice, go back through problem history; in learn mode, open the previous lesson |
+| `/doctor` | Check local runtimes and show install hints |
 | `/help` | Show in-app help |
 | `/exit` | Quit |
 

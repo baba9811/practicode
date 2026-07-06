@@ -362,6 +362,7 @@ fn slash_command_palette_surfaces_problem_mode_commands() {
     assert!(suggestions.contains(&"/hint <request>".to_string()));
     assert!(suggestions.contains(&"/generate <request>".to_string()));
     assert!(suggestions.contains(&"/profile".to_string()));
+    assert!(suggestions.contains(&"/doctor".to_string()));
     assert!(suggestions.contains(&"/home".to_string()));
     assert!(!suggestions.contains(&"/drill".to_string()));
     assert!(!suggestions.contains(&"/next-lesson".to_string()));
@@ -378,6 +379,7 @@ fn home_command_palette_shows_entry_commands() {
     let suggestions = app.command_suggestions_for_test();
     assert_eq!(suggestions[0], "/learn");
     assert!(suggestions.contains(&"/problems".to_string()));
+    assert!(suggestions.contains(&"/doctor".to_string()));
     assert!(suggestions.contains(&"/profile".to_string()));
     assert!(suggestions.contains(&"/help".to_string()));
     assert!(suggestions.contains(&"/quit".to_string()));
@@ -394,6 +396,7 @@ fn learn_command_palette_uses_run_next_back_aliases() {
     assert!(suggestions.contains(&"/run".to_string()));
     assert!(suggestions.contains(&"/next".to_string()));
     assert!(suggestions.contains(&"/back".to_string()));
+    assert!(suggestions.contains(&"/doctor".to_string()));
     assert!(suggestions.contains(&"/home".to_string()));
     assert!(!suggestions.contains(&"/drill".to_string()));
     assert!(!suggestions.contains(&"/next-lesson".to_string()));
@@ -662,6 +665,29 @@ fn model_command_explains_unavailable_provider_models() {
             .contains("provider does not expose model list")
     );
     assert!(app.output_for_test().contains("/model <name>"));
+}
+
+#[test]
+fn doctor_command_reports_runtime_checks() {
+    let root = tmp_root("doctor-command");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("doctor").unwrap();
+
+    assert!(app.output_for_test().contains("Doctor"));
+    assert!(app.output_for_test().contains("Runtime checks"));
+    assert!(app.output_for_test().contains("Python"));
+    assert!(app.output_for_test().contains("TypeScript"));
+}
+
+#[test]
+fn doctor_command_is_localized() {
+    let root = tmp_root("doctor-localized");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("ui ko").unwrap();
+    app.handle_command_for_test("doctor").unwrap();
+
+    assert!(app.output_for_test().contains("환경 진단"));
+    assert!(app.output_for_test().contains("런타임 확인"));
 }
 
 #[test]

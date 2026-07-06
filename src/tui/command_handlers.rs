@@ -36,6 +36,7 @@ impl PracticodeApp {
             "run" | "r" => self.action_run()?,
             "code" | "edit" | "e" => self.action_edit()?,
             "home" => self.action_home()?,
+            "doctor" => self.action_doctor(),
             "learn" => self.action_learn(arg)?,
             "drill" => self.action_drill()?,
             "next-lesson" => self.action_next_lesson()?,

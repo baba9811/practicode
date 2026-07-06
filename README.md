@@ -116,6 +116,8 @@ rustc --version
 
 References: [Python](https://docs.python.org/3/using/), [Node.js](https://nodejs.org/en/download), [Rust](https://www.rust-lang.org/tools/install), [Eclipse Temurin](https://adoptium.net/installation/).
 
+After starting practicode, run `/doctor` to check these runtimes from inside the TUI.
+
 Check the install:
 
 ```bash
@@ -177,6 +179,7 @@ Most-used commands:
 | `/run` | Judge the current submission or drill |
 | `/next` | Open the next problem or lesson |
 | `/back` | Go to the previous problem or lesson |
+| `/doctor` | Check local runtimes and show install hints |
 | `/profile` | Edit language, theme, difficulty, topics, and AI settings |
 
 See [docs/COMMANDS.md](docs/COMMANDS.md) for the full command list, aliases, AI generation commands, and profile settings.

@@ -57,6 +57,17 @@ fn default_ai_prompts_include_generation_language_scope() {
 }
 
 #[test]
+fn default_ai_prompts_forbid_answer_files_in_problem_dirs() {
+    let next = default_ai_next_prompt("arrays");
+    assert!(next.contains("Do not create solution.*"));
+    assert!(next.contains("test_solution.*"));
+
+    let background = default_ai_generate_prompt_with_settings(&Settings::default(), "arrays");
+    assert!(background.contains("Do not create solution.*"));
+    assert!(background.contains("test_solution.*"));
+}
+
+#[test]
 fn default_codex_command_uses_model_when_set() {
     let root = tmp_root("codex-command");
     let command = default_ai_next_command(

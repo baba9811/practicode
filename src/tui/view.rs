@@ -1,6 +1,27 @@
 use super::*;
 
 impl PracticodeApp {
+    pub(super) fn home_preview_text(&self) -> String {
+        match self.home_choice {
+            HomeChoice::Learn => {
+                let (done, total) =
+                    syntax_progress_count(&self.state, &self.state.settings.language);
+                format!(
+                    "Learning\n\nLanguage: {}\nProgress: {done}/{total}\n\n/run validates drills\n/next moves to the next lesson",
+                    syntax_language_name(&self.state.settings.language)
+                )
+            }
+            HomeChoice::Problems => {
+                format!(
+                    "Practice\n\nCurrent: {}\nDifficulty: {}\nStatus: {}\n\n/run judges submissions\n/next opens the next problem",
+                    self.problem.id,
+                    self.problem.difficulty,
+                    self.problem_status(&self.problem)
+                )
+            }
+        }
+    }
+
     pub(super) fn draw(&mut self, frame: &mut Frame) {
         let size = frame.area();
         let vertical = Layout::default()
@@ -15,6 +36,18 @@ impl PracticodeApp {
             .direction(Direction::Horizontal)
             .constraints([Constraint::Percentage(58), Constraint::Percentage(42)])
             .split(vertical[0]);
+        if self.mode == AppMode::Home {
+            let choices = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([
+                    Constraint::Length(7),
+                    Constraint::Length(7),
+                    Constraint::Min(1),
+                ])
+                .split(body[0]);
+            self.home_learn_area = choices[0];
+            self.home_problems_area = choices[1];
+        }
         let right_panes = if !self.show_output
             && self.mode == AppMode::Learn
             && !self.learn_result.is_empty()
@@ -31,6 +64,8 @@ impl PracticodeApp {
         };
         self.code_area = if self.show_output {
             Rect::default()
+        } else if self.mode == AppMode::Home {
+            Rect::default()
         } else if let Some((code_area, _)) = right_panes {
             code_area
         } else {
@@ -38,6 +73,8 @@ impl PracticodeApp {
         };
         self.output_area = if self.show_output {
             vertical[0]
+        } else if self.mode == AppMode::Home {
+            body[1]
         } else if let Some((_, result_area)) = right_panes {
             result_area
         } else {
@@ -47,21 +84,43 @@ impl PracticodeApp {
 
         let light = self.state.settings.theme == "light";
         if !self.show_output {
-            let left = if self.mode == AppMode::Learn {
-                Text::from(render_markdown_plain(&self.output))
+            if self.mode == AppMode::Home {
+                let left = Paragraph::new(self.home_text())
+                    .style(Self::pane_style(light))
+                    .block(Self::block(
+                        ui_text(&self.state.settings.ui_language, "home"),
+                        light,
+                        false,
+                    ))
+                    .wrap(Wrap { trim: false });
+                frame.render_widget(left, body[0]);
+
+                let right = Paragraph::new(self.home_preview_text())
+                    .style(Self::pane_style(light))
+                    .block(Self::block(
+                        ui_text(&self.state.settings.ui_language, "home_preview"),
+                        light,
+                        false,
+                    ))
+                    .wrap(Wrap { trim: false });
+                frame.render_widget(right, body[1]);
             } else {
-                problem_view::render(&self.problem, &self.state.settings.ui_language, light)
-            };
-            let title = if self.mode == AppMode::Learn {
-                ui_text(&self.state.settings.ui_language, "syntax")
-            } else {
-                ui_text(&self.state.settings.ui_language, "problem")
-            };
-            let problem = Paragraph::new(left)
-                .style(Self::pane_style(light))
-                .block(Self::block(title, light, false))
-                .wrap(Wrap { trim: false });
-            frame.render_widget(problem, body[0]);
+                let left = if self.mode == AppMode::Learn {
+                    Text::from(render_markdown_plain(&self.output))
+                } else {
+                    problem_view::render(&self.problem, &self.state.settings.ui_language, light)
+                };
+                let title = if self.mode == AppMode::Learn {
+                    ui_text(&self.state.settings.ui_language, "syntax")
+                } else {
+                    ui_text(&self.state.settings.ui_language, "problem")
+                };
+                let problem = Paragraph::new(left)
+                    .style(Self::pane_style(light))
+                    .block(Self::block(title, light, false))
+                    .wrap(Wrap { trim: false });
+                frame.render_widget(problem, body[0]);
+            }
         }
 
         if self.show_output {
@@ -86,7 +145,7 @@ impl PracticodeApp {
                 ))
                 .wrap(Wrap { trim: false });
             frame.render_widget(output, self.output_area);
-        } else {
+        } else if self.mode != AppMode::Home {
             let code = self
                 .editor
                 .visible_text(self.code_area.height.saturating_sub(2) as usize);

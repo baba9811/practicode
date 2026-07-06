@@ -30,6 +30,12 @@ impl PracticodeApp {
         let position = Position::new(mouse.column, mouse.row);
         if self.command_area.contains(position) {
             self.focus_command();
+        } else if self.mode == AppMode::Home && self.home_learn_area.contains(position) {
+            self.home_choice = HomeChoice::Learn;
+            self.open_home_choice()?;
+        } else if self.mode == AppMode::Home && self.home_problems_area.contains(position) {
+            self.home_choice = HomeChoice::Problems;
+            self.open_home_choice()?;
         } else if self.show_output && self.output_area.contains(position) {
             self.focus = Focus::Output;
         } else if self.code_area.contains(position) {
@@ -177,6 +183,14 @@ impl PracticodeApp {
                     self.list_cursor = Some(cursor);
                     self.handle_global_shortcut(key)?;
                 }
+            }
+            return Ok(());
+        }
+        if self.mode == AppMode::Home {
+            match key.code {
+                KeyCode::Left | KeyCode::Right => self.move_home_choice(),
+                KeyCode::Enter | KeyCode::Char(' ') => self.open_home_choice()?,
+                _ => self.handle_global_shortcut(key)?,
             }
             return Ok(());
         }

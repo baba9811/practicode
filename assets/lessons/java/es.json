@@ -4,196 +4,396 @@
   "ui_language": "es",
   "lessons": {
     "java-output": {
-      "title": "Salida",
-      "concept": "System.out.println escribe una línea. En Java, estudia Salida ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Salida dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Salida estándar",
+      "concept": "Salida estándar importa cuando el juez compara cada carácter y salto de línea. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en formar score=7 desde un int antes de que println añada el salto. Sigue la línea que concatena la etiqueta con score; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Salida",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Usar print cuando la salida esperada necesita el salto que agrega println.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Salida?"
+        "¿Dónde se convierte el entero en el texto score=7?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Salida en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar System.out.println con un valor calculado. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
-    "java-variables": {
-      "title": "Variables",
-      "concept": "Las variables de Java tienen tipos declarados. En Java, estudia Variables ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Variables dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "java-variables-types": {
+      "title": "Variables y tipos",
+      "concept": "Variables y tipos importa cuando los valores primitivos y las referencias a objetos deben declararse antes de usarse. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en combinar un String, un int y un boolean en una línea. Sigue la línea que mantiene score y passed coherentes; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Variables",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Cambiar solo el boolean y dejar score con el valor anterior.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Variables?"
+        "¿Qué variables determinan las tres partes de Ada:7:true?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Variables en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar variables locales tipadas coherentes con el reporte. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-numbers-operators": {
+      "title": "Números y operadores",
+      "concept": "Números y operadores importa cuando la división y el resto deben mantenerse enteros en muchos problemas. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en obtener cociente y resto desde el mismo total y size. Sigue la línea que usa / y % con los mismos operandos; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Usar un divisor distinto para el cociente y para el resto.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Por qué 17 / 5 produce 3 y no 3.4?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar división entera y resto. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-strings": {
       "title": "Cadenas",
-      "concept": "Los métodos de String exponen longitud, caracteres y subcadenas. En Java, estudia Cadenas ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Cadenas dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Cadenas importa cuando la limpieza de texto y substring ocurren antes de comparar o imprimir. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en recortar espacios antes de tomar el prefijo ok. Sigue la línea que llama a trim antes de substring; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Cadenas",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Calcular substring antes de quitar los espacios alrededor.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Cadenas?"
+        "¿Qué valor conserva raw después de calcular cleaned?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Cadenas en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar métodos de String sin mutar el texto original. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-control-flow": {
       "title": "Flujo de control",
-      "concept": "if, for y while controlan la ejecución. En Java, estudia Flujo de control ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Flujo de control dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Flujo de control importa cuando ramas y bucles deciden qué valores entran al acumulador. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en recorrer 1..3 y sumar solo impares. Sigue la línea que protege la suma con n % 2 == 1; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Flujo de control",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Sumar todos los valores del bucle esperando que el total coincida.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Flujo de control?"
+        "¿Qué iteraciones entran al if y cuáles se saltan?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Flujo de control en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar if dentro de un bucle for. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-methods": {
       "title": "Métodos",
-      "concept": "Los métodos agrupan comportamiento reutilizable. En Java, estudia Métodos ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Métodos dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Métodos importa cuando un cálculo reutilizable necesita un límite con nombre. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en pasar width y height a area. Sigue la línea que devuelve la multiplicación en vez de imprimir dentro del método; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Métodos",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Devolver perímetro cuando el llamador espera área.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Métodos?"
+        "¿Qué línea devuelve el valor calculado a main?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Métodos en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar parámetros y valor de retorno. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-input": {
-      "title": "Análisis de entrada",
-      "concept": "En los ejercicios puedes leer System.in directamente. En Java, estudia Análisis de entrada ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Análisis de entrada dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Lectura de entrada",
+      "concept": "Lectura de entrada importa cuando stdin llega como bytes y debe convertirse en tokens tipados. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en leer System.in una vez y sumar enteros parseados. Sigue la línea que divide por espacios antes de Integer.parseInt; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Análisis de entrada",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Parsear solo el primer token cuando el juez puede enviar muchos números.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Análisis de entrada?"
+        "¿Dónde el texto pasa de String a int?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Análisis de entrada en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar readAllBytes, split e Integer.parseInt. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-arrays-collections": {
-      "title": "Arreglos y colecciones",
-      "concept": "Los arreglos tienen tamaño fijo; las colecciones ofrecen contenedores flexibles. En Java, estudia Arreglos y colecciones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Arreglos y colecciones dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "title": "Arrays y colecciones",
+      "concept": "Arrays y colecciones importa cuando arrays fijos, List expandible, Map por clave y Set único resuelven tareas distintas. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en pasar valores de array a List, Map y Set. Sigue la línea que usa merge para el total del Map y add para el Set; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Arreglos y colecciones",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Usar nums.length cuando el problema pide el total numérico.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Arreglos y colecciones?"
+        "¿Qué colección guarda orden, cuál búsqueda y cuál elimina duplicados?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Arreglos y colecciones en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar APIs List, Map y Set con un array de origen. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-classes-objects": {
+      "title": "Clases y objetos",
+      "concept": "Clases y objetos importa cuando los objetos necesitan estado de instancia y comportamiento. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en crear Counter y llamar a add. Sigue la línea que actualiza this.value antes de devolver; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir new, campos y métodos de instancia.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra new, campos y métodos de instancia?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar new, campos y métodos de instancia. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-constructors": {
+      "title": "Constructores",
+      "concept": "Constructores importa cuando los objetos nuevos deben empezar con campos válidos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en guardar width y height antes de ejecutar area. Sigue la línea que asigna parámetros del constructor a campos final; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir parámetros de constructor y asignación this.field.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra parámetros de constructor y asignación this.field?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar parámetros de constructor y asignación this.field. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-encapsulation": {
+      "title": "Encapsulación",
+      "concept": "Encapsulación importa cuando los llamadores deben cambiar estado mediante métodos y no campos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en sumar puntos mediante Score.add. Sigue la línea que cambia el campo private points solo tras validar; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir campos private con métodos public.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra campos private con métodos public?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar campos private con métodos public. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-static-members": {
+      "title": "Miembros static",
+      "concept": "Miembros static importa cuando un valor pertenece a la clase y no a una instancia. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en llamar Scale.apply desde la clase. Sigue la línea que multiplica por FACTOR compartido; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir constantes static final y métodos static.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra constantes static final y métodos static?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar constantes static final y métodos static. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-enum-switch": {
+      "title": "Enum y switch",
+      "concept": "Enum y switch importa cuando un conjunto fijo de estados debe mapearse a resultados explícitos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en convertir Status.DONE en ok con switch. Sigue la línea que maneja directamente la rama DONE; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir constantes enum y ramas de switch.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra constantes enum y ramas de switch?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar constantes enum y ramas de switch. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-exceptions": {
       "title": "Excepciones",
-      "concept": "try/catch maneja fallos; las excepciones comprobadas aparecen en las firmas. En Java, estudia Excepciones ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Excepciones dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Excepciones importa cuando una entrada inválida debe recuperarse sin ocultar fallos no relacionados. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en capturar NumberFormatException y devolver fallback. Sigue la línea que captura el fallo específico de parseo; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Excepciones",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Cambiar solo el literal impreso en vez de corregir try/catch alrededor de Integer.parseInt.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Excepciones?"
+        "¿Qué expresión demuestra try/catch alrededor de Integer.parseInt?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Excepciones en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
-    },
-    "java-classes-interfaces": {
-      "title": "Clases e interfaces",
-      "concept": "Las clases contienen estado y comportamiento; las interfaces describen contratos. En Java, estudia Clases e interfaces ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Clases e interfaces dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
-      "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Clases e interfaces",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Clases e interfaces?"
-      ],
-      "exercise_prompt": "Completa el ejercicio de Clases e interfaces en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar try/catch alrededor de Integer.parseInt. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
     "java-generics": {
       "title": "Genéricos",
-      "concept": "Los genéricos reutilizan código con parámetros de tipo. En Java, estudia Genéricos ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Genéricos dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+      "concept": "Genéricos importa cuando un método debe conservar el tipo de elemento del llamador. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en devolver el último elemento de List<T>. Sigue la línea que usa T en vez de Object; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Genéricos",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Cambiar solo el literal impreso en vez de corregir método genérico <T> con List<T>.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Genéricos?"
+        "¿Qué expresión demuestra método genérico <T> con List<T>?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Genéricos en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar método genérico <T> con List<T>. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
-    "java-lambda-streams": {
-      "title": "Lambdas y streams",
-      "concept": "Las lambdas pasan comportamiento; los streams procesan secuencias. En Java, estudia Lambdas y streams ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Lambdas y streams dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "java-interfaces": {
+      "title": "Interfaces",
+      "concept": "Interfaces importa cuando los llamadores deben depender del comportamiento y no de una clase concreta. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en pasar User como Named. Sigue la línea que implementa name con la firma public; si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Lambdas y streams",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Cambiar solo el literal impreso en vez de corregir implements y parámetros de tipo interfaz.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Lambdas y streams?"
+        "¿Qué expresión demuestra implements y parámetros de tipo interfaz?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Lambdas y streams en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar implements y parámetros de tipo interfaz. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     },
-    "java-records-sealed": {
-      "title": "Records y tipos sealed",
-      "concept": "Los records reducen boilerplate de datos; los tipos sealed limitan la herencia. En Java, estudia Records y tipos sealed ubicando tres cosas en el ejemplo: la línea que prepara el valor, la expresión que lo lee y la instrucción que llega a la salida. Antes de editar el código inicial, predice su salida actual.",
-      "worked_example": "El ejemplo resuelto sitúa la regla de Records y tipos sealed dentro de código real de Java. Sigue la línea que prepara el dato, la expresión que lo usa y la instrucción que produce la salida.",
+    "java-inheritance-composition": {
+      "title": "Herencia y composición",
+      "concept": "Herencia y composición importa cuando una subclase también necesita un objeto auxiliar. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en PremiumUser combina baseScore heredado con Bonus. Sigue la línea que llama bonus.apply(baseScore()); si cambia, cambia la salida evaluada por una razón concreta.",
       "common_mistakes": [
-        "Copiar la forma del ejemplo sin explicar qué papel cumple Records y tipos sealed",
-        "Editar el código inicial de Java sin comprobar primero su salida actual",
-        "Arreglar solo paréntesis o signos sin aplicar la regla principal de la lección"
+        "Cambiar solo el literal impreso en vez de corregir extends más un campo compuesto.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo crea el valor que se imprimirá?",
-        "¿Qué pasaría si ese valor estuviera vacío, faltara o tuviera otro tipo?",
-        "¿Qué línea del código inicial está conectada directamente con Records y tipos sealed?"
+        "¿Qué expresión demuestra extends más un campo compuesto?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
       ],
-      "exercise_prompt": "Completa el ejercicio de Records y tipos sealed en Java. Primero predice la salida actual del código inicial y luego edita solo la parte relacionada con la regla de esta lección. No escribas la salida esperada como una constante."
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar extends más un campo compuesto. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-records": {
+      "title": "Records",
+      "concept": "Records importa cuando los portadores de datos inmutables necesitan menos repetición. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en usar los accesores generados x() e y(). Sigue la línea que suma ambos componentes del record; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir componentes record y accesores generados.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra componentes record y accesores generados?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar componentes record y accesores generados. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-optional": {
+      "title": "Optional",
+      "concept": "Optional importa cuando un valor ausente debe manejarse explícitamente. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en filtrar Optional antes de orElse. Sigue la línea que mantiene ok presente en vez de empty; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir Optional.of, filter y orElse.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra Optional.of, filter y orElse?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar Optional.of, filter y orElse. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-streams-lambdas": {
+      "title": "Streams y lambdas",
+      "concept": "Streams y lambdas importa cuando el procesamiento de colecciones es más claro como tubería. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en filtrar pares y luego elevarlos al cuadrado. Sigue la línea que usa filter antes de mapToInt; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir predicados lambda y terminal sum.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra predicados lambda y terminal sum?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar predicados lambda y terminal sum. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-comparators-sorting": {
+      "title": "Comparadores y ordenación",
+      "concept": "Comparadores y ordenación importa cuando los objetos necesitan orden separado de su forma de datos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en ordenar usuarios por score descendente. Sigue la línea que crea un Comparator desde User::score; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir Comparator.comparingInt y reversed.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra Comparator.comparingInt y reversed?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar Comparator.comparingInt y reversed. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-try-with-resources": {
+      "title": "try-with-resources",
+      "concept": "try-with-resources importa cuando los recursos deben cerrarse aunque el código salga temprano. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en leer bytes dentro de un bloque gestionado. Sigue la línea que declara el recurso en la cabecera try; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir AutoCloseable en cabecera try.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra AutoCloseable en cabecera try?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar AutoCloseable en cabecera try. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-packages-imports": {
+      "title": "Paquetes e imports",
+      "concept": "Paquetes e imports importa cuando los ejercicios de archivo único aún necesitan clases de paquetes JDK. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en importar List y ArrayList. Sigue la línea que usa nombres importados sin calificación completa; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir declaraciones import en Solution.java sin package.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra declaraciones import en Solution.java sin package?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar declaraciones import en Solution.java sin package. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-annotations": {
+      "title": "Anotaciones",
+      "concept": "Anotaciones importa cuando los metadatos pertenecen a declaraciones y no a lógica de ejecución. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en definir @Audit y anotar un método. Sigue la línea que mantiene el retorno normal del método; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir @interface y método anotado.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra @interface y método anotado?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar @interface y método anotado. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-sealed-classes": {
+      "title": "Clases sealed",
+      "concept": "Clases sealed importa cuando una jerarquía de dominio debe listar implementaciones permitidas. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en restringir Shape a Rect y Dot. Sigue la línea que calcula measure en un record permitido; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir sealed interface, permits y records final.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra sealed interface, permits y records final?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar sealed interface, permits y records final. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-testing-assert": {
+      "title": "Pruebas y assert",
+      "concept": "Pruebas y assert importa cuando las comprobaciones pequeñas deben fallar cerca del método roto. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en comprobar addTwo antes de imprimir. Sigue la línea que lanza AssertionError cuando el comportamiento difiere; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir helper puro más aserción explícita.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra helper puro más aserción explícita?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar helper puro más aserción explícita. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-equality-hashcode": {
+      "title": "equals y hashCode",
+      "concept": "equals y hashCode importa cuando HashSet debe reconocer objetos de valor iguales. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en agregar dos objetos Point iguales. Sigue la línea que compara campos y hashea los mismos campos; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir equals(Object) con hashCode coherente.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra equals(Object) con hashCode coherente?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar equals(Object) con hashCode coherente. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
+    },
+    "java-overloading-varargs": {
+      "title": "Sobrecarga y varargs",
+      "concept": "Sobrecarga y varargs importa cuando las llamadas eligen firmas y agrupan argumentos extra. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
+      "worked_example": "El ejemplo se centra en sumar first más el array rest. Sigue la línea que recorre cada valor varargs; si cambia, cambia la salida evaluada por una razón concreta.",
+      "common_mistakes": [
+        "Cambiar solo el literal impreso en vez de corregir int... rest y label sobrecargado.",
+        "Imprimir la respuesta final como literal evita practicar la construcción de Java de esta lección."
+      ],
+      "self_check": [
+        "¿Qué expresión demuestra int... rest y label sobrecargado?",
+        "Si cambia la entrada o el estado del objeto, ¿qué expresión debe cambiar antes de imprimir en stdout?"
+      ],
+      "exercise_prompt": "Edita el ejercicio Solution.java para usar int... rest y label sobrecargado. Conserva la forma de archivo único y haz que el caso pase mediante esa sintaxis."
     }
   }
 }

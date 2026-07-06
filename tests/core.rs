@@ -515,6 +515,101 @@ fn rust_lesson_copy_is_topic_specific() {
 }
 
 #[test]
+fn java_syntax_curriculum_covers_official_java_topics() {
+    let lessons = syntax_lessons_for("java");
+    let lesson_ids: Vec<_> = lessons.iter().map(|lesson| lesson.id).collect();
+
+    assert!(lesson_ids.len() >= 27, "java curriculum is too shallow");
+
+    for id in [
+        "java-output",
+        "java-variables-types",
+        "java-strings",
+        "java-control-flow",
+        "java-methods",
+        "java-input",
+        "java-arrays-collections",
+        "java-classes-objects",
+        "java-constructors",
+        "java-encapsulation",
+        "java-static-members",
+        "java-enum-switch",
+        "java-exceptions",
+        "java-generics",
+        "java-interfaces",
+        "java-inheritance-composition",
+        "java-records",
+        "java-optional",
+        "java-streams-lambdas",
+        "java-comparators-sorting",
+        "java-try-with-resources",
+        "java-packages-imports",
+        "java-annotations",
+        "java-sealed-classes",
+        "java-testing-assert",
+    ] {
+        assert!(lesson_ids.contains(&id), "missing {id}");
+    }
+
+    let refs = lessons
+        .iter()
+        .flat_map(|lesson| lesson.refs.iter().copied())
+        .collect::<Vec<_>>()
+        .join("\n");
+    for required_ref in [
+        "https://dev.java/learn/",
+        "https://docs.oracle.com/javase/tutorial/",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Comparator.html",
+    ] {
+        assert!(refs.contains(required_ref), "missing ref {required_ref}");
+    }
+}
+
+#[test]
+fn java_lesson_copy_is_topic_specific() {
+    let banned = [
+        "locating three concrete pieces",
+        "Use this example to place",
+        "Copying the shape of the example",
+        "edit only the part tied to this lesson's rule",
+        "Do not write the expected output as a constant",
+        "세 가지 구체적인 부분",
+        "이 예제를 사용해",
+        "三つの具体的な部分",
+        "この例を使って",
+        "三个具体部分",
+        "用这个例子",
+        "tres piezas concretas",
+        "Usa este ejemplo",
+    ];
+    for path in [
+        "assets/lessons/java/en.json",
+        "assets/lessons/java/ko.json",
+        "assets/lessons/java/ja.json",
+        "assets/lessons/java/zh.json",
+        "assets/lessons/java/es.json",
+    ] {
+        let catalog: serde_json::Value =
+            serde_json::from_str(&fs::read_to_string(path).unwrap()).unwrap();
+        for (id, copy) in catalog["lessons"].as_object().unwrap() {
+            let text = copy.to_string();
+            for phrase in banned {
+                assert!(!text.contains(phrase), "{path}:{id}: generic copy");
+            }
+        }
+    }
+}
+
+#[test]
 fn python_syntax_curriculum_covers_official_python_topics() {
     let lessons = syntax_lessons_for("python");
     let lesson_ids: Vec<_> = lessons.iter().map(|lesson| lesson.id).collect();
@@ -957,6 +1052,42 @@ fn typescript_syntax_starters_run_under_node_strip_types() {
 }
 
 #[test]
+fn java_syntax_starters_compile_to_useful_failures() {
+    if which("javac").is_none() || which("java").is_none() {
+        return;
+    }
+
+    let root = tmp_root("java-syntax-starters-compile");
+    for lesson in syntax_lessons_for("java") {
+        let path = ensure_syntax_submission(&root, lesson).unwrap();
+        let result = judge_path(
+            &root,
+            lesson.id,
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            !result.output.contains("compile failed"),
+            "{} starter should compile:\n{}",
+            lesson.id,
+            result.output
+        );
+        assert!(
+            !result.output.contains("Stderr"),
+            "{} starter should fail by expected output, not runtime stderr:\n{}",
+            lesson.id,
+            result.output
+        );
+        assert!(
+            !result.passed,
+            "{} starter should still require the learner edit",
+            lesson.id
+        );
+    }
+}
+
+#[test]
 fn python_syntax_examples_run_cleanly() {
     let Some(python) = which("python3").or_else(|| which("python")) else {
         return;
@@ -1008,6 +1139,31 @@ fn typescript_syntax_examples_run_under_node_strip_types() {
             "{} example should not write stderr\n{}",
             lesson.id,
             String::from_utf8_lossy(&output.stderr)
+        );
+    }
+}
+
+#[test]
+fn java_syntax_examples_pass_lesson_cases() {
+    if which("javac").is_none() || which("java").is_none() {
+        return;
+    }
+
+    let root = tmp_root("java-syntax-examples-run");
+    for lesson in syntax_lessons_for("java") {
+        let path = root.join(format!("{}.java", lesson.id));
+        fs::write(&path, lesson.example).unwrap();
+        let result = judge_path(
+            &root,
+            &format!("{}-example", lesson.id),
+            &path,
+            lesson.language,
+            &syntax_cases(lesson),
+        );
+        assert!(
+            result.passed,
+            "{} example should pass its lesson cases:\n{}",
+            lesson.id, result.output
         );
     }
 }

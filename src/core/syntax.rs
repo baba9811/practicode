@@ -125,17 +125,42 @@ const TS_TYPE_REFS: &[&str] = &[
     "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
     "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html",
 ];
-const JAVA_REFS: &[&str] = &[
+const JAVA_CORE_REFS: &[&str] = &[
     "https://dev.java/learn/",
     "https://docs.oracle.com/javase/tutorial/",
+    "https://docs.oracle.com/javase/specs/jls/se21/html/index.html",
+];
+const JAVA_LANGUAGE_REFS: &[&str] = &[
+    "https://dev.java/learn/",
+    "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html",
+    "https://docs.oracle.com/javase/specs/jls/se21/html/index.html",
+];
+const JAVA_CLASS_REFS: &[&str] = &[
+    "https://dev.java/learn/",
+    "https://docs.oracle.com/javase/tutorial/java/javaOO/classes.html",
+    "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+];
+const JAVA_COLLECTION_REFS: &[&str] = &[
+    "https://dev.java/learn/",
+    "https://docs.oracle.com/javase/tutorial/collections/index.html",
+    "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html",
+    "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
+    "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html",
+];
+const JAVA_EXCEPTION_REFS: &[&str] = &[
+    "https://dev.java/learn/",
+    "https://docs.oracle.com/javase/tutorial/essential/exceptions/",
+    "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
+    "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
+];
+const JAVA_STREAM_REFS: &[&str] = &[
+    "https://dev.java/learn/",
+    "https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html",
+    "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html",
 ];
 const EMPTY_HELLO: &[SyntaxCase] = &[SyntaxCase {
     input: "",
     output: "ok\n",
-}];
-const ECHO_CASE: &[SyntaxCase] = &[SyntaxCase {
-    input: "code\n",
-    output: "code\n",
 }];
 const SUM_CASE: &[SyntaxCase] = &[SyntaxCase {
     input: "2 3\n",
@@ -957,133 +982,1249 @@ const JAVA_LESSONS: &[SyntaxLesson] = &[
         "java-output",
         "java",
         "basic",
-        "Output",
-        "System.out.println writes a line.",
-        "System.out.println(\"ok\");",
-        "class Solution { public static void main(String[] args) { /* TODO: print the expected line */ } }\n",
-        EMPTY_HELLO,
-        JAVA_REFS
+        "Stdout",
+        "System.out.print writes text as-is, while System.out.println appends a line break that judges usually compare exactly.",
+        r#"class Solution {
+    public static void main(String[] args) {
+        int score = 7;
+        System.out.println("score=" + score);
+    }
+}
+"#,
+        r#"class Solution {
+    public static void main(String[] args) {
+        int score = 7;
+        // TODO: print exactly score=7 with one trailing newline.
+        System.out.println("TODO");
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "score=7\n",
+        }],
+        JAVA_CORE_REFS
     ),
     lesson!(
-        "java-variables",
+        "java-variables-types",
         "java",
         "basic",
-        "Variables",
-        "Java variables have declared types.",
-        "String word = \"ok\";",
-        "class Solution { public static void main(String[] args) { String word = \"\"; /* TODO: assign the expected word */ System.out.println(word); } }\n",
-        EMPTY_HELLO,
-        JAVA_REFS
+        "Variables and types",
+        "Local variables have declared types; primitives hold values directly and references point at objects such as String.",
+        r#"class Solution {
+    public static void main(String[] args) {
+        String name = "Ada";
+        int score = 7;
+        boolean passed = score >= 5;
+        System.out.println(name + ":" + score + ":" + passed);
+    }
+}
+"#,
+        r#"class Solution {
+    public static void main(String[] args) {
+        String name = "Ada";
+        int score = 0;
+        boolean passed = false;
+        // TODO: update the typed values so the report matches the expected output.
+        System.out.println(name + ":" + score + ":" + passed);
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "Ada:7:true\n",
+        }],
+        JAVA_LANGUAGE_REFS
+    ),
+    lesson!(
+        "java-numbers-operators",
+        "java",
+        "basic",
+        "Numbers and operators",
+        "Integer division, remainder, casts, and numeric promotion decide the value before it ever reaches stdout.",
+        r#"class Solution {
+    public static void main(String[] args) {
+        int total = 17;
+        int size = 5;
+        System.out.println((total / size) + ":" + (total % size));
+    }
+}
+"#,
+        r#"class Solution {
+    public static void main(String[] args) {
+        int total = 17;
+        int size = 5;
+        // TODO: use integer division and remainder so the output is 3:2.
+        System.out.println((total / 2) + ":" + (total - size));
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "3:2\n",
+        }],
+        JAVA_LANGUAGE_REFS
     ),
     lesson!(
         "java-strings",
         "java",
         "basic",
         "Strings",
-        "String methods expose length, chars, and substrings.",
-        "\"code\".substring(0, 2)",
-        "class Solution { public static void main(String[] args) { String text = \"xokx\"; /* TODO: print the middle text */ System.out.println(text); } }\n",
+        "String is immutable; methods such as trim, substring, charAt, and equals return or compare values without changing the original.",
+        r#"class Solution {
+    public static void main(String[] args) {
+        String raw = "  ok!  ";
+        String cleaned = raw.trim().substring(0, 2);
+        System.out.println(cleaned);
+    }
+}
+"#,
+        r#"class Solution {
+    public static void main(String[] args) {
+        String raw = "  ok!  ";
+        // TODO: trim the text and keep only ok.
+        String cleaned = raw.substring(0, 2);
+        System.out.println(cleaned);
+    }
+}
+"#,
         EMPTY_HELLO,
-        JAVA_REFS
+        JAVA_LANGUAGE_REFS
     ),
     lesson!(
         "java-control-flow",
         "java",
         "basic",
         "Control flow",
-        "if, for, and while control execution.",
-        "for (int i = 0; i < 3; i++) {}",
-        "class Solution { public static void main(String[] args) { boolean ready = false; /* TODO: print the expected word only when ready is true */ if (ready) System.out.println(\"ok\"); } }\n",
-        EMPTY_HELLO,
-        JAVA_REFS
+        "if selects a branch, loops repeat work, and each block must move the same typed values toward the final answer.",
+        r#"class Solution {
+    public static void main(String[] args) {
+        int total = 0;
+        for (int n = 1; n <= 3; n++) {
+            if (n % 2 == 1) {
+                total += n;
+            }
+        }
+        System.out.println(total);
+    }
+}
+"#,
+        r#"class Solution {
+    public static void main(String[] args) {
+        int total = 0;
+        for (int n = 1; n <= 3; n++) {
+            // TODO: add only odd numbers.
+            total += n;
+        }
+        System.out.println(total);
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "4\n",
+        }],
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/flow.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
+        ]
     ),
     lesson!(
         "java-methods",
         "java",
         "basic",
         "Methods",
-        "Methods group reusable behavior.",
-        "static int add(int a, int b) { return a + b; }",
-        "class Solution { static String word() { /* TODO: return the expected word */ return \"\"; } public static void main(String[] args) { System.out.println(word()); } }\n",
-        EMPTY_HELLO,
-        JAVA_REFS
+        "A method signature declares parameter types and a return type; return sends the computed value back to the caller.",
+        r#"class Solution {
+    static int area(int width, int height) {
+        return width * height;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(area(3, 4));
+    }
+}
+"#,
+        r#"class Solution {
+    static int area(int width, int height) {
+        // TODO: return rectangle area, not perimeter.
+        return width + height;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(area(3, 4));
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "12\n",
+        }],
+        JAVA_LANGUAGE_REFS
     ),
     lesson!(
         "java-input",
         "java",
         "intermediate",
         "Input parsing",
-        "System.in can be read directly for exercises.",
-        "String input = new String(System.in.readAllBytes());",
-        "import java.io.*;\nclass Solution { public static void main(String[] args) throws Exception { String input = new String(System.in.readAllBytes()); /* TODO: write input back unchanged */ } }\n",
-        ECHO_CASE,
-        JAVA_REFS
+        "Coding-test Java usually reads System.in once, splits whitespace, then converts tokens before doing numeric work.",
+        r#"import java.io.IOException;
+
+class Solution {
+    public static void main(String[] args) throws IOException {
+        String input = new String(System.in.readAllBytes());
+        int sum = 0;
+        for (String token : input.trim().split("\\s+")) {
+            if (!token.isEmpty()) {
+                sum += Integer.parseInt(token);
+            }
+        }
+        System.out.println(sum);
+    }
+}
+"#,
+        r#"import java.io.IOException;
+
+class Solution {
+    public static void main(String[] args) throws IOException {
+        String input = new String(System.in.readAllBytes());
+        int sum = 0;
+        // TODO: split input into tokens and add every parsed integer.
+        if (input.isEmpty()) {
+            sum = 0;
+        }
+        System.out.println(sum);
+    }
+}
+"#,
+        SUM_CASE,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/System.html#in",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Scanner.html",
+        ]
     ),
     lesson!(
         "java-arrays-collections",
         "java",
         "intermediate",
         "Arrays and collections",
-        "Arrays are fixed size; collections add flexible containers.",
-        "int[] nums = {1, 2};",
-        "class Solution { public static void main(String[] args) { int[] nums = {2, 3}; /* TODO: print the sum without hard-coding 5 */ System.out.println(nums.length); } }\n",
+        "Arrays keep a fixed length, while List, Map, and Set cover growable order, keyed lookup, and uniqueness.",
+        r#"import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+class Solution {
+    public static void main(String[] args) {
+        int[] nums = {2, 3};
+        List<Integer> list = new ArrayList<>();
+        Map<String, Integer> totals = new HashMap<>();
+        Set<Integer> seen = new HashSet<>();
+        for (int n : nums) {
+            list.add(n);
+            totals.merge("sum", n, Integer::sum);
+            seen.add(n);
+        }
+        System.out.println(totals.get("sum") + ":" + list.size() + ":" + seen.size());
+    }
+}
+"#,
+        r#"import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+class Solution {
+    public static void main(String[] args) {
+        int[] nums = {2, 3};
+        List<Integer> list = new ArrayList<>();
+        Map<String, Integer> totals = new HashMap<>();
+        Set<Integer> seen = new HashSet<>();
+        for (int n : nums) {
+            list.add(n);
+            // TODO: update both the Map total and Set of seen values.
+        }
+        System.out.println(nums.length + ":" + list.size() + ":" + seen.size());
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "5:2:2\n",
+        }],
+        JAVA_COLLECTION_REFS
+    ),
+    lesson!(
+        "java-classes-objects",
+        "java",
+        "basic",
+        "Classes and objects",
+        "A class defines fields and behavior; new creates an object whose instance methods read or change that state.",
+        r#"class Counter {
+    int value = 3;
+
+    int add(int delta) {
+        value += delta;
+        return value;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+        System.out.println(counter.add(2));
+    }
+}
+"#,
+        r#"class Counter {
+    int value = 3;
+
+    int add(int delta) {
+        // TODO: change this object's state by delta before returning it.
+        return value;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+        System.out.println(counter.add(2));
+    }
+}
+"#,
         SUM_CASE,
-        JAVA_REFS
+        JAVA_CLASS_REFS
+    ),
+    lesson!(
+        "java-constructors",
+        "java",
+        "basic",
+        "Constructors",
+        "A constructor initializes each new object before methods run; overloaded constructors provide different entry points.",
+        r#"class Rectangle {
+    private final int width;
+    private final int height;
+
+    Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    int area() {
+        return width * height;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        System.out.println(new Rectangle(3, 4).area());
+    }
+}
+"#,
+        r#"class Rectangle {
+    private final int width;
+    private final int height;
+
+    Rectangle(int width, int height) {
+        this.width = width;
+        // TODO: store the height parameter in the field.
+        this.height = 0;
+    }
+
+    int area() {
+        return width * height;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        System.out.println(new Rectangle(3, 4).area());
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "12\n",
+        }],
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/javaOO/constructors.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        ]
+    ),
+    lesson!(
+        "java-encapsulation",
+        "java",
+        "basic",
+        "Encapsulation",
+        "private fields protect representation; public methods expose the operations callers are allowed to perform.",
+        r#"class Score {
+    private int points;
+
+    void add(int delta) {
+        if (delta > 0) {
+            points += delta;
+        }
+    }
+
+    int points() {
+        return points;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Score score = new Score();
+        score.add(5);
+        System.out.println(score.points());
+    }
+}
+"#,
+        r#"class Score {
+    private int points;
+
+    void add(int delta) {
+        if (delta > 0) {
+            // TODO: update the private field through this method.
+        }
+    }
+
+    int points() {
+        return points;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Score score = new Score();
+        score.add(5);
+        System.out.println(score.points());
+    }
+}
+"#,
+        SUM_CASE,
+        JAVA_CLASS_REFS
+    ),
+    lesson!(
+        "java-static-members",
+        "java",
+        "basic",
+        "Static members",
+        "static fields and methods belong to the class, not one object, so they are shared through the class name.",
+        r#"class Scale {
+    static final int FACTOR = 3;
+
+    static int apply(int value) {
+        return value * FACTOR;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        System.out.println(Scale.apply(2));
+    }
+}
+"#,
+        r#"class Scale {
+    static final int FACTOR = 3;
+
+    static int apply(int value) {
+        // TODO: use the shared FACTOR constant.
+        return value;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        System.out.println(Scale.apply(2));
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "6\n",
+        }],
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/javaOO/classvars.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        ]
+    ),
+    lesson!(
+        "java-enum-switch",
+        "java",
+        "intermediate",
+        "Enum and switch",
+        "enum names a fixed set of constants, and switch expressions turn those constants into explicit result branches.",
+        r#"enum Status {
+    TODO, DONE
+}
+
+class Solution {
+    static String label(Status status) {
+        return switch (status) {
+            case TODO -> "work";
+            case DONE -> "ok";
+        };
+    }
+
+    public static void main(String[] args) {
+        System.out.println(label(Status.DONE));
+    }
+}
+"#,
+        r#"enum Status {
+    TODO, DONE
+}
+
+class Solution {
+    static String label(Status status) {
+        return switch (status) {
+            case TODO -> "work";
+            // TODO: return ok for the DONE branch.
+            case DONE -> "done";
+        };
+    }
+
+    public static void main(String[] args) {
+        System.out.println(label(Status.DONE));
+    }
+}
+"#,
+        EMPTY_HELLO,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
+        ]
     ),
     lesson!(
         "java-exceptions",
         "java",
         "intermediate",
         "Exceptions",
-        "try/catch handles failures; checked exceptions are part of signatures.",
-        "try { throw new RuntimeException(); } catch (RuntimeException e) {}",
-        "class Solution { public static void main(String[] args) { try { throw new RuntimeException(); } catch (RuntimeException e) { /* TODO: print the expected word */ } } }\n",
-        EMPTY_HELLO,
-        JAVA_REFS
-    ),
-    lesson!(
-        "java-classes-interfaces",
-        "java",
-        "advanced",
-        "Classes and interfaces",
-        "Classes hold state and behavior; interfaces describe behavior.",
-        "interface Named { String name(); }",
-        "interface Named { String name(); }\nclass Solution implements Named { public String name() { /* TODO: return the expected word */ return \"\"; } public static void main(String[] args) { System.out.println(new Solution().name()); } }\n",
-        EMPTY_HELLO,
-        JAVA_REFS
+        "try/catch handles recoverable failures; checked exceptions must be caught or declared in a method signature.",
+        r#"class Solution {
+    static int parseOrDefault(String text) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException error) {
+            return 12;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parseOrDefault("bad"));
+    }
+}
+"#,
+        r#"class Solution {
+    static int parseOrDefault(String text) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException error) {
+            // TODO: recover with the expected fallback value.
+            return 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parseOrDefault("bad"));
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "12\n",
+        }],
+        JAVA_EXCEPTION_REFS
     ),
     lesson!(
         "java-generics",
         "java",
-        "advanced",
+        "intermediate",
         "Generics",
-        "Generics reuse code with type parameters.",
-        "class Box<T> { T value; }",
-        "class Box<T> { T value; Box(T value) { this.value = value; } }\nclass Solution { public static void main(String[] args) { /* TODO: put the expected word inside the box */ System.out.println(new Box<String>(\"\").value); } }\n",
+        "Generics let one class or method preserve the caller's element type instead of falling back to Object casts.",
+        r#"import java.util.List;
+
+class Solution {
+    static <T> T last(List<T> items) {
+        return items.get(items.size() - 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(last(List.of("skip", "ok")));
+    }
+}
+"#,
+        r#"import java.util.List;
+
+class Solution {
+    static <T> T last(List<T> items) {
+        // TODO: return the last element while preserving T.
+        return items.get(0);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(last(List.of("skip", "ok")));
+    }
+}
+"#,
         EMPTY_HELLO,
-        &["https://dev.java/learn/generics/"]
+        &[
+            "https://dev.java/learn/generics/",
+            "https://docs.oracle.com/javase/tutorial/java/generics/index.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        ]
     ),
     lesson!(
-        "java-lambda-streams",
+        "java-interfaces",
         "java",
-        "advanced",
-        "Lambda and streams",
-        "Lambdas pass behavior; streams process sequences.",
-        "list.stream().map(x -> x + 1)",
-        "import java.util.*;\nclass Solution { public static void main(String[] args) { List<String> xs = List.of(\"\"); /* TODO: stream the expected word */ xs.stream().forEach(System.out::println); } }\n",
+        "intermediate",
+        "Interfaces",
+        "An interface names behavior a class promises to implement; callers can depend on that contract instead of the concrete class.",
+        r#"interface Named {
+    String name();
+}
+
+class User implements Named {
+    public String name() {
+        return "ok";
+    }
+}
+
+class Solution {
+    static String describe(Named named) {
+        return named.name();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(describe(new User()));
+    }
+}
+"#,
+        r#"interface Named {
+    String name();
+}
+
+class User implements Named {
+    public String name() {
+        // TODO: satisfy the interface with the expected name.
+        return "";
+    }
+}
+
+class Solution {
+    static String describe(Named named) {
+        return named.name();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(describe(new User()));
+    }
+}
+"#,
         EMPTY_HELLO,
-        &["https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html"]
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
+        ]
     ),
     lesson!(
-        "java-records-sealed",
+        "java-inheritance-composition",
+        "java",
+        "intermediate",
+        "Inheritance and composition",
+        "Inheritance reuses an is-a relationship; composition keeps a helper object as a field when behavior is only a has-a dependency.",
+        r#"class Bonus {
+    int apply(int base) {
+        return base + 2;
+    }
+}
+
+class User {
+    int baseScore() {
+        return 3;
+    }
+}
+
+class PremiumUser extends User {
+    private final Bonus bonus = new Bonus();
+
+    int score() {
+        return bonus.apply(baseScore());
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        System.out.println(new PremiumUser().score());
+    }
+}
+"#,
+        r#"class Bonus {
+    int apply(int base) {
+        return base + 2;
+    }
+}
+
+class User {
+    int baseScore() {
+        return 3;
+    }
+}
+
+class PremiumUser extends User {
+    private final Bonus bonus = new Bonus();
+
+    int score() {
+        // TODO: compose Bonus with the inherited baseScore.
+        return baseScore();
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        System.out.println(new PremiumUser().score());
+    }
+}
+"#,
+        SUM_CASE,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        ]
+    ),
+    lesson!(
+        "java-records",
         "java",
         "advanced",
-        "Records and sealed types",
-        "Records reduce data boilerplate; sealed types bound inheritance.",
-        "record Pair(int a, int b) {}",
-        "record Word(String value) {}\nclass Solution { public static void main(String[] args) { /* TODO: store the expected word in the record */ System.out.println(new Word(\"\").value()); } }\n",
+        "Records",
+        "A record declares an immutable data carrier and gives you a constructor, accessors, equals, hashCode, and toString.",
+        r#"record Point(int x, int y) {
+    int sum() {
+        return x + y;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Point point = new Point(2, 3);
+        System.out.println(point.sum());
+    }
+}
+"#,
+        r#"record Point(int x, int y) {
+    int sum() {
+        // TODO: use both generated accessors.
+        return x();
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Point point = new Point(2, 3);
+        System.out.println(point.sum());
+    }
+}
+"#,
+        SUM_CASE,
+        &[
+            "https://dev.java/learn/records/",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+        ]
+    ),
+    lesson!(
+        "java-optional",
+        "java",
+        "intermediate",
+        "Optional",
+        "Optional<T> makes a maybe-present value explicit and asks the caller to map, filter, or provide a fallback.",
+        r#"import java.util.Optional;
+
+class Solution {
+    public static void main(String[] args) {
+        Optional<String> value = Optional.of("ok");
+        String label = value.filter(text -> text.length() == 2).orElse("missing");
+        System.out.println(label);
+    }
+}
+"#,
+        r#"import java.util.Optional;
+
+class Solution {
+    public static void main(String[] args) {
+        Optional<String> value = Optional.empty();
+        // TODO: keep ok present and filter it before the fallback.
+        String label = value.filter(text -> text.length() == 2).orElse("missing");
+        System.out.println(label);
+    }
+}
+"#,
         EMPTY_HELLO,
-        JAVA_REFS
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
+        ]
+    ),
+    lesson!(
+        "java-streams-lambdas",
+        "java",
+        "advanced",
+        "Streams and lambdas",
+        "A lambda supplies behavior to a pipeline, and a stream processes elements only when a terminal operation consumes it.",
+        r#"import java.util.List;
+
+class Solution {
+    public static void main(String[] args) {
+        int total = List.of(1, 2, 3, 4).stream()
+            .filter(n -> n % 2 == 0)
+            .mapToInt(n -> n * n)
+            .sum();
+        System.out.println(total);
+    }
+}
+"#,
+        r#"import java.util.List;
+
+class Solution {
+    public static void main(String[] args) {
+        // TODO: square only the even numbers before summing.
+        int total = List.of(1, 2, 3, 4).stream()
+            .mapToInt(n -> n)
+            .sum();
+        System.out.println(total);
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "20\n",
+        }],
+        JAVA_STREAM_REFS
+    ),
+    lesson!(
+        "java-comparators-sorting",
+        "java",
+        "intermediate",
+        "Comparators and sorting",
+        "Comparator objects define ordering for sorted collections and list sorting without changing the stored type.",
+        r#"import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+record User(String name, int score) {}
+
+class Solution {
+    public static void main(String[] args) {
+        List<User> users = new ArrayList<>(List.of(
+            new User("Ada", 3),
+            new User("Lin", 5),
+            new User("Bo", 4)
+        ));
+        users.sort(Comparator.comparingInt(User::score).reversed());
+        User best = users.get(0);
+        System.out.println(best.name() + ":" + best.score());
+    }
+}
+"#,
+        r#"import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+record User(String name, int score) {}
+
+class Solution {
+    public static void main(String[] args) {
+        List<User> users = new ArrayList<>(List.of(
+            new User("Ada", 3),
+            new User("Lin", 5),
+            new User("Bo", 4)
+        ));
+        // TODO: sort by score descending, not by name.
+        users.sort(Comparator.comparing(User::name));
+        User best = users.get(0);
+        System.out.println(best.name() + ":" + best.score());
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "Lin:5\n",
+        }],
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Comparator.html",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html",
+        ]
+    ),
+    lesson!(
+        "java-try-with-resources",
+        "java",
+        "intermediate",
+        "Try-with-resources",
+        "try-with-resources closes AutoCloseable values automatically after the block, even when reading or parsing fails.",
+        r#"import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+class Solution {
+    public static void main(String[] args) throws IOException {
+        try (ByteArrayInputStream in = new ByteArrayInputStream("ok".getBytes(StandardCharsets.UTF_8))) {
+            System.out.println(new String(in.readAllBytes(), StandardCharsets.UTF_8));
+        }
+    }
+}
+"#,
+        r#"import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+class Solution {
+    public static void main(String[] args) throws IOException {
+        try (ByteArrayInputStream in = new ByteArrayInputStream("todo".getBytes(StandardCharsets.UTF_8))) {
+            // TODO: read ok from the managed resource.
+            System.out.println(new String(in.readAllBytes(), StandardCharsets.UTF_8));
+        }
+    }
+}
+"#,
+        EMPTY_HELLO,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AutoCloseable.html",
+        ]
+    ),
+    lesson!(
+        "java-packages-imports",
+        "java",
+        "basic",
+        "Packages and imports",
+        "A package names a namespace across files; in this single-file judge, imports are the practical way to use packaged JDK classes.",
+        r#"import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public static void main(String[] args) {
+        List<String> words = new ArrayList<>();
+        words.add("o");
+        words.add("k");
+        System.out.println(String.join("", words));
+    }
+}
+"#,
+        r#"import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public static void main(String[] args) {
+        List<String> words = new ArrayList<>();
+        words.add("o");
+        // TODO: add the second letter using the imported List implementation.
+        System.out.println(String.join("", words));
+    }
+}
+"#,
+        EMPTY_HELLO,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/package/index.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html",
+        ]
+    ),
+    lesson!(
+        "java-annotations",
+        "java",
+        "advanced",
+        "Annotations",
+        "Annotations attach metadata to declarations; tools and frameworks can read them without changing normal method execution.",
+        r#"@interface Audit {
+    String value();
+}
+
+class Solution {
+    @Audit("stdout")
+    static String label() {
+        return "ok";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(label());
+    }
+}
+"#,
+        r#"@interface Audit {
+    String value();
+}
+
+class Solution {
+    @Audit("stdout")
+    static String label() {
+        // TODO: keep the annotated method behavior correct.
+        return "";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(label());
+    }
+}
+"#,
+        EMPTY_HELLO,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/tutorial/java/annotations/index.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
+        ]
+    ),
+    lesson!(
+        "java-sealed-classes",
+        "java",
+        "advanced",
+        "Sealed classes",
+        "sealed restricts which classes or records may implement a hierarchy, making closed domain alternatives visible to readers.",
+        r#"sealed interface Shape permits Rect, Dot {
+    int measure();
+}
+
+record Rect(int width, int height) implements Shape {
+    public int measure() {
+        return width * height;
+    }
+}
+
+record Dot() implements Shape {
+    public int measure() {
+        return 0;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Shape shape = new Rect(3, 4);
+        System.out.println(shape.measure());
+    }
+}
+"#,
+        r#"sealed interface Shape permits Rect, Dot {
+    int measure();
+}
+
+record Rect(int width, int height) implements Shape {
+    public int measure() {
+        // TODO: compute rectangle area inside the permitted record.
+        return width + height;
+    }
+}
+
+record Dot() implements Shape {
+    public int measure() {
+        return 0;
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Shape shape = new Rect(3, 4);
+        System.out.println(shape.measure());
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "12\n",
+        }],
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
+        ]
+    ),
+    lesson!(
+        "java-testing-assert",
+        "java",
+        "intermediate",
+        "Testing and assert",
+        "Small testable methods let assertions check behavior before main prints; AssertionError is the simplest failure signal.",
+        r#"class Solution {
+    static int addTwo(int value) {
+        return value + 2;
+    }
+
+    static void check() {
+        if (addTwo(3) != 5) {
+            throw new AssertionError("addTwo should add 2");
+        }
+    }
+
+    public static void main(String[] args) {
+        check();
+        System.out.println(addTwo(3));
+    }
+}
+"#,
+        r#"class Solution {
+    static int addTwo(int value) {
+        // TODO: make the method satisfy the assertion and expected output.
+        return value;
+    }
+
+    static void check() {
+        if (addTwo(3) != 3) {
+            throw new AssertionError("current starter expectation");
+        }
+    }
+
+    public static void main(String[] args) {
+        check();
+        System.out.println(addTwo(3));
+    }
+}
+"#,
+        SUM_CASE,
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AssertionError.html",
+            "https://docs.oracle.com/javase/tutorial/essential/exceptions/",
+        ]
+    ),
+    lesson!(
+        "java-equality-hashcode",
+        "java",
+        "advanced",
+        "equals and hashCode",
+        "Hash-based collections rely on equals and hashCode agreeing about which objects represent the same value.",
+        r#"import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+class Point {
+    private final int x;
+    private final int y;
+
+    Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public boolean equals(Object other) {
+        if (!(other instanceof Point point)) {
+            return false;
+        }
+        return x == point.x && y == point.y;
+    }
+
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Set<Point> points = new HashSet<>();
+        points.add(new Point(2, 3));
+        points.add(new Point(2, 3));
+        System.out.println(points.size());
+    }
+}
+"#,
+        r#"import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+class Point {
+    private final int x;
+    private final int y;
+
+    Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public boolean equals(Object other) {
+        // TODO: compare Point values by fields, not object identity.
+        return this == other;
+    }
+
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+}
+
+class Solution {
+    public static void main(String[] args) {
+        Set<Point> points = new HashSet<>();
+        points.add(new Point(2, 3));
+        points.add(new Point(2, 3));
+        System.out.println(points.size());
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "1\n",
+        }],
+        JAVA_COLLECTION_REFS
+    ),
+    lesson!(
+        "java-overloading-varargs",
+        "java",
+        "advanced",
+        "Overloading and varargs",
+        "Overloading chooses a method by argument types, while varargs gathers remaining arguments into an array parameter.",
+        r#"class Solution {
+    static int total(int first, int... rest) {
+        int sum = first;
+        for (int value : rest) {
+            sum += value;
+        }
+        return sum;
+    }
+
+    static String label(String name, int score) {
+        return name + ":" + score;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(label("Ada", total(2, 3)));
+    }
+}
+"#,
+        r#"class Solution {
+    static int total(int first, int... rest) {
+        int sum = first;
+        for (int value : rest) {
+            // TODO: include every varargs value.
+        }
+        return sum;
+    }
+
+    static String label(String name, int score) {
+        return name + ":" + score;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(label("Ada", total(2, 3)));
+    }
+}
+"#,
+        &[SyntaxCase {
+            input: "",
+            output: "Ada:5\n",
+        }],
+        &[
+            "https://dev.java/learn/",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
+            "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html",
+        ]
     ),
 ];
 

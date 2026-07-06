@@ -2,6 +2,9 @@ use super::*;
 
 impl PracticodeApp {
     pub(super) fn load_code_editor(&mut self) -> Result<()> {
+        if self.mode == AppMode::Learn {
+            return self.load_syntax_editor();
+        }
         let path = ensure_submission(&self.root, &self.problem, &self.state.settings)?;
         let text = fs::read_to_string(path).unwrap_or_default();
         self.editor.set_text(&text);
@@ -9,12 +12,31 @@ impl PracticodeApp {
     }
 
     pub(super) fn save_code(&self) -> Result<()> {
+        if self.mode == AppMode::Learn {
+            return self.save_syntax_code();
+        }
         let path = ensure_submission(&self.root, &self.problem, &self.state.settings)?;
         fs::write(path, self.editor.text())?;
         Ok(())
     }
 
+    pub(super) fn load_syntax_editor(&mut self) -> Result<()> {
+        let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
+        let path = ensure_syntax_submission(&self.root, lesson)?;
+        let text = fs::read_to_string(path).unwrap_or_default();
+        self.editor.set_text(&text);
+        Ok(())
+    }
+
+    pub(super) fn save_syntax_code(&self) -> Result<()> {
+        let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
+        let path = ensure_syntax_submission(&self.root, lesson)?;
+        fs::write(path, self.editor.text())?;
+        Ok(())
+    }
+
     pub(super) fn start_problem_list(&mut self) {
+        self.mode = AppMode::Problems;
         self.list_cursor = Some(self.current_problem_index());
         self.write_text_output(&self.render_problem_list());
     }

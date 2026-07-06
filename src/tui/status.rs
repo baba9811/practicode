@@ -2,6 +2,17 @@ use super::*;
 
 impl PracticodeApp {
     pub(super) fn status_text(&self) -> String {
+        if self.mode == AppMode::Learn {
+            let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
+            let (done, total) = syntax_progress_count(&self.state, &self.state.settings.language);
+            return format!(
+                " PRACTICODE | learn | {} | {} | {done}/{total} | code:{} | {} ",
+                syntax_language_name(&self.state.settings.language),
+                lesson.id,
+                self.state.settings.language,
+                self.mode_hint(),
+            );
+        }
         let code_status = self.submission_status(&self.problem).0;
         let activity = if self.busy_label.is_empty() {
             "idle".to_string()
@@ -77,6 +88,9 @@ impl PracticodeApp {
         }
         if self.editing_notes {
             return "notes: type to edit, Esc profile";
+        }
+        if self.mode == AppMode::Learn && self.focus == Focus::Code {
+            return "learn: edit drill | /drill validate | /problems";
         }
         match (self.focus, self.list_cursor.is_some(), self.show_output) {
             (Focus::Command, _, _) => ui_text(lang, "hint_command"),

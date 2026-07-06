@@ -11,6 +11,9 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_run(&mut self) -> Result<()> {
+        if self.mode == AppMode::Learn {
+            return self.action_drill();
+        }
         self.save_code()?;
         let result = judge(&self.root, &self.problem, &self.state.settings);
         if result.passed {
@@ -165,6 +168,84 @@ impl PracticodeApp {
         Ok(())
     }
 
+    pub(super) fn action_learn(&mut self, language: &str) -> Result<()> {
+        let language = language.trim();
+        if !language.is_empty() && !LANGUAGES.contains(&language) {
+            self.write_text_output("Usage: /learn or /learn python|ts|java|rust");
+            return Ok(());
+        }
+        if !language.is_empty() {
+            self.state.settings.language = language.to_string();
+        }
+        self.mode = AppMode::Learn;
+        let language = self.state.settings.language.clone();
+        let lesson = current_syntax_lesson(&self.state, &language);
+        set_current_syntax_lesson(&mut self.state, &language, lesson.id);
+        save_state(&self.root, &self.state)?;
+        self.load_syntax_editor()?;
+        self.show_current_syntax_lesson();
+        Ok(())
+    }
+
+    pub(super) fn action_drill(&mut self) -> Result<()> {
+        if self.mode != AppMode::Learn {
+            self.action_learn("")?;
+        }
+        self.save_syntax_code()?;
+        let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
+        let path = ensure_syntax_submission(&self.root, lesson)?;
+        let cases = syntax_cases(lesson);
+        let result = judge_path(
+            &self.root,
+            &format!(".syntax-{}-{}", lesson.language, lesson.id),
+            &path,
+            lesson.language,
+            &cases,
+        );
+        if result.passed {
+            record_syntax_pass(&mut self.state, lesson.language, lesson.id);
+            save_state(&self.root, &self.state)?;
+        }
+        let headline = format!(
+            "{} {}/{}",
+            if result.passed { "PASS" } else { "FAIL" },
+            result.passed_cases,
+            result.total_cases
+        );
+        self.write_text_output(&format!("{headline}\n{}", result.output));
+        Ok(())
+    }
+
+    pub(super) fn action_next_lesson(&mut self) -> Result<()> {
+        self.mode = AppMode::Learn;
+        let language = self.state.settings.language.clone();
+        next_syntax_lesson(&mut self.state, &language, 1);
+        save_state(&self.root, &self.state)?;
+        self.load_syntax_editor()?;
+        self.show_current_syntax_lesson();
+        Ok(())
+    }
+
+    pub(super) fn action_prev_lesson(&mut self) -> Result<()> {
+        self.mode = AppMode::Learn;
+        let language = self.state.settings.language.clone();
+        next_syntax_lesson(&mut self.state, &language, -1);
+        save_state(&self.root, &self.state)?;
+        self.load_syntax_editor()?;
+        self.show_current_syntax_lesson();
+        Ok(())
+    }
+
+    pub(super) fn show_current_syntax_lesson(&mut self) {
+        let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
+        self.output = render_syntax_lesson(lesson, &self.state);
+        self.output_is_markdown = true;
+        self.show_output = false;
+        self.settings_cursor = None;
+        self.list_cursor = None;
+        self.focus = Focus::Code;
+    }
+
     pub(super) fn action_cycle_language(&mut self) -> Result<()> {
         let current = LANGUAGES
             .iter()
@@ -194,7 +275,11 @@ impl PracticodeApp {
         save_state(&self.root, &self.state)?;
         self.load_code_editor()?;
         self.settings_cursor = None;
-        self.show_output = false;
+        if self.mode == AppMode::Learn {
+            self.show_current_syntax_lesson();
+        } else {
+            self.show_output = false;
+        }
         self.focus = Focus::Code;
         Ok(())
     }

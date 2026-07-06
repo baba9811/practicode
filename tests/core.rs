@@ -5,7 +5,8 @@ use practicode::{
     core::{
         AppState, HistoryItem, Settings, ensure_submission, judge, load_bank, load_state,
         localized, next_problem, parse_language_list, parse_ui_language_list, problem_by_id,
-        record_pass, render_problem, render_problem_tui, save_bank, save_state,
+        record_pass, render_problem, render_problem_tui, save_bank, save_state, syntax_lessons_for,
+        syntax_progress_count,
     },
     process::which,
     text::render_markdown_plain,
@@ -145,6 +146,8 @@ fn save_state_writes_ai_settings_without_deprecated_empty_field() {
         solved: Vec::new(),
         history: Vec::new(),
         suggested_next_difficulty: "easy".to_string(),
+        syntax_progress: Default::default(),
+        current_syntax_lesson: Default::default(),
     };
     save_state(&root, &state).unwrap();
     let saved = fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
@@ -172,6 +175,33 @@ fn load_state_normalizes_ai_effort_by_provider() {
     .unwrap();
     let state = load_state(&root, &bank).unwrap();
     assert_eq!(state.settings.ai_effort, "xhigh");
+}
+
+#[test]
+fn load_state_normalizes_syntax_progress_for_learn_mode() {
+    let root = tmp_root("state-syntax-progress");
+    let bank = load_bank(&root).unwrap();
+    fs::create_dir_all(root.join(".practicode")).unwrap();
+    fs::write(
+        root.join(".practicode/problem-state.json"),
+        r#"{
+  "current_problem": "001-hello-world",
+  "syntax_progress": {
+    "python": ["py-variables", "unknown", "py-variables"],
+    "ruby": ["variables"]
+  },
+  "current_syntax_lesson": {
+    "python": "py-functions",
+    "ruby": "variables"
+  }
+}"#,
+    )
+    .unwrap();
+    let state = load_state(&root, &bank).unwrap();
+    assert_eq!(state.syntax_progress["python"], vec!["py-variables"]);
+    assert_eq!(state.current_syntax_lesson["python"], "py-functions");
+    assert!(!state.syntax_progress.contains_key("ruby"));
+    assert!(!state.current_syntax_lesson.contains_key("ruby"));
 }
 
 #[test]
@@ -310,6 +340,8 @@ fn next_problem_skips_history_and_saves_new_current() {
             status: "solved".to_string(),
         }],
         suggested_next_difficulty: "easy".to_string(),
+        syntax_progress: Default::default(),
+        current_syntax_lesson: Default::default(),
     };
     save_state(&root, &state).unwrap();
     let problem = next_problem(&root, &bank, &mut state).unwrap().unwrap();
@@ -341,6 +373,8 @@ fn next_problem_prefers_profile_difficulty_when_fixed() {
             status: "solved".to_string(),
         }],
         suggested_next_difficulty: "easy".to_string(),
+        syntax_progress: Default::default(),
+        current_syntax_lesson: Default::default(),
     };
     let next = next_problem(&root, &bank, &mut state).unwrap().unwrap();
     assert_eq!(next.difficulty, "medium");
@@ -356,12 +390,56 @@ fn record_pass_marks_solved_and_raises_suggested_difficulty_after_two_solves() {
         solved: vec!["000-warmup".to_string()],
         history: Vec::new(),
         suggested_next_difficulty: "easy".to_string(),
+        syntax_progress: Default::default(),
+        current_syntax_lesson: Default::default(),
     };
     record_pass(&root, &bank[0], &mut state).unwrap();
     let saved = load_state(&root, &bank).unwrap();
     assert!(saved.solved.contains(&"001-hello-world".to_string()));
     assert_eq!(saved.history[0].status, "solved");
     assert_eq!(saved.suggested_next_difficulty, "medium");
+    assert!(saved.syntax_progress.is_empty());
+}
+
+#[test]
+fn syntax_curriculum_covers_basic_to_advanced_for_every_supported_language() {
+    for language in ["python", "ts", "java", "rust"] {
+        let lessons = syntax_lessons_for(language);
+        assert!(
+            lessons.len() >= 12,
+            "{language} should have a real syntax course"
+        );
+        for level in ["basic", "intermediate", "advanced"] {
+            assert!(
+                lessons.iter().any(|lesson| lesson.level == level),
+                "{language} missing {level} syntax lessons"
+            );
+        }
+        assert_eq!(
+            lessons
+                .iter()
+                .filter(|lesson| lesson.drill.cases.is_empty())
+                .count(),
+            0
+        );
+    }
+}
+
+#[test]
+fn syntax_progress_count_is_separate_from_problem_progress() {
+    let root = tmp_root("syntax-progress-count");
+    let bank = load_bank(&root).unwrap();
+    let mut state = AppState {
+        current_problem: "001-hello-world".to_string(),
+        settings: Settings::default(),
+        solved: vec!["001-hello-world".to_string()],
+        history: Vec::new(),
+        suggested_next_difficulty: "easy".to_string(),
+        syntax_progress: Default::default(),
+        current_syntax_lesson: Default::default(),
+    };
+    record_pass(&root, &bank[0], &mut state).unwrap();
+    assert_eq!(syntax_progress_count(&state, "python").0, 0);
 }
 
 #[test]

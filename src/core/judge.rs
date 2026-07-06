@@ -35,38 +35,57 @@ pub fn judge(root: &Path, problem: &Problem, settings: &Settings) -> JudgeResult
         }
     };
     let language = normalize_language(&settings.language);
-    let command = match command_for(root, &path, &language) {
+    judge_path(root, &problem.id, &path, &language, &problem.cases)
+}
+
+pub fn judge_path(
+    root: &Path,
+    id: &str,
+    path: &Path,
+    language: &str,
+    cases: &[IoCase],
+) -> JudgeResult {
+    if cases.is_empty() {
+        return JudgeResult {
+            passed: false,
+            passed_cases: 0,
+            total_cases: 0,
+            output: "problem has no judge cases".to_string(),
+        };
+    }
+    let language = normalize_language(language);
+    let command = match command_for(root, path, &language) {
         Ok(Some(command)) => command,
         Ok(None) => {
             return JudgeResult {
                 passed: false,
                 passed_cases: 0,
-                total_cases: problem.cases.len(),
-                output: format!("Missing runtime for {}", settings.language),
+                total_cases: cases.len(),
+                output: format!("Missing runtime for {language}"),
             };
         }
         Err(error) => {
             return JudgeResult {
                 passed: false,
                 passed_cases: 0,
-                total_cases: problem.cases.len(),
+                total_cases: cases.len(),
                 output: format!("compile failed\n{error}"),
             };
         }
     };
-    let run_dir = root.join(".practicode/build").join(&problem.id).join("run");
+    let run_dir = root.join(".practicode/build").join(id).join("run");
     if let Err(error) = fs::create_dir_all(&run_dir) {
         return JudgeResult {
             passed: false,
             passed_cases: 0,
-            total_cases: problem.cases.len(),
+            total_cases: cases.len(),
             output: error.to_string(),
         };
     }
 
     let mut passed = 0;
     let mut lines = Vec::new();
-    for (index, case) in problem.cases.iter().enumerate() {
+    for (index, case) in cases.iter().enumerate() {
         let mut process = Command::new(&command.program);
         process.args(&command.args).current_dir(&run_dir);
         let run = match run_capture(&mut process, &case.input, Duration::from_secs(5)) {
@@ -101,9 +120,9 @@ pub fn judge(root: &Path, problem: &Problem, settings: &Settings) -> JudgeResult
     }
 
     JudgeResult {
-        passed: passed == problem.cases.len(),
+        passed: passed == cases.len(),
         passed_cases: passed,
-        total_cases: problem.cases.len(),
+        total_cases: cases.len(),
         output: lines.join("\n"),
     }
 }

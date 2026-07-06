@@ -6,11 +6,13 @@ use crate::{
     core::{
         AI_PROVIDERS, AppState, CLAUDE_AI_EFFORTS, CODEX_AI_EFFORTS, DIFFICULTIES, HistoryItem,
         LANGUAGES, PROBLEM_NOTES_PATH, Problem, STATE_PATH, THEMES, UI_LANGUAGES,
-        ensure_problem_files, ensure_submission, ext_for, give_up, judge, load_bank, load_state,
-        localized, next_problem, normalize_ai_effort, normalize_ai_provider, normalize_difficulty,
+        current_syntax_lesson, ensure_problem_files, ensure_submission, ensure_syntax_submission,
+        ext_for, give_up, judge, judge_path, load_bank, load_state, localized, next_problem,
+        next_syntax_lesson, normalize_ai_effort, normalize_ai_provider, normalize_difficulty,
         normalize_language, normalize_next_source, normalize_ui_language, parse_language_list,
         parse_topic_list, parse_ui_language_list, previous_problem, problem_by_id, record_pass,
-        save_state, template_for, ui_text,
+        record_syntax_pass, render_syntax_lesson, save_state, set_current_syntax_lesson,
+        syntax_cases, syntax_language_name, syntax_progress_count, template_for, ui_text,
     },
     text::{
         byte_index, char_len, compose_hangul_jamo, display_width, prefix, render_markdown_plain,
@@ -73,6 +75,12 @@ enum Focus {
     None,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum AppMode {
+    Problems,
+    Learn,
+}
+
 pub struct PracticodeApp {
     root: PathBuf,
     bank: Vec<Problem>,
@@ -89,6 +97,7 @@ pub struct PracticodeApp {
     editing_notes: bool,
     show_output: bool,
     focus: Focus,
+    mode: AppMode,
     list_cursor: Option<usize>,
     settings_cursor: Option<usize>,
     busy_label: String,
@@ -150,6 +159,7 @@ impl PracticodeApp {
             editing_notes: false,
             show_output: false,
             focus: Focus::Code,
+            mode: AppMode::Problems,
             list_cursor: None,
             settings_cursor: None,
             busy_label: String::new(),

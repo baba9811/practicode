@@ -35,6 +35,10 @@ impl PracticodeApp {
         match command {
             "run" | "r" => self.action_run()?,
             "code" | "edit" | "e" => self.action_edit()?,
+            "learn" => self.action_learn(arg)?,
+            "drill" => self.action_drill()?,
+            "next-lesson" => self.action_next_lesson()?,
+            "prev-lesson" => self.action_prev_lesson()?,
             "next" | "n" => self.action_next(arg)?,
             "generate" | "gen" | "new" => self.action_generate(arg),
             "back" | "prev" | "previous" | "p" => self.action_previous()?,

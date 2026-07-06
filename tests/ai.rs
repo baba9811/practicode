@@ -127,6 +127,8 @@ fn run_ai_next_exposes_request_provider_and_model_to_custom_command() {
         solved: Vec::new(),
         history: Vec::new(),
         suggested_next_difficulty: "easy".to_string(),
+        syntax_progress: Default::default(),
+        current_syntax_lesson: Default::default(),
     };
     let output = run_ai_next(&root, &state, false, "문자열 쉬운 문제");
     assert!(output.contains("finished"));

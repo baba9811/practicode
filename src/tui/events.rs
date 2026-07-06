@@ -181,8 +181,12 @@ impl PracticodeApp {
             return Ok(());
         }
         if key.code == KeyCode::Esc && self.show_output {
-            self.show_output = false;
-            self.focus = Focus::Code;
+            if self.mode == AppMode::Learn {
+                self.show_current_syntax_lesson();
+            } else {
+                self.show_output = false;
+                self.focus = Focus::Code;
+            }
             return Ok(());
         }
         self.handle_global_shortcut(key)

@@ -12,6 +12,8 @@ pub fn load_state(root: &Path, bank: &[Problem]) -> Result<AppState> {
                 status: "assigned".to_string(),
             }],
             suggested_next_difficulty: "easy".to_string(),
+            syntax_progress: HashMap::new(),
+            current_syntax_lesson: HashMap::new(),
         });
     }
 
@@ -25,6 +27,8 @@ pub fn load_state(root: &Path, bank: &[Problem]) -> Result<AppState> {
         state.current_problem = bank[0].id.clone();
     }
     normalize_settings(&mut state.settings);
+    state.syntax_progress = normalize_syntax_progress(&state.syntax_progress);
+    state.current_syntax_lesson = normalize_current_syntax_lessons(&state.current_syntax_lesson);
     if state.history.is_empty() {
         state.history.push(HistoryItem {
             id: state.current_problem.clone(),
@@ -43,6 +47,10 @@ pub fn save_state(root: &Path, state: &AppState) -> Result<()> {
         settings: &'a Settings,
         solved: &'a [String],
         history: &'a [HistoryItem],
+        #[serde(skip_serializing_if = "HashMap::is_empty")]
+        syntax_progress: &'a HashMap<String, Vec<String>>,
+        #[serde(skip_serializing_if = "HashMap::is_empty")]
+        current_syntax_lesson: &'a HashMap<String, String>,
     }
 
     let path = root.join(STATE_PATH);
@@ -56,6 +64,8 @@ pub fn save_state(root: &Path, state: &AppState) -> Result<()> {
         settings: &state.settings,
         solved: &state.solved,
         history: &state.history,
+        syntax_progress: &state.syntax_progress,
+        current_syntax_lesson: &state.current_syntax_lesson,
     };
     fs::write(path, serde_json::to_string_pretty(&file)? + "\n")?;
     Ok(())

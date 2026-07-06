@@ -72,13 +72,6 @@ pub(super) const COMMAND_HINTS: &[CommandHint] = &[
         help: true,
     },
     CommandHint {
-        insert: "lesson all",
-        display: "/lesson all",
-        desc_key: "cmd_lesson",
-        keep_open: false,
-        help: true,
-    },
-    CommandHint {
         insert: "hint ",
         display: "/hint <request>",
         desc_key: "cmd_hint",

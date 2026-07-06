@@ -166,28 +166,22 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_lesson(&mut self, language: &str) -> Result<()> {
-        let arg = language.trim();
-        let show_all = arg == "all";
-        let language = if arg.is_empty() || show_all {
+        let language = if language.trim().is_empty() {
             self.state.settings.language.clone()
         } else {
-            if !LANGUAGES.contains(&arg) {
+            let language = language.trim();
+            if !LANGUAGES.contains(&language) {
                 self.write_text_output(ui_text(&self.state.settings.ui_language, "syntax_usage"));
                 return Ok(());
             }
-            arg.to_string()
+            language.to_string()
         };
-        let text = if show_all {
-            syntax_curriculum_text(&language, &self.state.settings.ui_language, &self.state)
-        } else {
-            syntax_lesson_text(
-                &self.problem,
-                &language,
-                &self.state.settings.ui_language,
-                &self.state,
-            )
-        };
-        self.write_output(&text);
+        self.write_output(&syntax_lesson_text(
+            &self.problem,
+            &language,
+            &self.state.settings.ui_language,
+            &self.state,
+        ));
         Ok(())
     }
 

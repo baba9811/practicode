@@ -102,7 +102,6 @@ Submissions are saved as you type under `submissions/<problem-id>/solution.<ext>
 | `/open 2` | Open by number, id, or slug |
 | `/answer` | Show the reference answer |
 | `/lesson` | Show syntax examples for the current problem and code language |
-| `/lesson all` | Show the basic/intermediate/advanced syntax curriculum for the current code language |
 | `/hint` | Ask the selected AI for a concise hint |
 | `/hint explain my bug` | Ask the selected AI about the current problem and submission |
 | `/profile` | Show your current user profile |

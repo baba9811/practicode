@@ -3,10 +3,10 @@ mod common;
 use common::{tmp_root, two_problem_bank};
 use practicode::{
     core::{
-        AppState, HistoryItem, LANGUAGES, Settings, ensure_submission, judge, load_bank,
-        load_state, localized, next_problem, parse_language_list, parse_ui_language_list,
-        problem_by_id, record_pass, render_problem, render_problem_tui, save_bank, save_state,
-        syntax_lesson_text, syntax_lessons, syntax_progress_count,
+        AppState, HistoryItem, Settings, ensure_submission, judge, load_bank, load_state,
+        localized, next_problem, parse_language_list, parse_ui_language_list, problem_by_id,
+        record_pass, render_problem, render_problem_tui, save_bank, save_state, syntax_lesson_text,
+        syntax_progress_count,
     },
     process::which,
     text::render_markdown_plain,
@@ -407,43 +407,9 @@ fn record_pass_tracks_syntax_progress_for_current_language_topics() {
     };
     record_pass(&root, &bank[1], &mut state).unwrap();
     let saved = load_state(&root, &bank).unwrap();
-    assert_eq!(
-        syntax_progress_count(&saved, "rust"),
-        (2, syntax_lessons().len())
-    );
+    assert_eq!(syntax_progress_count(&saved, "rust"), (2, 5));
     assert_eq!(saved.syntax_progress["rust"], vec!["io", "strings"]);
     assert!(!saved.syntax_progress.contains_key("python"));
-}
-
-#[test]
-fn syntax_curriculum_covers_basics_to_advanced_for_every_language() {
-    let lessons = syntax_lessons();
-    assert!(
-        lessons.len() >= 12,
-        "syntax curriculum should be more than a small sample"
-    );
-    for level in ["basic", "intermediate", "advanced"] {
-        assert!(
-            lessons
-                .iter()
-                .filter(|lesson| lesson.level == level)
-                .count()
-                >= 3,
-            "missing enough {level} syntax lessons"
-        );
-    }
-    for lesson in lessons {
-        for language in LANGUAGES {
-            assert!(
-                lesson
-                    .examples
-                    .iter()
-                    .any(|example| example.language == *language),
-                "{} missing {language} example",
-                lesson.id
-            );
-        }
-    }
 }
 
 #[test]

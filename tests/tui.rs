@@ -169,7 +169,6 @@ fn slash_command_palette_surfaces_settings_commands() {
     assert!(suggestions.contains(&"/generate <request>".to_string()));
     assert!(suggestions.contains(&"/profile".to_string()));
     assert!(suggestions.contains(&"/lesson".to_string()));
-    assert!(suggestions.contains(&"/lesson all".to_string()));
     assert!(suggestions.contains(&"/difficulty auto".to_string()));
     assert!(suggestions.contains(&"/topics <list>".to_string()));
     assert!(suggestions.contains(&"/avoid <list>".to_string()));
@@ -205,29 +204,14 @@ fn lesson_command_shows_current_language_syntax() {
 }
 
 #[test]
-fn lesson_all_shows_full_basic_to_advanced_curriculum() {
-    let root = tmp_root("lesson-all-command");
-    let mut app = PracticodeApp::new(root).unwrap();
-    app.handle_command_for_test("language ts").unwrap();
-    app.handle_command_for_test("lesson all").unwrap();
-
-    let output = app.output_for_test();
-    assert!(output.contains("TypeScript"));
-    assert!(output.contains("Basic"));
-    assert!(output.contains("Intermediate"));
-    assert!(output.contains("Advanced"));
-    assert!(output.contains("Generics"));
-}
-
-#[test]
 fn profile_panel_shows_syntax_progress() {
     let root = tmp_root("profile-syntax-progress");
     let mut app = PracticodeApp::new(root).unwrap();
     app.handle_command_for_test("profile").unwrap();
 
     let output = app.output_for_test();
-    assert!(output.contains("Syntax progress: python 0/15"));
-    assert!(output.contains("Syntax lesson: /lesson all"));
+    assert!(output.contains("Syntax progress: python 0/5"));
+    assert!(output.contains("Syntax lesson: /lesson"));
 }
 
 #[test]

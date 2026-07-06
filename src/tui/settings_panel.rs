@@ -85,7 +85,7 @@ pub(super) fn render(
             ui_text(ui_language, "syntax_progress"),
             settings.language
         ),
-        format!("{}: /lesson all", ui_text(ui_language, "syntax_lesson")),
+        format!("{}: /lesson", ui_text(ui_language, "syntax_lesson")),
         row(
             cursor,
             AI_PROVIDER_ROW,

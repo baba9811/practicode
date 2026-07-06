@@ -23,9 +23,6 @@ fn syntax_copy_exists_in_every_ui_catalog() {
             "syntax_usage",
             "syntax_progress",
             "syntax_lesson",
-            "syntax_level_basic",
-            "syntax_level_intermediate",
-            "syntax_level_advanced",
             "cmd_lesson",
         ] {
             assert!(

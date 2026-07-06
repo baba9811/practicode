@@ -1,7 +1,6 @@
 use crate::core::{
     AppState, Problem, localized, normalize_ui_language, syntax_code_for, syntax_language_name,
-    syntax_lesson_completed, syntax_lesson_title, syntax_lessons_for_problem, syntax_level_label,
-    ui_text,
+    syntax_lesson_completed, syntax_lesson_title, syntax_lessons_for_problem, ui_text,
 };
 use ratatui::{
     style::{Color, Modifier, Style},
@@ -149,11 +148,7 @@ fn push_syntax_section(
             "[ ]"
         };
         lines.push(Line::from(Span::styled(
-            format!(
-                "  {checked} [{}] {}",
-                syntax_level_label(lesson.level, lang),
-                syntax_lesson_title(lesson, lang)
-            ),
+            format!("  {checked} {}", syntax_lesson_title(lesson, lang)),
             meta_style.add_modifier(Modifier::BOLD),
         )));
         push_code_lines(lines, syntax_code_for(lesson, language), code_style);

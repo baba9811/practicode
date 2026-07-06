@@ -7,10 +7,7 @@ fn ui_catalogs_load_and_fallback_to_english() {
         assert!(!ui_text(lang, "cmd_run").is_empty(), "{lang}");
         assert!(!ui_text(lang, "cmd_home").is_empty(), "{lang}");
         assert!(!ui_text(lang, "home_learn_choice").is_empty(), "{lang}");
-        assert!(
-            !ui_text(lang, "home_practice_choice").is_empty(),
-            "{lang}"
-        );
+        assert!(!ui_text(lang, "home_practice_choice").is_empty(), "{lang}");
         assert!(!ui_text(lang, "update_available").is_empty(), "{lang}");
     }
     assert_eq!(normalize_ui_language("zh-CN"), "zh");

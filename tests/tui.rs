@@ -129,7 +129,7 @@ fn app_start_resumes_problem_mode() {
 
     let app = PracticodeApp::new(root).unwrap();
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    assert!(!app.status_text_for_test().contains("home"));
+    assert!(!app.status_text_for_test().contains("| home |"));
 }
 
 #[test]

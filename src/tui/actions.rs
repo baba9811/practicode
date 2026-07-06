@@ -63,6 +63,9 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_edit(&mut self) -> Result<()> {
+        if self.mode == AppMode::Home {
+            return self.action_practice();
+        }
         self.editing_notes = false;
         self.load_code_editor()?;
         self.settings_cursor = None;
@@ -74,6 +77,11 @@ impl PracticodeApp {
     pub(super) fn action_run(&mut self) -> Result<()> {
         if self.mode == AppMode::Learn {
             return self.action_drill();
+        }
+        if self.mode == AppMode::Home {
+            self.mode = AppMode::Problems;
+            self.state.settings.start_mode = "problems".to_string();
+            save_state(&self.root, &self.state)?;
         }
         self.save_code()?;
         let result = judge(&self.root, &self.problem, &self.state.settings);
@@ -99,6 +107,9 @@ impl PracticodeApp {
         if self.mode == AppMode::Learn {
             return self.action_next_lesson();
         }
+        self.mode = AppMode::Problems;
+        self.state.settings.start_mode = "problems".to_string();
+        save_state(&self.root, &self.state)?;
         self.check_background_generation();
         let request = request.trim();
         let old_problem = self.state.current_problem.clone();
@@ -133,6 +144,12 @@ impl PracticodeApp {
     }
 
     pub(super) fn start_background_generation(&mut self, request: String) {
+        self.mode = AppMode::Problems;
+        self.state.settings.start_mode = "problems".to_string();
+        if save_state(&self.root, &self.state).is_err() {
+            self.write_text_output("Could not save practice mode before generation.");
+            return;
+        }
         let root = self.root.clone();
         let state = self.state.clone();
         let (tx, rx) = mpsc::channel();
@@ -212,6 +229,11 @@ impl PracticodeApp {
         if self.mode == AppMode::Learn {
             return self.action_prev_lesson();
         }
+        if self.mode == AppMode::Home {
+            self.mode = AppMode::Problems;
+            self.state.settings.start_mode = "problems".to_string();
+            save_state(&self.root, &self.state)?;
+        }
         let old_problem = self.state.current_problem.clone();
         self.problem = previous_problem(&self.root, &self.bank, &mut self.state)?;
         if self.state.current_problem == old_problem {
@@ -226,6 +248,11 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_give_up(&mut self) -> Result<()> {
+        if self.mode == AppMode::Home {
+            self.mode = AppMode::Problems;
+            self.state.settings.start_mode = "problems".to_string();
+            save_state(&self.root, &self.state)?;
+        }
         let answer = give_up(&self.root, &self.problem, &mut self.state)?;
         let language = normalize_language(&self.state.settings.language);
         self.write_output(&format!(

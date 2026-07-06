@@ -2,7 +2,7 @@ use super::*;
 
 impl PracticodeApp {
     pub(super) fn status_text(&self) -> String {
-        if self.mode == AppMode::Home {
+        if self.mode == AppMode::Home && !self.show_output {
             return format!(" PRACTICODE | home | {} ", self.mode_hint());
         }
         if self.mode == AppMode::Learn {
@@ -92,7 +92,7 @@ impl PracticodeApp {
         if self.editing_notes {
             return "notes: type to edit, Esc profile";
         }
-        if self.mode == AppMode::Home {
+        if self.mode == AppMode::Home && !self.show_output {
             return ui_text(lang, "home_help");
         }
         if self.mode == AppMode::Learn && self.focus == Focus::Code {
@@ -119,9 +119,15 @@ impl PracticodeApp {
             .collect::<Vec<_>>()
             .join("\n");
         let daily_loop = match self.mode {
-            AppMode::Home => "1. Choose Learn syntax or Practice coding tests.\n2. Use Left/Right to move and Enter/Space to open.\n3. Press `/` for commands.",
-            AppMode::Learn => "1. Read the lesson on the left.\n2. Edit the drill on the right.\n3. Use `/run`, then `/next` or `/back`.",
-            AppMode::Problems => "1. Type code in the right pane.\n2. Press `Esc`, then choose `/run` from the command palette.\n3. Use `/next` when it passes.",
+            AppMode::Home => {
+                "1. Choose Learn syntax or Practice coding tests.\n2. Use Left/Right to move and Enter/Space to open.\n3. Press `/` for commands."
+            }
+            AppMode::Learn => {
+                "1. Read the lesson on the left.\n2. Edit the drill on the right.\n3. Use `/run`, then `/next` or `/back`."
+            }
+            AppMode::Problems => {
+                "1. Type code in the right pane.\n2. Press `Esc`, then choose `/run` from the command palette.\n3. Use `/next` when it passes."
+            }
         };
         format!(
             "# {}\n\n## {}\n\n{}\n\n## {}\n\n{}\n\n## {}\n\n- `/` opens the command palette outside the editor.\n- `↑/↓` selects a command and `Enter` accepts it.\n- `Esc` cancels the command palette or leaves output.\n\n## {}\n\n- stdout is shown when a case fails.\n- stderr is shown without affecting the expected stdout.",

@@ -62,9 +62,7 @@ impl PracticodeApp {
         } else {
             None
         };
-        self.code_area = if self.show_output {
-            Rect::default()
-        } else if self.mode == AppMode::Home {
+        self.code_area = if self.show_output || self.mode == AppMode::Home {
             Rect::default()
         } else if let Some((code_area, _)) = right_panes {
             code_area

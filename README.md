@@ -236,7 +236,7 @@ On Windows, `~` means `%USERPROFILE%`. Set `PRACTICODE_HOME` to use another dire
 PRACTICODE_HOME=/path/to/practicode-data practicode
 ```
 
-When upgrading from `0.1.19` or earlier, launch `practicode` once from the old practice directory while the new data directory is empty. State, problems, and submissions are copied into the new location; the originals are not changed, and disposable build output is not copied. If the old practice directory was your home directory itself, set `PRACTICODE_HOME` to a new empty directory for that migration; automatic sibling-folder copying is disabled when the old metadata path already equals the default global path.
+When upgrading from `0.1.19` or earlier, launch `practicode` once from the old practice directory while the new data directory is empty. State, problems, and submissions are copied into the new location; the originals are not changed, and disposable build output is not copied. If the old practice directory was your home directory itself, choose a new empty `PRACTICODE_HOME` and keep that override configured afterward; automatic sibling-folder copying is disabled when the old metadata path already equals the default global path.
 
 ## Safety
 

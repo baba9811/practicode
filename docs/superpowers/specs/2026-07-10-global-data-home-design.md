@@ -52,6 +52,8 @@ If the new application root has no state or problem bank, copy legacy data non-d
 
 Never overwrite a destination file and never delete legacy data. If the destination already has state or a bank, skip migration entirely to avoid merging two histories. Migration failure stops startup with source and destination context rather than silently starting with empty data.
 
+Create an in-progress marker before copying so a failed migration resumes missing files on the next launch. Reject a data root nested under legacy `problems/` or `submissions/`, propagate filesystem lookup errors, create destination files without clobbering, and never follow destination symlinks outside the resolved root.
+
 If the legacy metadata directory already is the resolved global root, keep its metadata in place and do not infer that sibling `problems/` or `submissions/` directories belong to practicode. Users migrating that uncommon home-directory layout can opt into copying by selecting a separate empty `PRACTICODE_HOME`.
 
 ## AI Commands
@@ -78,6 +80,7 @@ Add focused tests for:
 - the missing-home error;
 - non-destructive legacy migration, including build-cache exclusion;
 - migration being skipped when the destination already contains data;
+- interrupted migration resume, nested-root rejection, filesystem lookup errors, and destination symlink rejection;
 - the generated Codex command containing `--skip-git-repo-check` and the resolved root;
 - Docker launcher syntax and a packed-launcher smoke run using an isolated data directory;
 - all existing state, problem, submission, syntax, judge, TUI, smoke, npm packaging, formatting, and Clippy checks.

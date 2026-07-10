@@ -3,8 +3,8 @@ use crossterm::{cursor::SetCursorStyle, event::DisableMouseCapture, execute};
 use std::{
     env,
     ffi::OsString,
-    fs,
-    io::stdout,
+    fs::{self, File, OpenOptions},
+    io::{self, stdout},
     path::{Path, PathBuf},
 };
 
@@ -15,6 +15,8 @@ pub mod process;
 pub mod text;
 pub mod tui;
 pub mod update;
+
+const LEGACY_MIGRATION_MARKER: &str = ".legacy-migration-in-progress";
 
 pub fn cli_help_text() -> &'static str {
     "practicode - local-first coding-test practice in your terminal
@@ -113,38 +115,108 @@ fn absolute_data_root(launch_dir: &Path, root: PathBuf) -> PathBuf {
 
 fn migrate_legacy_data(launch_dir: &Path, root: &Path) -> Result<()> {
     let legacy_metadata = launch_dir.join(".practicode");
-    if !legacy_metadata.join(core::STATE_PATH).exists()
-        && !legacy_metadata.join(core::BANK_PATH).exists()
+    if !path_exists(
+        &legacy_metadata.join(core::STATE_PATH),
+        "inspect legacy marker",
+    )? && !path_exists(
+        &legacy_metadata.join(core::BANK_PATH),
+        "inspect legacy marker",
+    )? {
+        return Ok(());
+    }
+
+    let same_metadata = same_existing_path(&legacy_metadata, root)?;
+    if same_metadata {
+        return Ok(());
+    }
+    let marker = root.join(LEGACY_MIGRATION_MARKER);
+    let migration_in_progress = match fs::symlink_metadata(&marker) {
+        Ok(metadata) if metadata.file_type().is_file() => true,
+        Ok(_) => bail!(
+            "migration marker {} is not a regular file",
+            marker.display()
+        ),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => false,
+        Err(error) => {
+            return Err(error)
+                .with_context(|| format!("inspect migration marker {}", marker.display()));
+        }
+    };
+    if !migration_in_progress
+        && (path_exists(&root.join(core::STATE_PATH), "inspect destination")?
+            || path_exists(&root.join(core::BANK_PATH), "inspect destination")?)
     {
         return Ok(());
     }
 
-    let same_metadata = same_existing_path(&legacy_metadata, root);
-    if same_metadata {
-        return Ok(());
-    }
-    if root.join(core::STATE_PATH).exists() || root.join(core::BANK_PATH).exists() {
-        return Ok(());
-    }
-
     fs::create_dir_all(root).with_context(|| format!("create data root {}", root.display()))?;
+    let canonical_root = validate_migration_root(launch_dir, root)?;
+    if !migration_in_progress {
+        OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&marker)
+            .with_context(|| format!("create migration marker {}", marker.display()))?;
+    }
     for name in [core::STATE_PATH, core::BANK_PATH, core::PROBLEM_NOTES_PATH] {
-        copy_file_if_missing(&legacy_metadata.join(name), &root.join(name))?;
+        copy_file_if_missing(
+            &legacy_metadata.join(name),
+            &root.join(name),
+            &canonical_root,
+        )?;
     }
     for name in ["problems", "submissions"] {
-        copy_tree_missing(&launch_dir.join(name), &root.join(name))?;
+        copy_tree_missing(&launch_dir.join(name), &root.join(name), &canonical_root)?;
     }
+    fs::remove_file(&marker)
+        .with_context(|| format!("remove migration marker {}", marker.display()))?;
     Ok(())
 }
 
-fn same_existing_path(left: &Path, right: &Path) -> bool {
-    match (fs::canonicalize(left), fs::canonicalize(right)) {
-        (Ok(left), Ok(right)) => left == right,
-        _ => left == right,
+fn path_exists(path: &Path, action: &str) -> Result<bool> {
+    path.try_exists()
+        .with_context(|| format!("{action} {}", path.display()))
+}
+
+fn validate_migration_root(launch_dir: &Path, root: &Path) -> Result<PathBuf> {
+    let root =
+        fs::canonicalize(root).with_context(|| format!("resolve data root {}", root.display()))?;
+    for name in ["problems", "submissions"] {
+        let source = launch_dir.join(name);
+        let metadata = match fs::symlink_metadata(&source) {
+            Ok(metadata) => metadata,
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => continue,
+            Err(error) => {
+                return Err(error).with_context(|| format!("inspect {}", source.display()));
+            }
+        };
+        if !metadata.file_type().is_dir() {
+            continue;
+        }
+        let source = fs::canonicalize(&source)
+            .with_context(|| format!("resolve legacy directory {}", source.display()))?;
+        if root.starts_with(&source) {
+            bail!(
+                "data root {} cannot be inside legacy directory {}",
+                root.display(),
+                source.display()
+            );
+        }
+    }
+    Ok(root)
+}
+
+fn same_existing_path(left: &Path, right: &Path) -> Result<bool> {
+    let left = fs::canonicalize(left)
+        .with_context(|| format!("resolve legacy metadata {}", left.display()))?;
+    match fs::canonicalize(right) {
+        Ok(right) => Ok(left == right),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(false),
+        Err(error) => Err(error).with_context(|| format!("resolve data root {}", right.display())),
     }
 }
 
-fn copy_file_if_missing(source: &Path, destination: &Path) -> Result<()> {
+fn copy_file_if_missing(source: &Path, destination: &Path, root: &Path) -> Result<()> {
     let metadata = match fs::symlink_metadata(source) {
         Ok(metadata) => metadata,
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
@@ -152,24 +224,53 @@ fn copy_file_if_missing(source: &Path, destination: &Path) -> Result<()> {
             return Err(error).with_context(|| format!("inspect {}", source.display()));
         }
     };
-    if !metadata.file_type().is_file() || destination.exists() {
+    if !metadata.file_type().is_file() {
         return Ok(());
     }
-    if let Some(parent) = destination.parent() {
-        fs::create_dir_all(parent)
-            .with_context(|| format!("create directory {}", parent.display()))?;
-    }
-    fs::copy(source, destination).with_context(|| {
-        format!(
-            "copy legacy data {} to {}",
-            source.display(),
+    match fs::symlink_metadata(destination) {
+        Ok(metadata) if metadata.file_type().is_symlink() => bail!(
+            "destination file symlink {} is not allowed",
             destination.display()
-        )
-    })?;
+        ),
+        Ok(_) => return Ok(()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => {
+            return Err(error).with_context(|| format!("inspect {}", destination.display()));
+        }
+    }
+    let parent = destination
+        .parent()
+        .with_context(|| format!("find parent for {}", destination.display()))?;
+    let parent = fs::canonicalize(parent)
+        .with_context(|| format!("resolve destination directory {}", parent.display()))?;
+    if !parent.starts_with(root) {
+        bail!(
+            "destination directory {} is outside data root {}",
+            parent.display(),
+            root.display()
+        );
+    }
+
+    let mut input = File::open(source).with_context(|| format!("open {}", source.display()))?;
+    let mut output = OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(destination)
+        .with_context(|| format!("create {} without overwriting", destination.display()))?;
+    if let Err(error) = io::copy(&mut input, &mut output) {
+        let _ = fs::remove_file(destination);
+        return Err(error).with_context(|| {
+            format!(
+                "copy legacy data {} to {}",
+                source.display(),
+                destination.display()
+            )
+        });
+    }
     Ok(())
 }
 
-fn copy_tree_missing(source: &Path, destination: &Path) -> Result<()> {
+fn copy_tree_missing(source: &Path, destination: &Path, root: &Path) -> Result<()> {
     let metadata = match fs::symlink_metadata(source) {
         Ok(metadata) => metadata,
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
@@ -181,8 +282,43 @@ fn copy_tree_missing(source: &Path, destination: &Path) -> Result<()> {
         return Ok(());
     }
 
-    fs::create_dir_all(destination)
-        .with_context(|| format!("create directory {}", destination.display()))?;
+    match fs::symlink_metadata(destination) {
+        Ok(metadata) if metadata.file_type().is_dir() => {
+            let destination = fs::canonicalize(destination).with_context(|| {
+                format!("resolve destination directory {}", destination.display())
+            })?;
+            if !destination.starts_with(root) {
+                bail!(
+                    "destination directory {} is outside data root {}",
+                    destination.display(),
+                    root.display()
+                );
+            }
+        }
+        Ok(_) => bail!(
+            "destination directory {} is not a regular directory",
+            destination.display()
+        ),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+            let parent = destination
+                .parent()
+                .with_context(|| format!("find parent for {}", destination.display()))?;
+            let parent = fs::canonicalize(parent)
+                .with_context(|| format!("resolve destination directory {}", parent.display()))?;
+            if !parent.starts_with(root) {
+                bail!(
+                    "destination directory {} is outside data root {}",
+                    parent.display(),
+                    root.display()
+                );
+            }
+            fs::create_dir(destination)
+                .with_context(|| format!("create directory {}", destination.display()))?;
+        }
+        Err(error) => {
+            return Err(error).with_context(|| format!("inspect {}", destination.display()));
+        }
+    }
     for entry in fs::read_dir(source)
         .with_context(|| format!("read legacy directory {}", source.display()))?
     {
@@ -192,9 +328,9 @@ fn copy_tree_missing(source: &Path, destination: &Path) -> Result<()> {
             .with_context(|| format!("inspect {}", entry.path().display()))?;
         let target = destination.join(entry.file_name());
         if file_type.is_dir() {
-            copy_tree_missing(&entry.path(), &target)?;
+            copy_tree_missing(&entry.path(), &target, root)?;
         } else if file_type.is_file() {
-            copy_file_if_missing(&entry.path(), &target)?;
+            copy_file_if_missing(&entry.path(), &target, root)?;
         }
     }
     Ok(())
@@ -342,6 +478,134 @@ mod tests {
 
         fs::remove_dir_all(launch).unwrap();
         fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn legacy_migration_resumes_an_interrupted_copy() {
+        let launch = temp_root("legacy-resume-launch");
+        let root = temp_root("legacy-resume-root");
+        fs::create_dir_all(launch.join(".practicode")).unwrap();
+        fs::create_dir_all(launch.join("problems")).unwrap();
+        fs::write(launch.join(".practicode/problem-state.json"), "state").unwrap();
+        fs::write(launch.join(".practicode/problem_bank.json"), "bank").unwrap();
+        fs::write(launch.join("problems/INDEX.md"), "index").unwrap();
+        fs::write(root.join("problem-state.json"), "state").unwrap();
+        fs::write(root.join(".legacy-migration-in-progress"), "").unwrap();
+
+        migrate_legacy_data(&launch, &root).unwrap();
+
+        assert_eq!(
+            fs::read_to_string(root.join("problem_bank.json")).unwrap(),
+            "bank"
+        );
+        assert_eq!(
+            fs::read_to_string(root.join("problems/INDEX.md")).unwrap(),
+            "index"
+        );
+        assert!(!root.join(".legacy-migration-in-progress").exists());
+
+        fs::remove_dir_all(launch).unwrap();
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn migration_root_rejects_a_legacy_source_descendant() {
+        let launch = temp_root("legacy-descendant");
+        let root = launch.join("problems/data");
+        fs::create_dir_all(&root).unwrap();
+
+        let error = validate_migration_root(&launch, &root)
+            .unwrap_err()
+            .to_string();
+
+        assert!(error.contains("inside legacy"));
+        fs::remove_dir_all(launch).unwrap();
+    }
+
+    #[test]
+    fn legacy_migration_reports_marker_lookup_errors() {
+        let launch = temp_root("legacy-marker-error");
+        let root = temp_root("legacy-marker-error-root");
+        fs::write(launch.join(".practicode"), "not a directory").unwrap();
+
+        let error = migrate_legacy_data(&launch, &root).unwrap_err().to_string();
+
+        assert!(error.contains("inspect legacy marker"));
+        fs::remove_dir_all(launch).unwrap();
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn legacy_migration_does_not_follow_destination_symlinks() {
+        use std::os::unix::fs::symlink;
+
+        let launch = temp_root("legacy-symlink-launch");
+        let root = temp_root("legacy-symlink-root");
+        let outside = temp_root("legacy-symlink-outside");
+        fs::create_dir_all(launch.join(".practicode")).unwrap();
+        fs::create_dir_all(launch.join("problems")).unwrap();
+        fs::write(launch.join(".practicode/problem-state.json"), "state").unwrap();
+        fs::write(launch.join(".practicode/problem_bank.json"), "bank").unwrap();
+        fs::write(launch.join(".practicode/problem_notes.md"), "notes").unwrap();
+        fs::write(launch.join("problems/INDEX.md"), "index").unwrap();
+        symlink(outside.join("notes.md"), root.join("problem_notes.md")).unwrap();
+        symlink(&outside, root.join("problems")).unwrap();
+
+        let error = migrate_legacy_data(&launch, &root).unwrap_err().to_string();
+
+        assert!(error.contains("destination"));
+        assert!(!outside.join("notes.md").exists());
+        assert!(!outside.join("INDEX.md").exists());
+
+        fs::remove_dir_all(launch).unwrap();
+        fs::remove_dir_all(root).unwrap();
+        fs::remove_dir_all(outside).unwrap();
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn legacy_migration_rejects_a_destination_file_symlink() {
+        use std::os::unix::fs::symlink;
+
+        let launch = temp_root("legacy-file-symlink-launch");
+        let root = temp_root("legacy-file-symlink-root");
+        let outside = temp_root("legacy-file-symlink-outside");
+        fs::create_dir_all(launch.join(".practicode")).unwrap();
+        fs::write(launch.join(".practicode/problem-state.json"), "state").unwrap();
+        fs::write(launch.join(".practicode/problem_notes.md"), "notes").unwrap();
+        symlink(outside.join("notes.md"), root.join("problem_notes.md")).unwrap();
+
+        let error = migrate_legacy_data(&launch, &root).unwrap_err().to_string();
+
+        assert!(error.contains("destination file symlink"));
+        assert!(!outside.join("notes.md").exists());
+
+        fs::remove_dir_all(launch).unwrap();
+        fs::remove_dir_all(root).unwrap();
+        fs::remove_dir_all(outside).unwrap();
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn legacy_migration_rejects_a_marker_symlink() {
+        use std::os::unix::fs::symlink;
+
+        let launch = temp_root("legacy-marker-symlink-launch");
+        let root = temp_root("legacy-marker-symlink-root");
+        let outside = temp_root("legacy-marker-symlink-outside");
+        fs::create_dir_all(launch.join(".practicode")).unwrap();
+        fs::write(launch.join(".practicode/problem-state.json"), "state").unwrap();
+        symlink(outside.join("marker"), root.join(LEGACY_MIGRATION_MARKER)).unwrap();
+
+        let error = migrate_legacy_data(&launch, &root).unwrap_err().to_string();
+
+        assert!(error.contains("migration marker"));
+        assert!(!outside.join("marker").exists());
+
+        fs::remove_dir_all(launch).unwrap();
+        fs::remove_dir_all(root).unwrap();
+        fs::remove_dir_all(outside).unwrap();
     }
 
     #[test]

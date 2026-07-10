@@ -121,7 +121,7 @@ assert_eq!(
 assert!(resolve_data_root(None, None, None).unwrap_err().to_string().contains("PRACTICODE_HOME"));
 ```
 
-Use unique temporary roots to verify migration copies state, bank, notes, `problems/`, and `submissions/`; excludes `.practicode/build/`; keeps an existing destination note unchanged; skips a distinct destination that already contains state; and does not copy ambiguous sibling folders when the legacy metadata directory already equals the new root. Remove fixtures at each test's end.
+Use unique temporary roots to verify migration copies state, bank, notes, `problems/`, and `submissions/`; excludes `.practicode/build/`; keeps an existing destination note unchanged; skips a distinct destination that already contains state; resumes an interrupted copy; rejects nested roots and destination symlinks; propagates marker lookup errors; and does not copy ambiguous sibling folders when the legacy metadata directory already equals the new root. Remove fixtures at each test's end.
 
 - [ ] **Step 2: Run unit tests to verify RED**
 
@@ -171,7 +171,7 @@ for name in ["problems", "submissions"] {
 }
 ```
 
-`copy_tree_missing` creates missing directories, copies regular files only when absent, recurses into directories, and ignores symlinks. Attach source/destination context to copy errors. Do not traverse `.practicode/build`.
+`copy_tree_missing` creates missing directories, copies regular files only with no-clobber creation, recurses into directories, and ignores source symlinks. Use an in-progress marker for retry, reject roots nested below either legacy tree, reject destination symlinks, and attach source/destination context to lookup and copy errors. Do not traverse `.practicode/build`.
 
 - [ ] **Step 5: Run unit and full tests to verify GREEN**
 

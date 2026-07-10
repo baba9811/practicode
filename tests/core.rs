@@ -51,6 +51,35 @@ fn syntax_mastery_uses_one_day_initial_schedule() {
 }
 
 #[test]
+fn syntax_mastery_scheduling_saturates_at_u64_max() {
+    let now = u64::MAX - 1;
+    let mut result_state = test_state();
+
+    record_syntax_result(&mut result_state, "rust", "rust-output", true, now, false);
+
+    assert_eq!(
+        result_state.syntax_mastery["rust"]["rust-output"],
+        LessonMastery {
+            stage: MasteryStage::Practiced,
+            review_due_at: u64::MAX,
+            attempts: 1,
+        }
+    );
+
+    let mut test_out_state = test_state();
+    record_syntax_test_out(&mut test_out_state, "rust", &["rust-output"], now);
+
+    assert_eq!(
+        test_out_state.syntax_mastery["rust"]["rust-output"],
+        LessonMastery {
+            stage: MasteryStage::Practiced,
+            review_due_at: u64::MAX,
+            attempts: 1,
+        }
+    );
+}
+
+#[test]
 fn syntax_mastery_uses_three_and_seven_day_follow_up_schedule() {
     let mut state = test_state();
     let lesson_id = "rust-ownership";

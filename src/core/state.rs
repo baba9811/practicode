@@ -285,4 +285,47 @@ mod tests {
             ["rename problem-state.json.tmp problem-state.json"]
         );
     }
+
+    #[test]
+    fn windows_replacement_restores_primary_after_new_file_rename_fails() {
+        let operations = RefCell::new(Vec::new());
+        let error = replace_state_file_windows_with(
+            Path::new("problem-state.json"),
+            Path::new("problem-state.json.tmp"),
+            Path::new("problem-state.json.bak"),
+            true,
+            |path| {
+                operations
+                    .borrow_mut()
+                    .push(format!("remove {}", path.display()));
+                Ok(())
+            },
+            |from, to| {
+                operations
+                    .borrow_mut()
+                    .push(format!("rename {} {}", from.display(), to.display()));
+                if from == Path::new("problem-state.json.tmp") {
+                    Err(anyhow!("injected replacement failure"))
+                } else {
+                    Ok(())
+                }
+            },
+        )
+        .unwrap_err()
+        .to_string();
+
+        assert_eq!(
+            operations.into_inner(),
+            [
+                "remove problem-state.json.bak",
+                "rename problem-state.json problem-state.json.bak",
+                "rename problem-state.json.tmp problem-state.json",
+                "rename problem-state.json.bak problem-state.json",
+            ]
+        );
+        assert_eq!(
+            error,
+            "replace problem-state.json with problem-state.json.tmp: injected replacement failure"
+        );
+    }
 }

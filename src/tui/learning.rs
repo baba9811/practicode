@@ -44,6 +44,17 @@ pub(super) fn learning_step_label(language: &str, step: LearningStep) -> &'stati
     )
 }
 
+pub(super) fn learning_view_label(language: &str, view: LearningView) -> &'static str {
+    ui_text(
+        language,
+        match view {
+            LearningView::Lesson => "learning_view_lesson",
+            LearningView::Code => "learning_view_code",
+            LearningView::Result => "learning_view_result",
+        },
+    )
+}
+
 #[derive(Clone, Copy, Debug)]
 struct LearningItem {
     lesson_id: &'static str,
@@ -306,21 +317,27 @@ pub(super) fn progress_text(state: &AppState, now: u64) -> String {
             .count()
     };
     let (_, core) = crate::core::syntax_core_progress_count(state, &language);
+    let practiced = count(MasteryStage::Practiced);
+    let retained = count(MasteryStage::Retained);
+    let mastered = count(MasteryStage::Mastered);
+    let new = core.saturating_sub(practiced + retained + mastered);
     let due = due_syntax_lesson_count(state, &language, now);
     let ui_language = &state.settings.ui_language;
     format!(
-        "{}\n{}: {}\n{}: {core}\n{}: {}\n{}: {}\n{}: {}\n{}: {due}",
+        "{}\n{}: {}\n{}: {core}\n{}: {}\n{}: {}\n{}: {}\n{}: {}\n{}: {due}",
         ui_text(ui_language, "progress_title"),
         ui_text(ui_language, "progress_language"),
         syntax_language_name(&language),
         ui_text(ui_language, "progress_core"),
-        ui_text(ui_language, "progress_practiced"),
-        count(MasteryStage::Practiced),
-        ui_text(ui_language, "progress_retained"),
-        count(MasteryStage::Retained),
-        ui_text(ui_language, "progress_mastered"),
-        count(MasteryStage::Mastered),
-        ui_text(ui_language, "progress_due"),
+        ui_text(ui_language, "mastery_new"),
+        new,
+        ui_text(ui_language, "mastery_practiced"),
+        practiced,
+        ui_text(ui_language, "mastery_retained"),
+        retained,
+        ui_text(ui_language, "mastery_mastered"),
+        mastered,
+        ui_text(ui_language, "learning_due_reviews"),
     )
 }
 
@@ -595,5 +612,55 @@ mod tests {
         assert_eq!(session.view(), LearningView::Lesson);
         session.cycle_view();
         assert_eq!(session.view(), LearningView::Code);
+    }
+
+    #[test]
+    fn progress_counts_untouched_core_lessons_as_new() {
+        let mut state = state();
+        state.settings.language = "python".to_string();
+        let core = syntax_lessons_for("python")
+            .into_iter()
+            .filter(|lesson| lesson.track == SyntaxTrack::Core)
+            .count();
+
+        let progress = progress_text(&state, 1_000);
+
+        assert!(progress.contains(&format!("New: {core}")), "{progress}");
+    }
+
+    #[test]
+    fn progress_does_not_double_count_explicit_new_mastery() {
+        let mut state = state();
+        state.settings.language = "python".to_string();
+        state.syntax_mastery.insert(
+            "python".to_string(),
+            [
+                ("py-output", MasteryStage::New),
+                ("py-variables", MasteryStage::Practiced),
+            ]
+            .into_iter()
+            .map(|(id, stage)| {
+                (
+                    id.to_string(),
+                    crate::core::LessonMastery {
+                        stage,
+                        review_due_at: 0,
+                        attempts: 1,
+                    },
+                )
+            })
+            .collect(),
+        );
+        let core = syntax_lessons_for("python")
+            .into_iter()
+            .filter(|lesson| lesson.track == SyntaxTrack::Core)
+            .count();
+
+        let progress = progress_text(&state, 1_000);
+
+        assert!(
+            progress.contains(&format!("New: {}", core - 1)),
+            "{progress}"
+        );
     }
 }

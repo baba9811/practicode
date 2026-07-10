@@ -2,23 +2,45 @@ use super::*;
 
 impl PracticodeApp {
     pub(super) fn status_text(&self) -> String {
+        let lang = &self.state.settings.ui_language;
         if self.mode == AppMode::Home && !self.show_output {
-            return format!(" PRACTICODE | home | {} ", self.mode_hint());
+            return format!(
+                " PRACTICODE | {} | {} ",
+                ui_text(lang, "mode_home"),
+                self.mode_hint()
+            );
         }
         if self.mode == AppMode::Learn {
             let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
-            let (done, total) = syntax_progress_count(&self.state, &self.state.settings.language);
+            let (done, total) =
+                syntax_core_progress_count(&self.state, &self.state.settings.language);
+            let selected_focus = match self.learning_session.view() {
+                LearningView::Lesson => Focus::Left,
+                LearningView::Code => Focus::Code,
+                LearningView::Result => Focus::Output,
+            };
+            let context = if !self.show_output && self.focus == selected_focus {
+                format!(
+                    "{}: {} | {}",
+                    ui_text(lang, "focus_active"),
+                    learning_view_label(lang, self.learning_session.view()),
+                    self.mode_hint()
+                )
+            } else {
+                self.mode_hint().to_string()
+            };
             return format!(
-                " PRACTICODE | learn | {} | {} | {done}/{total} | code:{} | {} ",
+                " PRACTICODE | {} | {} | {} | {done}/{total} | {context} | {}:{} ",
+                ui_text(lang, "mode_learn"),
                 syntax_language_name(&self.state.settings.language),
                 lesson.id,
+                ui_text(lang, "status_code"),
                 self.state.settings.language,
-                self.mode_hint(),
             );
         }
-        let code_status = self.submission_status(&self.problem).0;
+        let code_status = localized_status(lang, &self.submission_status(&self.problem).0);
         let activity = if self.busy_label.is_empty() {
-            "idle".to_string()
+            ui_text(lang, "status_idle").to_string()
         } else {
             format!("{}{}", self.busy_body, self.busy_dots())
         };
@@ -35,11 +57,12 @@ impl PracticodeApp {
             self.mode_hint().to_string()
         };
         format!(
-            " PRACTICODE | {} | {} | {} | {} | code:{} | {} | {} ",
+            " PRACTICODE | {} | {} | {} | {} | {}:{} | {} | {} ",
             self.problem.id,
-            self.problem.difficulty,
-            self.problem_status(&self.problem),
+            localized_status(lang, &self.problem.difficulty),
+            localized_status(lang, &self.problem_status(&self.problem)),
             activity,
+            ui_text(lang, "status_code"),
             code_status,
             self.state.settings.language,
             tail,
@@ -47,7 +70,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn next_source_help(&self) -> String {
-        "Next behavior: /next opens unsolved local problems first and asks AI only when none remain. Use /generate <request> to create a problem in the background.".to_string()
+        ui_text(&self.state.settings.ui_language, "next_source_help").to_string()
     }
 
     pub(super) fn background_generation_status(&self) -> Option<String> {
@@ -56,7 +79,13 @@ impl PracticodeApp {
                 .generate_started
                 .map(|started| started.elapsed().as_secs())
                 .unwrap_or_default();
-            Some(format!("bg generate {elapsed}s"))
+            Some(format!(
+                "{} {elapsed}s",
+                ui_text(
+                    &self.state.settings.ui_language,
+                    "status_background_generation"
+                )
+            ))
         } else {
             self.generate_notice.clone()
         }
@@ -90,10 +119,17 @@ impl PracticodeApp {
             };
         }
         if self.editing_notes {
-            return "notes: type to edit, Esc profile";
+            return ui_text(lang, "hint_notes");
         }
         if self.mode == AppMode::Home && !self.show_output {
             return ui_text(lang, "home_help");
+        }
+        if self.mode == AppMode::Learn
+            && !self.show_output
+            && self.learning_session.view() == LearningView::Result
+            && self.focus != Focus::Command
+        {
+            return ui_text(lang, "hint_result");
         }
         if self.mode == AppMode::Learn && self.focus == Focus::Code {
             return ui_text(lang, "hint_learn");
@@ -119,18 +155,12 @@ impl PracticodeApp {
             .collect::<Vec<_>>()
             .join("\n");
         let daily_loop = match self.mode {
-            AppMode::Home => {
-                "1. Choose Learn syntax or Practice coding tests.\n2. Use arrow keys to move and Enter/Space to open.\n3. Press `/` for commands."
-            }
-            AppMode::Learn => {
-                "1. Read the lesson on the left.\n2. Edit the exercise on the right.\n3. Use `/run`, then `/next` or `/back`."
-            }
-            AppMode::Problems => {
-                "1. Type code in the right pane.\n2. Press `Esc`, then choose `/run` from the command palette.\n3. Use `/next` when it passes."
-            }
+            AppMode::Home => ui_text(lang, "help_home_loop"),
+            AppMode::Learn => ui_text(lang, "help_learn_loop"),
+            AppMode::Problems => ui_text(lang, "help_problem_loop"),
         };
         format!(
-            "# {}\n\n## {}\n\n{}\n\n## {}\n\n{}\n\n## {}\n\n- {}\n- `/` opens the command palette outside the editor.\n- `↑/↓` selects a command and `Enter` accepts it.\n- `Esc` cancels the command palette or leaves output.\n\n## {}\n\n- stdout is shown when a case fails.\n- stderr is shown without affecting the expected stdout.",
+            "# {}\n\n## {}\n\n{}\n\n## {}\n\n{}\n\n## {}\n\n- {}\n- {}\n- {}\n- {}\n\n## {}\n\n- {}\n- {}",
             ui_text(lang, "help_title"),
             ui_text(lang, "daily_loop"),
             daily_loop,
@@ -138,7 +168,12 @@ impl PracticodeApp {
             commands,
             ui_text(lang, "keys"),
             ui_text(lang, "learning_shortcuts"),
+            ui_text(lang, "help_palette_open"),
+            ui_text(lang, "help_palette_move"),
+            ui_text(lang, "help_palette_close"),
             ui_text(lang, "debug_prints"),
+            ui_text(lang, "help_stdout"),
+            ui_text(lang, "help_stderr"),
         )
     }
 }

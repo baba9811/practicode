@@ -20,17 +20,24 @@ impl PracticodeApp {
                     ui_text(lang, "progress_language"),
                     syntax_language_name(&self.state.settings.language),
                     ui_text(lang, "syntax_progress"),
-                    ui_text(lang, "progress_due"),
+                    ui_text(lang, "learning_due_reviews"),
                     ui_text(lang, "home_next_step"),
                     learning_step_label(lang, next.step()),
                 )
             }
             HomeChoice::Problems => {
+                let lang = &self.state.settings.ui_language;
                 format!(
-                    "Practice\n\nCurrent: {}\nDifficulty: {}\nStatus: {}\n\n/run judges submissions\n/next opens the next problem",
+                    "{}\n\n{}: {}\n{}: {}\n{}: {}\n\n{}\n{}",
+                    ui_text(lang, "home_practice_preview_title"),
+                    ui_text(lang, "home_current"),
                     self.problem.id,
-                    self.problem.difficulty,
-                    self.problem_status(&self.problem)
+                    ui_text(lang, "difficulty"),
+                    localized_status(lang, &self.problem.difficulty),
+                    ui_text(lang, "home_status"),
+                    localized_status(lang, &self.problem_status(&self.problem)),
+                    ui_text(lang, "home_practice_run"),
+                    ui_text(lang, "home_practice_next"),
                 )
             }
         }
@@ -38,98 +45,172 @@ impl PracticodeApp {
 
     pub(super) fn draw(&mut self, frame: &mut Frame) {
         let size = frame.area();
+        self.home_area = Rect::default();
+        self.home_learn_area = Rect::default();
+        self.home_problems_area = Rect::default();
+        self.left_area = Rect::default();
+        self.code_area = Rect::default();
+        self.output_area = Rect::default();
+        self.command_area = Rect::default();
+        self.command_palette_area = Rect::default();
+        let light = self.state.settings.theme == "light";
+        if size.width < 60 || size.height < 16 {
+            frame.render_widget(
+                Paragraph::new(ui_text(&self.state.settings.ui_language, "resize_required"))
+                    .style(Self::pane_style(light))
+                    .wrap(Wrap { trim: false }),
+                size,
+            );
+            return;
+        }
+
         let vertical = Layout::default()
             .direction(Direction::Vertical)
             .constraints([
                 Constraint::Min(1),
                 Constraint::Length(1),
-                Constraint::Length(3),
+                Constraint::Length(1),
             ])
             .split(size);
-        let body = Layout::default()
+        let body = vertical[0];
+        let panes = Layout::default()
             .direction(Direction::Horizontal)
-            .constraints([Constraint::Percentage(58), Constraint::Percentage(42)])
-            .split(vertical[0]);
-        if self.mode == AppMode::Home {
-            self.left_area = Rect::default();
-            self.home_area = body[0];
+            .constraints([Constraint::Percentage(42), Constraint::Percentage(58)])
+            .split(body);
+        let wide = size.width >= 100;
+
+        if self.show_output {
+            self.output_area = body;
+        } else {
+            match self.mode {
+                AppMode::Home => {
+                    self.home_area = if wide { panes[0] } else { body };
+                    if wide {
+                        self.output_area = panes[1];
+                    }
+                }
+                AppMode::Learn if wide => {
+                    self.left_area = panes[0];
+                    if self.learning_session.view() == LearningView::Result {
+                        self.output_area = panes[1];
+                    } else {
+                        self.code_area = panes[1];
+                    }
+                }
+                AppMode::Learn => match self.learning_session.view() {
+                    LearningView::Lesson => self.left_area = body,
+                    LearningView::Code => self.code_area = body,
+                    LearningView::Result => self.output_area = body,
+                },
+                AppMode::Problems => {
+                    self.left_area = panes[0];
+                    self.code_area = panes[1];
+                }
+            }
+        }
+
+        if self.mode == AppMode::Home && !self.show_output {
             let choices = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints([
-                    Constraint::Length(7),
-                    Constraint::Length(7),
-                    Constraint::Min(1),
-                ])
-                .split(body[0]);
+                .constraints(if wide {
+                    [
+                        Constraint::Length(7),
+                        Constraint::Length(7),
+                        Constraint::Min(1),
+                    ]
+                } else {
+                    [
+                        Constraint::Length(6),
+                        Constraint::Length(6),
+                        Constraint::Min(1),
+                    ]
+                })
+                .split(self.home_area);
             self.home_learn_area = choices[0];
             self.home_problems_area = choices[1];
-        } else if self.show_output {
-            self.left_area = Rect::default();
-        } else {
-            self.left_area = body[0];
         }
-        let right_panes = if !self.show_output
-            && self.mode == AppMode::Learn
-            && !self.learn_result.is_empty()
-            && body[1].height >= 6
-        {
-            let result_height = (body[1].height / 3).clamp(3, 7);
-            let panes = Layout::default()
-                .direction(Direction::Vertical)
-                .constraints([Constraint::Min(3), Constraint::Length(result_height)])
-                .split(body[1]);
-            Some((panes[0], panes[1]))
-        } else {
-            None
-        };
-        self.code_area = if self.show_output || self.mode == AppMode::Home {
-            Rect::default()
-        } else if let Some((code_area, _)) = right_panes {
-            code_area
-        } else {
-            body[1]
-        };
-        self.output_area = if self.show_output {
-            vertical[0]
-        } else if self.mode == AppMode::Home {
-            body[1]
-        } else if let Some((_, result_area)) = right_panes {
-            result_area
-        } else {
-            self.code_area
-        };
         self.command_area = vertical[2];
 
-        let light = self.state.settings.theme == "light";
         if !self.show_output {
             if self.mode == AppMode::Home {
-                let left = Paragraph::new(self.home_text())
-                    .style(Self::pane_style(light))
-                    .block(Self::block(
-                        ui_text(&self.state.settings.ui_language, "home"),
-                        light,
-                        self.focus == Focus::Home,
-                    ))
-                    .wrap(Wrap { trim: false });
-                frame.render_widget(left, body[0]);
+                if wide {
+                    let left = Paragraph::new(self.home_text())
+                        .style(Self::pane_style(light))
+                        .block(Self::block(
+                            ui_text(&self.state.settings.ui_language, "home"),
+                            light,
+                            self.focus == Focus::Home,
+                        ))
+                        .wrap(Wrap { trim: false });
+                    frame.render_widget(left, self.home_area);
+                } else {
+                    for (area, choice, title, description) in [
+                        (
+                            self.home_learn_area,
+                            HomeChoice::Learn,
+                            ui_text(&self.state.settings.ui_language, "home_learn_choice"),
+                            ui_text(&self.state.settings.ui_language, "home_learn_description"),
+                        ),
+                        (
+                            self.home_problems_area,
+                            HomeChoice::Problems,
+                            ui_text(&self.state.settings.ui_language, "home_practice_choice"),
+                            ui_text(
+                                &self.state.settings.ui_language,
+                                "home_practice_description",
+                            ),
+                        ),
+                    ] {
+                        frame.render_widget(
+                            Paragraph::new(description)
+                                .style(Self::pane_style(light))
+                                .block(Self::block(
+                                    title,
+                                    light,
+                                    self.focus == Focus::Home && self.home_choice == choice,
+                                ))
+                                .wrap(Wrap { trim: false }),
+                            area,
+                        );
+                    }
+                    let help_area = Rect::new(
+                        self.home_area.x,
+                        self.home_problems_area.bottom(),
+                        self.home_area.width,
+                        self.home_area
+                            .bottom()
+                            .saturating_sub(self.home_problems_area.bottom()),
+                    );
+                    frame.render_widget(
+                        Paragraph::new(ui_text(&self.state.settings.ui_language, "home_help"))
+                            .style(Self::pane_style(light)),
+                        help_area,
+                    );
+                }
 
-                let right = Paragraph::new(self.home_preview_text())
-                    .style(Self::pane_style(light))
-                    .block(Self::block(
-                        ui_text(&self.state.settings.ui_language, "home_preview"),
-                        light,
-                        false,
-                    ))
-                    .wrap(Wrap { trim: false });
-                frame.render_widget(right, body[1]);
-            } else {
+                if self.output_area.width > 0 {
+                    let right = Paragraph::new(self.home_preview_text())
+                        .style(Self::pane_style(light))
+                        .block(Self::block(
+                            ui_text(&self.state.settings.ui_language, "home_preview"),
+                            light,
+                            false,
+                        ))
+                        .wrap(Wrap { trim: false });
+                    frame.render_widget(right, self.output_area);
+                }
+            } else if self.left_area.width > 0 {
                 let left = if self.mode == AppMode::Learn {
-                    markdown_text(&self.output, light)
+                    markdown_text(
+                        &self.output,
+                        light,
+                        ui_text(&self.state.settings.ui_language, "empty_value"),
+                    )
                 } else {
                     problem_view::render(&self.problem, &self.state.settings.ui_language, light)
                 };
                 let title = if self.mode == AppMode::Learn {
-                    ui_text(&self.state.settings.ui_language, "syntax")
+                    ui_text(&self.state.settings.ui_language, "learning_view_lesson")
                 } else {
                     ui_text(&self.state.settings.ui_language, "problem")
                 };
@@ -138,7 +219,7 @@ impl PracticodeApp {
                     .block(Self::block(title, light, self.focus == Focus::Left))
                     .wrap(Wrap { trim: false })
                     .scroll((self.left_scroll, 0));
-                frame.render_widget(problem, body[0]);
+                frame.render_widget(problem, self.left_area);
             }
         }
 
@@ -165,12 +246,16 @@ impl PracticodeApp {
                 .wrap(Wrap { trim: false })
                 .scroll((self.output_scroll, 0));
             frame.render_widget(output, self.output_area);
-        } else if self.mode != AppMode::Home {
+        } else if self.mode != AppMode::Home && self.code_area.width > 0 {
             let code = self
                 .editor
                 .visible_text(self.code_area.height.saturating_sub(2) as usize);
             let title = if self.mode == AppMode::Learn {
-                format!("exercise.{}", ext_for(&self.state.settings.language))
+                format!(
+                    "{} · exercise.{}",
+                    ui_text(&self.state.settings.ui_language, "learning_view_code"),
+                    ext_for(&self.state.settings.language)
+                )
             } else {
                 format!("solution.{}", ext_for(&self.state.settings.language))
             };
@@ -178,20 +263,22 @@ impl PracticodeApp {
                 .style(Self::pane_style(light))
                 .block(Self::block(&title, light, self.focus == Focus::Code));
             frame.render_widget(code, self.code_area);
-
-            if self.mode == AppMode::Learn && !self.learn_result.is_empty() && right_panes.is_some()
-            {
-                let result = Paragraph::new(self.learn_result.clone())
-                    .style(Self::pane_style(light))
-                    .block(Self::block(
-                        ui_text(&self.state.settings.ui_language, "exercise_result"),
-                        light,
-                        false,
-                    ))
-                    .wrap(Wrap { trim: false })
-                    .scroll((self.output_scroll, 0));
-                frame.render_widget(result, self.output_area);
-            }
+        } else if self.mode == AppMode::Learn && self.output_area.width > 0 {
+            let text = if self.learn_result.is_empty() {
+                ui_text(&self.state.settings.ui_language, "result_empty").to_string()
+            } else {
+                self.learn_result.clone()
+            };
+            let result = Paragraph::new(text)
+                .style(Self::pane_style(light))
+                .block(Self::block(
+                    ui_text(&self.state.settings.ui_language, "learning_view_result"),
+                    light,
+                    self.focus == Focus::Output,
+                ))
+                .wrap(Wrap { trim: false })
+                .scroll((self.output_scroll, 0));
+            frame.render_widget(result, self.output_area);
         }
 
         let status = Paragraph::new(self.status_text()).style(if light {
@@ -207,18 +294,23 @@ impl PracticodeApp {
         });
         frame.render_widget(status, vertical[1]);
 
-        let command_text = if self.focus == Focus::Command || !self.command.is_empty() {
+        let command_text = if self.focus == Focus::Command {
+            format!(
+                "[{}] {}",
+                ui_text(&self.state.settings.ui_language, "focus_active"),
+                self.command
+            )
+        } else if !self.command.is_empty() {
             self.command.clone()
         } else {
-            ui_text(&self.state.settings.ui_language, "command_placeholder").to_string()
+            format!(
+                "{}: {}",
+                ui_text(&self.state.settings.ui_language, "command"),
+                ui_text(&self.state.settings.ui_language, "command_placeholder")
+            )
         };
         let command = Paragraph::new(command_text)
             .style(Self::pane_style(light))
-            .block(Self::block(
-                ui_text(&self.state.settings.ui_language, "command"),
-                light,
-                self.focus == Focus::Command,
-            ))
             .wrap(Wrap { trim: false });
         frame.render_widget(command, vertical[2]);
         self.draw_command_palette(frame, vertical[2]);
@@ -227,6 +319,9 @@ impl PracticodeApp {
 
     pub(super) fn wants_mouse_capture(&self) -> bool {
         !self.show_output
+            && !(self.mode == AppMode::Learn
+                && self.learning_session.view() == LearningView::Result
+                && self.focus != Focus::Command)
     }
 
     pub(super) fn sync_mouse_capture(&mut self) {
@@ -322,24 +417,48 @@ impl PracticodeApp {
             return Text::from(lines);
         }
         if self.output_is_markdown {
-            return markdown_text(&self.output, light);
+            return markdown_text(
+                &self.output,
+                light,
+                ui_text(&self.state.settings.ui_language, "empty_value"),
+            );
         }
         let output = self.output.clone();
         let mut lines = Vec::new();
+        let pass = format!(
+            "{} ",
+            ui_text(&self.state.settings.ui_language, "result_pass")
+        );
+        let fail = format!(
+            "{} ",
+            ui_text(&self.state.settings.ui_language, "result_fail")
+        );
+        let case = format!(
+            "{} ",
+            ui_text(&self.state.settings.ui_language, "judge_case")
+        );
         for line in output.lines() {
             if line.is_empty() {
                 lines.push(Line::default());
-            } else if line.starts_with("PASS ")
-                || line.starts_with("FAIL ")
-                || line.starts_with("Case ")
-                || line.starts_with("Next:")
-                || line.starts_with("Fix:")
+            } else if line.starts_with(&pass)
+                || line.starts_with(&fail)
+                || line.starts_with(&case)
+                || line == ui_text(&self.state.settings.ui_language, "run_pass_next")
+                || line == ui_text(&self.state.settings.ui_language, "run_fail_next")
             {
                 lines.push(Line::from(Span::styled(line.to_string(), title_style)));
-            } else if matches!(
-                line,
-                "Input" | "Expected" | "Got" | "Stdout" | "Stderr" | "Compile" | "Error"
-            ) {
+            } else if [
+                "judge_input",
+                "judge_expected",
+                "judge_got",
+                "judge_stdout",
+                "judge_stderr",
+                "judge_compile",
+                "judge_error",
+            ]
+            .into_iter()
+            .any(|key| line == ui_text(&self.state.settings.ui_language, key))
+            {
                 lines.push(Line::from(Span::styled(line.to_string(), label_style)));
             } else if line.starts_with("  ") {
                 lines.push(Line::from(vec![
@@ -353,7 +472,7 @@ impl PracticodeApp {
         Text::from(lines)
     }
 
-    pub(super) fn draw_command_palette(&self, frame: &mut Frame, command_area: Rect) {
+    pub(super) fn draw_command_palette(&mut self, frame: &mut Frame, command_area: Rect) {
         let suggestions = self.command_suggestions();
         if suggestions.is_empty() || command_area.y < 3 {
             return;
@@ -365,8 +484,9 @@ impl PracticodeApp {
             command_area.width,
             height,
         );
+        self.command_palette_area = area;
         let selected = self.command_palette_cursor.min(suggestions.len() - 1);
-        let visible = height.saturating_sub(2) as usize;
+        let visible = height.saturating_sub(3) as usize;
         let start = selected.saturating_sub(visible.saturating_sub(1));
         let mut lines = suggestions
             .iter()
@@ -461,12 +581,16 @@ impl PracticodeApp {
         match self.focus {
             Focus::Command => {
                 let before = prefix(&self.command, self.command_cursor);
+                let marker = format!(
+                    "[{}] ",
+                    ui_text(&self.state.settings.ui_language, "focus_active")
+                );
                 let x = command_area
                     .x
-                    .saturating_add(1)
+                    .saturating_add(display_width(&marker) as u16)
                     .saturating_add(display_width(&before) as u16)
-                    .min(command_area.right().saturating_sub(2));
-                frame.set_cursor_position(Position::new(x, command_area.y.saturating_add(1)));
+                    .min(command_area.right().saturating_sub(1));
+                frame.set_cursor_position(Position::new(x, command_area.y));
             }
             Focus::Code if !self.show_output => {
                 if let Some(position) = self.editor.cursor_position(code_area) {
@@ -483,7 +607,7 @@ impl PracticodeApp {
     }
 }
 
-fn markdown_text(markdown: &str, light: bool) -> Text<'static> {
+fn markdown_text(markdown: &str, light: bool, empty_label: &str) -> Text<'static> {
     let title_style = if light {
         Style::default()
             .fg(Color::Blue)
@@ -523,7 +647,7 @@ fn markdown_text(markdown: &str, light: bool) -> Text<'static> {
     for line in markdown.lines() {
         if line.trim_start().starts_with("```") {
             if in_fence {
-                push_markdown_code_block(&mut lines, &code_lines, code_style);
+                push_markdown_code_block(&mut lines, &code_lines, code_style, empty_label);
                 code_lines.clear();
             }
             in_fence = !in_fence;
@@ -549,7 +673,7 @@ fn markdown_text(markdown: &str, light: bool) -> Text<'static> {
         }
     }
     if in_fence {
-        push_markdown_code_block(&mut lines, &code_lines, code_style);
+        push_markdown_code_block(&mut lines, &code_lines, code_style, empty_label);
     }
     Text::from(lines)
 }
@@ -558,11 +682,12 @@ fn push_markdown_code_block(
     lines: &mut Vec<Line<'static>>,
     code_lines: &[String],
     code_style: Style,
+    empty_label: &str,
 ) {
     if code_lines.iter().all(|line| line.is_empty()) {
         lines.push(Line::from(vec![
             Span::raw("  "),
-            Span::styled(" <empty> ".to_string(), code_style),
+            Span::styled(format!(" {empty_label} "), code_style),
         ]));
         return;
     }
@@ -578,7 +703,9 @@ fn push_markdown_code_block(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+    use crossterm::event::{
+        KeyCode, KeyEvent, KeyModifiers, MouseButton, MouseEvent, MouseEventKind,
+    };
     use ratatui::{Terminal, backend::TestBackend};
 
     fn tmp_root(name: &str) -> PathBuf {
@@ -599,6 +726,199 @@ mod tests {
             .collect()
     }
 
+    fn draw_at(app: &mut PracticodeApp, width: u16, height: u16) -> Terminal<TestBackend> {
+        let backend = TestBackend::new(width, height);
+        let mut terminal = Terminal::new(backend).unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+        terminal
+    }
+
+    #[test]
+    fn learning_layout_switches_at_the_exact_width_boundary() {
+        for (width, height) in [(60, 16), (80, 24), (99, 30)] {
+            let mut app = PracticodeApp::new(tmp_root(&format!("narrow-{width}"))).unwrap();
+            app.handle_command("learn python").unwrap();
+
+            let _terminal = draw_at(&mut app, width, height);
+
+            assert_eq!(app.left_area, Rect::default(), "{width}x{height}");
+            assert_eq!(app.output_area, Rect::default(), "{width}x{height}");
+            assert_eq!(app.code_area, Rect::new(0, 0, width, height - 2));
+            assert_eq!(app.command_area.height, 1);
+            if width == 80 {
+                assert!(app.code_area.width.saturating_sub(2) > 60);
+            }
+        }
+
+        for (width, height) in [(100, 30), (140, 40)] {
+            let mut app = PracticodeApp::new(tmp_root(&format!("wide-{width}"))).unwrap();
+            app.handle_command("learn python").unwrap();
+
+            let _terminal = draw_at(&mut app, width, height);
+
+            assert!(app.left_area.width > 0, "{width}x{height}");
+            assert!(app.code_area.width > 0, "{width}x{height}");
+            assert!(
+                app.code_area.width > app.left_area.width,
+                "{width}x{height}"
+            );
+            assert!(app.left_area.right() <= app.code_area.x, "{width}x{height}");
+            assert_eq!(app.left_area.y, app.code_area.y);
+            assert_eq!(app.left_area.height, app.code_area.height);
+            assert_eq!(app.command_area.height, 1);
+        }
+    }
+
+    #[test]
+    fn undersized_terminal_renders_only_the_localized_resize_message() {
+        let mut app = PracticodeApp::new(tmp_root("resize-ko")).unwrap();
+        app.set_ui_language("ko").unwrap();
+        let _terminal = draw_at(&mut app, 60, 16);
+
+        for (width, height) in [(59, 15), (59, 16), (60, 15)] {
+            let terminal = draw_at(&mut app, width, height);
+            let text = buffer_text(&terminal);
+            let compact = text.replace(' ', "");
+            assert!(
+                compact.contains("터미널크기를60x16이상으로조정하세요."),
+                "{width}x{height}: {text}"
+            );
+            assert!(!text.contains("PRACTICODE"), "{width}x{height}: {text}");
+            assert_eq!(app.home_area, Rect::default());
+            assert_eq!(app.home_learn_area, Rect::default());
+            assert_eq!(app.home_problems_area, Rect::default());
+            assert_eq!(app.left_area, Rect::default());
+            assert_eq!(app.code_area, Rect::default());
+            assert_eq!(app.output_area, Rect::default());
+            assert_eq!(app.command_area, Rect::default());
+        }
+
+        app.handle_key(KeyEvent::new(KeyCode::Char('c'), KeyModifiers::CONTROL))
+            .unwrap();
+        assert!(app.should_quit);
+    }
+
+    #[test]
+    fn narrow_f6_selects_one_full_width_learning_view() {
+        let mut app = PracticodeApp::new(tmp_root("narrow-f6")).unwrap();
+        app.handle_command("learn python").unwrap();
+
+        let _terminal = draw_at(&mut app, 80, 24);
+        assert_eq!(app.code_area, Rect::new(0, 0, 80, 22));
+
+        app.handle_key(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
+            .unwrap();
+        let terminal = draw_at(&mut app, 80, 24);
+        assert_eq!(app.left_area, Rect::default());
+        assert_eq!(app.code_area, Rect::default());
+        assert_eq!(app.output_area, Rect::new(0, 0, 80, 22));
+        assert!(buffer_text(&terminal).contains("No result yet."));
+        assert!(!app.wants_mouse_capture());
+        assert!(app.status_text().contains("drag select to copy"));
+        app.focus_command();
+        assert!(app.wants_mouse_capture());
+        assert!(app.status_text().contains("Enter submit | Esc cancel"));
+        app.handle_key(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
+            .unwrap();
+
+        app.handle_key(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
+            .unwrap();
+        let _terminal = draw_at(&mut app, 80, 24);
+        assert_eq!(app.left_area, Rect::new(0, 0, 80, 22));
+        assert_eq!(app.code_area, Rect::default());
+        assert_eq!(app.output_area, Rect::default());
+    }
+
+    #[test]
+    fn command_palette_overlays_the_body_and_keeps_a_one_row_input() {
+        let mut app = PracticodeApp::new(tmp_root("palette-overlay")).unwrap();
+        app.handle_command("learn python").unwrap();
+        let _terminal = draw_at(&mut app, 80, 24);
+        let body = app.code_area;
+        assert_eq!(app.command_area.height, 1);
+
+        app.focus_command();
+        let terminal = draw_at(&mut app, 80, 24);
+
+        assert_eq!(app.code_area, body);
+        assert_eq!(app.command_area.height, 1);
+        assert!(buffer_text(&terminal).contains("Commands"));
+        assert!(
+            buffer_text(&terminal).contains("up/down select | Enter run | Esc cancel"),
+            "palette hint was clipped"
+        );
+
+        app.handle_mouse(MouseEvent {
+            kind: MouseEventKind::Down(MouseButton::Left),
+            column: 2,
+            row: 10,
+            modifiers: KeyModifiers::NONE,
+        })
+        .unwrap();
+        assert_eq!(app.focus, Focus::Command);
+    }
+
+    #[test]
+    fn narrow_home_cards_match_their_mouse_hitboxes_in_long_locales() {
+        for language in ["ko", "es"] {
+            let mut app = PracticodeApp::new(tmp_root(&format!("home-cards-{language}"))).unwrap();
+            app.set_ui_language(language).unwrap();
+            app.action_home().unwrap();
+            let terminal = draw_at(&mut app, 60, 16);
+            let buffer = terminal.backend().buffer();
+
+            assert_eq!(
+                buffer[(app.home_learn_area.x, app.home_learn_area.y)].symbol(),
+                "┌"
+            );
+            assert_eq!(
+                buffer[(app.home_problems_area.x, app.home_problems_area.y)].symbol(),
+                "┌"
+            );
+            assert!(app.home_learn_area.bottom() <= app.home_problems_area.y);
+
+            app.handle_mouse(MouseEvent {
+                kind: MouseEventKind::Down(MouseButton::Left),
+                column: app.home_problems_area.x + 2,
+                row: app.home_problems_area.y + 2,
+                modifiers: KeyModifiers::NONE,
+            })
+            .unwrap();
+            assert_eq!(app.mode, AppMode::Problems, "{language}");
+        }
+    }
+
+    #[test]
+    fn command_cursor_stays_on_the_single_input_row_with_hangul() {
+        let mut app = PracticodeApp::new(tmp_root("command-cursor-ko")).unwrap();
+        app.set_ui_language("ko").unwrap();
+        app.focus_command();
+        for char in "ㅇㅏㄴ".chars() {
+            app.insert_command_char(char);
+        }
+
+        let terminal = draw_at(&mut app, 60, 16);
+        let cursor = terminal.backend().cursor_position();
+        assert_eq!(cursor.y, app.command_area.y);
+        assert!(cursor.x < app.command_area.right());
+    }
+
+    #[test]
+    fn supported_locales_and_themes_render_at_boundary_sizes_without_panics() {
+        for language in UI_LANGUAGES {
+            for theme in THEMES {
+                let mut app =
+                    PracticodeApp::new(tmp_root(&format!("matrix-{language}-{theme}"))).unwrap();
+                app.set_ui_language(language).unwrap();
+                app.set_theme(theme).unwrap();
+                app.action_learn("python").unwrap();
+                for (width, height) in [(60, 16), (80, 24), (100, 30), (140, 40)] {
+                    let _terminal = draw_at(&mut app, width, height);
+                }
+            }
+        }
+    }
+
     #[test]
     fn output_uses_full_body_so_terminal_drag_selection_has_no_side_pane() {
         let mut app = PracticodeApp::new(tmp_root("full-output")).unwrap();
@@ -608,12 +928,12 @@ mod tests {
         let mut terminal = Terminal::new(backend).unwrap();
         terminal.draw(|frame| app.draw(frame)).unwrap();
 
-        assert_eq!(app.output_area, Rect::new(0, 0, 80, 20));
+        assert_eq!(app.output_area, Rect::new(0, 0, 80, 22));
         assert_eq!(app.code_area, Rect::default());
     }
 
     #[test]
-    fn learn_result_keeps_lesson_and_splits_right_pane() {
+    fn narrow_learn_result_uses_the_full_body() {
         let mut app = PracticodeApp::new(tmp_root("learn-result-split")).unwrap();
         app.handle_command("learn python").unwrap();
         app.handle_command("next").unwrap();
@@ -626,9 +946,9 @@ mod tests {
 
         assert!(app.output.contains("Exercise"));
         assert!(app.learn_result.contains("FAIL"));
-        assert_ne!(app.output_area, Rect::new(0, 0, 80, 20));
-        assert!(app.output_area.y > app.code_area.y);
-        assert_eq!(app.output_area.x, app.code_area.x);
+        assert_eq!(app.output_area, Rect::new(0, 0, 80, 22));
+        assert_eq!(app.left_area, Rect::default());
+        assert_eq!(app.code_area, Rect::default());
     }
 
     #[test]
@@ -673,7 +993,7 @@ mod tests {
         let mut app = PracticodeApp::new(tmp_root("output-scroll")).unwrap();
         app.handle_command("help").unwrap();
 
-        let backend = TestBackend::new(80, 12);
+        let backend = TestBackend::new(80, 16);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal.draw(|frame| app.draw(frame)).unwrap();
         assert!(buffer_text(&terminal).contains("Help"));
@@ -700,7 +1020,7 @@ mod tests {
             .iter()
             .map(|cell| cell.symbol())
             .collect::<String>();
-        assert!(text.contains("> Home"));
+        assert!(text.contains("> Continue today's session"));
     }
 
     #[test]
@@ -712,5 +1032,35 @@ mod tests {
         assert!(preview.contains("Due: 0"));
         assert!(preview.contains("Next step: Language delta"));
         assert!(!preview.contains("moves to the next lesson"));
+    }
+
+    #[test]
+    fn home_preview_and_status_localize_problem_state_tokens() {
+        let mut app = PracticodeApp::new(tmp_root("home-problem-tokens-ko")).unwrap();
+        app.set_ui_language("ko").unwrap();
+        app.action_home().unwrap();
+        app.home_choice = HomeChoice::Problems;
+
+        let preview = app.home_preview_text();
+        assert!(preview.contains("난이도: 쉬움"), "{preview}");
+        assert!(preview.contains("상태: 배정됨"), "{preview}");
+        assert!(!preview.contains("easy"), "{preview}");
+
+        app.action_practice().unwrap();
+        let status = app.status_text();
+        assert!(status.contains("| 쉬움 |"), "{status}");
+        assert!(!status.contains("| easy |"), "{status}");
+    }
+
+    #[test]
+    fn localized_judge_case_keeps_the_result_emphasis() {
+        let mut app = PracticodeApp::new(tmp_root("judge-case-style-ko")).unwrap();
+        app.set_ui_language("ko").unwrap();
+        app.output = "케이스 1: 실패".to_string();
+        app.output_is_markdown = false;
+
+        let text = app.output_text();
+
+        assert_eq!(text.lines[0].spans[0].style.fg, Some(Color::Yellow));
     }
 }

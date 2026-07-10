@@ -1,17 +1,74 @@
 use super::*;
-use crate::core::JudgeResult;
+use crate::core::{JudgeFailureKind, JudgeResult};
 
-fn judge_headline(result: &JudgeResult) -> String {
+fn judge_headline(result: &JudgeResult, language: &str) -> String {
+    let failure = result.failure_kind.map(|kind| {
+        ui_text(
+            language,
+            match kind {
+                JudgeFailureKind::Compile => "judge_failure_compile",
+                JudgeFailureKind::TypeCheck => "judge_failure_typecheck",
+                JudgeFailureKind::Runtime => "judge_failure_runtime",
+                JudgeFailureKind::Timeout => "judge_failure_timeout",
+                JudgeFailureKind::Output => "judge_failure_output",
+            },
+        )
+    });
     format!(
         "{} {}/{}{}",
-        if result.passed { "PASS" } else { "FAIL" },
+        ui_text(
+            language,
+            if result.passed {
+                "result_pass"
+            } else {
+                "result_fail"
+            }
+        ),
         result.passed_cases,
         result.total_cases,
-        result
-            .failure_kind
-            .map(|kind| format!(" [{kind:?}]"))
-            .unwrap_or_default()
+        failure.map(|kind| format!(" [{kind}]")).unwrap_or_default()
     )
+}
+
+fn localized_judge_output(output: &str, language: &str) -> String {
+    let structured = output.lines().any(|line| {
+        line.strip_prefix("Case ")
+            .and_then(|rest| rest.split_once(": "))
+            .is_some_and(|(_, outcome)| matches!(outcome, "PASS" | "FAIL"))
+    });
+    if !structured {
+        return output.to_string();
+    }
+    output
+        .lines()
+        .map(|line| {
+            if let Some((case, outcome)) = line
+                .strip_prefix("Case ")
+                .and_then(|rest| rest.split_once(": "))
+            {
+                let outcome = match outcome {
+                    "PASS" => ui_text(language, "result_pass"),
+                    "FAIL" => ui_text(language, "result_fail"),
+                    _ => outcome,
+                };
+                return format!("{} {case}: {outcome}", ui_text(language, "judge_case"));
+            }
+            match line {
+                "Input" => ui_text(language, "judge_input").to_string(),
+                "Expected" => ui_text(language, "judge_expected").to_string(),
+                "Got" => ui_text(language, "judge_got").to_string(),
+                "Stdout" => ui_text(language, "judge_stdout").to_string(),
+                "Stderr" => ui_text(language, "judge_stderr").to_string(),
+                "Error" => ui_text(language, "judge_error").to_string(),
+                "Compile" => ui_text(language, "judge_compile").to_string(),
+                "  <hidden>" => format!("  <{}>", ui_text(language, "judge_hidden")),
+                "  <empty>" => format!("  {}", ui_text(language, "empty_value")),
+                "  timeout: 5s" => format!("  {}", ui_text(language, "judge_timeout_detail")),
+                _ => line.to_string(),
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 impl PracticodeApp {
@@ -120,13 +177,14 @@ impl PracticodeApp {
         if result.passed {
             record_pass(&self.root, &self.problem, &mut self.state)?;
         }
-        let headline = judge_headline(&result);
+        let headline = judge_headline(&result, &self.state.settings.ui_language);
         let next_step = if result.passed {
             ui_text(&self.state.settings.ui_language, "run_pass_next")
         } else {
             ui_text(&self.state.settings.ui_language, "run_fail_next")
         };
-        self.write_text_output(&format!("{headline}\n{}\n\n{next_step}", result.output));
+        let detail = localized_judge_output(&result.output, &self.state.settings.ui_language);
+        self.write_text_output(&format!("{headline}\n{detail}\n\n{next_step}"));
         Ok(())
     }
 
@@ -339,18 +397,39 @@ impl PracticodeApp {
             &cases,
         );
         let assisted = self.learning_session.assisted();
+        let now = unix_time_now();
         record_syntax_result(
             &mut self.state,
             lesson.language,
             lesson.id,
             result.passed,
-            unix_time_now(),
+            now,
             assisted,
+        );
+        let mastery = &self.state.syntax_mastery[lesson.language][lesson.id];
+        let stage = ui_text(
+            &self.state.settings.ui_language,
+            match mastery.stage {
+                crate::core::MasteryStage::New => "mastery_new",
+                crate::core::MasteryStage::Practiced => "mastery_practiced",
+                crate::core::MasteryStage::Retained => "mastery_retained",
+                crate::core::MasteryStage::Mastered => "mastery_mastered",
+            },
+        );
+        let review_days = mastery
+            .review_due_at
+            .saturating_sub(now)
+            .saturating_add(86_399)
+            / 86_400;
+        let learning_state = format!(
+            "{}: {stage}\n{}: {review_days}",
+            ui_text(&self.state.settings.ui_language, "result_mastery"),
+            ui_text(&self.state.settings.ui_language, "result_review_days"),
         );
         self.learning_session.finish_judge(result.passed);
         save_state(&self.root, &self.state)?;
         self.output_scroll = 0;
-        let headline = judge_headline(&result);
+        let headline = judge_headline(&result, &self.state.settings.ui_language);
         let next_step = ui_text(
             &self.state.settings.ui_language,
             if result.passed {
@@ -359,7 +438,10 @@ impl PracticodeApp {
                 "run_fail_next"
             },
         );
-        self.learn_result = format!("{headline}\n{}\n\n{next_step}", result.output.trim_end());
+        self.learn_result = format!(
+            "{headline}\n{}\n\n{learning_state}\n\n{next_step}",
+            localized_judge_output(&result.output, &self.state.settings.ui_language).trim_end()
+        );
         self.show_current_syntax_lesson();
         Ok(())
     }
@@ -673,5 +755,20 @@ impl PracticodeApp {
         self.editing_notes = false;
         self.show_profile();
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn judge_localization_preserves_tool_owned_compiler_diagnostics() {
+        let raw = "Case 1: compiler-owned diagnostic\nTS2322: raw detail";
+        assert_eq!(localized_judge_output(raw, "ko"), raw);
+        assert_eq!(
+            localized_judge_output("Case 1: FAIL\n\nGot\n  value", "ko"),
+            "케이스 1: 실패\n\n실제 출력\n  value"
+        );
     }
 }

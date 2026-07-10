@@ -12,8 +12,7 @@ use crate::{
         normalize_next_source, normalize_ui_language, parse_language_list, parse_topic_list,
         parse_ui_language_list, previous_problem, problem_by_id, record_pass, record_syntax_result,
         render_problem_tui, render_syntax_lesson, save_state, set_current_syntax_lesson,
-        syntax_cases, syntax_core_progress_count, syntax_language_name, syntax_progress_count,
-        template_for, ui_text,
+        syntax_cases, syntax_core_progress_count, syntax_language_name, template_for, ui_text,
     },
     text::{
         byte_index, char_len, compose_hangul_jamo, display_width, prefix, render_markdown_plain,
@@ -61,8 +60,8 @@ use self::commands::COMMAND_HINTS;
 pub use self::editor::TextEditor;
 pub use self::learning::LearningStep;
 use self::learning::{
-    LearningAdvance, LearningSession, LearningView, learning_step_label, progress_text,
-    render_learning_step, unix_time_now,
+    LearningAdvance, LearningSession, LearningView, learning_step_label, learning_view_label,
+    progress_text, render_learning_step, unix_time_now,
 };
 
 const UPDATE_CHECK_INTERVAL: Duration = Duration::from_secs(30 * 60);
@@ -96,6 +95,16 @@ enum AppMode {
 enum HomeChoice {
     Learn,
     Problems,
+}
+
+fn localized_status(language: &str, status: &str) -> String {
+    let key = format!("status_{status}");
+    let localized = ui_text(language, &key);
+    if localized.is_empty() {
+        status.to_string()
+    } else {
+        localized.to_string()
+    }
 }
 
 pub struct PracticodeApp {
@@ -148,6 +157,7 @@ pub struct PracticodeApp {
     code_area: Rect,
     output_area: Rect,
     command_area: Rect,
+    command_palette_area: Rect,
     mouse_capture: bool,
     should_quit: bool,
     #[cfg(test)]
@@ -220,6 +230,7 @@ impl PracticodeApp {
             code_area: Rect::default(),
             output_area: Rect::default(),
             command_area: Rect::default(),
+            command_palette_area: Rect::default(),
             mouse_capture: false,
             should_quit: false,
             #[cfg(test)]

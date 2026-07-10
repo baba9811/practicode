@@ -256,7 +256,7 @@ fn app_command_generate_request_starts_background_generation() {
         .unwrap();
     assert!(!app.has_task());
     assert!(app.has_background_generation_for_test());
-    assert!(app.status_text_for_test().contains("bg generate"));
+    assert!(app.status_text_for_test().contains("background generation"));
 }
 
 #[test]
@@ -510,14 +510,15 @@ fn problem_run_shows_failure_kind_visible_output_and_localized_next_action() {
     app.handle_command_for_test("run").unwrap();
 
     let output = app.output_for_test();
-    assert!(output.contains("FAIL 0/1 [Output]"), "{output}");
-    assert!(output.contains("Got\n  actual visible output"));
+    assert!(output.contains("실패 0/1 [출력]"), "{output}");
+    assert!(output.contains("실제 출력\n  actual visible output"));
+    assert!(!output.contains("Got\n"));
     assert!(output.contains("수정: Esc 또는 e로 편집한 뒤 /run"));
     assert!(!output.contains("Hello, World!"));
 }
 
 #[test]
-fn lesson_run_shows_typecheck_detail_and_localized_next_action() {
+fn lesson_run_localizes_app_headline_and_preserves_raw_compiler_diagnostic() {
     if which("node").is_none() || which("tsc").is_none() {
         return;
     }
@@ -543,7 +544,8 @@ fn lesson_run_shows_typecheck_detail_and_localized_next_action() {
     app.handle_command_for_test("run").unwrap();
 
     let output = app.learn_result_for_test();
-    assert!(output.contains("FAIL 0/1 [TypeCheck]"), "{output}");
+    assert!(output.contains("실패 0/1 [타입 검사]"), "{output}");
+    // Compiler stderr is tool-owned pass-through; only app-owned headline and guidance localize.
     assert!(output.contains("TS2322"), "{output}");
     assert!(output.contains("수정: Esc 또는 e로 편집한 뒤 /run"));
     assert!(!output.contains("score=7"));
@@ -1030,6 +1032,7 @@ fn guided_session_records_each_judge_and_only_a_pass_reaches_reflect() {
 
     app.handle_command_for_test("run").unwrap();
     assert_eq!(app.learning_step_for_test(), LearningStep::Exercise);
+    assert!(app.learn_result_for_test().contains("Mastery: New"));
     let bank = load_bank(&root).unwrap();
     let failed = load_state(&root, &bank).unwrap();
     assert_eq!(failed.syntax_mastery["python"]["py-output"].attempts, 1);
@@ -1045,6 +1048,11 @@ fn guided_session_records_each_judge_and_only_a_pass_reaches_reflect() {
     app.handle_command_for_test("run").unwrap();
 
     assert_eq!(app.learning_step_for_test(), LearningStep::Reflect);
+    assert!(app.learn_result_for_test().contains("Mastery: Practiced"));
+    assert!(
+        app.learn_result_for_test()
+            .contains("Next review (days): 1")
+    );
     let passed = load_state(&root, &bank).unwrap();
     assert_eq!(passed.syntax_mastery["python"]["py-output"].attempts, 2);
     assert_eq!(
@@ -1184,4 +1192,68 @@ fn home_exposes_a_localized_continue_session_action() {
         app.handle_command_for_test("home").unwrap();
         assert!(app.output_for_test().contains(expected), "{lang}");
     }
+}
+
+#[test]
+fn home_help_and_status_use_the_selected_ui_language() {
+    let cases = [
+        ("en", "home", "Choose Learn or Practice"),
+        ("ko", "홈", "학습 또는 연습을 선택"),
+        ("ja", "ホーム", "学習または練習を選択"),
+        ("zh", "主页", "选择学习或练习"),
+        ("es", "Inicio", "Elige Aprender o Practicar"),
+    ];
+
+    for (lang, mode, help_line) in cases {
+        let root = tmp_root(&format!("localized-home-help-{lang}"));
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.handle_command_for_test(&format!("ui {lang}")).unwrap();
+        app.handle_command_for_test("home").unwrap();
+        assert!(app.status_text_for_test().contains(mode), "{lang}");
+
+        app.handle_command_for_test("help").unwrap();
+        let help = app.output_for_test();
+        assert!(help.contains(help_line), "{lang}: {help}");
+        if lang != "en" {
+            assert!(!help.contains("Choose Learn syntax"), "{lang}: {help}");
+            assert!(
+                !help.contains("opens the command palette"),
+                "{lang}: {help}"
+            );
+        }
+    }
+}
+
+#[test]
+fn learning_status_does_not_claim_view_focus_behind_overlays() {
+    let root = tmp_root("learning-overlay-focus");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+    assert!(app.status_text_for_test().contains("ACTIVE: Code"));
+
+    app.focus_command_for_test();
+    let status = app.status_text_for_test();
+    assert!(!status.contains("ACTIVE: Code"));
+    assert_eq!(status.matches("Enter submit | Esc cancel").count(), 1);
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
+        .unwrap();
+    assert!(!app.status_text_for_test().contains("ACTIVE: Code"));
+    app.handle_command_for_test("help").unwrap();
+    assert!(!app.status_text_for_test().contains("ACTIVE: Code"));
+}
+
+#[test]
+fn tab_inserts_exactly_four_spaces_in_the_code_editor() {
+    let root = tmp_root("tab-four-spaces");
+    let bank = load_bank(&root).unwrap();
+    let state = load_state(&root, &bank).unwrap();
+    let path = ensure_submission(&root, &bank[0], &state.settings).unwrap();
+    std::fs::write(&path, "").unwrap();
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("code").unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Tab, KeyModifiers::NONE))
+        .unwrap();
+
+    assert_eq!(std::fs::read_to_string(path).unwrap(), "    ");
 }

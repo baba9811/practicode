@@ -40,6 +40,9 @@ impl PracticodeApp {
             return Ok(());
         }
         let position = Position::new(mouse.column, mouse.row);
+        if self.command_palette_area.contains(position) {
+            return Ok(());
+        }
         if matches!(
             mouse.kind,
             MouseEventKind::ScrollUp | MouseEventKind::ScrollDown
@@ -254,7 +257,10 @@ impl PracticodeApp {
                 KeyCode::Enter => self.open_selected_problem()?,
                 KeyCode::Esc => {
                     self.list_cursor = None;
-                    self.write_text_output("Closed list.");
+                    self.write_text_output(ui_text(
+                        &self.state.settings.ui_language,
+                        "list_closed",
+                    ));
                 }
                 _ => {
                     self.list_cursor = Some(cursor);

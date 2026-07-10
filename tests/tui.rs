@@ -36,7 +36,7 @@ fn first_run_shows_home_once() {
     assert!(app.status_text_for_test().contains("home"));
     assert!(app.output_for_test().contains("Learn syntax"));
     assert!(app.output_for_test().contains("Practice coding tests"));
-    assert!(root.join(".practicode/problem-state.json").exists());
+    assert!(root.join("problem-state.json").exists());
 
     let app = PracticodeApp::new(root).unwrap();
     assert!(app.status_text_for_test().contains("home"));
@@ -51,7 +51,7 @@ fn home_command_opens_home_and_persists_it() {
 
     assert!(app.status_text_for_test().contains("home"));
     assert!(app.output_for_test().contains("Learn syntax"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"home\""));
 }
 
@@ -67,7 +67,7 @@ fn home_arrows_and_enter_open_selected_mode() {
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
     assert!(!app.status_text_for_test().contains("| home |"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
@@ -82,7 +82,7 @@ fn home_vertical_arrows_and_enter_open_selected_mode() {
         .unwrap();
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 
     let root = tmp_root("home-keyboard-up");
@@ -94,7 +94,7 @@ fn home_vertical_arrows_and_enter_open_selected_mode() {
         .unwrap();
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
@@ -107,7 +107,7 @@ fn home_space_opens_learn_mode() {
         .unwrap();
 
     assert!(app.status_text_for_test().contains("learn"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"learn\""));
 }
 
@@ -126,7 +126,7 @@ fn home_command_escape_returns_to_home_focus() {
         .unwrap();
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
@@ -144,7 +144,7 @@ fn home_output_escape_returns_to_home_focus() {
         .unwrap();
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
@@ -175,7 +175,7 @@ fn clicking_home_area_returns_to_home_focus() {
         .unwrap();
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
@@ -194,7 +194,7 @@ fn home_mouse_click_opens_clicked_choice() {
     .unwrap();
 
     assert!(app.status_text_for_test().contains("001-hello-world"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"start_mode\": \"problems\""));
 }
 
@@ -459,7 +459,7 @@ fn old_lesson_aliases_are_removed() {
         assert!(app.output_for_test().contains("Unknown command"));
     }
     assert!(app.learn_result_for_test().is_empty());
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"python\": \"py-output\""));
     assert!(!saved.contains("\"syntax_progress\": {\n    \"python\""));
 }
@@ -531,7 +531,7 @@ fn profile_commands_update_saved_preferences() {
     assert!(output.contains("Avoid topics: dp, graph"));
     assert!(output.contains("Generated answer languages: python, rust"));
     assert!(output.contains("Generated UI languages: ko, en"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"difficulty\": \"medium\""));
     assert!(saved.contains("\"topics\": ["));
     assert!(saved.contains("\"avoid_topics\": ["));
@@ -567,10 +567,9 @@ fn profile_panel_toggles_generation_languages_with_keyboard() {
     let output = app.output_for_test();
     assert!(output.contains("[ ] python"));
     assert!(output.contains("Generated answer languages: ts, java, rust"));
-    let saved: serde_json::Value = serde_json::from_str(
-        &std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap(),
-    )
-    .unwrap();
+    let saved: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("problem-state.json")).unwrap())
+            .unwrap();
     let languages = saved["settings"]["generate_languages"]
         .as_array()
         .unwrap()
@@ -605,7 +604,7 @@ fn profile_panel_cycles_ai_settings_with_keyboard() {
     assert!(output.contains("AI provider: claude"));
     assert!(output.contains("AI model: claude-test"));
     assert!(output.contains("AI effort: low"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"ai_provider\": \"claude\""));
     assert!(saved.contains("\"ai_model\": \"claude-test\""));
     assert!(saved.contains("\"ai_effort\": \"low\""));
@@ -636,7 +635,7 @@ fn profile_panel_opens_problem_notes_editor() {
         .unwrap();
 
     assert_eq!(
-        std::fs::read_to_string(root.join(".practicode/problem_notes.md")).unwrap(),
+        std::fs::read_to_string(root.join("problem_notes.md")).unwrap(),
         "Prefer strings\nAvoid DP"
     );
     assert!(app.output_for_test().contains("User profile"));
@@ -702,7 +701,7 @@ fn effort_command_updates_saved_ai_effort() {
     app.handle_command_for_test("effort high").unwrap();
 
     assert!(app.output_for_test().contains("AI effort: high"));
-    let saved = std::fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = std::fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"ai_effort\": \"high\""));
 }
 

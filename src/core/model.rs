@@ -5,9 +5,9 @@ pub const THEMES: &[&str] = &["dark", "light"];
 pub const AI_PROVIDERS: &[&str] = &["codex", "claude"];
 pub const CODEX_AI_EFFORTS: &[&str] = &["auto", "low", "medium", "high", "xhigh"];
 pub const CLAUDE_AI_EFFORTS: &[&str] = &["auto", "low", "medium", "high", "xhigh", "max"];
-pub const BANK_PATH: &str = ".practicode/problem_bank.json";
-pub const STATE_PATH: &str = ".practicode/problem-state.json";
-pub const PROBLEM_NOTES_PATH: &str = ".practicode/problem_notes.md";
+pub const BANK_PATH: &str = "problem_bank.json";
+pub const STATE_PATH: &str = "problem-state.json";
+pub const PROBLEM_NOTES_PATH: &str = "problem_notes.md";
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Settings {

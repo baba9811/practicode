@@ -74,7 +74,7 @@ pub fn judge_path(
             };
         }
     };
-    let run_dir = root.join(".practicode/build").join(id).join("run");
+    let run_dir = root.join("build").join(id).join("run");
     if let Err(error) = fs::create_dir_all(&run_dir) {
         return JudgeResult {
             passed: false,
@@ -202,7 +202,7 @@ fn compile_java(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
         return Ok(None);
     };
     let build = root
-        .join(".practicode/build")
+        .join("build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default())
         .join("java");
     fs::create_dir_all(&build)?;
@@ -233,7 +233,7 @@ fn compile_rust(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
         return Ok(None);
     };
     let build = root
-        .join(".practicode/build")
+        .join("build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default());
     fs::create_dir_all(&build)?;
     let exe = build.join(if cfg!(windows) {

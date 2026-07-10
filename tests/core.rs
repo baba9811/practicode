@@ -42,9 +42,8 @@ fn load_state_defaults_start_mode_to_home() {
 fn load_state_normalizes_start_mode() {
     let root = tmp_root("state-start-mode-normalize");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem-state.json"),
+        root.join("problem-state.json"),
         r#"{
   "current_problem": "001-hello-world",
   "settings": {
@@ -62,7 +61,7 @@ fn save_bank_creates_local_custom_problem_bank() {
     let root = tmp_root("save-bank");
     let bank = two_problem_bank(&root);
     let loaded = load_bank(&root).unwrap();
-    assert!(root.join(".practicode/problem_bank.json").exists());
+    assert!(root.join("problem_bank.json").exists());
     assert_eq!(
         loaded.iter().map(|problem| &problem.id).collect::<Vec<_>>(),
         bank.iter().map(|problem| &problem.id).collect::<Vec<_>>()
@@ -72,8 +71,7 @@ fn save_bank_creates_local_custom_problem_bank() {
 #[test]
 fn load_bank_rejects_empty_custom_bank() {
     let root = tmp_root("empty-bank");
-    fs::create_dir_all(root.join(".practicode")).unwrap();
-    fs::write(root.join(".practicode/problem_bank.json"), "[]").unwrap();
+    fs::write(root.join("problem_bank.json"), "[]").unwrap();
     let error = load_bank(&root).unwrap_err().to_string();
     assert!(error.contains("at least one problem"));
 }
@@ -84,9 +82,8 @@ fn load_bank_rejects_invalid_problem_shape() {
     let mut problem = load_bank(&root).unwrap().remove(0);
     problem.id = "../bad".to_string();
     problem.cases.clear();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem_bank.json"),
+        root.join("problem_bank.json"),
         serde_json::to_string_pretty(&vec![problem]).unwrap(),
     )
     .unwrap();
@@ -134,9 +131,8 @@ fn generation_language_lists_accept_all_or_known_values_only() {
 fn load_state_keeps_next_source_to_current_values_only() {
     let root = tmp_root("state-source");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem-state.json"),
+        root.join("problem-state.json"),
         r#"{
   "current_problem": "001-hello-world",
   "settings": {
@@ -153,9 +149,8 @@ fn load_state_keeps_next_source_to_current_values_only() {
 fn load_state_normalizes_practice_profile() {
     let root = tmp_root("state-profile");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem-state.json"),
+        root.join("problem-state.json"),
         r##"{
   "current_problem": "001-hello-world",
   "suggested_next_difficulty": "weird",
@@ -196,7 +191,7 @@ fn save_state_writes_ai_settings_without_deprecated_empty_field() {
         current_syntax_lesson: Default::default(),
     };
     save_state(&root, &state).unwrap();
-    let saved = fs::read_to_string(root.join(".practicode/problem-state.json")).unwrap();
+    let saved = fs::read_to_string(root.join("problem-state.json")).unwrap();
     assert!(saved.contains("\"ai_provider\": \"claude\""));
     assert!(saved.contains("\"ai_model\": \"sonnet\""));
     assert!(saved.contains("\"ai_effort\": \"max\""));
@@ -207,9 +202,8 @@ fn save_state_writes_ai_settings_without_deprecated_empty_field() {
 fn load_state_normalizes_ai_effort_by_provider() {
     let root = tmp_root("state-ai-effort");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem-state.json"),
+        root.join("problem-state.json"),
         r#"{
   "current_problem": "001-hello-world",
   "settings": {
@@ -227,9 +221,8 @@ fn load_state_normalizes_ai_effort_by_provider() {
 fn load_state_normalizes_ai_provider_case_and_spaces() {
     let root = tmp_root("state-ai-provider");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem-state.json"),
+        root.join("problem-state.json"),
         r#"{
   "current_problem": "001-hello-world",
   "settings": {
@@ -250,9 +243,8 @@ fn load_state_normalizes_ai_provider_case_and_spaces() {
 fn load_state_normalizes_syntax_progress_for_learn_mode() {
     let root = tmp_root("state-syntax-progress");
     let bank = load_bank(&root).unwrap();
-    fs::create_dir_all(root.join(".practicode")).unwrap();
     fs::write(
-        root.join(".practicode/problem-state.json"),
+        root.join("problem-state.json"),
         r#"{
   "current_problem": "001-hello-world",
   "syntax_progress": {
@@ -430,10 +422,7 @@ fn judge_runs_submission_from_build_directory() {
     let result = judge(&root, &bank[0], &settings);
     assert!(result.passed, "{}", result.output);
     assert!(!root.join("touch.txt").exists());
-    assert!(
-        root.join(".practicode/build/001-hello-world/run/touch.txt")
-            .exists()
-    );
+    assert!(root.join("build/001-hello-world/run/touch.txt").exists());
 }
 
 #[test]

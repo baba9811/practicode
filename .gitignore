@@ -1,6 +1,7 @@
 target/
 node_modules/
 npm-debug.log*
+.worktrees/
 .practicode/
 .superpowers/
 docs/superpowers/

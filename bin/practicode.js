@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 const { spawnSync } = require("node:child_process");
-const { existsSync } = require("node:fs");
+const { existsSync, mkdirSync } = require("node:fs");
+const { homedir } = require("node:os");
 const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
@@ -73,6 +74,11 @@ function runDockerSandbox(forwardedArgs) {
     process.exit(build.status ?? 1);
   }
 
+  const dataHome = path.resolve(
+    process.env.PRACTICODE_HOME || path.join(homedir(), ".practicode"),
+  );
+  mkdirSync(dataHome, { recursive: true });
+
   const runArgs = [
     "run",
     "--rm",
@@ -95,12 +101,16 @@ function runDockerSandbox(forwardedArgs) {
     "/tmp:rw,nosuid,nodev,size=256m,mode=1777",
     "--mount",
     `type=bind,source=${process.cwd()},target=/workspace`,
+    "--mount",
+    `type=bind,source=${dataHome},target=/data`,
     "-w",
     "/workspace",
     "-e",
     `TERM=${process.env.TERM || "xterm-256color"}`,
     "-e",
     "HOME=/tmp",
+    "-e",
+    "PRACTICODE_HOME=/data",
     "-e",
     "PRACTICODE_NO_UPDATE_CHECK=1",
   ];

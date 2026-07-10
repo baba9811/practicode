@@ -16,6 +16,7 @@
 - Legacy migration never overwrites or deletes user data and never copies build cache.
 - Codex keeps its existing sandbox mode and skips only the Git-repository check.
 - Docker data survives container removal in the same host data root.
+- Do not start Docker, build a local Docker image, or run a local container during implementation verification; use static launcher checks and npm packaging only.
 - Release version is `0.1.20`.
 
 ---

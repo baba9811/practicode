@@ -133,11 +133,21 @@ pub struct IoCase {
     pub output: String,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum JudgeFailureKind {
+    Compile,
+    TypeCheck,
+    Runtime,
+    Timeout,
+    Output,
+}
+
 #[derive(Clone, Debug)]
 pub struct JudgeResult {
     pub passed: bool,
     pub passed_cases: usize,
     pub total_cases: usize,
+    pub failure_kind: Option<JudgeFailureKind>,
     pub output: String,
 }
 

@@ -3,11 +3,12 @@ mod common;
 use common::{tmp_root, two_problem_bank};
 use practicode::{
     core::{
-        AppState, HistoryItem, LANGUAGES, Settings, SyntaxKind, SyntaxTrack, ensure_submission,
-        ensure_syntax_submission, judge, judge_path, load_bank, load_state, localized,
-        next_problem, parse_language_list, parse_ui_language_list, problem_by_id, record_pass,
-        render_problem, render_problem_tui, render_syntax_lesson, save_bank, save_state,
-        syntax_cases, syntax_lessons_for, syntax_progress_count,
+        AppState, HistoryItem, JudgeFailureKind, LANGUAGES, Settings, SyntaxKind, SyntaxTrack,
+        ensure_submission, ensure_syntax_submission, judge, judge_path, load_bank, load_state,
+        localized, next_problem, normalize_judge_output, parse_language_list,
+        parse_ui_language_list, problem_by_id, record_pass, render_problem, render_problem_tui,
+        render_syntax_lesson, save_bank, save_state, syntax_cases, syntax_lessons_for,
+        syntax_progress_count,
     },
     process::which,
     text::render_markdown_plain,
@@ -337,6 +338,221 @@ fn judge_runs_python_solution_against_cases() {
     let result = judge(&root, &bank[0], &settings);
     assert!(result.passed, "{}", result.output);
     assert_eq!(result.passed_cases, result.total_cases);
+}
+
+#[test]
+fn judge_preserves_meaningful_whitespace() {
+    assert_eq!(normalize_judge_output("ok\r\n"), "ok\n");
+    assert_ne!(normalize_judge_output(" ok\n"), "ok\n");
+    assert_ne!(normalize_judge_output("ok\n\n"), "ok\n");
+}
+
+#[test]
+fn judge_compares_normalized_output_without_trimming() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("judge-exact-output");
+    let path = root.join("solution.py");
+    fs::write(&path, "import sys\nsys.stdout.write('ok\\n\\n')\n").unwrap();
+    let result = judge_path(
+        &root,
+        "exact-output",
+        &path,
+        "python",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: "ok\n".to_string(),
+        }],
+    );
+
+    assert!(!result.passed, "extra output newline must be meaningful");
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Output));
+    assert!(result.output.contains("Got\n  ok\n  "));
+}
+
+#[test]
+fn judge_classifies_nonzero_exit_as_runtime_failure() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("judge-runtime-failure");
+    let path = root.join("solution.py");
+    fs::write(
+        &path,
+        "import sys\nprint('runtime detail', file=sys.stderr)\nsys.exit(7)\n",
+    )
+    .unwrap();
+    let result = judge_path(
+        &root,
+        "runtime-failure",
+        &path,
+        "python",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: "private expected\n".to_string(),
+        }],
+    );
+
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Runtime));
+    assert!(result.output.contains("runtime detail"));
+    assert!(!result.output.contains("private expected"));
+}
+
+#[test]
+fn judge_classifies_timeout_before_runtime_failure() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("judge-timeout-failure");
+    let path = root.join("solution.py");
+    fs::write(&path, "import time\ntime.sleep(10)\n").unwrap();
+    let result = judge_path(
+        &root,
+        "timeout-failure",
+        &path,
+        "python",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: String::new(),
+        }],
+    );
+
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Timeout));
+    assert!(result.output.contains("timeout: 5s"));
+}
+
+#[test]
+fn java_compiler_errors_are_compile_failures() {
+    if which("javac").is_none() || which("java").is_none() {
+        return;
+    }
+    let root = tmp_root("judge-java-compile-failure");
+    let path = root.join("Solution.java");
+    fs::write(
+        &path,
+        "class Solution { public static void main(String[] args) { nope } }\n",
+    )
+    .unwrap();
+    let result = judge_path(
+        &root,
+        "java-compile-failure",
+        &path,
+        "java",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: String::new(),
+        }],
+    );
+
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Compile));
+    assert!(result.output.contains("Solution.java"));
+}
+
+#[test]
+fn rust_compiler_errors_are_compile_failures() {
+    if which("rustc").is_none() {
+        return;
+    }
+    let root = tmp_root("judge-rust-compile-failure");
+    let path = root.join("solution.rs");
+    fs::write(&path, "fn main() { let value: = 1; }\n").unwrap();
+    let result = judge_path(
+        &root,
+        "rust-compile-failure",
+        &path,
+        "rust",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: String::new(),
+        }],
+    );
+
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Compile));
+    assert!(result.output.contains("solution.rs"));
+}
+
+#[test]
+fn rust_judge_explicitly_uses_edition_2024() {
+    if which("rustc").is_none() {
+        return;
+    }
+    let root = tmp_root("judge-rust-edition-2024");
+    let path = root.join("solution.rs");
+    fs::write(&path, "fn main() { let gen = 1; println!(\"{gen}\"); }\n").unwrap();
+    let result = judge_path(
+        &root,
+        "rust-edition-2024",
+        &path,
+        "rust",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: "1\n".to_string(),
+        }],
+    );
+
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Compile));
+    assert!(result.output.contains("reserved keyword"));
+}
+
+#[test]
+fn typescript_type_errors_fail_before_matching_stdout_runs() {
+    if which("node").is_none() || which("tsc").is_none() {
+        return;
+    }
+    let root = tmp_root("judge-typescript-typecheck-failure");
+    let dir = root.join("submissions/typecheck");
+    fs::create_dir_all(&dir).unwrap();
+    let path = dir.join("solution.ts");
+    fs::write(
+        &path,
+        "const value: number = \"ok\";\nconsole.log(value);\n",
+    )
+    .unwrap();
+    let result = judge_path(
+        &root,
+        "typescript-typecheck-failure",
+        &path,
+        "ts",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: "ok\n".to_string(),
+        }],
+    );
+
+    assert!(!result.passed);
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::TypeCheck));
+    assert!(result.output.contains("TS2322"), "{}", result.output);
+    assert!(
+        root.join("build/typecheck/typescript/node-shim.d.ts")
+            .exists()
+    );
+    assert!(!dir.join("solution.js").exists());
+}
+
+#[test]
+fn typescript_nonzero_exit_is_a_runtime_failure_after_typecheck() {
+    if which("node").is_none() || which("tsc").is_none() {
+        return;
+    }
+    let root = tmp_root("judge-typescript-runtime-failure");
+    let dir = root.join("submissions/runtime");
+    fs::create_dir_all(&dir).unwrap();
+    let path = dir.join("solution.ts");
+    fs::write(&path, "throw new Error('runtime detail');\n").unwrap();
+    let result = judge_path(
+        &root,
+        "typescript-runtime-failure",
+        &path,
+        "ts",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: String::new(),
+        }],
+    );
+
+    assert_eq!(result.failure_kind, Some(JudgeFailureKind::Runtime));
+    assert!(result.output.contains("runtime detail"));
 }
 
 #[test]
@@ -1380,7 +1596,7 @@ fn python_syntax_starters_fail_by_output_not_runtime_error() {
 
 #[test]
 fn typescript_syntax_starters_run_under_node_strip_types() {
-    if which("node").is_none() {
+    if which("node").is_none() || which("tsc").is_none() {
         return;
     }
 
@@ -1527,7 +1743,7 @@ fn typescript_syntax_examples_run_under_node_strip_types() {
 
 #[test]
 fn typescript_syntax_examples_are_not_answer_keys() {
-    if which("node").is_none() {
+    if which("node").is_none() || which("tsc").is_none() {
         return;
     }
 

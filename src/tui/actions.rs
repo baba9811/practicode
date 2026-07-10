@@ -1,4 +1,18 @@
 use super::*;
+use crate::core::JudgeResult;
+
+fn judge_headline(result: &JudgeResult) -> String {
+    format!(
+        "{} {}/{}{}",
+        if result.passed { "PASS" } else { "FAIL" },
+        result.passed_cases,
+        result.total_cases,
+        result
+            .failure_kind
+            .map(|kind| format!(" [{kind:?}]"))
+            .unwrap_or_default()
+    )
+}
 
 impl PracticodeApp {
     pub(super) fn home_text(&self) -> String {
@@ -92,12 +106,7 @@ impl PracticodeApp {
         if result.passed {
             record_pass(&self.root, &self.problem, &mut self.state)?;
         }
-        let headline = format!(
-            "{} {}/{}",
-            if result.passed { "PASS" } else { "FAIL" },
-            result.passed_cases,
-            result.total_cases
-        );
+        let headline = judge_headline(&result);
         let next_step = if result.passed {
             ui_text(&self.state.settings.ui_language, "run_pass_next")
         } else {
@@ -311,13 +320,16 @@ impl PracticodeApp {
             save_state(&self.root, &self.state)?;
         }
         self.output_scroll = 0;
-        let headline = format!(
-            "{} {}/{}",
-            if result.passed { "PASS" } else { "FAIL" },
-            result.passed_cases,
-            result.total_cases
+        let headline = judge_headline(&result);
+        let next_step = ui_text(
+            &self.state.settings.ui_language,
+            if result.passed {
+                "run_pass_next"
+            } else {
+                "run_fail_next"
+            },
         );
-        self.learn_result = format!("{headline}\n{}", result.output.trim_end());
+        self.learn_result = format!("{headline}\n{}\n\n{next_step}", result.output.trim_end());
         self.show_current_syntax_lesson();
         Ok(())
     }

@@ -112,16 +112,34 @@ where
     F: FnMut(&str) -> bool,
     V: FnMut(&str, &[&str]) -> Option<String>,
 {
-    if !has_command("node") {
+    let has_node = has_command("node");
+    let has_tsc = has_command("tsc");
+    if !has_node {
         return DoctorCheck {
             status: DoctorStatus::Missing,
             name: "TypeScript",
-            detail: "node >= 22.6.0".to_string(),
+            detail: if has_tsc {
+                "missing node >= 22.6.0".to_string()
+            } else {
+                "missing node >= 22.6.0 and tsc".to_string()
+            },
             install: Some(NODE_INSTALL),
         };
     }
     let version = command_version("node", &["--version"]).unwrap_or_else(|| "unknown".to_string());
     let ok = node_supports_strip_types(&version);
+    if !has_tsc {
+        return DoctorCheck {
+            status: DoctorStatus::Missing,
+            name: "TypeScript",
+            detail: if ok {
+                format!("missing tsc (node {version})")
+            } else {
+                format!("missing tsc; Node.js >= 22.6.0 ({version})")
+            },
+            install: None,
+        };
+    }
     DoctorCheck {
         status: if ok {
             DoctorStatus::Ok
@@ -130,9 +148,9 @@ where
         },
         name: "TypeScript",
         detail: if ok {
-            format!("node {version}")
+            format!("node {version} + tsc")
         } else {
-            format!("Node.js >= 22.6.0 ({version})")
+            format!("Node.js >= 22.6.0 ({version}) + tsc")
         },
         install: (!ok).then_some(NODE_INSTALL),
     }
@@ -292,11 +310,40 @@ mod tests {
             "en",
             "ts",
             "codex",
-            |name| matches!(name, "node" | "codex"),
+            |name| matches!(name, "node" | "tsc" | "codex"),
             |name, _| (name == "node").then(|| "v22.5.0".to_string()),
         );
 
         assert!(output.contains("UPDATE TypeScript"));
         assert!(output.contains("Node.js >= 22.6.0"));
+    }
+
+    #[test]
+    fn doctor_reports_missing_tsc_when_node_is_ready() {
+        let output = doctor_text_with(
+            "en",
+            "ts",
+            "codex",
+            |name| matches!(name, "node" | "codex"),
+            |name, _| (name == "node").then(|| "v22.6.0".to_string()),
+        );
+
+        assert!(output.contains("MISSING TypeScript"));
+        assert!(output.contains("missing tsc"));
+    }
+
+    #[test]
+    fn doctor_reports_missing_node_when_tsc_is_ready() {
+        let output = doctor_text_with(
+            "en",
+            "ts",
+            "codex",
+            |name| matches!(name, "tsc" | "codex"),
+            |_, _| None,
+        );
+
+        assert!(output.contains("MISSING TypeScript"));
+        assert!(output.contains("missing node >= 22.6.0"));
+        assert!(!output.contains("missing tsc"));
     }
 }

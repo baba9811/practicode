@@ -2,7 +2,14 @@ mod common;
 
 use common::{tmp_root, two_problem_bank};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers, MouseButton, MouseEvent, MouseEventKind};
-use practicode::tui::{PracticodeApp, TextEditor};
+use practicode::{
+    core::{
+        ensure_submission, ensure_syntax_submission, load_bank, load_state, save_state,
+        syntax_lessons_for,
+    },
+    process::which,
+    tui::{PracticodeApp, TextEditor},
+};
 use ratatui::{layout::Rect, style::Color};
 
 #[test]
@@ -471,9 +478,70 @@ fn run_in_learn_keeps_lesson_pane_visible() {
     app.handle_command_for_test("learn python").unwrap();
     app.handle_command_for_test("run").unwrap();
     assert!(app.output_for_test().contains("Syntax"));
-    assert!(app.learn_result_for_test().contains("FAIL"));
+    assert!(app.learn_result_for_test().contains("FAIL 0/1 [Output]"));
     assert!(app.learn_result_for_test().contains("Got\n  TODO"));
+    assert!(
+        app.learn_result_for_test()
+            .contains("Fix: press Esc or e to edit, then /run")
+    );
     assert!(app.status_text_for_test().contains("learn"));
+}
+
+#[test]
+fn problem_run_shows_failure_kind_visible_output_and_localized_next_action() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("problem-run-structured-failure");
+    let bank = load_bank(&root).unwrap();
+    let mut state = load_state(&root, &bank).unwrap();
+    state.settings.start_mode = "problems".to_string();
+    state.settings.ui_language = "ko".to_string();
+    let path = ensure_submission(&root, &bank[0], &state.settings).unwrap();
+    std::fs::write(path, "print('actual visible output')\n").unwrap();
+    save_state(&root, &state).unwrap();
+    let mut app = PracticodeApp::new(root).unwrap();
+
+    app.handle_command_for_test("run").unwrap();
+
+    let output = app.output_for_test();
+    assert!(output.contains("FAIL 0/1 [Output]"), "{output}");
+    assert!(output.contains("Got\n  actual visible output"));
+    assert!(output.contains("수정: Esc 또는 e로 편집한 뒤 /run"));
+    assert!(!output.contains("Hello, World!"));
+}
+
+#[test]
+fn lesson_run_shows_typecheck_detail_and_localized_next_action() {
+    if which("node").is_none() || which("tsc").is_none() {
+        return;
+    }
+    let root = tmp_root("lesson-run-typecheck-failure");
+    let bank = load_bank(&root).unwrap();
+    let lesson = syntax_lessons_for("ts")[0];
+    let mut state = load_state(&root, &bank).unwrap();
+    state.settings.language = "ts".to_string();
+    state.settings.ui_language = "ko".to_string();
+    state.settings.start_mode = "learn".to_string();
+    state
+        .current_syntax_lesson
+        .insert("ts".to_string(), lesson.id.to_string());
+    let path = ensure_syntax_submission(&root, lesson).unwrap();
+    std::fs::write(
+        path,
+        "const value: number = 'ok';\nconsole.log('score=7');\n",
+    )
+    .unwrap();
+    save_state(&root, &state).unwrap();
+    let mut app = PracticodeApp::new(root).unwrap();
+
+    app.handle_command_for_test("run").unwrap();
+
+    let output = app.learn_result_for_test();
+    assert!(output.contains("FAIL 0/1 [TypeCheck]"), "{output}");
+    assert!(output.contains("TS2322"), "{output}");
+    assert!(output.contains("수정: Esc 또는 e로 편집한 뒤 /run"));
+    assert!(!output.contains("score=7"));
 }
 
 #[test]
@@ -681,6 +749,7 @@ fn doctor_command_reports_runtime_checks() {
     assert!(app.output_for_test().contains("Runtime checks"));
     assert!(app.output_for_test().contains("Python"));
     assert!(app.output_for_test().contains("TypeScript"));
+    assert!(app.output_for_test().contains("tsc"));
 }
 
 #[test]

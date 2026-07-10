@@ -139,15 +139,15 @@ impl LearningSession {
     }
 
     pub(super) fn mark_assisted(&mut self) {
-        if self.guided
-            && self.queue.get(self.index).is_some()
-            && matches!(
-                self.step,
-                LearningStep::Review
-                    | LearningStep::Delta
-                    | LearningStep::Predict
-                    | LearningStep::Exercise
-            )
+        if !self.guided
+            || (self.queue.get(self.index).is_some()
+                && matches!(
+                    self.step,
+                    LearningStep::Review
+                        | LearningStep::Delta
+                        | LearningStep::Predict
+                        | LearningStep::Exercise
+                ))
         {
             self.assisted = true;
         }
@@ -481,7 +481,36 @@ mod tests {
 
         let mut inactive = LearningSession::inactive();
         inactive.mark_assisted();
+        assert!(inactive.assisted());
+        inactive.finish_judge(true);
         assert!(!inactive.assisted());
+    }
+
+    #[test]
+    fn manual_assisted_capstone_pass_cannot_advance_mastery() {
+        let capstone = lesson("capstone", SyntaxTrack::Core, SyntaxKind::Capstone);
+        let lessons = [&capstone];
+        let mut state = state();
+        let mut session = LearningSession::inactive();
+
+        session.mark_assisted();
+        crate::core::record_syntax_result_for_lessons(
+            &mut state,
+            "rust",
+            "capstone",
+            true,
+            1_000,
+            session.assisted(),
+            &lessons,
+        );
+        session.finish_judge(true);
+
+        assert_eq!(state.syntax_mastery["rust"]["capstone"].attempts, 1);
+        assert_eq!(
+            state.syntax_mastery["rust"]["capstone"].stage,
+            MasteryStage::New
+        );
+        assert!(!session.assisted());
     }
 
     #[test]

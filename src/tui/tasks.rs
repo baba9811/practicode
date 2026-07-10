@@ -340,6 +340,22 @@ mod tests {
         app
     }
 
+    fn assert_learning_exit_clears_session(
+        name: &str,
+        leave: impl FnOnce(&mut PracticodeApp) -> Result<()>,
+    ) {
+        let mut app = learning_app(name);
+        app.handle_command("hint").unwrap();
+        assert!(app.learning_session.assisted());
+
+        leave(&mut app).unwrap();
+
+        assert!(!app.learning_session.is_guided());
+        assert!(!app.learning_session.assisted());
+        app.handle_command("learn python").unwrap();
+        assert!(!app.learning_session.assisted());
+    }
+
     #[test]
     fn update_check_refreshes_visible_checking_notice() {
         let root = crate::process::unique_temp_path("practicode-update-test", "dir");
@@ -362,6 +378,23 @@ mod tests {
             .enumerate()
         {
             let mut app = learning_app(&format!("practicode-ai-command-{index}"));
+
+            app.handle_command(command).unwrap();
+
+            assert!(app.learning_session.assisted(), "{command}");
+            assert!(app.task_rx.is_none(), "{command}");
+        }
+    }
+
+    #[test]
+    fn every_manual_lesson_ai_command_marks_the_attempt_at_start() {
+        for (index, command) in ["hint", "hint one clue", "ask", "ask why", "ai explain this"]
+            .into_iter()
+            .enumerate()
+        {
+            let mut app = learning_app(&format!("practicode-manual-ai-command-{index}"));
+            app.handle_command("back").unwrap();
+            assert!(!app.learning_session.is_guided());
 
             app.handle_command(command).unwrap();
 
@@ -418,5 +451,42 @@ mod tests {
 
         assert!(!app.learning_session.assisted());
         assert!(app.task_rx.is_none());
+    }
+
+    #[test]
+    fn home_clears_the_assisted_learning_session() {
+        assert_learning_exit_clears_session("practicode-ai-home-boundary", |app| {
+            app.handle_command("home")
+        });
+    }
+
+    #[test]
+    fn practice_clears_the_assisted_learning_session() {
+        assert_learning_exit_clears_session("practicode-ai-practice-boundary", |app| {
+            app.action_practice()
+        });
+    }
+
+    #[test]
+    fn problem_list_clears_the_assisted_learning_session() {
+        assert_learning_exit_clears_session("practicode-ai-list-boundary", |app| {
+            app.handle_command("problems")
+        });
+    }
+
+    #[test]
+    fn direct_problem_open_clears_the_assisted_learning_session() {
+        assert_learning_exit_clears_session("practicode-ai-open-boundary", |app| {
+            app.open_problem("1")
+        });
+    }
+
+    #[test]
+    fn generation_clears_the_assisted_learning_session() {
+        assert_learning_exit_clears_session("practicode-ai-generate-boundary", |app| {
+            app.state.settings.ai_next_command = "true".to_string();
+            app.start_background_generation(String::new());
+            Ok(())
+        });
     }
 }

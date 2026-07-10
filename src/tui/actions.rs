@@ -15,6 +15,13 @@ fn judge_headline(result: &JudgeResult) -> String {
 }
 
 impl PracticodeApp {
+    pub(super) fn transition_mode(&mut self, mode: AppMode) {
+        if self.mode == AppMode::Learn && mode != AppMode::Learn {
+            self.learning_session = LearningSession::inactive();
+        }
+        self.mode = mode;
+    }
+
     pub(super) fn home_text(&self) -> String {
         let lang = &self.state.settings.ui_language;
         let learn_label = ui_text(lang, "home_learn_choice");
@@ -38,7 +45,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_home(&mut self) -> Result<()> {
-        self.mode = AppMode::Home;
+        self.transition_mode(AppMode::Home);
         self.state.settings.start_mode = "home".to_string();
         save_state(&self.root, &self.state)?;
         self.learn_result.clear();
@@ -54,7 +61,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_practice(&mut self) -> Result<()> {
-        self.mode = AppMode::Problems;
+        self.transition_mode(AppMode::Problems);
         self.state.settings.start_mode = "problems".to_string();
         save_state(&self.root, &self.state)?;
         self.load_code_editor()?;
@@ -104,7 +111,7 @@ impl PracticodeApp {
             return self.action_exercise();
         }
         if self.mode == AppMode::Home {
-            self.mode = AppMode::Problems;
+            self.transition_mode(AppMode::Problems);
             self.state.settings.start_mode = "problems".to_string();
             save_state(&self.root, &self.state)?;
         }
@@ -127,7 +134,7 @@ impl PracticodeApp {
         if self.mode == AppMode::Learn {
             return self.action_next_learning();
         }
-        self.mode = AppMode::Problems;
+        self.transition_mode(AppMode::Problems);
         self.state.settings.start_mode = "problems".to_string();
         save_state(&self.root, &self.state)?;
         self.check_background_generation();
@@ -164,7 +171,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn start_background_generation(&mut self, request: String) {
-        self.mode = AppMode::Problems;
+        self.transition_mode(AppMode::Problems);
         self.state.settings.start_mode = "problems".to_string();
         if save_state(&self.root, &self.state).is_err() {
             self.write_text_output("Could not save practice mode before generation.");
@@ -253,7 +260,7 @@ impl PracticodeApp {
             return self.action_prev_lesson();
         }
         if self.mode == AppMode::Home {
-            self.mode = AppMode::Problems;
+            self.transition_mode(AppMode::Problems);
             self.state.settings.start_mode = "problems".to_string();
             save_state(&self.root, &self.state)?;
         }
@@ -272,7 +279,7 @@ impl PracticodeApp {
 
     pub(super) fn action_give_up(&mut self) -> Result<()> {
         if self.mode == AppMode::Home {
-            self.mode = AppMode::Problems;
+            self.transition_mode(AppMode::Problems);
             self.state.settings.start_mode = "problems".to_string();
             save_state(&self.root, &self.state)?;
         }
@@ -294,7 +301,7 @@ impl PracticodeApp {
         if !language.is_empty() {
             self.state.settings.language = language.to_string();
         }
-        self.mode = AppMode::Learn;
+        self.transition_mode(AppMode::Learn);
         self.state.settings.start_mode = "learn".to_string();
         self.learn_result.clear();
         self.left_scroll = 0;
@@ -379,7 +386,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_next_lesson(&mut self) -> Result<()> {
-        self.mode = AppMode::Learn;
+        self.transition_mode(AppMode::Learn);
         self.learning_session = LearningSession::inactive();
         let language = self.state.settings.language.clone();
         next_syntax_lesson(&mut self.state, &language, 1);
@@ -393,7 +400,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn action_prev_lesson(&mut self) -> Result<()> {
-        self.mode = AppMode::Learn;
+        self.transition_mode(AppMode::Learn);
         self.learning_session = LearningSession::inactive();
         let language = self.state.settings.language.clone();
         next_syntax_lesson(&mut self.state, &language, -1);

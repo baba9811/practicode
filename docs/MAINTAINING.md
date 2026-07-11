@@ -35,25 +35,33 @@ make test
 Release:
 
 ```bash
-make release VERSION=0.1.3
+make release VERSION=0.2.0
 ```
 
-The release script checks versions, runs tests, creates the version commit and tag, and pushes `main` plus the tag.
+The release script checks Cargo/npm/lock versions, runs the complete lesson, launcher, package, clippy, test, and isolated smoke gates, creates the version commit and tag, then atomically pushes `main` plus the tag.
+
+The tag workflow first verifies that the exact tag commit belongs to `origin/main`, validates again, and builds five native assets: macOS Intel/Apple Silicon, Linux x64/arm64 musl, and Windows x64. Each binary is smoked on its matching hosted runner. A draft GitHub Release receives all binaries plus `SHA256SUMS`, then publication proceeds in dependency order: crates.io, the public GitHub Release, and finally npm. This guarantees that a newly published npm launcher can download public assets immediately.
+
+Both registry jobs use the GitHub `release` environment. Keep its deployment policy restricted to tag pattern `v*.*.*` with no required human reviewer; the workflow itself accepts only exact `vMAJOR.MINOR.PATCH` tags reachable from `main`. Keep workflow Actions pinned to full commit SHAs and update their adjacent version comments and pins together.
 
 Verify publication:
 
 ```bash
-gh run list --limit 5
-npm view practicode version
+gh run list --workflow release.yml --limit 5
+gh run watch <run-id> --exit-status
+gh release view v0.2.0 --json assets --jq '.assets[].name'
+npm view practicode@0.2.0 version
 npm view practicode dist.signatures dist.attestations --json
 cargo search practicode --limit 1
 ```
+
+Download the published assets to a temporary directory and verify `SHA256SUMS` before announcing the release.
 
 Do not print or commit tokens. Local `.env` and `.npmrc` are ignored; GitHub Actions uses `NPM_TOKEN` and `CRATES_TOKEN` repository secrets.
 
 For npm supply-chain posture, keep `publishConfig.provenance` enabled and keep the release job's `id-token: write` permission. When the npm package's Trusted Publisher setting is configured for this repository and `.github/workflows/release.yml`, remove the long-lived `NPM_TOKEN` dependency from the npm publish steps and disallow token publishing in the npm package settings.
 
-Socket.dev indexes the npm package page at <https://socket.dev/npm/package/practicode>. It may lag behind npm immediately after a release; verify npm first with `npm view practicode version`, then re-check Socket after indexing catches up. The npm package should not include install lifecycle scripts; the Node launcher may build with Cargo on first use instead.
+Socket.dev indexes the npm package page at <https://socket.dev/npm/package/practicode>. It may lag behind npm immediately after a release; verify npm first, then re-check Socket after indexing catches up. The npm package must not include install lifecycle scripts. Its Node launcher downloads the immutable versioned release asset, verifies SHA-256, installs it atomically in a per-user cache, and never invokes Cargo on the native path.
 
 ## Documentation Ownership
 

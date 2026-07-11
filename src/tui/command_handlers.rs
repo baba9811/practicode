@@ -22,11 +22,6 @@ impl PracticodeApp {
             self.write_output(&self.help_text());
             return Ok(());
         }
-        if value.starts_with("vim") {
-            self.list_cursor = None;
-            self.write_text_output("The code editor is already open on the right.");
-            return Ok(());
-        }
         let (command, arg) = value.split_once(char::is_whitespace).unwrap_or((value, ""));
         let arg = arg.trim();
         if !matches!(command, "list" | "problems") {
@@ -34,7 +29,7 @@ impl PracticodeApp {
         }
         match command {
             "run" | "r" => self.action_run()?,
-            "code" | "edit" | "e" => self.action_edit()?,
+            "code" | "edit" | "e" | "vim" => self.action_edit()?,
             "home" => self.action_home()?,
             "doctor" => self.action_doctor(),
             "learn" => self.action_learn(arg)?,
@@ -80,13 +75,20 @@ impl PracticodeApp {
                 self.state.settings.ai_next_command = arg.to_string();
                 self.state.settings.next_source = "ai".to_string();
                 save_state(&self.root, &self.state)?;
-                self.write_text_output("AI next command saved.");
+                self.write_text_output(ui_text(
+                    &self.state.settings.ui_language,
+                    "ai_next_command_saved",
+                ));
             }
             "provider" | "ai-provider" if arg.is_empty() => {
                 self.write_text_output(&format!(
-                    "AI provider: {}\n{}",
+                    "{}: {}\n{}",
+                    ui_text(&self.state.settings.ui_language, "settings_ai_provider"),
                     self.state.settings.ai_provider,
-                    provider_status(&self.state.settings.ai_provider)
+                    provider_status(
+                        &self.state.settings.ai_provider,
+                        &self.state.settings.ui_language
+                    )
                 ));
             }
             "provider" | "ai-provider" if AI_PROVIDERS.contains(&arg) => {
@@ -102,9 +104,13 @@ impl PracticodeApp {
                 self.model_message = None;
                 save_state(&self.root, &self.state)?;
                 self.write_text_output(&format!(
-                    "AI provider: {}\n{}",
+                    "{}: {}\n{}",
+                    ui_text(&self.state.settings.ui_language, "settings_ai_provider"),
                     self.state.settings.ai_provider,
-                    provider_status(&self.state.settings.ai_provider)
+                    provider_status(
+                        &self.state.settings.ai_provider,
+                        &self.state.settings.ui_language
+                    )
                 ));
             }
             "model" if arg.is_empty() => {
@@ -148,8 +154,81 @@ impl PracticodeApp {
             "notes" => self.show_notes()?,
             "update" => self.refresh_update_notice(),
             "exit" | "quit" | "q" => self.should_quit = true,
-            _ => self.write_text_output(&format!("Unknown command: {value}\nTry /help.")),
+            _ => self.write_text_output(
+                &ui_text(&self.state.settings.ui_language, "unknown_command")
+                    .replace("{command}", value),
+            ),
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn app(language: &str) -> PracticodeApp {
+        let root = crate::process::unique_temp_path("practicode-command-handler-locale", "dir");
+        std::fs::create_dir_all(&root).unwrap();
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.state.settings.ui_language = language.to_string();
+        app
+    }
+
+    #[test]
+    fn command_handler_feedback_uses_the_selected_locale() {
+        let mut app = app("ja");
+
+        app.handle_command("vim").unwrap();
+        assert_eq!(app.mode, AppMode::Problems);
+        assert_eq!(app.practice_view, PracticeView::Code);
+        assert_eq!(app.focus, Focus::Code);
+        assert!(!app.show_output);
+
+        app.handle_command("ai-next-command true").unwrap();
+        assert_eq!(app.output, ui_text("ja", "ai_next_command_saved"));
+
+        app.handle_command("unknown-example").unwrap();
+        assert_eq!(
+            app.output,
+            ui_text("ja", "unknown_command").replace("{command}", "unknown-example")
+        );
+
+        app.handle_command("provider").unwrap();
+        assert!(
+            app.output
+                .starts_with(&format!("{}: ", ui_text("ja", "settings_ai_provider"))),
+            "{}",
+            app.output
+        );
+    }
+
+    #[test]
+    fn vim_alias_matches_only_the_exact_command_from_every_view() {
+        for setup in [None, Some("learn"), Some("help")] {
+            let mut app = app("en");
+            if let Some(command) = setup {
+                app.handle_command(command).unwrap();
+            }
+
+            app.handle_command("vim").unwrap();
+
+            if setup == Some("learn") {
+                assert_eq!(app.mode, AppMode::Learn);
+                assert_eq!(app.learning_session.view(), LearningView::Code);
+            } else {
+                assert_eq!(app.mode, AppMode::Problems, "setup: {setup:?}");
+                assert_eq!(app.practice_view, PracticeView::Code, "setup: {setup:?}");
+            }
+            assert_eq!(app.focus, Focus::Code, "setup: {setup:?}");
+            assert!(!app.show_output, "setup: {setup:?}");
+        }
+
+        let mut app = app("en");
+        app.handle_command("vimbad").unwrap();
+        assert_eq!(
+            app.output,
+            ui_text("en", "unknown_command").replace("{command}", "vimbad")
+        );
     }
 }

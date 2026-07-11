@@ -423,11 +423,12 @@
       "kind": "lesson",
       "level": "intermediate",
       "title": "Optional filtering and fallback",
-      "body": "Model a possibly accepted token with Optional, filter by length, and use orElse rather than calling get on an empty container.",
+      "body": "Model a possibly accepted token with Optional, retain present text only when it has at most three characters, and use orElse rather than calling get on an empty container.",
       "example": "import java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) {\n        String value = Optional.of(\"cat\").filter(s -> s.length() <= 3).orElse(\"missing\");\n        System.out.println(\"value=\" + value);\n    }\n}\n",
-      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String token = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Optional<String> value = token.equals(\"-\") ? Optional.empty() : Optional.of(token);\n        // TODO: retain only the accepted short token before choosing the fallback.\n        System.out.println(value.filter(s -> s.length() > 3).orElse(\"missing\"));\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String token = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Optional<String> value = token.equals(\"-\") ? Optional.empty() : Optional.of(token);\n        // TODO: retain only an accepted token of at most three characters before choosing the fallback.\n        System.out.println(value.filter(s -> s.length() > 3).orElse(\"missing\"));\n    }\n}\n",
       "cases": [
         { "input": "ok\n", "output": "ok\n" },
+        { "input": "cat\n", "output": "cat\n" },
         { "input": "toolong\n", "output": "missing\n" },
         { "input": "-\n", "output": "missing\n" }
       ],

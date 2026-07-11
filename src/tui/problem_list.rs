@@ -45,6 +45,7 @@ impl PracticodeApp {
     }
 
     pub(super) fn render_problem_list(&self) -> String {
+        let lang = &self.state.settings.ui_language;
         let status_by_id = self
             .state
             .history
@@ -55,9 +56,16 @@ impl PracticodeApp {
             .list_cursor
             .unwrap_or_else(|| self.current_problem_index());
         let mut lines = vec![
-            "Problems".to_string(),
+            ui_text(lang, "problem_list_title").to_string(),
             String::new(),
-            "    # ID                 Difficulty  Status      Code      Title".to_string(),
+            format!(
+                "    # {} {} {} {} {}",
+                cell(ui_text(lang, "problem_list_id"), 18),
+                cell(ui_text(lang, "problem_list_difficulty"), 10),
+                cell(ui_text(lang, "problem_list_status"), 10),
+                cell(ui_text(lang, "problem_list_code"), 9),
+                ui_text(lang, "problem_list_name")
+            ),
         ];
         for (index, problem) in self.bank.iter().enumerate() {
             let marker = if index == cursor { ">" } else { " " };
@@ -67,20 +75,25 @@ impl PracticodeApp {
                 " "
             };
             let title = localized(&problem.title, &self.state.settings.ui_language);
-            let code_status = self.submission_status(problem).0;
-            lines.push(format!(
-                "{marker} {current} {:>2} {:<18} {:<10} {:<10} {:<9} {title}",
-                index + 1,
-                problem.id,
-                problem.difficulty,
+            let difficulty = localized_status(lang, &problem.difficulty);
+            let status = localized_status(
+                lang,
                 status_by_id
                     .get(problem.id.as_str())
                     .copied()
                     .unwrap_or("-"),
-                code_status,
+            );
+            let code_status = localized_status(lang, &self.submission_status(problem).0);
+            lines.push(format!(
+                "{marker} {current} {:>2} {} {} {} {} {title}",
+                index + 1,
+                cell(&problem.id, 18),
+                cell(&difficulty, 10),
+                cell(&status, 10),
+                cell(&code_status, 9),
             ));
         }
-        lines.push("\nup/down or j/k select | enter open | esc close".to_string());
+        lines.push(format!("\n{}", ui_text(lang, "problem_list_hint")));
         lines.join("\n")
     }
 
@@ -115,7 +128,10 @@ impl PracticodeApp {
     pub(super) fn open_problem(&mut self, query: &str) -> Result<()> {
         self.list_cursor = None;
         let Some(problem) = self.find_problem(query).cloned() else {
-            self.write_text_output(&format!("Problem not found: {query}\nTry /problems."));
+            self.write_text_output(
+                &ui_text(&self.state.settings.ui_language, "problem_not_found")
+                    .replace("{query}", query),
+            );
             return Ok(());
         };
         self.problem = problem;
@@ -137,7 +153,8 @@ impl PracticodeApp {
         ensure_problem_files(&self.root, &self.problem)?;
         self.load_code_editor()?;
         self.show_output = false;
-        self.focus = Focus::Code;
+        self.practice_view = PracticeView::Problem;
+        self.focus = Focus::Left;
         Ok(())
     }
 
@@ -186,5 +203,61 @@ impl PracticodeApp {
         } else {
             ("written".to_string(), format!("({relative})"))
         }
+    }
+}
+
+fn cell(value: &str, width: usize) -> String {
+    format!(
+        "{value}{}",
+        " ".repeat(width.saturating_sub(display_width(value)))
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn app(language: &str) -> PracticodeApp {
+        let root = crate::process::unique_temp_path("practicode-problem-list-locale", "dir");
+        std::fs::create_dir_all(&root).unwrap();
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.state.settings.ui_language = language.to_string();
+        app
+    }
+
+    #[test]
+    fn problem_list_localizes_app_owned_columns_and_values() {
+        let app = app("zh");
+
+        let list = app.render_problem_list();
+
+        for key in [
+            "problem_list_title",
+            "problem_list_id",
+            "problem_list_difficulty",
+            "problem_list_status",
+            "problem_list_code",
+            "problem_list_name",
+            "problem_list_hint",
+            "status_easy",
+            "status_assigned",
+            "status_template",
+        ] {
+            assert!(list.contains(ui_text("zh", key)), "{key}: {list}");
+        }
+        assert!(!list.contains("Problems"), "{list}");
+        assert!(!list.contains("Difficulty"), "{list}");
+    }
+
+    #[test]
+    fn missing_problem_feedback_uses_the_selected_locale() {
+        let mut app = app("ja");
+
+        app.open_problem("does-not-exist").unwrap();
+
+        assert_eq!(
+            app.output,
+            ui_text("ja", "problem_not_found").replace("{query}", "does-not-exist")
+        );
     }
 }

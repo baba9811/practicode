@@ -12,9 +12,9 @@ use crate::{
         normalize_ai_effort, normalize_ai_provider, normalize_difficulty, normalize_language,
         normalize_next_source, normalize_ui_language, parse_language_list, parse_topic_list,
         parse_ui_language_list, previous_problem, problem_by_id, record_pass, record_syntax_result,
-        render_problem_tui, render_syntax_lesson, save_state, set_current_syntax_lesson,
-        syntax_cases, syntax_core_progress_count, syntax_language_name, syntax_review_due_at,
-        template_for, ui_text,
+        render_syntax_lesson, save_state, set_current_syntax_lesson, syntax_cases,
+        syntax_core_progress_count, syntax_language_name, syntax_review_due_at, template_for,
+        ui_text,
     },
     text::{
         byte_index, char_len, compose_hangul_jamo, display_width, prefix, render_markdown_plain,
@@ -99,6 +99,12 @@ enum HomeChoice {
     Problems,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum PracticeView {
+    Problem,
+    Code,
+}
+
 fn localized_status(language: &str, status: &str) -> String {
     let key = format!("status_{status}");
     let localized = ui_text(language, &key);
@@ -131,6 +137,7 @@ pub struct PracticodeApp {
     focus: Focus,
     mode: AppMode,
     home_choice: HomeChoice,
+    practice_view: PracticeView,
     home_area: Rect,
     home_learn_area: Rect,
     home_problems_area: Rect,
@@ -218,6 +225,7 @@ impl PracticodeApp {
             focus: Focus::Code,
             mode: AppMode::Problems,
             home_choice: HomeChoice::Learn,
+            practice_view: PracticeView::Problem,
             home_area: Rect::default(),
             home_learn_area: Rect::default(),
             home_problems_area: Rect::default(),
@@ -264,7 +272,6 @@ impl PracticodeApp {
 
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         self.start_update_check();
-        self.start_model_check();
         while !self.should_quit {
             self.sync_mouse_capture();
             terminal.draw(|frame| self.draw(frame))?;
@@ -272,7 +279,6 @@ impl PracticodeApp {
             self.check_background_generation();
             self.check_update();
             self.maybe_start_periodic_update_check();
-            self.start_model_check();
             self.check_models();
             if event::poll(Duration::from_millis(100))? {
                 match event::read()? {

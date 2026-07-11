@@ -77,7 +77,7 @@
     },
     "java-strings": {
       "title": "String cleanup and content equality",
-      "concept": "`strip` removes surrounding Unicode whitespace and returns a stripped String without mutating the source. Indexing and length use UTF-16 code units, while `.equals` compares contents and `==` compares references.",
+      "concept": "`strip` removes leading and trailing code points recognized by `Character.isWhitespace` and returns a stripped String without mutating the source. Indexing and length use UTF-16 code units, while `.equals` compares contents and `==` compares references.",
       "worked_example": "The sample strips spaces from a curly-wrapped word, verifies its delimiters, and extracts the interior with `substring`. The original string remains unchanged.",
       "common_mistakes": [
         "Using `==` to decide whether two separately created strings contain the same text.",
@@ -95,7 +95,7 @@
     },
     "java-control-flow": {
       "title": "Branches and bounded loops",
-      "concept": "A `for` loop controls the inclusive numeric range and an `if` filters odd values. Enums offer fixed named alternatives; sealed hierarchies close subtype alternatives for pattern switches.",
+      "concept": "A `for` loop controls the inclusive numeric range and an `if` filters odd values. Java requires the branch expression to be boolean, so the remainder comparison must be explicit.",
       "worked_example": "The counter advances from one through seven. Only values with a nonzero remainder after division by two enter the accumulator, producing a labeled odd sum.",
       "common_mistakes": [
         "Using `< limit` and silently dropping the upper bound when it is odd.",
@@ -103,13 +103,13 @@
       ],
       "self_check": [
         "Which loop values contribute when the limit is six?",
-        "How do enum constants and permitted sealed subtypes differ as closed alternatives?"
+        "Why does the loop condition use `<=` rather than `<` for this task?"
       ],
       "exercise_prompt": "Traverse the inclusive range and accumulate only odd integers before printing the total.",
       "objective": "Coordinate loop bounds, a parity branch, and an accumulator for zero and positive limits.",
       "language_delta": "Java conditions must have boolean type, unlike languages that coerce zero and nonzero integers in branches.",
       "prediction_prompt": "List every value visited for limit three, marking which ones change the total.",
-      "transfer_trap": "Arrow switch rules avoid fall-through, but an ordinary loop still needs correctly chosen initialization, condition, and update."
+      "transfer_trap": "A range helper in another language may exclude its endpoint by default; this Java loop spells out the inclusive boundary."
     },
     "java-enum-switch": {
       "title": "Exhaustive enum switch expressions",
@@ -131,21 +131,21 @@
     },
     "java-methods": {
       "title": "Typed static method checkpoint",
-      "concept": "A method signature fixes parameter and return types, while Java passes every argument by value, including copied object-reference values. Overload choice happens at compile time, varargs arrives as an array, and non-`java.lang` types need imports or qualified names.",
+      "concept": "A method signature fixes parameter and return types, while Java passes each argument value into a new parameter variable. This checkpoint keeps the calculation behind one typed static method instead of duplicating it in main.",
       "worked_example": "The calculation lives in `area(int, int)`, and main supplies separate demo dimensions. The return value crosses the method boundary before formatting.",
       "common_mistakes": [
         "Repeating the multiplication in main instead of completing the named method.",
         "Believing a method can replace the caller's reference variable merely because both variables refer to one object."
       ],
       "self_check": [
-        "Which parts of `static int area(int width, int height)` influence overload resolution?",
-        "When a varargs parameter is called, what concrete value does its method body receive?"
+        "What return type and two parameter types does `area` declare?",
+        "Why should main call `area` instead of repeating the multiplication expression?"
       ],
       "exercise_prompt": "Finish the typed area method and keep stdin parsing and stdout formatting in main.",
       "objective": "Demonstrate a reusable value-returning boundary rather than embedding all logic in the entry point.",
-      "language_delta": "Java has neither Python-style dynamic parameter binding nor TypeScript's erased overload implementations; one compiled signature must be applicable.",
+      "language_delta": "Java checks the parameter and return types at compile time, and this static method can be called without constructing a Solution object.",
       "prediction_prompt": "Trace the two parsed integers into parameters, through the return statement, and back to println.",
-      "transfer_trap": "Imports do not affect overload selection; declared argument and parameter types do."
+      "transfer_trap": "Passing an object would copy its reference value, not give the method a way to replace the caller's variable."
     },
     "java-overloading-varargs": {
       "title": "Overloads and varargs arrays",
@@ -185,7 +185,7 @@
     },
     "java-arrays-collections": {
       "title": "Collection observations",
-      "concept": "Arrays have fixed length, while generic List, Map, and Set types expose different collection behaviors. Streams can derive aggregates, and Comparator chains make ordering explicit instead of relying on subtraction.",
+      "concept": "Arrays have fixed length, while generic List, Map, and Set types expose different collection behaviors. Streams can derive aggregates from those views without changing the source collections.",
       "worked_example": "Each array value enters a list, frequency map, and unique set. The sum is reconstructed from map keys times counts, so every printed field observes the advertised structure.",
       "common_mistakes": [
         "Printing the array length where the contract asks for a sum derived from Map entries.",
@@ -257,7 +257,7 @@
     },
     "java-classes-objects": {
       "title": "Per-instance object state",
-      "concept": "Each object owns its instance fields and receives behavior through methods. Constructors establish validity, private methods can enforce boundaries, static fields belong to the class, interfaces define contracts, and composition models has-a relationships.",
+      "concept": "Each Counter object owns a separate `value` field. The `add` method receives a local `delta` parameter and must update the receiver's field through `this` or an unambiguous field name.",
       "worked_example": "One Counter starts at ten and receives a delta through `add`. The method changes `this` instance's field, and main observes twelve afterward.",
       "common_mistakes": [
         "Changing only the parameter variable and expecting the object's field to follow.",
@@ -265,11 +265,11 @@
       ],
       "self_check": [
         "Which storage location changes inside `add`, and which local variable merely carries an argument?",
-        "When is inheritance appropriate instead of holding a composed helper field?"
+        "What would happen if two Counter instances started with different values?"
       ],
       "exercise_prompt": "Send the parsed delta to a Counter method that updates the receiver's own state.",
       "objective": "Observe identity and encapsulated mutation through a minimal class instance.",
-      "language_delta": "Java classes use nominal declared types and explicit constructors, unlike purely structural object shapes.",
+      "language_delta": "Java instance fields live with each object, while a method parameter is a local variable created for that call.",
       "prediction_prompt": "Track the Counter field separately from the `delta` parameter before and after the method call.",
       "transfer_trap": "Private access prevents outside reads and writes, but only method logic can protect an invariant."
     },
@@ -365,7 +365,7 @@
     },
     "java-exceptions": {
       "title": "Narrow exception recovery",
-      "concept": "`Integer.parseInt` reports malformed input with unchecked `NumberFormatException`. Catch that precise failure, while using Optional for absence and try-with-resources for deterministic closing rather than treating every condition as one broad exception.",
+      "concept": "`Integer.parseInt` reports malformed integer syntax with unchecked `NumberFormatException`. Catch that precise failure at the parsing boundary so unrelated defects are not mistaken for invalid input.",
       "worked_example": "Parsing `oops` enters the narrow catch and returns the caller's fallback. Other unexpected runtime defects would not be swallowed by this helper.",
       "common_mistakes": [
         "Catching `Exception` and hiding unrelated programming errors.",
@@ -373,18 +373,18 @@
       ],
       "self_check": [
         "Does a valid negative integer enter the catch block?",
-        "Which resource-closing failures can a try-with-resources statement preserve as suppressed exceptions?"
+        "Why is catching `NumberFormatException` safer here than catching every Exception?"
       ],
       "exercise_prompt": "Return a successful parsed value or the supplied fallback only when numeric syntax is invalid.",
       "objective": "Recover at the smallest relevant exception boundary without masking other faults.",
       "language_delta": "Java distinguishes checked exceptions that must be handled or declared from unchecked RuntimeException subclasses such as NumberFormatException.",
       "prediction_prompt": "Choose the try or catch return path for each candidate token before evaluating its fallback.",
-      "transfer_trap": "Missing data, malformed data, and I/O failure carry different meanings; one catch-all path erases that distinction."
+      "transfer_trap": "A valid negative integer is data, not an error; only malformed numeric syntax selects this fallback path."
     },
     "java-optional": {
       "title": "Optional filtering and fallback",
       "concept": "Optional represents a return value that may be absent. `filter` retains a present value only when its predicate succeeds, and `orElse` supplies a safe fallback without `get()`.",
-      "worked_example": "The present word `cat` satisfies the length predicate, so the fallback is not selected. A label distinguishes the demonstration line.",
+      "worked_example": "The present three-character word `cat` satisfies the at-most-three predicate, so the fallback is not selected. A label distinguishes the demonstration line.",
       "common_mistakes": [
         "Calling `get()` without proving presence and risking `NoSuchElementException`.",
         "Using Optional fields and parameters everywhere instead of mainly as an absence-aware return type."
@@ -393,10 +393,10 @@
         "Does `filter` invoke its predicate when the Optional is already empty?",
         "Which path produces `missing` for the dash sentinel?"
       ],
-      "exercise_prompt": "Construct possible presence, retain only a short token, and choose the fallback declaratively.",
-      "objective": "Separate absent input from accepted present text without unsafe extraction.",
+      "exercise_prompt": "Construct possible presence, retain only a token of at most three characters, and choose the fallback declaratively.",
+      "objective": "Separate absent input and overlong text from accepted present text of at most three characters without unsafe extraction.",
       "language_delta": "Optional is an explicit container, unlike nullable references that carry no method-enforced handling path.",
-      "prediction_prompt": "Mark the Optional as present or empty after construction and again after filtering each case.",
+      "prediction_prompt": "For each of the four cases, mark the Optional as present or empty after construction and again after filtering.",
       "transfer_trap": "Optional does not replace exceptions for failures that need diagnostic information."
     },
     "java-try-with-resources": {

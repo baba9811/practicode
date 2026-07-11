@@ -2,7 +2,7 @@ use crate::{
     core::{
         AppState, CLAUDE_AI_EFFORTS, LANGUAGES, PROBLEM_NOTES_PATH, Problem, Settings,
         SyntaxLesson, UI_LANGUAGES, ensure_submission, ensure_syntax_submission,
-        normalize_ai_provider, render_problem, syntax_lesson_study_context,
+        normalize_ai_provider, render_problem, syntax_lesson_study_context, ui_text,
     },
     process::{run_capture, sh_quote, shell_process, unique_temp_path, which},
 };
@@ -199,42 +199,64 @@ pub fn default_ai_generate_command(root: &Path, settings: &Settings, request: &s
     }
 }
 
-pub fn provider_status(provider: &str) -> String {
-    match normalize_ai_provider(provider).as_str() {
-        "claude" => {
-            if which("claude").is_some() {
-                "Claude CLI found.".to_string()
-            } else {
-                "Claude CLI not found. Install Claude Code or choose /provider codex.".to_string()
-            }
-        }
-        _ => {
-            if which("codex").is_none() {
-                return "Codex CLI not found. Install Codex CLI or choose /provider claude."
-                    .to_string();
-            }
-            if codex_daemon_path().is_some_and(|path| path.exists()) {
-                "Codex CLI found. App-server daemon is available.".to_string()
-            } else {
-                "Codex CLI found. App-server daemon is not available; practicode will use codex exec directly.".to_string()
-            }
-        }
-    }
+pub fn provider_status(provider: &str, lang: &str) -> String {
+    let provider = normalize_ai_provider(provider);
+    let command = if provider == "claude" {
+        "claude"
+    } else {
+        "codex"
+    };
+    provider_status_with(
+        &provider,
+        lang,
+        which(command).is_some(),
+        provider == "codex" && codex_daemon_path().is_some_and(|path| path.exists()),
+    )
 }
 
-pub fn available_models(provider: &str) -> ModelCatalog {
+fn provider_status_with(provider: &str, lang: &str, found: bool, daemon: bool) -> String {
+    if provider == "claude" {
+        if found {
+            return ui_text(lang, "provider_cli_found").replace("{provider}", "Claude");
+        }
+        return ui_text(lang, "provider_cli_missing")
+            .replace("{provider}", "Claude")
+            .replace("{install}", "Claude Code")
+            .replace("{command}", "/provider codex");
+    }
+    if !found {
+        return ui_text(lang, "provider_cli_missing")
+            .replace("{provider}", "Codex")
+            .replace("{install}", "Codex CLI")
+            .replace("{command}", "/provider claude");
+    }
+    ui_text(
+        lang,
+        if daemon {
+            "provider_codex_daemon_available"
+        } else {
+            "provider_codex_direct_fallback"
+        },
+    )
+    .to_string()
+}
+
+pub fn available_models(provider: &str, lang: &str) -> ModelCatalog {
     match normalize_ai_provider(provider).as_str() {
-        "codex" => codex_models(),
+        "codex" => codex_models(lang),
         "claude" => ModelCatalog {
             models: CLAUDE_MODEL_FALLBACKS
                 .iter()
                 .map(|model| (*model).to_string())
                 .collect(),
-            message: Some(format!(
-                "Bundled Claude presets from Claude Code {} --help. Efforts: {}.",
-                claude_version().unwrap_or_else(|| "current".to_string()),
-                CLAUDE_AI_EFFORTS.join(", ")
-            )),
+            message: Some(
+                ui_text(lang, "model_claude_presets")
+                    .replace(
+                        "{version}",
+                        &claude_version().unwrap_or_else(|| "?".to_string()),
+                    )
+                    .replace("{efforts}", &CLAUDE_AI_EFFORTS.join(", ")),
+            ),
         },
         _ => ModelCatalog::default(),
     }
@@ -299,19 +321,22 @@ pub fn read_problem_notes(root: &Path) -> Result<String> {
     }
 }
 
-fn codex_models() -> ModelCatalog {
+fn codex_models(lang: &str) -> ModelCatalog {
     if which("codex").is_none() {
         return ModelCatalog {
             models: Vec::new(),
             message: Some(
-                "Codex CLI not found; choose /provider claude or install Codex CLI.".to_string(),
+                ui_text(lang, "model_cli_missing")
+                    .replace("{provider}", "Codex")
+                    .replace("{command}", "/provider claude")
+                    .replace("{install}", "Codex CLI"),
             ),
         };
     }
     if codex_daemon_path().is_none_or(|path| !path.exists()) {
         return ModelCatalog {
             models: codex_cached_models(),
-            message: Some("Codex app-server daemon is unavailable; install the standalone Codex app to list models, or use /model <name>.".to_string()),
+            message: Some(ui_text(lang, "model_codex_daemon_unavailable").to_string()),
         };
     }
     let mut start = Command::new("codex");
@@ -323,9 +348,7 @@ fn codex_models() -> ModelCatalog {
     let Ok(run) = run_capture(&mut command, &format!("{input}\n"), Duration::from_secs(2)) else {
         return ModelCatalog {
             models: codex_cached_models(),
-            message: Some(
-                "Could not query Codex model list; using bundled/cache model presets.".to_string(),
-            ),
+            message: Some(ui_text(lang, "model_codex_query_failed").to_string()),
         };
     };
     if run.code != Some(0) {
@@ -333,11 +356,9 @@ fn codex_models() -> ModelCatalog {
         return ModelCatalog {
             models: codex_cached_models(),
             message: Some(if detail.is_empty() {
-                "Could not query Codex model list; using bundled/cache model presets.".to_string()
+                ui_text(lang, "model_codex_query_failed").to_string()
             } else {
-                format!(
-                    "Could not query Codex model list; using bundled/cache model presets: {detail}"
-                )
+                format!("{}: {detail}", ui_text(lang, "model_codex_query_failed"))
             }),
         };
     }
@@ -345,7 +366,7 @@ fn codex_models() -> ModelCatalog {
     if models.is_empty() {
         ModelCatalog {
             models,
-            message: Some("Codex app-server returned no models.".to_string()),
+            message: Some(ui_text(lang, "model_codex_empty").to_string()),
         }
     } else {
         ModelCatalog {
@@ -618,12 +639,40 @@ fn list_or_all(values: &[String], all: &[&str]) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::parse_model_list;
+    use super::*;
 
     #[test]
     fn parses_codex_model_list_response() {
         let output =
             r#"{"id":1,"result":{"data":[{"model":"gpt-test","displayName":"GPT Test"}]}}"#;
         assert_eq!(parse_model_list(output), vec!["gpt-test"]);
+    }
+
+    #[test]
+    fn provider_status_localizes_every_app_owned_branch() {
+        let cases = [
+            ("claude", true, false, "CLI를 찾았습니다"),
+            ("claude", false, false, "CLI가 없습니다"),
+            ("codex", false, false, "CLI가 없습니다"),
+            ("codex", true, true, "데몬을 사용할 수 있습니다"),
+            ("codex", true, false, "codex exec를 직접 사용합니다"),
+        ];
+        for (provider, found, daemon, expected) in cases {
+            let status = provider_status_with(provider, "ko", found, daemon);
+            assert!(status.contains(expected), "{provider}:{expected}: {status}");
+            assert!(!status.contains("not found"), "{status}");
+            assert!(!status.contains("is available"), "{status}");
+        }
+    }
+
+    #[test]
+    fn bundled_model_notice_localizes_copy_and_preserves_raw_tokens() {
+        let catalog = available_models("claude", "zh");
+        let message = catalog.message.unwrap();
+
+        assert!(message.contains("内置 Claude 预设"), "{message}");
+        assert!(message.contains("--help"), "{message}");
+        assert!(message.contains("auto, low, medium"), "{message}");
+        assert!(!message.contains("Bundled Claude presets"), "{message}");
     }
 }

@@ -17,7 +17,7 @@
       ],
       "exercise_prompt": "Read the two stdin fields and format one colon-delimited line through process.stdout.write.",
       "objective": "Produce `name:score` followed by exactly one newline for every supplied record.",
-      "language_delta": "Unlike console.log, stdout.write adds no spacing or newline; Node runs the stripped JavaScript and resolves module behavior independently of annotations.",
+      "language_delta": "Unlike `console.log`, `process.stdout.write` adds no spacing or newline; Node runs the stripped JavaScript and resolves module behavior independently of annotations.",
       "prediction_prompt": "Before execution, spell out the bytes emitted for a Unicode name and a two-digit score.",
       "transfer_trap": "A browser console displays values for inspection, whereas an online judge compares the program's stdout text."
     },
@@ -304,7 +304,7 @@
         "Can a type alias name a union even though an interface cannot directly do so?"
       ],
       "exercise_prompt": "Construct the intersection from the unchanged parsed name and numeric score.",
-      "objective": "Preserve positive, zero, and negative scores across one structural formatting function.",
+      "objective": "Preserve positive, zero, and negative scores while constructing and printing one structurally typed object.",
       "language_delta": "Interfaces can declaration-merge while aliases can express unions; both disappear at runtime, and related labs add class behavior, readonly views, or satisfies checks.",
       "prediction_prompt": "Write the Entry object created from `Bo -2` before interpolating its fields.",
       "transfer_trap": "Java interfaces participate in nominal declarations and JVM metadata, unlike TypeScript's erased structural interface."
@@ -463,7 +463,7 @@
       ],
       "self_check": [
         "What is the static return type of double even before it contains an await expression?",
-        "When does the process.stdout.write callback run relative to Promise fulfillment?"
+        "When does the output call run relative to fulfillment of the Promise returned by double?"
       ],
       "exercise_prompt": "Resolve double with twice its argument while retaining await and the top-level rejection path.",
       "objective": "Produce doubled results for positive, zero, and negative inputs through asynchronous control flow.",
@@ -502,7 +502,7 @@
         "Which command branch performs the zero-divisor check before asynchronous execution?"
       ],
       "exercise_prompt": "Build a strict parser, execute the exhaustive command union, and narrow failures from unknown.",
-      "objective": "Calculate valid add and divide commands while returning invalid for partial numbers and zero division.",
+      "objective": "Calculate valid add and divide commands while writing invalid for partial or non-finite numbers and division by zero.",
       "language_delta": "TypeScript strict catch treats failures as unknown because JavaScript may throw any value; parseInt returns NaN on wholly invalid text and never enters catch by itself.",
       "prediction_prompt": "Trace `add 12px 1` through conversion and identify the exact validation that rejects it.",
       "transfer_trap": "Exception-only parsing patterns from other languages do not transfer: JavaScript numeric conversion often reports failure with NaN instead of throwing."

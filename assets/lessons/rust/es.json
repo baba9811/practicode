@@ -4,439 +4,526 @@
   "ui_language": "es",
   "lessons": {
     "rust-output": {
-      "title": "Salida",
-      "concept": "Salida se centra en esta habilidad de Rust: formatear valores con println! y producir stdout exacto para el juez. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Salida. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Salida estándar exacta en bytes",
+      "concept": "La macro `println!` valida sus argumentos de formato durante la compilación y añade exactamente un salto LF después del texto representado.",
+      "worked_example": "La muestra une el nombre de una herramienta y una edición mediante un guion. Los argumentos capturados demuestran el formato sin copiar la respuesta del ejercicio.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Salida en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Salida.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Salida se centra en esta habilidad de Rust: formatear valores con println!"
+        "Llamar `println` como una función y omitir el signo de exclamación obligatorio.",
+        "Añadir espacios alrededor de los dos puntos y cambiar la salida aunque los valores sean correctos."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Salida antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Salida debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué caracteres proceden de la plantilla y cuál añade la macro al final?",
+        "¿Usarías `print!` o `println!` si no se permitiera una nueva línea final?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Salida a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Lee un nombre y una puntuación y representa ambos con el delimitador exacto mostrado por los casos.",
+      "objective": "Producir una línea comprobada al compilar cuyos bytes coincidan con la salida requerida.",
+      "language_delta": "El formato de Rust mantiene separados plantilla y argumentos tipados y comprueba su relación, en vez de depender de concatenaciones implícitas.",
+      "prediction_prompt": "Antes de ejecutar, decide si la puntuación situada fuera de las llaves se repite por cada valor sustituido.",
+      "transfer_trap": "`println!` no es una función variádica ordinaria: es una expansión de macro con plantilla conocida estáticamente."
     },
     "rust-variables": {
-      "title": "Vinculaciones y mutabilidad",
-      "concept": "Vinculaciones y mutabilidad se centra en esta habilidad de Rust: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Vinculaciones y mutabilidad. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Estado cambiante con un único enlace mutable",
+      "concept": "Un enlace `mut` permite asignar de nuevo al mismo almacenamiento. Otro `let` con igual nombre produce sombreado: crea un enlace nuevo en lugar de mutar el anterior.",
+      "worked_example": "La demostración actualiza `value` una vez y luego lo sombrea con un resultado transformado. Ambos mecanismos quedan visibles en pocas líneas.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Vinculaciones y mutabilidad en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Vinculaciones y mutabilidad.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Vinculaciones y mutabilidad se centra en esta habilidad de Rust: preferir vinculaciones let inmutables y usar mut solo cuando el valor cambia de verdad."
+        "Escribir `value += 1` sin `mut`; el enlace original no admite otra asignación.",
+        "Describir el sombreado como actualización in situ y ocultar cuándo deja de ser accesible el enlace anterior."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Vinculaciones y mutabilidad antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Vinculaciones y mutabilidad debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué línea modifica almacenamiento y cuál introduce otro enlace?",
+        "¿Necesita `mut` la etiqueta inmutable solo porque se imprime después de cambiar el total?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Vinculaciones y mutabilidad a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Mantén fija la etiqueta y suma cada entero posterior en un acumulador declarado expresamente como mutable.",
+      "objective": "Distinguir un total mutable intencionado de los datos de contexto inmutables.",
+      "language_delta": "Rust hace explícita la mutabilidad del enlace; el sombreado puede incluso cambiar de tipo sin declarar una variable mutable.",
+      "prediction_prompt": "Predice el total después de cada vuelta antes de comprobar la línea final formateada.",
+      "transfer_trap": "No confundas sombrear con reasignar: el primero crea otro enlace y puede cambiar su tipo."
     },
     "rust-numbers-tuples": {
-      "title": "Números y tuplas",
-      "concept": "Números y tuplas se centra en esta habilidad de Rust: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Números y tuplas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "División con signo observada en una tupla",
+      "concept": "Para operandos `i64` válidos, `/` trunca hacia cero y `%` devuelve el resto asociado. El divisor no es cero y se excluye el desbordamiento `i64::MIN / -1`.",
+      "worked_example": "Dividir veintitrés entre cuatro produce cociente y resto positivos, que se consultan por separado como `result.0` y `result.1`.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Números y tuplas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Números y tuplas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Números y tuplas se centra en esta habilidad de Rust: combinar tipos numéricos explícitos con acceso a campos de tupla como pair.0 y pair.1."
+        "Aplicar la división con redondeo hacia abajo de Python y obtener otro cociente con dividendo negativo.",
+        "Intercambiar los índices de la tupla: compila, pero invierte los campos requeridos."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Números y tuplas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Números y tuplas debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "Para menos diecisiete entre cinco, ¿el truncamiento avanza hacia cero o menos infinito?",
+        "¿Qué identidad verifica el resto y qué pareja de desbordamiento queda excluida?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Números y tuplas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-strings": {
-      "title": "Cadenas",
-      "concept": "Cadenas se centra en esta habilidad de Rust: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Cadenas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Cadenas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Cadenas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Cadenas se centra en esta habilidad de Rust: decidir cuándo hace falta un String con propiedad y cuándo basta un &str prestado."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Cadenas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Cadenas debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Cadenas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-control-flow": {
-      "title": "Flujo de control",
-      "concept": "Flujo de control se centra en esta habilidad de Rust: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Flujo de control. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Flujo de control en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Flujo de control.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Flujo de control se centra en esta habilidad de Rust: usar if como expresión y rangos for para construir valores, no solo ramificar por costumbre."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Flujo de control antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Flujo de control debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Flujo de control a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-functions": {
-      "title": "Funciones",
-      "concept": "Funciones se centra en esta habilidad de Rust: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Funciones. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Funciones en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Funciones.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Funciones se centra en esta habilidad de Rust: escribir firmas donde los tipos de parámetros y retorno documenten el límite del cálculo."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Funciones antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Funciones debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Funciones a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-structs-impl": {
-      "title": "Structs e impl",
-      "concept": "Structs e impl se centra en esta habilidad de Rust: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Structs e impl. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Structs e impl en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Structs e impl.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Structs e impl se centra en esta habilidad de Rust: agrupar campos del dominio en un struct y poner en impl el comportamiento que usa esos campos."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Structs e impl antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Structs e impl debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Structs e impl a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-enum-match": {
-      "title": "Enums y match",
-      "concept": "Enums y match se centra en esta habilidad de Rust: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Enums y match. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Enums y match en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Enums y match.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Enums y match se centra en esta habilidad de Rust: modelar alternativas con variantes enum y cubrir cada variante de forma exhaustiva con match."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Enums y match antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Enums y match debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Enums y match a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-option": {
-      "title": "Option e if let",
-      "concept": "Option e if let se centra en esta habilidad de Rust: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Option e if let. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Option e if let en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Option e if let.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Option e if let se centra en esta habilidad de Rust: hacer explícitos los valores ausentes con Option<T> y extraer Some de forma segura."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Option e if let antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Option e if let debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Option e if let a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-modules-use": {
-      "title": "Módulos y use",
-      "concept": "Módulos y use se centra en esta habilidad de Rust: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Módulos y use. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Módulos y use en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Módulos y use.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Módulos y use se centra en esta habilidad de Rust: controlar espacio de nombres, privacidad y rutas locales con mod, pub y use."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Módulos y use antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Módulos y use debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Módulos y use a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Analiza dos enteros, con divisor no nulo y sin `i64::MIN / -1`, e imprime en orden la tupla cociente-resto.",
+      "objective": "Calcular y desestructurar dos resultados respetando la aritmética con signo de Rust.",
+      "language_delta": "La barra entera de Rust trunca cuando difieren los signos; `//` de Python redondea hacia menos infinito.",
+      "prediction_prompt": "Calcula cociente y resto del caso con signos mezclados antes de invocar `rustc`.",
+      "transfer_trap": "El símbolo `/` no implica punto flotante: los tipos de operandos determinan la aritmética."
     },
     "rust-input": {
-      "title": "Parseo de entrada",
-      "concept": "Parseo de entrada se centra en esta habilidad de Rust: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Parseo de entrada. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Consumir una entrada separada por espacios",
+      "concept": "El método del trait `Read` llena un `String` propio y `split_whitespace` visita todos los tokens aunque cambien de línea. Una entrada vacía produce un iterador vacío.",
+      "worked_example": "Un segmento de bytes implementa `Read`; por eso la muestra prueba `read_to_string` de forma determinista sin depender de un terminal.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Parseo de entrada en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Parseo de entrada.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Parseo de entrada se centra en esta habilidad de Rust: leer stdin una vez, dividir texto en tokens y convertirlos a valores tipados."
+        "Leer una sola línea e ignorar tokens válidos posteriores a un salto.",
+        "Tratar `parse` como infalible fuera del contrato y convertir texto mal formado en un pánico sin explicación."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Parseo de entrada antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Parseo de entrada debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Por qué `sum` sobre un iterador vacío devuelve la identidad aditiva?",
+        "¿Qué `trait` importado hace disponible `read_to_string` sobre stdin?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Parseo de entrada a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Lee la entrada completa, analiza todos los enteros separados por espacios en blanco e imprime su suma.",
+      "objective": "Resolver entradas válidas de una línea, varias líneas y vacías mediante la misma tokenización.",
+      "language_delta": "El análisis Rust devuelve `Result` en vez de convertir por coerción; aquí `unwrap` solo se justifica porque los tokens están garantizados.",
+      "prediction_prompt": "Decide si el caso multilínea difiere del equivalente separado solo por espacios tras `split_whitespace`.",
+      "transfer_trap": "No reduzcas la entrada a su primera línea: el contrato define un flujo completo de tokens."
     },
     "rust-vec-hashmap": {
-      "title": "Vec y HashMap",
-      "concept": "Vec y HashMap se centra en esta habilidad de Rust: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Vec y HashMap. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Combinar una secuencia con una tabla de consulta",
+      "concept": "El primer token es la consulta; las palabras restantes permanecen ordenadas en un `Vec` y un `HashMap` construido con `entry` registra sus frecuencias.",
+      "worked_example": "La muestra cuenta etiquetas de color repetidas y luego imprime la cantidad de claves distintas sin depender del orden de iteración del mapa.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Vec y HashMap en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Vec y HashMap.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Vec y HashMap se centra en esta habilidad de Rust: elegir Vec para datos ordenados y la API entry de HashMap para conteo y búsqueda por clave."
+        "Imprimir directamente la iteración de `HashMap` y depender de un orden no especificado.",
+        "Indexar `counts[query]` y provocar pánico cuando la consulta no aparece."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Vec y HashMap antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Vec y HashMap debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué colección informa cuántos valores llegaron y cuál cuántas veces apareció la consulta?",
+        "¿Por qué `get().copied().unwrap_or(0)` resuelve una ausencia sin mutar?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Vec y HashMap a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Guarda los tokens de valores en orden, cuenta cada clave e informa de la longitud y frecuencia solicitadas.",
+      "objective": "Elegir `Vec` para orden y `HashMap` para agregación segura dentro del mismo programa.",
+      "language_delta": "El `HashMap` estándar de Rust no promete orden de iteración, a diferencia de ciertos diccionarios ordenados por inserción.",
+      "prediction_prompt": "Sigue una consulta ausente y decide si `get` crea alguna entrada nueva.",
+      "transfer_trap": "No sustituyas `entry` por dos consultas sin una medición: la operación ocupada o vacante ya expresa la actualización."
     },
-    "rust-borrowing-slices": {
-      "title": "Préstamos y slices",
-      "concept": "Préstamos y slices se centra en esta habilidad de Rust: pasar slices prestados para que las funciones lean datos sin tomar propiedad. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Préstamos y slices. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "rust-control-flow": {
+      "title": "Hacer que las ramas devuelvan una etiqueta",
+      "concept": "`if` es una expresión: las ramas de paridad producen la cadena que se presenta junto a una suma de rango inclusivo. Ambos valores de rama deben compartir tipo.",
+      "worked_example": "La muestra elige una etiqueta de preparación y consume aparte un rango entero inclusivo para calcular un número triangular.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Préstamos y slices en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Préstamos y slices.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Préstamos y slices se centra en esta habilidad de Rust: pasar slices prestados para que las funciones lean datos sin tomar propiedad."
+        "Escribir `1..n`, perder el extremo superior y cambiar cada total positivo.",
+        "Devolver cadena en una rama y entero en otra, aunque una expresión `if` necesita un solo tipo."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Préstamos y slices antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Préstamos y slices debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué secuencia genera `1..=0` y qué identidad devuelve `sum`?",
+        "¿La paridad se decide antes o después del total y afecta eso a la propiedad?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Préstamos y slices a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-result": {
-      "title": "Result y ?",
-      "concept": "Result y ? se centra en esta habilidad de Rust: devolver errores recuperables con Result<T, E> y propagarlos con el operador ?. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Result y ?. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Result y ? en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Result y ?.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Result y ?"
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Result y ? antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Result y ? debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Result y ? a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-ownership": {
-      "title": "Propiedad y préstamos",
-      "concept": "Propiedad y préstamos se centra en esta habilidad de Rust: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Propiedad y préstamos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Propiedad y préstamos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Propiedad y préstamos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Propiedad y préstamos se centra en esta habilidad de Rust: seguir cuándo un String se mueve, cuándo vuelve y cuándo una referencia solo lo presta."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Propiedad y préstamos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Propiedad y préstamos debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Propiedad y préstamos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Clasifica la entrada como par o impar y acompaña esa etiqueta con la suma inclusiva desde uno hasta `n`.",
+      "objective": "Construir una salida mediante una rama tipada y un rango sensible a sus límites.",
+      "language_delta": "Las condiciones Rust requieren `bool`; no existe conversión implícita de números a booleanos como en C, JavaScript o Python.",
+      "prediction_prompt": "Para `n = 4`, enumera los elementos exactos del rango y calcula después el total mostrado.",
+      "transfer_trap": "Un rango semiabierto de otro lenguaje puede parecer igual y omitir silenciosamente el último valor."
     },
     "rust-iterators": {
-      "title": "Iteradores y closures",
-      "concept": "Iteradores y closures se centra en esta habilidad de Rust: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Iteradores y closures. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Impulsar filtro y transformación con una suma terminal",
+      "concept": "El análisis crea enteros propios; `filter` presta cada candidato, `map` recibe los aceptados y `sum` consume finalmente toda la tubería.",
+      "worked_example": "Un rango no acotado resulta seguro porque `take` limita el consumo antes de que `collect` solicite un `Vec` concreto.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Iteradores y closures en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Iteradores y closures.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Iteradores y closures se centra en esta habilidad de Rust: componer adaptadores iteradores perezosos con closures y consumirlos con sum o collect."
+        "Crear adaptadores `map` y `filter` sin operación terminal, por lo que no se transforma nada.",
+        "Omitir el cuadrado y sumar los valores pares originales."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Iteradores y closures antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Iteradores y closures debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿En qué llamada comienza realmente la iteración?",
+        "¿Por qué cero pasa el filtro par pero no aumenta el total tras elevarse?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Iteradores y closures a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Analiza los enteros, conserva los pares, elévalos perezosamente al cuadrado y consume la tubería en una suma.",
+      "objective": "Expresar un recorrido numérico de varias etapas con un único consumidor terminal.",
+      "language_delta": "Las cadenas de iterador codifican préstamos y propiedad de elementos en sus tipos, además de ser perezosas.",
+      "prediction_prompt": "Predice cada secuencia intermedia para menos dos, menos uno y cero.",
+      "transfer_trap": "No uses `collect` entre cada adaptador; `sum` puede solicitar los elementos directamente sin un `Vec` temporal."
+    },
+    "rust-functions": {
+      "title": "Punto de control: valores a través de una función",
+      "concept": "`area` recibe dos `i64` por valor y devuelve otro mediante su expresión final. `main` conserva la responsabilidad de la entrada y la salida.",
+      "worked_example": "Una función distinta devuelve un `String` asignado por `format!`; así muestra el retorno por expresión con datos no numéricos.",
+      "common_mistakes": [
+        "Colocar punto y coma tras `width * height` y cambiar el resultado del cuerpo a unidad.",
+        "Imprimir dentro de `area` en vez de devolver, acoplando el cálculo a una salida concreta."
+      ],
+      "self_check": [
+        "¿Puede llamarse dos veces `area` sin estado oculto de la primera?",
+        "¿Qué parte de la firma promete que vuelve un `i64`?"
+      ],
+      "exercise_prompt": "Analiza ancho y alto, llama a una función `area` pura e imprime únicamente el valor que devuelve.",
+      "objective": "Separar el cálculo tipado de stdin y stdout mediante una frontera reutilizable.",
+      "language_delta": "La última expresión puede retornarse sin `return`, pero un punto y coma cambia de forma significativa el tipo del cuerpo.",
+      "prediction_prompt": "Predice el tipo del cuerpo con y sin punto y coma final antes de compilar.",
+      "transfer_trap": "No traslades un retorno implícito sin revisar la puntuación: en Rust, el punto y coma produce `()`."
+    },
+    "rust-modules-use": {
+      "title": "Acortar una ruta de módulo visible",
+      "concept": "El módulo `grading` expone `verdict` con `pub` y `use` introduce su nombre corto en el ámbito exterior. Visibilidad y resolución de nombres son decisiones separadas.",
+      "worked_example": "Un elemento anidado `units` se declara público y después se importa antes de llamarlo desde `main`, mostrando todo el recorrido de ruta a alias.",
+      "common_mistakes": [
+        "Añadir `use` a una función privada hermana no elude la privacidad.",
+        "Escribir una ruta relativa desde otro módulo y resolver otro espacio de nombres o ninguno."
+      ],
+      "self_check": [
+        "¿Podría `main` llamar `grading::verdict` sin la declaración `use`?",
+        "¿Qué palabra permite invocar `verdict` desde fuera de `grading`?"
+      ],
+      "exercise_prompt": "Mantén pública e importada la función y corrige el límite inclusivo para que apruebe toda puntuación mayor o igual que 80.",
+      "objective": "Resolver un elemento público mediante `use` y aplicar correctamente la frontera de 80 puntos.",
+      "language_delta": "`use` se parece a un alias léxico, no a una importación de ejecución que cargue paquetes.",
+      "prediction_prompt": "Predice los veredictos de 79, 80 y 91; explica después si `use` cambia conducta o solo la ruta.",
+      "transfer_trap": "Paquetes y crates de Cargo son límites mayores; este laboratorio de un archivo solo muestra módulos del lenguaje."
     },
     "rust-generics": {
-      "title": "Genéricos",
-      "concept": "Genéricos se centra en esta habilidad de Rust: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Genéricos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Copiar el último elemento de un segmento genérico",
+      "concept": "`last_copy` acepta un `slice` compartido de cualquier `T: Copy`. `copied` convierte `Option<&T>` en `Option<T>` sin afirmar que todo tipo Rust sea barato de duplicar.",
+      "worked_example": "La función compañera obtiene el primer `u8` de un array prestado y muestra su `Option` mediante formato de depuración.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Genéricos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Genéricos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Genéricos se centra en esta habilidad de Rust: escribir una función sobre T manteniendo chequeo de tipos concretos en compilación."
+        "Omitir el límite `Copy` e intentar extraer un `T` propio mediante `copied`.",
+        "Llamar siempre a `clone`, exigir `Clone` y ocultar una operación potencialmente más costosa."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Genéricos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Genéricos debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué presta `last_copy` y qué valor pequeño devuelve?",
+        "¿Cumple `String` este límite o convendría devolver una referencia?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Genéricos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Implementa un auxiliar genérico para el último elemento y aplícalo al `slice` de enteros analizados.",
+      "objective": "Usar un límite de `trait` que justifique exactamente copiar un valor a través de un préstamo compartido.",
+      "language_delta": "Rust comprueba una definición genérica restringida; no aplaza la validación de operaciones arbitrarias hasta una monomorfización posterior.",
+      "prediction_prompt": "Predice el `Option` de un `slice` unitario antes de que `main` aplique `unwrap`.",
+      "transfer_trap": "No amplíes a `Clone` por costumbre; `Copy` expresa el comportamiento que necesitan estos enteros."
     },
     "rust-traits": {
-      "title": "Traits y bounds",
-      "concept": "Traits y bounds se centra en esta habilidad de Rust: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Traits y bounds. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Exigir valores resumibles sin clonarlos",
+      "concept": "`ScoreCard` implementa `Summary` prestando `self`. La función genérica `render` acepta una referencia a cualquier valor con ese límite y devuelve el texto producido.",
+      "worked_example": "La muestra `Size` implementa un comportamiento pequeño para cualquier `Vec<T>` y lo invoca con sintaxis de método.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Traits y bounds en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Traits y bounds.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Traits y bounds se centra en esta habilidad de Rust: describir comportamiento requerido con traits y usar bounds para invocarlo genéricamente."
+        "Mover `self.name` fuera de un préstamo compartido, acción prohibida e innecesaria para formatear.",
+        "Recibir un `ScoreCard` concreto en `render` y perder la reutilización aportada por `Summary`."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Traits y bounds antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Traits y bounds debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Llamar a `summary` consume la tarjeta o la deja utilizable?",
+        "¿Dónde declara la función que `T` implementa `Summary`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Traits y bounds a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-lifetimes": {
-      "title": "Lifetimes",
-      "concept": "Lifetimes se centra en esta habilidad de Rust: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Lifetimes. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Lifetimes en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Lifetimes.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Lifetimes se centra en esta habilidad de Rust: anotar relaciones entre entradas y salidas prestadas sin alargar el almacenamiento."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Lifetimes antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Lifetimes debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Lifetimes a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-traits-lifetimes": {
-      "title": "Objetos trait y despacho dyn",
-      "concept": "Objetos trait y despacho dyn se centra en esta habilidad de Rust: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Objetos trait y despacho dyn. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Objetos trait y despacho dyn en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Objetos trait y despacho dyn.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Objetos trait y despacho dyn se centra en esta habilidad de Rust: usar &dyn Trait cuando la flexibilidad del despacho en tiempo de ejecución compensa frente a un tipo genérico."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Objetos trait y despacho dyn antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Objetos trait y despacho dyn debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Objetos trait y despacho dyn a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-testing": {
-      "title": "Pruebas y aserciones",
-      "concept": "Pruebas y aserciones se centra en esta habilidad de Rust: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Pruebas y aserciones. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Pruebas y aserciones en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Pruebas y aserciones.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Pruebas y aserciones se centra en esta habilidad de Rust: separar lógica pura de main para que funciones #[test] y macros assert verifiquen comportamiento."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Pruebas y aserciones antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Pruebas y aserciones debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Pruebas y aserciones a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-smart-pointers": {
-      "title": "Smart pointers",
-      "concept": "Smart pointers se centra en esta habilidad de Rust: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Smart pointers. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Smart pointers en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Smart pointers.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Smart pointers se centra en esta habilidad de Rust: usar Box<T> para poseer datos en heap y trabajar con comportamiento tipo puntero mediante deref."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Smart pointers antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Smart pointers debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Smart pointers a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-interior-mutability": {
-      "title": "Mutabilidad interior",
-      "concept": "Mutabilidad interior se centra en esta habilidad de Rust: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Mutabilidad interior. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Mutabilidad interior en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Mutabilidad interior.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Mutabilidad interior se centra en esta habilidad de Rust: usar RefCell<T> cuando el chequeo de préstamos en ejecución es el modelo correcto más simple."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Mutabilidad interior antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Mutabilidad interior debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Mutabilidad interior a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-concurrency": {
-      "title": "Hilos y join",
-      "concept": "Hilos y join se centra en esta habilidad de Rust: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Hilos y join. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Hilos y join en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Hilos y join.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Hilos y join se centra en esta habilidad de Rust: mover trabajo a thread::spawn y usar join para recuperar con seguridad el resultado del worker."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Hilos y join antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Hilos y join debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Hilos y join a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-shared-state": {
-      "title": "Estado compartido con Arc y Mutex",
-      "concept": "Estado compartido con Arc y Mutex se centra en esta habilidad de Rust: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Estado compartido con Arc y Mutex. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Estado compartido con Arc y Mutex en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Estado compartido con Arc y Mutex.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Estado compartido con Arc y Mutex se centra en esta habilidad de Rust: combinar Arc<T> para propiedad compartida con Mutex<T> para mutación de a una vez."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Estado compartido con Arc y Mutex antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Estado compartido con Arc y Mutex debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Estado compartido con Arc y Mutex a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-async-await": {
-      "title": "Async y await",
-      "concept": "Async y await se centra en esta habilidad de Rust: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Async y await. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Async y await en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Async y await.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Async y await se centra en esta habilidad de Rust: reconocer que async crea un Future y que ejecutarlo requiere un executor o runtime."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Async y await antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Async y await debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Async y await a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Construye una tarjeta y representa sus campos prestados mediante un auxiliar limitado por `Summary`.",
+      "objective": "Definir comportamiento compartido e invocarlo sin ceder la propiedad del valor implementador.",
+      "language_delta": "Los `trait` permiten despacho estático a través de genéricos sin exigir una jerarquía de herencia.",
+      "prediction_prompt": "Decide si `render` puede aceptar dos structs sin relación que implementen `Summary`.",
+      "transfer_trap": "No clones campos propios para silenciar un error de préstamo; el formato admite referencias a valores mostrables."
     },
     "rust-macros": {
-      "title": "macro_rules!",
-      "concept": "macro_rules! se centra en esta habilidad de Rust: emparejar patrones de tokens con macro_rules! y expandir código Rust repetido en compilación. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de macro_rules!. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Transformar tokens emparejados en una expresión",
+      "concept": "`greet!` se exporta y expande a `$crate::helper`, por lo que la búsqueda del auxiliar queda anclada en el crate de definición antes de comprobar tipos.",
+      "worked_example": "`caller::run` invoca la macro exportada `increment!` desde un módulo anidado, pero `$crate` todavía resuelve `helper` en la raíz que la definió.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de macro_rules! en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de macro_rules!.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: macro_rules!"
+        "Olvidar `!` y pedir al compilador una función en vez de una macro.",
+        "Expandir dos veces una expresión de entrada y repetir también sus efectos secundarios."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica macro_rules! antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de macro_rules! debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Por qué `$crate` estabiliza la búsqueda si la macro se invoca desde otra ruta?",
+        "¿Dónde se comprueba el tipo de la llamada expandida después del emparejamiento?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando macro_rules! a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "rust-unsafe": {
-      "title": "Rust unsafe",
-      "concept": "Rust unsafe se centra en esta habilidad de Rust: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Rust unsafe. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Rust unsafe en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Rust unsafe.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Rust unsafe se centra en esta habilidad de Rust: poner operaciones no verificables en bloques unsafe manteniendo la API externa lo más segura posible."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Rust unsafe antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Rust unsafe debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Rust unsafe a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Completa el auxiliar de saludo del crate de definición, invocado por la macro exportada desde el módulo anidado, usando el nombre recortado.",
+      "objective": "Exportar una macro cuya expansión resuelva higiénicamente un auxiliar mediante `$crate`.",
+      "language_delta": "Las macros trabajan sobre sintaxis antes de la ejecución; no son sustitución textual ni reflexión.",
+      "prediction_prompt": "Expande `crate::greet!(name)` dentro de `caller::greet_from` e identifica la ruta resuelta.",
+      "transfer_trap": "Una ruta relativa al invocador es frágil para auxiliares propios; `$crate` fija el crate de definición."
     },
     "rust-cargo-workspaces": {
-      "title": "Paquetes Cargo y workspaces",
-      "concept": "Paquetes Cargo y workspaces se centra en esta habilidad de Rust: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo. Apréndela siguiendo el valor tipado en el ejemplo, desde su creación hasta las decisiones de movimiento o préstamo y la expresión que llega a stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Paquetes Cargo y workspaces. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Orientarse en un espacio de trabajo de Cargo",
+      "concept": "Un espacio de trabajo coordina paquetes miembros y un directorio de destino compartido. Este ejecutor solo puede comprobar qué comandos seleccionan todos los miembros.",
+      "worked_example": "El ejemplo imprime un comando de inspección de metadatos y deja claro que este archivo compilado con `rustc` no ha cargado un manifiesto real.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Paquetes Cargo y workspaces en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Paquetes Cargo y workspaces.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Paquetes Cargo y workspaces se centra en esta habilidad de Rust: entender cuándo la estructura de paquetes Cargo y cargo check --workspace importan más allá de un archivo."
+        "Suponer que `cargo test` desde un miembro cubre necesariamente todo el espacio de trabajo.",
+        "Tratar esta correspondencia de texto como prueba de una configuración que el ejecutor nunca construyó."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Paquetes Cargo y workspaces antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Paquetes Cargo y workspaces debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué opción selecciona todo el espacio de trabajo para `cargo check` o `cargo test`?",
+        "¿Por qué los argumentos de comprobación de `rustfmt` aparecen después de `--`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Paquetes Cargo y workspaces a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Asocia las intenciones `check`, `test` y `fmt` con las líneas documentadas para todo el espacio de trabajo.",
+      "objective": "Identificar mantenimiento seguro de todos los miembros sin fingir una compilación multipaquete.",
+      "language_delta": "Los espacios de trabajo pertenecen a Cargo; `rustc` no puede verificar esa estructura del proyecto.",
+      "prediction_prompt": "Para `fmt`, separa qué argumentos recibe Cargo y cuáles se reenvían a `rustfmt`.",
+      "transfer_trap": "No conviertas este laboratorio en ruta principal hasta que el evaluador cree un espacio de trabajo temporal y observe miembros reales."
+    },
+    "rust-ownership": {
+      "title": "Transferir y recuperar la propiedad de un `String`",
+      "concept": "`main` quita los finales de línea del `String` original y mueve su propietario a `describe`. `String` contiene puntero, longitud y capacidad; la entrada vacía puede permanecer sin asignación dinámica.",
+      "worked_example": "`wrap` consume los metadatos del `String` y toma la propiedad del búfer existente. Después, `main` ya no puede reutilizar el enlace movido.",
+      "common_mistakes": [
+        "Leer el enlace exterior después de pasarlo por valor y obtener un error de valor movido.",
+        "Añadir `clone` ante cualquier error de propiedad y asignar memoria innecesaria en vez de elegir otra firma."
+      ],
+      "self_check": [
+        "¿En qué llamada sale la propiedad de `main` y mediante qué patrón recupera `main` un propietario?",
+        "¿Por qué `describe` puede llamar a `len` antes de mover el texto a la tupla?"
+      ],
+      "exercise_prompt": "Elimina los finales de línea dentro del `String` original, muévelo a `describe` y devuélvelo junto con su longitud UTF-8.",
+      "objective": "Mover y devolver el mismo propietario sin clonar; una entrada vacía puede seguir sin reservar memoria.",
+      "language_delta": "Mover un `String` transfiere tres metadatos de tamaño fijo y no copia su búfer ni reduce el valor a una sola palabra de puntero.",
+      "prediction_prompt": "Predice la cantidad de bytes de `é` antes de compararla con el conteo de escalares posterior.",
+      "transfer_trap": "`Box`, `Arc` y `RefCell` expresan otras estructuras; aprende primero este movimiento ordinario sin copias."
+    },
+    "rust-smart-pointers": {
+      "title": "Poseer indirectamente el siguiente nodo recursivo",
+      "concept": "`List::Cons` guarda su cola en `Box<List>`. Así cada `enum` tiene tamaño finito conocido y mantiene propiedad exclusiva sobre la cadena recursiva.",
+      "worked_example": "La muestra construye dos enlaces en cajas y los recorre mediante referencias compartidas, por lo que visitar la lista no la consume.",
+      "common_mistakes": [
+        "Colocar `List` directamente dentro de `Cons` y crear un tipo de tamaño infinito rechazado.",
+        "Afirmar que `Box` acelera el código; aquí importa la indirección propietaria de tamaño conocido."
+      ],
+      "self_check": [
+        "¿Qué parte de `Cons` mantiene tamaño fijo aunque la cola sea arbitrariamente larga?",
+        "¿Por qué construir desde un iterador invertido conserva el orden original?"
+      ],
+      "exercise_prompt": "Pliega los enteros analizados en una lista recursiva con cajas e imprime la suma obtenida al recorrerla.",
+      "objective": "Representar un tipo recursivo propietario mediante `Box` y visitarlo sin mover sus nodos.",
+      "language_delta": "Un lenguaje con recolección puede ocultar la indirección; Rust exige que la arista de propiedad aparezca en el tipo.",
+      "prediction_prompt": "Dibuja la cadena `Cons` de tres tokens antes de evaluar su suma recursiva.",
+      "transfer_trap": "`Arc` y `Rc` expresan propiedad compartida; esta cola tiene un único propietario y solo necesita `Box`."
+    },
+    "rust-interior-mutability": {
+      "title": "Préstamo mutable dinámico dentro de un propietario inmutable",
+      "concept": "`EventLog` expone `record` mediante `&self` y `RefCell` comprueba dinámicamente préstamos compartidos y mutables. La guarda mutable termina después de `push`, antes del préstamo final.",
+      "worked_example": "`Cell` maneja un entero `Copy` sin prestar referencias, de modo que la muestra incrementa un contador a través de un enlace inmutable.",
+      "common_mistakes": [
+        "Mantener `borrow_mut` y pedir a la vez `borrow`, lo que provoca pánico por accesos solapados.",
+        "Un `RefCell<T>` propio puede moverse a otro hilo si `T: Send`, pero no es `Sync` y no protege mutación compartida concurrente."
+      ],
+      "self_check": [
+        "¿Dónde deja de estar viva la guarda `RefMut` creada dentro de `record`?",
+        "¿Qué exclusividad se mantiene aunque el propietario nunca se declare `mut`?"
+      ],
+      "exercise_prompt": "Registra cada token mediante `&self` e informa de la longitud final del vector almacenado en `RefCell`.",
+      "objective": "Aplicar mutabilidad interior con préstamos cortos, no solapados y de un solo hilo.",
+      "language_delta": "`RefCell` pospone las reglas de exclusividad hasta la ejecución; no las elimina.",
+      "prediction_prompt": "Predice qué ocurre si `record` conserva una guarda mutable y solicita otra.",
+      "transfer_trap": "`RefCell` no sincroniza hilos; usa `Mutex` cuando varios comparten y modifican el mismo valor."
+    },
+    "rust-strings": {
+      "title": "Medir tres vistas distintas de texto UTF-8",
+      "concept": "`String` y `str` almacenan UTF-8. `len` cuenta bytes, `chars` produce valores escalares Unicode y un corte válido debe comenzar y terminar en fronteras de carácter.",
+      "worked_example": "El escalar del cangrejo ocupa cuatro bytes; por eso la muestra corta de forma segura el rango de cuatro bytes e informa de cantidades de bytes y escalares diferentes.",
+      "common_mistakes": [
+        "Intentar `text[0]`, aunque un byte no equivale necesariamente a un carácter.",
+        "Cortar en un desplazamiento de byte arbitrario y provocar pánico aunque sea menor que `len`."
+      ],
+      "self_check": [
+        "¿Cuántos bytes y valores escalares contiene la `é` de los casos?",
+        "¿Por qué el prefijo del cangrejo abarca cuatro bytes y no uno?"
+      ],
+      "exercise_prompt": "Imprime por separado la longitud UTF-8 en bytes, el conteo escalar y el primer escalar del texto recibido.",
+      "objective": "Elegir `len`, `chars` y una consulta segura según la medida solicitada.",
+      "language_delta": "Rust cuenta bytes UTF-8; Java y JavaScript usan unidades UTF-16, y segmentar grafemas requeriría lógica Unicode adicional.",
+      "prediction_prompt": "Predice los tres campos para el caso cangrejo seguido de `a` antes de compilar.",
+      "transfer_trap": "No apliques índices ASCII a `str`: sus posiciones son desplazamientos en bytes sujetos a fronteras de carácter válidas."
+    },
+    "rust-borrowing-slices": {
+      "title": "Punto de control: prestar un segmento de la entrada propia",
+      "concept": "`main` posee el búfer `String`; `first_word` lo presta temporalmente y devuelve un `&str` dentro del mismo almacenamiento. No se asigna memoria para la palabra.",
+      "worked_example": "El auxiliar `key` usa `split_once` para prestar el prefijo de un registro propio hasta que ese registro deja de necesitarse.",
+      "common_mistakes": [
+        "Devolver un `slice` de un `String` local y dejar una referencia a almacenamiento ya destruido.",
+        "Llamar a `to_owned` dentro de `first_word` y cambiar la API con una asignación evitable."
+      ],
+      "self_check": [
+        "¿Qué valor debe seguir vivo mientras se imprime la primera palabra prestada?",
+        "¿Por qué la entrada vacía produce con seguridad `&str` vacío sin `unwrap`?"
+      ],
+      "exercise_prompt": "Presta el búfer completo de entrada y devuelve como `&str` su primera palabra separada por espacios.",
+      "objective": "Relacionar el `slice` devuelto con el `String` del llamador y manejar la ausencia sin asignar.",
+      "language_delta": "Las referencias Rust expresan relaciones de validez en compilación; otros entornos suelen ocultar el vínculo de propiedad de una subcadena.",
+      "prediction_prompt": "Decide si el espacio inicial pertenece al resultado cuando se usa `split_whitespace`.",
+      "transfer_trap": "Los tiempos de vida, objetos de `trait` y punteros inseguros parten de esta misma relación limitada por el propietario."
+    },
+    "rust-lifetimes": {
+      "title": "Relacionar los tiempos de vida de una elección devuelta",
+      "concept": "`longer` puede devolver cualquiera de sus argumentos; un parámetro de tiempo de vida relaciona las dos entradas con la salida. El texto subyacente sigue perteneciendo al llamador.",
+      "worked_example": "`shorter` necesita `'a` explícita porque dos entradas prestadas impiden a las reglas de elisión elegir de cuál procede la referencia devuelta.",
+      "common_mistakes": [
+        "Esperar que la elisión seleccione entre dos referencias de entrada; esa relación debe escribirse.",
+        "Comparar `str::len` y ordenar bytes UTF-8 cuando se piden valores escalares Unicode."
+      ],
+      "self_check": [
+        "¿Qué memoria asigna o retiene una anotación de tiempo de vida en ejecución? Ninguna.",
+        "¿Por qué la salida solo puede durar lo permitido por la entrada elegida?"
+      ],
+      "exercise_prompt": "Separa la entrada por la barra y devuelve prestado el lado con más escalares, prefiriendo el izquierdo en un empate.",
+      "objective": "Anotar una relación de referencias sin cambiar propiedad ni duración del almacenamiento.",
+      "language_delta": "Los tiempos de vida expresan razonamiento estático sobre préstamos; no son contadores que mantengan activa una asignación.",
+      "prediction_prompt": "Compara `é` con `aa` primero por bytes y luego por escalares y explica el ganador.",
+      "transfer_trap": "No añadas `'static` para callar el compilador; exigiría datos globales en vez de describir los préstamos reales."
+    },
+    "rust-traits-lifetimes": {
+      "title": "Despacho dinámico con un resultado prestado",
+      "concept": "`render` acepta `&dyn Draw`, elige la implementación mediante una tabla virtual y devuelve un `&str` prestado del componente como máximo durante el préstamo de este.",
+      "worked_example": "La muestra envía un `Tag` a través de un objeto de `trait Named` y recibe su texto interior sin clonar el `String` propietario.",
+      "common_mistakes": [
+        "Añadir un método genérico sin restricción `where Self: Sized`; esa excepción es necesaria para mantener compatible con `dyn` el resto del `trait`.",
+        "Devolver una referencia a un `String` temporal creado dentro de `draw`, que quedaría colgante."
+      ],
+      "self_check": [
+        "¿Qué sigue perteneciendo a `Button` o `Label` después de volver de `render`?",
+        "¿Qué llamada usa despacho dinámico y qué tiempo de vida se infiere para el `str` devuelto?"
+      ],
+      "exercise_prompt": "Construye el componente solicitado y representa su etiqueta prestada mediante una referencia `dyn Draw`.",
+      "objective": "Combinar despacho dinámico seguro para objetos con un resultado ligado al préstamo receptor.",
+      "language_delta": "Un objeto de `trait` elige en ejecución; un límite genérico suele monomorfizarse para cada tipo concreto.",
+      "prediction_prompt": "Predice qué implementación recibe `label:Rust` y hasta cuándo es válida su referencia devuelta.",
+      "transfer_trap": "No encierres todo en `Box`: `main` ya posee el componente y basta un préstamo corto `&dyn Draw`."
+    },
+    "rust-unsafe": {
+      "title": "Obligación de seguridad local y explícita",
+      "concept": "`read_copy` convierte una referencia compartida válida en puntero crudo y realiza una lectura insegura. El comentario documenta tiempo de vida, alineación y posibilidad de copia.",
+      "worked_example": "La muestra demuestra que existe el índice cero antes de llamar `get_unchecked` dentro de un bloque pequeño cuya invariante puede revisarse.",
+      "common_mistakes": [
+        "Usar `unsafe` como escape general, aunque no vuelve válido un puntero colgante o mal alineado.",
+        "En Rust 2024, una operación insegura directa dentro de `unsafe fn` activa por defecto `unsafe_op_in_unsafe_fn`; configurar ese `lint` como `deny` convierte la advertencia en error."
+      ],
+      "self_check": [
+        "¿Qué hechos hacen válida la llamada `pointer.read` en esa línea?",
+        "¿Qué referencia segura garantiza que el dato siga vivo durante la operación?"
+      ],
+      "exercise_prompt": "Oculta la copia mediante puntero crudo detrás de una función segura con una invariante documentada.",
+      "objective": "Limitar lo inseguro a una operación auditable sin imponer obligaciones adicionales a quien llama.",
+      "language_delta": "Rust 2024 advierte si una `unsafe fn` ejecuta una operación insegura fuera de un bloque explícito, que delimita la revisión.",
+      "prediction_prompt": "Imagina que se destruye la referencia antes de leer e identifica qué condición deja de cumplirse.",
+      "transfer_trap": "No marques insegura toda la función si el envoltorio puede establecer internamente cada precondición."
+    },
+    "rust-structs-impl": {
+      "title": "Comportamiento prestado junto a sus datos",
+      "concept": "`Rectangle` posee dos dimensiones; `area` presta `&self` y deja disponible la instancia después del cálculo. La llamada de método suministra automáticamente ese receptor.",
+      "worked_example": "`Counter` muestra otro método de solo lectura cuyo receptor se presta en vez de consumirse o prestarse de forma mutable.",
+      "common_mistakes": [
+        "Declarar `area(self)` y consumir el rectángulo aunque el cálculo solo lee campos.",
+        "Confundir `Rectangle::area` con una función asociada sin receptor e ignorar `&self`."
+      ],
+      "self_check": [
+        "¿Puede llamarse dos veces `rectangle.area()` y qué receptor lo permite?",
+        "¿Sería necesario `&mut self` para una multiplicación que no cambia campos?"
+      ],
+      "exercise_prompt": "Construye un `Rectangle` desde las dimensiones analizadas e imprime el resultado de su método `area` no consumidor.",
+      "objective": "Modelar campos relacionados y añadir comportamiento mediante `impl` sin consumir el valor.",
+      "language_delta": "Los receptores Rust revelan si una llamada consume, muta o solo presta el objeto.",
+      "prediction_prompt": "Decide si cambiar `&self` por `&mut self` aporta algo a una multiplicación pura.",
+      "transfer_trap": "Genéricos y `trait` pueden generalizar después el comportamiento; un `impl` concreto basta para esta frontera."
+    },
+    "rust-enum-match": {
+      "title": "Alternativas cerradas y exhaustivas",
+      "concept": "`Command` representa sumar, multiplicar o salir con datos propios de cada variante. `evaluate` nombra todos los casos y `rustc` avisa si se incorpora otra variante.",
+      "worked_example": "El `match` del semáforo cubre tres variantes sin carga y devuelve una duración `u8` desde la expresión.",
+      "common_mistakes": [
+        "Usar una rama comodín y perder el diagnóstico útil cuando crezca el `enum`.",
+        "Leer cargas antes de decidir la variante y complicar el caso `Quit`, que no posee ninguna."
+      ],
+      "self_check": [
+        "¿Qué variantes contienen dos enteros y cuál no contiene datos?",
+        "¿Qué ayuda del compilador se pierde al absorber todo con `_`?"
+      ],
+      "exercise_prompt": "Analiza el comando en su variante de `enum` y evalúalo mediante brazos explícitos y exhaustivos de `match`.",
+      "objective": "Representar un conjunto cerrado con cargas por variante y coincidencia total de patrones.",
+      "language_delta": "Rust comprueba la exhaustividad estáticamente; otros `switch` permiten omisiones o ejecución en cascada entre casos.",
+      "prediction_prompt": "Predice qué nombres se enlazan en cada brazo antes de calcular.",
+      "transfer_trap": "`Option` también es un `enum`; sus variantes `Some` y `None` merecen el mismo manejo deliberado."
+    },
+    "rust-option": {
+      "title": "Ramificar por presencia sin forzar el valor",
+      "concept": "El primer escalar Unicode es `Some(char)` para texto no vacío y `None` en caso contrario. Un `match` explícito produce una salida útil para ambos estados normales.",
+      "worked_example": "`checked_half` usa `then_some` para crear un `Option` solo cuando el entero es par, y el formato de depuración muestra el envoltorio.",
+      "common_mistakes": [
+        "Llamar a `unwrap` y tratar la entrada vacía esperada como un error de programación.",
+        "Usar `bytes().next()` y obtener el primer byte UTF-8 en vez del escalar Unicode."
+      ],
+      "self_check": [
+        "¿Qué carga contiene `Some` en el resultado de `chars().next()`?",
+        "¿Qué rama se ejecuta para una cadena recortada de longitud cero?"
+      ],
+      "exercise_prompt": "Examina el primer escalar opcional e imprime ese `char` o la palabra de ausencia documentada.",
+      "objective": "Manejar exhaustivamente una ausencia normal sin nulos, centinelas ni pánico.",
+      "language_delta": "`Option` incorpora la ausencia al tipo, a diferencia de referencias anulables que pueden olvidarse hasta ejecutar.",
+      "prediction_prompt": "Predice el escalar elegido en el caso coreano, sin razonar como si fueran bytes.",
+      "transfer_trap": "Reserva `unwrap` para ausencias que violen una invariante; aquí el texto vacío forma parte del contrato."
+    },
+    "rust-result": {
+      "title": "Propagar errores de análisis desde un auxiliar puro",
+      "concept": "`sum_tokens` usa `try_fold` para aplicar `?` a cada conversión. El primer `ParseIntError` sale del auxiliar y `main` decide cómo representarlo.",
+      "worked_example": "`positive` muestra la propagación con `?` seguida de otra validación de dominio, separando claramente propagación y recuperación.",
+      "common_mistakes": [
+        "Leer `?` como captura, aunque devuelve inmediatamente el error desde la función exterior.",
+        "Forzar cada token y evitar que `main` convierta una entrada mal formada en la línea estable requerida."
+      ],
+      "self_check": [
+        "¿Cuál es el retorno de la función que contiene el signo de interrogación?",
+        "¿Visita `try_fold` tokens posteriores al primer `Err`?"
+      ],
+      "exercise_prompt": "Suma tokens enteros mediante `Result` e imprime un marcador estable si falla cualquiera de las conversiones.",
+      "objective": "Separar conversión falible y recuperación visible conservando la ruta original del error.",
+      "language_delta": "`Result` hace explícito el fallo recuperable en la firma, en vez de permitir excepciones que crucen llamadas sin marcar.",
+      "prediction_prompt": "Sigue el acumulador para `2 bad` e identifica dónde retorna el control.",
+      "transfer_trap": "No conviertas cada fallo en pánico; quien llama posee aquí la política de salida."
+    },
+    "rust-testing": {
+      "title": "Comprobaciones dentro de la ruta que ejecuta el evaluador",
+      "concept": "El binario de referencia llama `assert_eq!` antes de leer stdin, por lo que esas comprobaciones se ejecutan. Un módulo `cfg(test)` no existe en esta compilación ordinaria.",
+      "worked_example": "La muestra `triple` ejecuta una aserción en línea y después imprime un estado que no es respuesta; demuestra la comprobación sin arnés de pruebas.",
+      "common_mistakes": [
+        "Suponer que funciones `#[test]` corren en un binario normal de `rustc`, aunque nunca se construyó el arnés.",
+        "Usar aserciones para validar entrada no confiable y provocar pánico en lugar de un error controlado."
+      ],
+      "self_check": [
+        "Si una igualdad en línea es falsa, ¿se alcanza el `println!` posterior?",
+        "¿Qué activa el arnés: `cargo test` o `rustc --test`, frente a `rustc` normal?"
+      ],
+      "exercise_prompt": "Implementa `add_two`, conserva dos aserciones ejecutables de frontera e imprime el resultado para la entrada.",
+      "objective": "Dejar una comprobación real en el mismo modo de ejecución usado por esta lección.",
+      "language_delta": "Los atributos de prueba dependen del modo de compilación; una aserción llamada en `main` no necesita generar un arnés.",
+      "prediction_prompt": "Predice el proceso si `add_two` devuelve su argumento sin cambios mientras siguen las aserciones.",
+      "transfer_trap": "Este laboratorio enseña aserciones ejecutables y el límite del ejecutor, no dominio completo de pruebas unitarias."
+    },
+    "rust-async-await": {
+      "title": "Ejecutar `await` con un ejecutor deliberadamente limitado",
+      "concept": "`double` espera `std::future::ready` y `block_on_ready` sondea el `Future` una sola vez. `Pending` es un error porque este ejecutor no despierta ni vuelve a sondear.",
+      "worked_example": "`message` contiene un `.await` real y el mismo mecanismo de un solo sondeo lo impulsa, haciendo observable la ejecución en vez de abandonar un futuro creado.",
+      "common_mistakes": [
+        "Llamar a `double` sin sondear su `Future`, por lo que no se ejecuta el cuerpo asíncrono.",
+        "Usar este auxiliar de un sondeo para temporizadores, E/S o cualquier futuro que pueda quedar pendiente."
+      ],
+      "self_check": [
+        "¿Cuándo empieza a ejecutarse el futuro: al llamar a `double` o al hacer `poll`?",
+        "¿Qué condición permite aquí un despertador que no hace nada? El futuro esperado está listo inmediatamente."
+      ],
+      "exercise_prompt": "Transforma el número dentro del futuro listo e impulsa ese cálculo asíncrono hasta obtener su salida.",
+      "objective": "Observar un `await` genuino sin ocultar la limitación de un solo sondeo.",
+      "language_delta": "El código `async` de Rust permanece inerte hasta que un ejecutor sondea el `Future`; no inicia trabajo automáticamente.",
+      "prediction_prompt": "Predice qué brazo de `match` recibe el futuro listo y por qué no hay un segundo sondeo.",
+      "transfer_trap": "Usa un ejecutor de producción si puede aparecer `Pending`; convertir este auxiliar en planificador queda fuera de este entorno."
+    },
+    "rust-concurrency": {
+      "title": "Esperar el resultado propio de un trabajador",
+      "concept": "El `i64` analizado implementa `Copy`, así que una clausura `move` recibe su copia sin invalidar necesariamente el enlace exterior. `join` sincroniza y devuelve el cálculo.",
+      "worked_example": "La muestra crea un hilo para una multiplicación y consume su manejador antes de imprimir; el proceso no puede salir antes de disponer del resultado.",
+      "common_mistakes": [
+        "Descartar `JoinHandle` separa el trabajador; no espera implícitamente su finalización.",
+        "Prestar datos de pila a una clausura lanzada y fallar el requisito `'static` porque el hilo podría durar más."
+      ],
+      "self_check": [
+        "¿Qué valor copiado cruza al hilo y por qué podría seguir utilizándose el original?",
+        "¿Qué error de `join` convierte `expect` en pánico del hilo principal?"
+      ],
+      "exercise_prompt": "Captura el entero `Copy` en un trabajador, duplícalo allí, espera con `join` e imprime el valor devuelto.",
+      "objective": "Coordinar explícitamente un resultado sin depender de tiempos ni del cierre del proceso.",
+      "language_delta": "`spawn` crea un hilo del sistema planificado independientemente; puede empezar antes o después de que continúe el hilo llamador, y `join` es el punto de sincronización.",
+      "prediction_prompt": "Predice qué resultado garantiza `join` sin suponer qué hilo obtiene CPU primero.",
+      "transfer_trap": "No hace falta estado compartido para un único retorno; `Arc` y `Mutex` pertenecen al proyecto de varios trabajadores."
+    },
+    "rust-shared-state": {
+      "title": "Proyecto final: mutación compartida entre trabajadores unidos",
+      "concept": "`main` posee el `Vec` y crea un hilo por entero. Cada clausura posee su valor y un clon de `Arc`, calcula fuera de la sección crítica y mantiene la guarda de `Mutex` brevemente.",
+      "worked_example": "La muestra lanza dos hilos reales, consume ambos manejadores y solo entonces lee el total protegido; ninguna actualización queda pendiente.",
+      "common_mistakes": [
+        "Tratar `lock` como acceso instantáneo, aunque puede bloquear o devolver envenenamiento tras un pánico.",
+        "Mantener la guarda durante cálculos ajenos y alargar la contención; el cuadrado se calcula antes de bloquear."
+      ],
+      "self_check": [
+        "¿Se consumen todos los `JoinHandle` antes de tomar la guarda final?",
+        "¿Dónde aparecen iteración, clones de `Arc`, movimientos a hilos y ámbito de `MutexGuard`?"
+      ],
+      "exercise_prompt": "Lanza y espera un trabajador por entrada y añade cada cuadrado a un total compartido `Arc<Mutex<i64>>`.",
+      "objective": "Integrar propiedad, iteración, hilos, sincronización y salida determinista en un programa acotado.",
+      "language_delta": "`Arc` gestiona un tiempo de vida compartido y `Mutex` la exclusión; `RefCell` no es `Sync` y no protege mutación concurrente.",
+      "prediction_prompt": "Explica por qué el orden de planificación no cambia la suma final después de unir todos los hilos.",
+      "transfer_trap": "Aquí corresponde `Arc`, no `Box`; `Mutex` ya impone la invariante de alias, por lo que `unsafe` sería innecesario."
     }
   }
 }

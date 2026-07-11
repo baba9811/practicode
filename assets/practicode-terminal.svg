@@ -1,36 +1,40 @@
-<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="720" fill="#070b12"/>
-  <rect x="54" y="42" width="1092" height="636" rx="10" fill="#0b111a" stroke="#214c5c" stroke-width="2"/>
-
-  <rect x="76" y="68" width="560" height="430" rx="4" fill="#0f1720" stroke="#00c2d1" stroke-width="2"/>
-  <rect x="664" y="68" width="458" height="430" rx="4" fill="#0d141c" stroke="#f8e71c" stroke-width="2"/>
-
-  <text x="92" y="91" fill="#16d6e8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">Problem</text>
-  <text x="680" y="91" fill="#f8e71c" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">&gt; solution.py</text>
-
-  <text x="96" y="128" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="700">001. Hello World</text>
-  <text x="96" y="164" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">Difficulty: easy    Topics: io</text>
-  <text x="96" y="206" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">Print exactly Hello, World! to stdout.</text>
-
-  <text x="96" y="286" fill="#00d2e8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17" font-weight="700">Input</text>
-  <rect x="96" y="304" width="486" height="44" rx="3" fill="#101d28" stroke="#29495a"/>
-  <text x="112" y="332" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">No input.</text>
-
-  <text x="96" y="388" fill="#00d2e8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17" font-weight="700">Output</text>
-  <rect x="96" y="406" width="486" height="66" rx="3" fill="#101d28" stroke="#29495a"/>
-  <text x="112" y="446" fill="#f6c177" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">Hello, World!</text>
-
-  <text x="690" y="128" fill="#64748b" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">  1</text>
-  <text x="738" y="128" fill="#7dd3fc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">print</text>
-  <text x="790" y="128" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="16">('Hello, World!')</text>
-
-  <rect x="76" y="512" width="1046" height="30" fill="#152033"/>
-  <text x="94" y="533" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">PRACTICODE | 001-hello-world | easy | idle | assigned | code:written | python | Esc then / command</text>
-
-  <rect x="76" y="558" width="1046" height="48" rx="2" fill="#0b1017" stroke="#00c2d1" stroke-width="2"/>
-  <text x="94" y="579" fill="#16d6e8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">Command</text>
-  <text x="94" y="596" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">/</text>
-
-  <rect x="76" y="614" width="1046" height="46" rx="2" fill="#101923" stroke="#214c5c"/>
-  <text x="94" y="641" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15">/run  /next  /hint &lt;request&gt;  /profile  /difficulty auto  /topics arrays, strings</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1112" height="630" viewBox="0 0 1112 630" role="img" aria-label="Practicode · Learn">
+<rect width="1112" height="630" rx="14" fill="#0f172a"/>
+<rect x="1" y="1" width="1110" height="628" rx="13" fill="none" stroke="#334155"/>
+<circle cx="18" cy="18" r="5" fill="#fb7185"/><circle cx="34" cy="18" r="5" fill="#fbbf24"/><circle cx="50" cy="18" r="5" fill="#4ade80"/>
+<text x="70" y="23" fill="#94a3b8" font-size="13" font-family="ui-monospace, SFMono-Regular, Consolas, Liberation Mono, monospace">Practicode · Learn</text>
+<g fill="#e5e7eb" font-size="14" font-family="ui-monospace, SFMono-Regular, Consolas, Liberation Mono, monospace" xml:space="preserve">
+<text x="16" y="48">┌&gt; Lesson────────────────────────────────────────┐┌Code · Exercise.rs──────────────────────────────────────────────────┐</text>
+<text x="16" y="66">│Language delta: Make stdout byte-exact          ││&gt;  1 use std::io::{self, Read};                                     │</text>
+<text x="16" y="84">│                                                ││   2                                                                │</text>
+<text x="16" y="102">│Unlike string concatenation in many languages,  ││   3 fn render(name: &amp;str, score: &amp;str) -&gt; String {                 │</text>
+<text x="16" y="120">│Rust formatting keeps the template and typed    ││   4     // TODO: use the exact field separator required by stdout. │</text>
+<text x="16" y="138">│arguments separate and validates their          ││   5     format!(&quot;{name} {score}&quot;)                                  │</text>
+<text x="16" y="156">│relationship.                                   ││   6 }                                                              │</text>
+<text x="16" y="174">│                                                ││   7                                                                │</text>
+<text x="16" y="192">│                                                ││   8 fn main() {                                                    │</text>
+<text x="16" y="210">│                                                ││   9     let mut input = String::new();                             │</text>
+<text x="16" y="228">│                                                ││  10     io::stdin().read_to_string(&amp;mut input).unwrap();           │</text>
+<text x="16" y="246">│                                                ││  11     let mut fields = input.split_whitespace();                 │</text>
+<text x="16" y="264">│                                                ││  12     let name = fields.next().unwrap();                         │</text>
+<text x="16" y="282">│                                                ││  13     let score = fields.next().unwrap();                        │</text>
+<text x="16" y="300">│                                                ││  14     println!(&quot;{}&quot;, render(name, score));                       │</text>
+<text x="16" y="318">│                                                ││  15 }                                                              │</text>
+<text x="16" y="336">│                                                ││  16                                                                │</text>
+<text x="16" y="354">│                                                ││                                                                    │</text>
+<text x="16" y="372">│                                                ││                                                                    │</text>
+<text x="16" y="390">│                                                ││                                                                    │</text>
+<text x="16" y="408">│                                                ││                                                                    │</text>
+<text x="16" y="426">│                                                ││                                                                    │</text>
+<text x="16" y="444">│                                                ││                                                                    │</text>
+<text x="16" y="462">│                                                ││                                                                    │</text>
+<text x="16" y="480">│                                                ││                                                                    │</text>
+<text x="16" y="498">│                                                ││                                                                    │</text>
+<text x="16" y="516">│                                                ││                                                                    │</text>
+<text x="16" y="534">│                                                ││                                                                    │</text>
+<text x="16" y="552">│                                                ││                                                                    │</text>
+<text x="16" y="570">└────────────────────────────────────────────────┘└────────────────────────────────────────────────────────────────────┘</text>
+<text x="16" y="588"> F1 help | F5 run | F6 view | /next step                                                                                </text>
+<text x="16" y="606">Command: Type /, move with up/down, Enter runs                                                                          </text>
+</g>
 </svg>

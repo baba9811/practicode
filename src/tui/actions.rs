@@ -215,13 +215,14 @@ impl PracticodeApp {
 
     pub(super) fn action_practice(&mut self) -> Result<()> {
         self.transition_mode(AppMode::Problems);
+        self.practice_view = PracticeView::Problem;
         self.state.settings.start_mode = "problems".to_string();
         save_state(&self.root, &self.state)?;
         self.load_code_editor()?;
         self.settings_cursor = None;
         self.list_cursor = None;
         self.show_output = false;
-        self.focus = Focus::Code;
+        self.focus = Focus::Left;
         Ok(())
     }
 
@@ -242,7 +243,7 @@ impl PracticodeApp {
 
     pub(super) fn action_edit(&mut self) -> Result<()> {
         if self.mode == AppMode::Home {
-            return self.action_practice();
+            self.action_practice()?;
         }
         self.editing_notes = false;
         self.load_code_editor()?;
@@ -255,6 +256,7 @@ impl PracticodeApp {
         self.left_scroll = 0;
         self.output_scroll = 0;
         self.show_output = false;
+        self.practice_view = PracticeView::Code;
         self.focus = Focus::Code;
         Ok(())
     }
@@ -300,7 +302,8 @@ impl PracticodeApp {
             self.load_code_editor()?;
             self.settings_cursor = None;
             self.show_output = false;
-            self.focus = Focus::Code;
+            self.practice_view = PracticeView::Problem;
+            self.focus = Focus::Left;
             return Ok(());
         }
         if self.generate_rx.is_some() {
@@ -395,8 +398,9 @@ impl PracticodeApp {
             {
                 self.problem = problem;
             } else {
+                let unavailable = ui_text(&self.state.settings.ui_language, "next_unavailable");
                 self.write_text_output(&format!(
-                    "{}{}No next problem is available yet.",
+                    "{}{}{unavailable}",
                     if output.is_empty() { "" } else { &output },
                     if output.is_empty() { "" } else { "\n\n" }
                 ));
@@ -406,7 +410,8 @@ impl PracticodeApp {
         self.load_code_editor()?;
         self.settings_cursor = None;
         self.show_output = false;
-        self.focus = Focus::Code;
+        self.practice_view = PracticeView::Problem;
+        self.focus = Focus::Left;
         Ok(())
     }
 
@@ -423,12 +428,13 @@ impl PracticodeApp {
         let old_problem = self.state.current_problem.clone();
         self.problem = previous_problem(&self.root, &self.bank, &mut self.state)?;
         if self.state.current_problem == old_problem {
-            self.write_text_output("Already at the first known problem.");
+            self.write_text_output(ui_text(&self.state.settings.ui_language, "first_problem"));
         } else {
             self.load_code_editor()?;
             self.settings_cursor = None;
             self.show_output = false;
-            self.focus = Focus::Code;
+            self.practice_view = PracticeView::Problem;
+            self.focus = Focus::Left;
         }
         Ok(())
     }
@@ -441,8 +447,10 @@ impl PracticodeApp {
         }
         let answer = give_up(&self.root, &self.problem, &mut self.state)?;
         let language = normalize_language(&self.state.settings.language);
+        let heading = ui_text(&self.state.settings.ui_language, "answer_for_language")
+            .replace("{language}", &language);
         self.write_output(&format!(
-            "Answer for {language}:\n\n```{language}\n{}\n```",
+            "{heading}\n\n```{language}\n{}\n```",
             answer.trim_end()
         ));
         Ok(())
@@ -451,7 +459,7 @@ impl PracticodeApp {
     pub(super) fn action_learn(&mut self, language: &str) -> Result<()> {
         let language = language.trim();
         if !language.is_empty() && !LANGUAGES.contains(&language) {
-            self.write_text_output("Usage: /learn or /learn python|ts|java|rust");
+            self.write_text_output(ui_text(&self.state.settings.ui_language, "learn_usage"));
             return Ok(());
         }
         if !language.is_empty() {
@@ -611,11 +619,19 @@ impl PracticodeApp {
     }
 
     pub(super) fn cycle_learning_view(&mut self) {
-        if self.mode != AppMode::Learn {
-            return;
+        if self.mode == AppMode::Problems {
+            self.practice_view = match self.practice_view {
+                PracticeView::Problem => PracticeView::Code,
+                PracticeView::Code => PracticeView::Problem,
+            };
+            self.focus = match self.practice_view {
+                PracticeView::Problem => Focus::Left,
+                PracticeView::Code => Focus::Code,
+            };
+        } else if self.mode == AppMode::Learn {
+            self.learning_session.cycle_view();
+            self.show_current_syntax_lesson();
         }
-        self.learning_session.cycle_view();
-        self.show_current_syntax_lesson();
     }
 
     pub(super) fn action_cycle_language(&mut self) -> Result<()> {
@@ -651,7 +667,10 @@ impl PracticodeApp {
         self.load_code_editor()?;
         self.settings_cursor = None;
         self.show_output = false;
-        self.focus = Focus::Code;
+        self.focus = match self.practice_view {
+            PracticeView::Problem => Focus::Left,
+            PracticeView::Code => Focus::Code,
+        };
         Ok(())
     }
 
@@ -662,7 +681,10 @@ impl PracticodeApp {
             self.left_scroll = 0;
             self.show_current_syntax_lesson();
         } else {
-            self.write_text_output(&format!("UI language: {}", self.state.settings.ui_language));
+            self.write_text_output(
+                &ui_text(&self.state.settings.ui_language, "ui_language_set")
+                    .replace("{language}", &self.state.settings.ui_language),
+            );
         }
         Ok(())
     }
@@ -670,14 +692,19 @@ impl PracticodeApp {
     pub(super) fn set_theme(&mut self, theme: &str) -> Result<()> {
         self.state.settings.theme = theme.to_string();
         save_state(&self.root, &self.state)?;
-        self.write_text_output(&format!("Theme: {theme}"));
+        self.write_text_output(
+            &ui_text(&self.state.settings.ui_language, "theme_set").replace("{theme}", theme),
+        );
         Ok(())
     }
 
     pub(super) fn set_difficulty(&mut self, difficulty: &str) -> Result<()> {
         let difficulty = difficulty.trim().to_lowercase();
         if !DIFFICULTIES.contains(&difficulty.as_str()) {
-            self.write_text_output("Difficulty: auto, easy, medium, or hard.");
+            self.write_text_output(ui_text(
+                &self.state.settings.ui_language,
+                "difficulty_options",
+            ));
             return Ok(());
         }
         let normalized = normalize_difficulty(&difficulty);
@@ -1026,5 +1053,68 @@ mod tests {
         );
         assert!(!lab_text.contains("Next review (days)"), "{lab_text}");
         assert!(core_text.contains("Next review (days): 1"), "{core_text}");
+    }
+
+    fn localized_app(name: &str, language: &str) -> PracticodeApp {
+        let root = crate::process::unique_temp_path(name, "dir");
+        std::fs::create_dir_all(&root).unwrap();
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.state.settings.ui_language = language.to_string();
+        app
+    }
+
+    #[test]
+    fn first_problem_feedback_uses_the_selected_locale() {
+        let mut app = localized_app("practicode-first-problem-locale", "ko");
+
+        app.action_previous().unwrap();
+
+        assert_eq!(app.output, ui_text("ko", "first_problem"));
+    }
+
+    #[test]
+    fn answer_heading_uses_the_selected_locale() {
+        let mut app = localized_app("practicode-answer-locale", "ja");
+
+        app.action_give_up().unwrap();
+
+        let heading = ui_text("ja", "answer_for_language").replace("{language}", "python");
+        assert!(app.output.starts_with(&heading), "{}", app.output);
+        assert!(!app.output.starts_with("Answer for"), "{}", app.output);
+    }
+
+    #[test]
+    fn command_feedback_uses_the_selected_locale() {
+        let mut app = localized_app("practicode-command-feedback-locale", "es");
+
+        app.action_learn("ruby").unwrap();
+        assert_eq!(app.output, ui_text("es", "learn_usage"));
+
+        app.set_theme("light").unwrap();
+        assert_eq!(
+            app.output,
+            ui_text("es", "theme_set").replace("{theme}", "light")
+        );
+
+        app.set_difficulty("impossible").unwrap();
+        assert_eq!(app.output, ui_text("es", "difficulty_options"));
+
+        app.set_ui_language("zh").unwrap();
+        assert_eq!(
+            app.output,
+            ui_text("zh", "ui_language_set").replace("{language}", "zh")
+        );
+    }
+
+    #[test]
+    fn unavailable_next_problem_uses_the_selected_locale() {
+        let mut app = localized_app("practicode-next-unavailable-locale", "zh");
+        save_state(&app.root, &app.state).unwrap();
+        let current = app.state.current_problem.clone();
+
+        app.finish_next_problem(String::new(), current, false)
+            .unwrap();
+
+        assert_eq!(app.output, ui_text("zh", "next_unavailable"));
     }
 }

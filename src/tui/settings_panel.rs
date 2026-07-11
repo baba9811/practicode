@@ -1,6 +1,6 @@
 use crate::core::{
     AI_PROVIDERS, AppState, CLAUDE_AI_EFFORTS, CODEX_AI_EFFORTS, DIFFICULTIES, LANGUAGES, THEMES,
-    UI_LANGUAGES, normalize_ai_effort,
+    UI_LANGUAGES, normalize_ai_effort, ui_text,
 };
 
 pub(super) struct SettingsChange {
@@ -32,16 +32,16 @@ pub(super) fn render(
     let generate_languages = list_or_all(&settings.generate_languages, ui_language);
     let generate_ui_languages = list_or_all(&settings.generate_ui_languages, ui_language);
     let mut lines = vec![
-        label(ui_language, "title").to_string(),
+        ui_text(ui_language, "settings_title").to_string(),
         String::new(),
-        label(ui_language, "instructions").to_string(),
+        ui_text(ui_language, "settings_instructions").to_string(),
         String::new(),
         row(
             cursor,
             0,
             &format!(
                 "{}: {}",
-                label(ui_language, "code_language"),
+                ui_text(ui_language, "settings_code_language"),
                 settings.language
             ),
         ),
@@ -50,56 +50,68 @@ pub(super) fn render(
             1,
             &format!(
                 "{}: {}",
-                label(ui_language, "ui_language"),
+                ui_text(ui_language, "settings_ui_language"),
                 settings.ui_language
             ),
         ),
         row(
             cursor,
             2,
-            &format!("{}: {}", label(ui_language, "theme"), settings.theme),
+            &format!(
+                "{}: {}",
+                ui_text(ui_language, "settings_theme"),
+                settings.theme
+            ),
         ),
         row(
             cursor,
             3,
             &format!(
                 "{}: {}",
-                label(ui_language, "difficulty"),
+                ui_text(ui_language, "settings_difficulty"),
                 settings.difficulty
             ),
         ),
         String::new(),
-        format!("{}: {topics}", label(ui_language, "preferred_topics")),
-        format!("{}: {avoid}", label(ui_language, "avoid_topics")),
+        format!(
+            "{}: {topics}",
+            ui_text(ui_language, "settings_preferred_topics")
+        ),
+        format!("{}: {avoid}", ui_text(ui_language, "settings_avoid_topics")),
         format!(
             "{}: {generate_languages}",
-            label(ui_language, "generated_answer_languages")
+            ui_text(ui_language, "settings_generated_answer_languages")
         ),
         format!(
             "{}: {generate_ui_languages}",
-            label(ui_language, "generated_ui_languages")
+            ui_text(ui_language, "settings_generated_ui_languages")
         ),
         row(
             cursor,
             AI_PROVIDER_ROW,
-            &format!("AI provider: {}", settings.ai_provider),
+            &format!(
+                "{}: {}",
+                ui_text(ui_language, "settings_ai_provider"),
+                settings.ai_provider
+            ),
         ),
         row(
             cursor,
             AI_MODEL_ROW,
             &format!(
-                "AI model: {}{}",
+                "{}: {}{}",
+                ui_text(ui_language, "settings_ai_model"),
                 if settings.ai_model == "auto" {
-                    label(ui_language, "provider_default")
+                    ui_text(ui_language, "settings_provider_default")
                 } else {
                     settings.ai_model.as_str()
                 },
                 if models_loading {
-                    " (loading)"
+                    format!(" ({})", ui_text(ui_language, "settings_model_loading"))
                 } else if available_models.is_empty() {
-                    " (/model to load)"
+                    format!(" ({})", ui_text(ui_language, "settings_model_load_hint"))
                 } else {
-                    ""
+                    String::new()
                 }
             ),
         ),
@@ -107,9 +119,10 @@ pub(super) fn render(
             cursor,
             AI_EFFORT_ROW,
             &format!(
-                "AI effort: {}",
+                "{}: {}",
+                ui_text(ui_language, "settings_ai_effort"),
                 if settings.ai_effort == "auto" {
-                    label(ui_language, "provider_default")
+                    ui_text(ui_language, "settings_provider_default")
                 } else {
                     settings.ai_effort.as_str()
                 }
@@ -118,10 +131,14 @@ pub(super) fn render(
         row(
             cursor,
             NOTE_ROW,
-            &format!("{}: Enter", label(ui_language, "problem_notes")),
+            &format!(
+                "{}: {}",
+                ui_text(ui_language, "settings_problem_notes"),
+                ui_text(ui_language, "settings_note_action")
+            ),
         ),
         String::new(),
-        label(ui_language, "answer_toggles").to_string(),
+        ui_text(ui_language, "settings_answer_toggles").to_string(),
     ];
     for (index, language) in LANGUAGES.iter().enumerate() {
         let row_index = TOGGLE_START + index;
@@ -133,7 +150,7 @@ pub(super) fn render(
         ));
     }
     lines.push(String::new());
-    lines.push(label(ui_language, "ui_toggles").to_string());
+    lines.push(ui_text(ui_language, "settings_ui_toggles").to_string());
     for (index, language) in UI_LANGUAGES.iter().enumerate() {
         let row_index = TOGGLE_START + LANGUAGES.len() + index;
         let checked = generate_ui_language_enabled(state, language);
@@ -145,7 +162,7 @@ pub(super) fn render(
     }
     lines.extend([
         String::new(),
-        label(ui_language, "commands").to_string(),
+        ui_text(ui_language, "settings_commands").to_string(),
         "/profile".to_string(),
         "/difficulty auto|easy|medium|hard".to_string(),
         "/topics arrays, strings".to_string(),
@@ -230,52 +247,6 @@ pub(super) fn apply_selected(
         _ => {}
     }
     change
-}
-
-fn label<'a>(ui_language: &str, key: &'a str) -> &'a str {
-    if ui_language == "ko" {
-        match key {
-            "title" => "사용자 프로필",
-            "instructions" => "위/아래로 이동하고 Space 또는 Enter로 변경/토글",
-            "code_language" => "코드 언어",
-            "ui_language" => "UI 언어",
-            "theme" => "테마",
-            "difficulty" => "난이도",
-            "preferred_topics" => "선호 주제",
-            "avoid_topics" => "피할 주제",
-            "generated_answer_languages" => "생성 정답 언어",
-            "generated_ui_languages" => "생성 문제 언어",
-            "provider_default" => "auto (provider 기본값)",
-            "problem_notes" => "문제 생성 메모 편집",
-            "answer_toggles" => "생성 정답 언어 토글",
-            "ui_toggles" => "생성 문제 언어 토글",
-            "commands" => "명령",
-            "none" => "(없음)",
-            "all" => "전체",
-            _ => key,
-        }
-    } else {
-        match key {
-            "title" => "User profile",
-            "instructions" => "Use up/down to move. Press Space or Enter to cycle/toggle.",
-            "code_language" => "Code language",
-            "ui_language" => "UI language",
-            "theme" => "Theme",
-            "difficulty" => "Difficulty",
-            "preferred_topics" => "Preferred topics",
-            "avoid_topics" => "Avoid topics",
-            "generated_answer_languages" => "Generated answer languages",
-            "generated_ui_languages" => "Generated UI languages",
-            "provider_default" => "auto (provider default)",
-            "problem_notes" => "Edit problem notes",
-            "answer_toggles" => "Generated answer language toggles",
-            "ui_toggles" => "Generated problem text language toggles",
-            "commands" => "Commands",
-            "none" => "(none)",
-            "all" => "all",
-            _ => key,
-        }
-    }
 }
 
 fn cycle_ai_model(state: &mut AppState, available_models: &[String]) {
@@ -399,7 +370,7 @@ fn toggle_generate_ui_language(state: &mut AppState, language: &str) {
 
 fn list_or_none(values: &[String], ui_language: &str) -> String {
     if values.is_empty() {
-        label(ui_language, "none").to_string()
+        ui_text(ui_language, "settings_none").to_string()
     } else {
         values.join(", ")
     }
@@ -407,7 +378,7 @@ fn list_or_none(values: &[String], ui_language: &str) -> String {
 
 fn list_or_all(values: &[String], ui_language: &str) -> String {
     if values.is_empty() {
-        label(ui_language, "all").to_string()
+        ui_text(ui_language, "settings_all").to_string()
     } else {
         values.join(", ")
     }

@@ -6,10 +6,11 @@ Type `/` outside the editor to open the command palette. Use `up/down` to move, 
 
 | Command | Action |
 | --- | --- |
-| `/home` | Return to the Learn syntax / Practice coding tests chooser |
+| `/home` | Return to the Continue today's session / Practice coding tests chooser |
 | `/run` | Judge the current submission or syntax exercise |
 | `/code` | Return to the code editor |
-| `/next` | In practice, open the next problem; in learn mode, open the next lesson |
+| `/vim` | Open the code editor (compatibility alias) |
+| `/next` | In practice, open the next problem; in guided learning, advance the current step and then the queue |
 | `/back` | In practice, go back through problem history; in learn mode, open the previous lesson |
 | `/doctor` | Check local runtimes and show install hints |
 | `/help` | Show in-app help |
@@ -41,8 +42,12 @@ Examples:
 | `/learn` | Open syntax learning |
 | `/run` | Validate the current exercise |
 | `/ask <question>` | Ask about the current lesson, worked example, or exercise |
-| `/next` | Open the next lesson |
+| `/next` | Advance Review → Delta → Predict → Exercise → Reflect, then open the next queued lesson |
 | `/back` | Open the previous lesson |
+| `/lesson` | Show the complete localized lesson reference |
+| `/progress` | Show a privacy-safe core/due/retained/mastered summary |
+
+Learning sessions queue at most two due reviews before one new core lesson. `F5` runs the current exercise, `F6` cycles Lesson/Code/Result, and `F1` opens contextual help. AI-assisted capstone attempts cannot complete a course until a later unassisted pass.
 
 ## AI Help
 
@@ -59,6 +64,8 @@ Examples:
 | `/effort low`, `/effort medium`, `/effort high`, `/effort xhigh` | Set AI effort |
 
 Claude also supports `/effort max`.
+
+Invoking `/ask` or `/hint` sends the current problem or lesson, submission code, latest result, and your request to the selected provider CLI. AI-backed `/next` and `/generate` run from `PRACTICODE_HOME` with the configured provider's local permissions; they can read learning state, the problem bank, notes, indexes, and submissions and can update generated problem files. A custom `ai_next_command` has whatever access that program is granted. Review those settings before enabling AI.
 
 ## Profile And Preferences
 
@@ -82,4 +89,4 @@ Inside `/profile`, use `up/down` to move and `Space` or `Enter` to cycle common 
 
 ## Aliases
 
-Older command names such as `/prev`, `/previous`, `/list`, `/giveup`, `/give`, `/lang`, `/settings`, and `/quit` still work.
+Older command names such as `/vim`, `/prev`, `/previous`, `/list`, `/giveup`, `/give`, `/lang`, `/settings`, and `/quit` still work.

@@ -1,7 +1,13 @@
 use practicode::core::{LANGUAGES, syntax_lessons_for};
 use practicode::i18n::{UI_LANGUAGES, normalize_ui_language, ui_text};
+use practicode::text::display_width;
 use serde_json::Value;
-use std::{collections::HashMap, fs, path::Path};
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+    path::Path,
+    process::Command,
+};
 
 fn lesson_asset_dir(language: &str) -> &str {
     match language {
@@ -43,6 +49,185 @@ fn assert_not_generic_lesson_copy(ui_language: &str, lesson_id: &str, text: &str
             "{ui_language}:{lesson_id} contains generic lesson-copy phrase: {phrase}"
         );
     }
+}
+
+fn assert_no_unformatted_english_terms(ui_language: &str, lesson_id: &str, text: &str) {
+    if !["ko", "ja", "zh"].contains(&ui_language) {
+        return;
+    }
+    let prose = text.split('`').step_by(2).collect::<Vec<_>>().join(" ");
+    let banned = [
+        "alias",
+        "annotation",
+        "array",
+        "assertion",
+        "await",
+        "awaitable",
+        "branch",
+        "callback",
+        "capstone",
+        "case",
+        "casting",
+        "catch",
+        "chain",
+        "check",
+        "checker",
+        "class",
+        "coalescing",
+        "command",
+        "compile",
+        "compiler",
+        "context",
+        "coercion",
+        "control",
+        "data",
+        "dataclass",
+        "default",
+        "demo",
+        "dispatch",
+        "editor",
+        "eager",
+        "error",
+        "executor",
+        "exception",
+        "fallback",
+        "feature",
+        "field",
+        "flow",
+        "frontier",
+        "function",
+        "future",
+        "generic",
+        "generator",
+        "handle",
+        "hint",
+        "import",
+        "indexed",
+        "instance",
+        "interface",
+        "introspection",
+        "interpreter",
+        "iterable",
+        "iterator",
+        "key",
+        "label",
+        "literal",
+        "loop",
+        "materialize",
+        "mapped",
+        "member",
+        "membership",
+        "metadata",
+        "method",
+        "model",
+        "mutable",
+        "narrowing",
+        "object",
+        "one-poll",
+        "overload",
+        "parser",
+        "patch",
+        "path",
+        "payload",
+        "predicate",
+        "prefix",
+        "promise",
+        "property",
+        "protocol",
+        "readonly",
+        "record",
+        "rebinding",
+        "result",
+        "route",
+        "runtime",
+        "starter",
+        "static",
+        "stdin",
+        "stdout",
+        "stem",
+        "strict",
+        "string",
+        "sorting",
+        "surrogate",
+        "text",
+        "todo",
+        "token",
+        "toolchain",
+        "tuple",
+        "type",
+        "unit",
+        "union",
+        "validation",
+        "variant",
+        "worker",
+        "wrapper",
+        "yield",
+    ];
+    for word in prose
+        .split(|character: char| {
+            !(character.is_ascii_alphanumeric() || character == '_' || character == '-')
+        })
+        .filter(|word| !word.is_empty())
+    {
+        assert!(
+            !banned.contains(&word.to_ascii_lowercase().as_str()),
+            "{ui_language}:{lesson_id} contains unformatted English prose term: {word}"
+        );
+    }
+}
+
+fn normalized_character_ngrams(
+    copy: &serde_json::Map<String, Value>,
+    width: usize,
+) -> HashSet<String> {
+    let mut prose = String::new();
+    for value in copy.values() {
+        match value {
+            Value::String(text) => {
+                prose.push_str(text);
+                prose.push(' ');
+            }
+            Value::Array(items) => {
+                for item in items {
+                    if let Some(text) = item.as_str() {
+                        prose.push_str(text);
+                        prose.push(' ');
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    let characters = prose
+        .chars()
+        .filter(|character| character.is_alphanumeric())
+        .collect::<Vec<_>>();
+    characters
+        .windows(width)
+        .map(|window| window.iter().collect())
+        .collect()
+}
+
+fn normalized_word_ngrams(copy: &serde_json::Map<String, Value>, width: usize) -> HashSet<String> {
+    let mut words = Vec::new();
+    for value in copy.values() {
+        let texts = match value {
+            Value::String(text) => vec![text.as_str()],
+            Value::Array(items) => items.iter().filter_map(Value::as_str).collect(),
+            _ => Vec::new(),
+        };
+        for text in texts {
+            words.extend(
+                text.split(|character: char| !character.is_alphanumeric())
+                    .filter(|word| !word.is_empty())
+                    .map(str::to_lowercase),
+            );
+        }
+    }
+    words
+        .windows(width)
+        .map(|window| window.join(" "))
+        .collect()
 }
 
 #[test]
@@ -122,6 +307,82 @@ fn ui_catalogs_have_complete_localized_learning_ui_copy() {
         "generation_partial_count",
         "judge_unknown_status",
         "judge_missing_typescript_tool",
+        "hint_learn_compact",
+        "hint_problem_compact",
+        "hint_home_compact",
+        "pane_exercise",
+        "pane_solution",
+        "settings_title",
+        "settings_instructions",
+        "settings_code_language",
+        "settings_ui_language",
+        "settings_theme",
+        "settings_difficulty",
+        "settings_preferred_topics",
+        "settings_avoid_topics",
+        "settings_generated_answer_languages",
+        "settings_generated_ui_languages",
+        "settings_provider_default",
+        "settings_problem_notes",
+        "settings_answer_toggles",
+        "settings_ui_toggles",
+        "settings_commands",
+        "settings_none",
+        "settings_all",
+        "settings_ai_provider",
+        "settings_ai_model",
+        "settings_ai_effort",
+        "settings_model_loading",
+        "settings_model_load_hint",
+        "settings_note_action",
+        "model_use_default_model",
+        "model_use_default_effort",
+        "model_loading",
+        "model_unavailable",
+        "model_custom_hint",
+        "model_available_efforts",
+        "model_available_models",
+        "note_saved",
+        "notes_empty",
+        "notes_title",
+        "first_problem",
+        "answer_for_language",
+        "learn_usage",
+        "ui_language_set",
+        "theme_set",
+        "difficulty_options",
+        "practice_shortcuts",
+        "problem_list_title",
+        "problem_list_id",
+        "problem_list_difficulty",
+        "problem_list_status",
+        "problem_list_code",
+        "problem_list_name",
+        "problem_list_hint",
+        "problem_not_found",
+        "update_checking",
+        "ai_next_command_saved",
+        "unknown_command",
+        "next_unavailable",
+        "next_failed",
+        "provider_cli_found",
+        "provider_cli_missing",
+        "provider_codex_daemon_available",
+        "provider_codex_direct_fallback",
+        "model_cli_missing",
+        "model_claude_presets",
+        "model_codex_daemon_unavailable",
+        "model_codex_query_failed",
+        "model_codex_empty",
+        "doctor_missing_tool",
+        "doctor_node_required",
+        "doctor_tsc_unreadable",
+        "doctor_tsc_required",
+        "doctor_unknown_version",
+        "doctor_node_install_linux",
+        "doctor_codex_install",
+        "doctor_claude_install",
+        "ai_context_disclosure",
     ];
     let catalogs = UI_LANGUAGES
         .iter()
@@ -161,12 +422,123 @@ fn ui_catalogs_have_complete_localized_learning_ui_copy() {
             "help_home_loop",
             "help_learn_loop",
             "help_problem_loop",
+            "provider_cli_found",
+            "provider_cli_missing",
+            "provider_codex_daemon_available",
+            "provider_codex_direct_fallback",
+            "model_cli_missing",
+            "model_claude_presets",
+            "model_codex_daemon_unavailable",
+            "model_codex_query_failed",
+            "model_codex_empty",
+            "doctor_missing_tool",
+            "doctor_node_required",
+            "doctor_tsc_unreadable",
+            "doctor_tsc_required",
+            "doctor_unknown_version",
+            "doctor_node_install_linux",
+            "doctor_codex_install",
+            "doctor_claude_install",
         ] {
             assert_ne!(
                 catalog[key], catalogs[0].1[key],
                 "{lang}:{key} leaked English"
             );
         }
+    }
+}
+
+#[test]
+fn compact_hints_fit_sixty_columns_and_keep_essential_shortcuts() {
+    for lang in UI_LANGUAGES {
+        let learn = ui_text(lang, "hint_learn_compact");
+        for token in ["/next", "F5", "F6", "F1"] {
+            assert!(
+                learn.contains(token),
+                "{lang}:hint_learn_compact needs {token}"
+            );
+        }
+        let problem = ui_text(lang, "hint_problem_compact");
+        for token in ["F6", "/run", "/next", "F1"] {
+            assert!(
+                problem.contains(token),
+                "{lang}:hint_problem_compact needs {token}"
+            );
+        }
+        for key in [
+            "hint_learn_compact",
+            "hint_problem_compact",
+            "hint_home_compact",
+        ] {
+            let value = ui_text(lang, key);
+            assert!(
+                display_width(value) <= 60,
+                "{lang}:{key} is {} columns: {value}",
+                display_width(value)
+            );
+        }
+    }
+}
+
+#[test]
+fn practice_shortcuts_keep_the_problem_loop_commands() {
+    for lang in UI_LANGUAGES {
+        let value = ui_text(lang, "practice_shortcuts");
+        for token in ["F1", "F6", "/run", "/next"] {
+            assert!(
+                value.contains(token),
+                "{lang}:practice_shortcuts needs {token}"
+            );
+        }
+    }
+}
+
+#[test]
+fn ai_palette_copy_discloses_the_context_sent_to_the_selected_provider() {
+    let markers = [
+        (
+            "en",
+            ["problem/lesson", "code", "result/context", "provider"],
+        ),
+        ("ko", ["문제/레슨", "코드", "결과/맥락", "제공자"]),
+        (
+            "ja",
+            ["問題/レッスン", "コード", "結果/文脈", "プロバイダー"],
+        ),
+        ("zh", ["题目/课程", "代码", "结果/上下文", "提供商"]),
+        (
+            "es",
+            [
+                "problema/lección",
+                "código",
+                "resultado/contexto",
+                "proveedor",
+            ],
+        ),
+    ];
+    for (lang, expected) in markers {
+        for key in ["cmd_hint", "cmd_ask", "cmd_ai"] {
+            let value = ui_text(lang, key);
+            for marker in expected {
+                assert!(
+                    value.contains(marker),
+                    "{lang}:{key} needs {marker}: {value}"
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn compact_ai_disclosure_fits_the_palette_and_names_the_sent_context() {
+    for lang in UI_LANGUAGES {
+        let value = ui_text(lang, "ai_context_disclosure");
+        assert!(!value.trim().is_empty(), "{lang}");
+        assert!(
+            display_width(value) <= 58,
+            "{lang}: disclosure is {} columns: {value}",
+            display_width(value)
+        );
     }
 }
 
@@ -188,8 +560,26 @@ fn ui_catalogs_reject_known_english_scaffolding_and_spanish_misspellings() {
         }
     }
 
-    let spanish = fs::read_to_string("assets/i18n/es.json").unwrap();
-    let spanish_words = spanish
+    let spanish_catalog = serde_json::from_str::<HashMap<String, String>>(
+        &fs::read_to_string("assets/i18n/es.json").unwrap(),
+    )
+    .unwrap();
+    let spanish = spanish_catalog
+        .values()
+        .cloned()
+        .collect::<Vec<_>>()
+        .join("\n");
+    let mut spanish_prose = String::with_capacity(spanish.len());
+    let mut inside_placeholder = false;
+    for character in spanish.chars() {
+        match character {
+            '{' => inside_placeholder = true,
+            '}' => inside_placeholder = false,
+            _ if !inside_placeholder => spanish_prose.push(character),
+            _ => {}
+        }
+    }
+    let spanish_words = spanish_prose
         .split(|character: char| !character.is_alphabetic())
         .collect::<std::collections::HashSet<_>>();
     for misspelling in [
@@ -321,13 +711,18 @@ fn lesson_catalogs_have_complete_study_copy_for_every_language() {
                         lesson.id
                     );
                 }
+                let minimum_prose_length = if ["ko", "ja", "zh"].contains(&ui_language) {
+                    30
+                } else {
+                    45
+                };
                 for field in ["title", "concept", "worked_example", "exercise_prompt"] {
                     let text = copy
                         .get(field)
                         .and_then(Value::as_str)
                         .unwrap_or_else(|| panic!("{ui_language}:{} missing {field}", lesson.id));
                     assert!(
-                        text.chars().count() >= 45 || field == "title",
+                        text.chars().count() >= minimum_prose_length || field == "title",
                         "{ui_language}:{} {field} too short: {text}",
                         lesson.id
                     );
@@ -355,6 +750,69 @@ fn lesson_catalogs_have_complete_study_copy_for_every_language() {
                         );
                         assert_no_english_scaffolding_terms(ui_language, lesson.id, text);
                         assert_not_generic_lesson_copy(ui_language, lesson.id, text);
+                    }
+                }
+                if ["en", "ko", "ja", "zh", "es"].contains(&ui_language) {
+                    for field in [
+                        "objective",
+                        "language_delta",
+                        "prediction_prompt",
+                        "transfer_trap",
+                    ] {
+                        let text = copy.get(field).and_then(Value::as_str).unwrap_or_else(|| {
+                            panic!("{ui_language}:{} missing {field}", lesson.id)
+                        });
+                        assert!(
+                            text.chars().count() >= 20,
+                            "{ui_language}:{} {field} too short: {text}",
+                            lesson.id
+                        );
+                        assert_no_english_scaffolding_terms(ui_language, lesson.id, text);
+                        assert_not_generic_lesson_copy(ui_language, lesson.id, text);
+                    }
+                    assert_ne!(
+                        copy["objective"], copy["concept"],
+                        "{ui_language}:{} objective repeats concept",
+                        lesson.id
+                    );
+                    assert_ne!(
+                        copy["language_delta"], copy["concept"],
+                        "{ui_language}:{} language_delta repeats concept",
+                        lesson.id
+                    );
+                    assert_ne!(
+                        copy["prediction_prompt"], copy["exercise_prompt"],
+                        "{ui_language}:{} prediction repeats exercise",
+                        lesson.id
+                    );
+                    for value in copy_object.values() {
+                        let texts = match value {
+                            Value::String(text) => vec![text.as_str()],
+                            Value::Array(items) => items.iter().filter_map(Value::as_str).collect(),
+                            _ => Vec::new(),
+                        };
+                        for text in texts {
+                            assert!(
+                                !text.to_ascii_lowercase().contains("example:"),
+                                "{ui_language}:{} references a nonexistent example: label",
+                                lesson.id
+                            );
+                            if ["ko", "ja", "zh"].contains(&ui_language) {
+                                assert!(
+                                    !text.to_ascii_lowercase().contains("judge"),
+                                    "{ui_language}:{} contains untranslated judge prose",
+                                    lesson.id
+                                );
+                                assert_no_unformatted_english_terms(ui_language, lesson.id, text);
+                            }
+                            if ui_language == "ko" {
+                                assert!(
+                                    !text.contains("흐름 흐름"),
+                                    "ko:{} contains duplicated 흐름",
+                                    lesson.id
+                                );
+                            }
+                        }
                     }
                 }
             }
@@ -393,6 +851,68 @@ fn lesson_catalogs_have_complete_study_copy_for_every_language() {
                     "{path}: repeated lesson copy {count} times: {text}"
                 );
             }
+            if ["ko", "ja", "zh"].contains(&ui_language) {
+                let mut frequencies = HashMap::<String, usize>::new();
+                for copy in lessons.values() {
+                    for gram in normalized_character_ngrams(
+                        copy.as_object().expect("lesson copy object"),
+                        24,
+                    ) {
+                        *frequencies.entry(gram).or_default() += 1;
+                    }
+                }
+                let mut repeated = frequencies
+                    .into_iter()
+                    .filter(|(_, count)| count * 5 > lessons.len())
+                    .collect::<Vec<_>>();
+                repeated
+                    .sort_by(|left, right| right.1.cmp(&left.1).then_with(|| left.0.cmp(&right.0)));
+                repeated.truncate(3);
+                assert!(
+                    repeated.is_empty(),
+                    "{path}: repeated 24-character lesson templates: {repeated:?}"
+                );
+            }
+            if ui_language == "es" {
+                let mut frequencies = HashMap::<String, usize>::new();
+                for copy in lessons.values() {
+                    for gram in
+                        normalized_word_ngrams(copy.as_object().expect("lesson copy object"), 8)
+                    {
+                        *frequencies.entry(gram).or_default() += 1;
+                    }
+                }
+                let mut repeated = frequencies
+                    .into_iter()
+                    .filter(|(_, count)| count * 5 > lessons.len())
+                    .collect::<Vec<_>>();
+                repeated
+                    .sort_by(|left, right| right.1.cmp(&left.1).then_with(|| left.0.cmp(&right.0)));
+                repeated.truncate(3);
+                assert!(
+                    repeated.is_empty(),
+                    "{path}: repeated 8-word lesson templates: {repeated:?}"
+                );
+            }
         }
     }
+}
+
+#[test]
+fn review_manifest_covers_every_final_lesson_catalog_hash() {
+    let output = Command::new("node")
+        .arg("scripts/check-lessons.js")
+        .output()
+        .expect("run lesson review manifest checker");
+    assert!(
+        output.status.success(),
+        "{}{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(
+        String::from_utf8_lossy(&output.stdout).contains("20 catalogs, 550 records"),
+        "{}",
+        String::from_utf8_lossy(&output.stdout)
+    );
 }

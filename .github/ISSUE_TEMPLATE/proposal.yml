@@ -1,0 +1,34 @@
+name: Focused proposal
+description: Propose one learner or maintainer outcome before starting a larger change.
+title: "[proposal] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe who is blocked and what they cannot accomplish today.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Smallest useful outcome
+      description: Keep this to one behavior that can be tested independently.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Existing workaround or simpler alternative
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Product boundaries
+      options:
+        - label: Core learning can remain offline and deterministic.
+          required: true
+        - label: This does not require accounts, telemetry, or exposing local source and progress.
+          required: true
+        - label: I searched for an existing issue covering this outcome.
+          required: true

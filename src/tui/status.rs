@@ -1,6 +1,27 @@
 use super::*;
 
 impl PracticodeApp {
+    pub(super) fn status_text_for_width(&self, width: u16) -> String {
+        if self.task_rx.is_some()
+            || self.editing_notes
+            || self.focus == Focus::Command
+            || self.list_cursor.is_some()
+            || self.show_output
+        {
+            return format!(" {} ", self.mode_hint());
+        }
+        if width > 120 {
+            return self.status_text();
+        }
+        let lang = &self.state.settings.ui_language;
+        let key = match self.mode {
+            AppMode::Home => "hint_home_compact",
+            AppMode::Learn => "hint_learn_compact",
+            AppMode::Problems => "hint_problem_compact",
+        };
+        format!(" {} ", ui_text(lang, key))
+    }
+
     pub(super) fn status_text(&self) -> String {
         let lang = &self.state.settings.ui_language;
         if self.mode == AppMode::Home && !self.show_output {
@@ -207,8 +228,11 @@ impl PracticodeApp {
         {
             return ui_text(lang, "hint_result");
         }
-        if self.mode == AppMode::Learn && self.focus == Focus::Code {
+        if self.mode == AppMode::Learn && !self.show_output && self.focus != Focus::Command {
             return ui_text(lang, "hint_learn");
+        }
+        if self.mode == AppMode::Problems && !self.show_output && self.focus != Focus::Command {
+            return ui_text(lang, "hint_problem");
         }
         match (self.focus, self.list_cursor.is_some(), self.show_output) {
             (Focus::Command, _, _) => ui_text(lang, "hint_command"),
@@ -230,10 +254,16 @@ impl PracticodeApp {
             .map(|hint| format!("- `{}` {}", hint.display, ui_text(lang, hint.desc_key)))
             .collect::<Vec<_>>()
             .join("\n");
-        let daily_loop = match self.mode {
-            AppMode::Home => ui_text(lang, "help_home_loop"),
-            AppMode::Learn => ui_text(lang, "help_learn_loop"),
-            AppMode::Problems => ui_text(lang, "help_problem_loop"),
+        let (daily_loop, shortcuts) = match self.mode {
+            AppMode::Home => (ui_text(lang, "help_home_loop"), ui_text(lang, "home_help")),
+            AppMode::Learn => (
+                ui_text(lang, "help_learn_loop"),
+                ui_text(lang, "learning_shortcuts"),
+            ),
+            AppMode::Problems => (
+                ui_text(lang, "help_problem_loop"),
+                ui_text(lang, "practice_shortcuts"),
+            ),
         };
         format!(
             "# {}\n\n## {}\n\n{}\n\n## {}\n\n{}\n\n## {}\n\n- {}\n- {}\n- {}\n- {}\n\n## {}\n\n- {}\n- {}",
@@ -243,7 +273,7 @@ impl PracticodeApp {
             ui_text(lang, "commands"),
             commands,
             ui_text(lang, "keys"),
-            ui_text(lang, "learning_shortcuts"),
+            shortcuts,
             ui_text(lang, "help_palette_open"),
             ui_text(lang, "help_palette_move"),
             ui_text(lang, "help_palette_close"),

@@ -111,7 +111,7 @@ impl LearningSession {
             queue,
             index: 0,
             step,
-            view: LearningView::Code,
+            view: LearningView::Lesson,
             assisted: false,
         }
     }
@@ -590,6 +590,7 @@ mod tests {
             ["py-variables", "py-numbers", "py-input"]
         );
         assert_eq!(session.step(), LearningStep::Review);
+        assert_eq!(session.view(), LearningView::Lesson);
     }
 
     #[test]

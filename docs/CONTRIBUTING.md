@@ -46,8 +46,8 @@ When opening the pull request, include what changed, how you checked it, and scr
 Prerequisites:
 
 - Rust stable with Cargo, rustfmt, and clippy.
-- Node.js 18+ for the npm wrapper and package checks.
-- Optional local runtimes for judging: Python, Node.js, JDK, and Rust.
+- Node.js 18+ for the npm launcher and package checks.
+- For the complete executable curriculum gate: Python 3.12, Node 22, TypeScript 5.9.3, JDK 21, and stable Rust.
 
 Common commands:
 
@@ -55,7 +55,7 @@ Common commands:
 cargo run --
 cargo run -- --smoke
 cargo test
-npm run smoke
+npm run test:launcher
 ```
 
 Full local check:
@@ -84,10 +84,23 @@ make test
 - Reuse existing helpers and patterns before adding new code.
 - Prefer the Rust standard library. Add crates only when they remove real complexity.
 - Put UI strings in [assets/i18n](../assets/i18n), not inline in Rust code.
-- Keep English localization complete first; other locales can be partial because the runtime falls back per key to English.
-- Put syntax lesson study copy in [assets/lessons](../assets/lessons). Unlike UI strings, lesson copy is required for every supported UI language.
+- Keep every UI and lesson catalog complete; incomplete locale prose does not fall back silently.
+- Put syntax lesson study copy in [assets/lessons](../assets/lessons) and follow its executable-content contract.
 - Keep the root [README](../README.md) focused on users.
 - Use relative links for repo-local docs and assets.
+
+## Lesson Changes
+
+Lesson corrections and new cases need evidence beyond a prose diff:
+
+1. Make the English behavior, starter, cases, and primary references agree.
+2. Update all affected locales without changing identifiers or operators.
+3. Run the focused runtime/mutation test and the i18n suite.
+4. Ask an independent agent that did not author the change to read the final records against the code and references. A human reviewer is not required.
+5. Resolve every Critical/Important finding, then update the relevant review profile verdict if needed.
+6. Run `node scripts/check-lessons.js --refresh`, inspect the hash diff, and run the checker again.
+
+CI rejects stale hashes, incomplete 4×5 coverage, self-approval identities, unresolved disagreements, and open high-severity findings.
 
 ## Problem Authoring
 
@@ -109,6 +122,7 @@ Runtime paths are relative to `PRACTICODE_HOME` or `~/.practicode`:
 - Relevant checks were run, or the PR says why they were not.
 - Visible TUI changes include a screenshot or short terminal description.
 - User-facing text is in `assets/i18n/*.json`.
+- Changed lessons have executable evidence and an independent review manifest hash.
 - Local generated data, secrets, tokens, and answer keys are not committed.
 
 ## References

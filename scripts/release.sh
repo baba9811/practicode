@@ -58,12 +58,33 @@ if git ls-remote --exit-code --tags origin "v$version" >/dev/null 2>&1; then
 fi
 
 echo "Releasing v$version"
+version_commit_created=false
+restore_version_files() {
+  if [[ "$version_commit_created" == false ]]; then
+    git restore -- Cargo.toml Cargo.lock package.json
+  fi
+}
+trap restore_version_files EXIT
+
 VERSION="$version" perl -0pi -e 's/^version = ".*"/version = "$ENV{VERSION}"/m' Cargo.toml
-node -e "const fs=require('fs'); const p=require('./package.json'); p.version=process.env.VERSION; fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n')"
-cargo test
-npm pack --dry-run >/dev/null
+VERSION="$version" node -e "const fs=require('fs'); const p=require('./package.json'); p.version=process.env.VERSION; fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n')"
+cargo check
+lock_version=$(sed -n '/name = "practicode"/{n;s/version = "\(.*\)"/\1/p;q;}' Cargo.lock)
+if [[ "$lock_version" != "$version" ]]; then
+  echo "Cargo.lock version ($lock_version) does not match $version" >&2
+  exit 1
+fi
+
+git diff --check
+make test
+cargo package --allow-dirty --list >/dev/null
+if command -v actionlint >/dev/null 2>&1; then
+  actionlint .github/workflows/ci.yml .github/workflows/release.yml
+fi
 
 git add Cargo.toml Cargo.lock package.json
 git commit -m "Release v$version"
+version_commit_created=true
+trap - EXIT
 git tag "v$version"
-git push origin main "v$version"
+git push --atomic origin main "v$version"

@@ -1,7 +1,5 @@
 use super::*;
 
-const UPDATE_CHECKING_TEXT: &str = "Checking for updates...";
-
 impl PracticodeApp {
     pub(super) fn start_ai_prompt(&mut self, prompt: &str) -> Result<()> {
         if self.task_rx.is_some() {
@@ -53,7 +51,10 @@ impl PracticodeApp {
                     if let Err(error) =
                         self.finish_next_problem(output, old_problem, fallback_to_local)
                     {
-                        self.write_text_output(&format!("Next failed\n{error}"));
+                        self.write_text_output(&format!(
+                            "{}\n{error}",
+                            ui_text(&self.state.settings.ui_language, "next_failed")
+                        ));
                     }
                 }
             }
@@ -104,7 +105,8 @@ impl PracticodeApp {
 
     pub(super) fn check_update(&mut self) {
         let result = self.update_rx.as_ref().and_then(|rx| rx.try_recv().ok());
-        let showing_update_check = self.output == UPDATE_CHECKING_TEXT;
+        let showing_update_check =
+            self.output == ui_text(&self.state.settings.ui_language, "update_checking");
         if let Some(result) = result {
             self.update_rx = None;
             self.update_check = Some(result.clone());
@@ -149,9 +151,10 @@ impl PracticodeApp {
             return;
         }
         let query_provider = provider.clone();
+        let ui_language = self.state.settings.ui_language.clone();
         let (tx, rx) = mpsc::channel();
         thread::spawn(move || {
-            let _ = tx.send(available_models(&query_provider));
+            let _ = tx.send(available_models(&query_provider, &ui_language));
         });
         self.available_models_provider = provider;
         self.model_rx = Some(rx);
@@ -178,36 +181,43 @@ impl PracticodeApp {
     }
 
     pub(super) fn model_status_text(&self) -> String {
+        let lang = &self.state.settings.ui_language;
         let mut lines = vec![
-            format!("AI provider: {}", self.state.settings.ai_provider),
             format!(
-                "AI model: {}",
+                "{}: {}",
+                ui_text(lang, "settings_ai_provider"),
+                self.state.settings.ai_provider
+            ),
+            format!(
+                "{}: {}",
+                ui_text(lang, "settings_ai_model"),
                 if self.state.settings.ai_model == "auto" {
-                    "auto (provider default)"
+                    ui_text(lang, "settings_provider_default")
                 } else {
                     self.state.settings.ai_model.as_str()
                 }
             ),
             format!(
-                "AI effort: {}",
+                "{}: {}",
+                ui_text(lang, "settings_ai_effort"),
                 if self.state.settings.ai_effort == "auto" {
-                    "auto (provider default)"
+                    ui_text(lang, "settings_provider_default")
                 } else {
                     self.state.settings.ai_effort.as_str()
                 }
             ),
-            "Use /model auto to let the provider choose its default.".to_string(),
-            "Use /effort auto to let the provider choose its default.".to_string(),
+            ui_text(lang, "model_use_default_model").to_string(),
+            ui_text(lang, "model_use_default_effort").to_string(),
         ];
         if self.model_rx.is_some() {
-            lines.push("Loading provider model list...".to_string());
+            lines.push(ui_text(lang, "model_loading").to_string());
         } else if self.available_models.is_empty() {
             lines.push(
                 self.model_message
                     .clone()
-                    .unwrap_or_else(|| "Provider model list is unavailable.".to_string()),
+                    .unwrap_or_else(|| ui_text(lang, "model_unavailable").to_string()),
             );
-            lines.push("Use /model <name> for a known model.".to_string());
+            lines.push(ui_text(lang, "model_custom_hint").to_string());
         } else {
             if let Some(message) = &self.model_message {
                 lines.push(message.clone());
@@ -217,8 +227,10 @@ impl PracticodeApp {
             } else {
                 CODEX_AI_EFFORTS
             };
-            lines.push(format!("Available efforts: {}", efforts.join(", ")));
-            lines.push("Available models:".to_string());
+            lines.push(
+                ui_text(lang, "model_available_efforts").replace("{efforts}", &efforts.join(", ")),
+            );
+            lines.push(ui_text(lang, "model_available_models").to_string());
             lines.extend(
                 self.available_models
                     .iter()
@@ -313,7 +325,7 @@ impl PracticodeApp {
                 ui_text(&lang, "update_available")
             ));
         } else if self.update_rx.is_some() {
-            self.write_text_output(UPDATE_CHECKING_TEXT);
+            self.write_text_output(ui_text(&lang, "update_checking"));
         } else if matches!(self.update_check, Some(UpdateCheck::Disabled)) {
             self.write_text_output(ui_text(&lang, "update_check_disabled"));
         } else if matches!(self.update_check, Some(UpdateCheck::Failed)) {
@@ -325,16 +337,23 @@ impl PracticodeApp {
 
     pub(super) fn append_note(&mut self, note: &str) -> Result<()> {
         append_problem_note(&self.root, note)?;
-        self.write_text_output(&format!("Problem note saved to {PROBLEM_NOTES_PATH}."));
+        self.write_text_output(
+            &ui_text(&self.state.settings.ui_language, "note_saved")
+                .replace("{path}", PROBLEM_NOTES_PATH),
+        );
         Ok(())
     }
 
     pub(super) fn show_notes(&mut self) -> Result<()> {
         let notes = read_problem_notes(&self.root)?;
         if notes.is_empty() {
-            self.write_text_output("No notes yet. Use /note to edit problem-generation notes.");
+            self.write_text_output(ui_text(&self.state.settings.ui_language, "notes_empty"));
         } else {
-            self.write_text_output(&format!("Problem notes ({PROBLEM_NOTES_PATH})\n\n{notes}"));
+            self.write_text_output(&format!(
+                "{}\n\n{notes}",
+                ui_text(&self.state.settings.ui_language, "notes_title")
+                    .replace("{path}", PROBLEM_NOTES_PATH)
+            ));
         }
         Ok(())
     }
@@ -375,6 +394,14 @@ mod tests {
         app
     }
 
+    fn localized_app(name: &str, language: &str) -> PracticodeApp {
+        let root = crate::process::unique_temp_path(name, "dir");
+        std::fs::create_dir_all(&root).unwrap();
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.state.settings.ui_language = language.to_string();
+        app
+    }
+
     fn assert_learning_exit_clears_session(
         name: &str,
         leave: impl FnOnce(&mut PracticodeApp) -> Result<()>,
@@ -399,11 +426,110 @@ mod tests {
         let (tx, rx) = std::sync::mpsc::channel();
         tx.send(UpdateCheck::Disabled).unwrap();
         app.update_rx = Some(rx);
-        app.write_text_output(UPDATE_CHECKING_TEXT);
+        app.write_text_output(ui_text("en", "update_checking"));
 
         app.check_update();
 
         assert_eq!(app.output, ui_text("en", "update_check_disabled"));
+    }
+
+    #[test]
+    fn visible_update_check_uses_the_selected_locale() {
+        let mut app = localized_app("practicode-update-checking-locale", "ko");
+        let (_tx, rx) = std::sync::mpsc::channel();
+        app.update_rx = Some(rx);
+
+        app.show_update_notice();
+
+        assert_eq!(app.output, ui_text("ko", "update_checking"));
+    }
+
+    #[test]
+    fn next_failure_heading_uses_the_selected_locale() {
+        let mut app = localized_app("practicode-next-failed-locale", "ja");
+        std::fs::write(app.root.join("problem_bank.json"), "not json").unwrap();
+        let (tx, rx) = std::sync::mpsc::channel();
+        tx.send(TaskResult::Next {
+            output: String::new(),
+            old_problem: app.state.current_problem.clone(),
+            fallback_to_local: false,
+        })
+        .unwrap();
+        app.task_rx = Some(rx);
+
+        app.check_task();
+
+        assert!(
+            app.output.starts_with(ui_text("ja", "next_failed")),
+            "{}",
+            app.output
+        );
+        assert!(app.output.contains("parse"), "{}", app.output);
+    }
+
+    #[test]
+    fn profile_copy_renders_in_the_selected_locale() {
+        let app = localized_app("practicode-profile-locale", "ja");
+
+        let profile = app.profile_text();
+
+        for key in [
+            "settings_title",
+            "settings_instructions",
+            "settings_code_language",
+            "settings_ai_provider",
+            "settings_ai_model",
+            "settings_model_load_hint",
+            "settings_problem_notes",
+        ] {
+            assert!(profile.contains(ui_text("ja", key)), "{key}: {profile}");
+        }
+        assert!(!profile.contains("User profile"), "{profile}");
+        assert!(!profile.contains("AI provider"), "{profile}");
+    }
+
+    #[test]
+    fn model_status_renders_app_owned_copy_in_the_selected_locale() {
+        let app = localized_app("practicode-model-status-locale", "zh");
+
+        let status = app.model_status_text();
+
+        for key in [
+            "settings_ai_provider",
+            "settings_ai_model",
+            "settings_ai_effort",
+            "model_use_default_model",
+            "model_use_default_effort",
+            "model_unavailable",
+            "model_custom_hint",
+        ] {
+            assert!(status.contains(ui_text("zh", key)), "{key}: {status}");
+        }
+        assert!(!status.contains("AI provider"), "{status}");
+        assert!(!status.contains("Provider model list"), "{status}");
+    }
+
+    #[test]
+    fn notes_feedback_renders_in_the_selected_locale() {
+        let mut app = localized_app("practicode-notes-locale", "es");
+
+        app.show_notes().unwrap();
+        assert_eq!(app.output, ui_text("es", "notes_empty"));
+
+        app.append_note("prioriza límites").unwrap();
+        assert_eq!(
+            app.output,
+            ui_text("es", "note_saved").replace("{path}", PROBLEM_NOTES_PATH)
+        );
+
+        app.show_notes().unwrap();
+        assert!(
+            app.output
+                .starts_with(&ui_text("es", "notes_title").replace("{path}", PROBLEM_NOTES_PATH)),
+            "{}",
+            app.output
+        );
+        assert!(app.output.contains("prioriza límites"), "{}", app.output);
     }
 
     #[test]

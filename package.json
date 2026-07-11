@@ -1,7 +1,7 @@
 {
   "name": "practicode",
   "version": "0.1.20",
-  "description": "Local-first coding-test practice in a Rust terminal UI with optional AI help.",
+  "description": "Offline-first programming language lessons and coding practice in a Rust terminal UI.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -17,7 +17,8 @@
   "scripts": {
     "start": "node bin/practicode.js",
     "build": "cargo build --release --locked",
-    "smoke": "node bin/practicode.js --smoke"
+    "smoke": "node bin/practicode.js --smoke",
+    "test:launcher": "node --test tests/launcher.test.js"
   },
   "files": [
     "assets/",
@@ -37,7 +38,8 @@
   "keywords": [
     "algorithms",
     "coding-practice",
-    "competitive-programming",
+    "learning",
+    "programming-languages",
     "ratatui",
     "rust",
     "tui"

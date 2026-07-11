@@ -1,3 +1,4 @@
+use super::localized_status;
 use crate::core::{Problem, localized, normalize_ui_language, ui_text};
 use ratatui::{
     style::{Color, Modifier, Style},
@@ -57,7 +58,7 @@ pub(super) fn render(problem: &Problem, ui_language: &str, light: bool) -> Text<
             format!(
                 "{}: {}    {}: {}",
                 ui_text(&lang, "difficulty"),
-                problem.difficulty,
+                localized_status(&lang, &problem.difficulty),
                 ui_text(&lang, "topics"),
                 problem.topics.join(", ")
             ),
@@ -162,5 +163,25 @@ mod tests {
 
         assert!(rendered.contains("<비어 있음>"), "{rendered}");
         assert!(!rendered.contains("<empty>"), "{rendered}");
+    }
+
+    #[test]
+    fn tui_problem_view_localizes_difficulty_tokens() {
+        for language in ["ko", "ja", "zh", "es"] {
+            let problem = crate::core::starter_problem();
+            let text = render(&problem, language, false);
+            let rendered = text
+                .lines
+                .iter()
+                .flat_map(|line| line.spans.iter())
+                .map(|span| span.content.as_ref())
+                .collect::<String>();
+
+            assert!(
+                rendered.contains(ui_text(language, "status_easy")),
+                "{language}: {rendered}"
+            );
+            assert!(!rendered.contains(": easy"), "{language}: {rendered}");
+        }
     }
 }

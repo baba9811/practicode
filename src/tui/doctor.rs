@@ -16,7 +16,19 @@ struct DoctorCheck {
     status: DoctorStatus,
     name: &'static str,
     detail: String,
-    install: Option<&'static str>,
+    install: Option<InstallHelp>,
+}
+
+#[derive(Clone, Copy)]
+enum InstallHelp {
+    Python,
+    Node,
+    NodeAndTypeScript,
+    TypeScript,
+    Java,
+    Rust,
+    Codex,
+    Claude,
 }
 
 impl PracticodeApp {
@@ -63,31 +75,39 @@ where
         ui_text(lang, "doctor_runtime_checks").to_string(),
     ];
 
-    for check in runtime_checks(&mut has_command, &mut command_version) {
+    for check in runtime_checks(lang, &mut has_command, &mut command_version) {
         push_check(lang, &mut lines, check);
     }
 
     lines.push(String::new());
     lines.push(ui_text(lang, "doctor_optional_ai").to_string());
-    push_check(lang, &mut lines, ai_check(ai_provider, &mut has_command));
+    push_check(
+        lang,
+        &mut lines,
+        ai_check(lang, ai_provider, &mut has_command),
+    );
 
     lines.join("\n")
 }
 
-fn runtime_checks<F, V>(has_command: &mut F, command_version: &mut V) -> Vec<DoctorCheck>
+fn runtime_checks<F, V>(
+    lang: &str,
+    has_command: &mut F,
+    command_version: &mut V,
+) -> Vec<DoctorCheck>
 where
     F: FnMut(&str) -> bool,
     V: FnMut(&str, &[&str]) -> Option<String>,
 {
     vec![
-        python_check(has_command),
-        node_check(has_command, command_version),
-        java_check(has_command),
-        rust_check(has_command),
+        python_check(lang, has_command),
+        node_check(lang, has_command, command_version),
+        java_check(lang, has_command),
+        rust_check(lang, has_command),
     ]
 }
 
-fn python_check<F>(has_command: &mut F) -> DoctorCheck
+fn python_check<F>(lang: &str, has_command: &mut F) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
 {
@@ -105,12 +125,18 @@ where
             DoctorStatus::Missing
         },
         name: "Python",
-        detail: command.unwrap_or("python3 or python").to_string(),
-        install: command.is_none().then_some(PYTHON_INSTALL),
+        detail: command.map(str::to_string).unwrap_or_else(|| {
+            format!(
+                "{}; {}",
+                missing_tool(lang, "python3"),
+                missing_tool(lang, "python")
+            )
+        }),
+        install: command.is_none().then_some(InstallHelp::Python),
     }
 }
 
-fn node_check<F, V>(has_command: &mut F, command_version: &mut V) -> DoctorCheck
+fn node_check<F, V>(lang: &str, has_command: &mut F, command_version: &mut V) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
     V: FnMut(&str, &[&str]) -> Option<String>,
@@ -118,56 +144,66 @@ where
     let has_node = has_command("node");
     let has_tsc = has_command("tsc");
     if !has_tsc {
+        let mut detail = missing_tool(lang, "tsc");
+        if !has_node {
+            detail.push_str(&format!("; {}", ui_text(lang, "doctor_node_required")));
+        }
         return DoctorCheck {
             status: DoctorStatus::Missing,
             name: "TypeScript",
-            detail: if has_node {
-                "missing tsc".to_string()
+            detail,
+            install: Some(if has_node {
+                InstallHelp::TypeScript
             } else {
-                "missing tsc and node >= 22.6.0".to_string()
-            },
-            install: (!has_node).then_some(NODE_INSTALL),
+                InstallHelp::NodeAndTypeScript
+            }),
         };
     }
     let Some(tsc_version) = command_version("tsc", &["--version"]) else {
+        let mut detail = ui_text(lang, "doctor_tsc_unreadable").to_string();
+        if !has_node {
+            detail.push_str(&format!("; {}", ui_text(lang, "doctor_node_required")));
+        }
         return DoctorCheck {
             status: DoctorStatus::Update,
             name: "TypeScript",
-            detail: format!(
-                "unreadable tsc version; TypeScript 5.9.x required{}",
-                if has_node {
-                    ""
-                } else {
-                    "; missing node >= 22.6.0"
-                }
-            ),
-            install: (!has_node).then_some(NODE_INSTALL),
+            detail,
+            install: Some(if has_node {
+                InstallHelp::TypeScript
+            } else {
+                InstallHelp::NodeAndTypeScript
+            }),
         };
     };
     if !typescript_version_is_supported(&tsc_version) {
+        let mut detail = ui_text(lang, "doctor_tsc_required").replace("{version}", &tsc_version);
+        if !has_node {
+            detail.push_str(&format!("; {}", ui_text(lang, "doctor_node_required")));
+        }
         return DoctorCheck {
             status: DoctorStatus::Update,
             name: "TypeScript",
-            detail: format!(
-                "TypeScript 5.9.x required ({tsc_version}){}",
-                if has_node {
-                    ""
-                } else {
-                    "; missing node >= 22.6.0"
-                }
-            ),
-            install: (!has_node).then_some(NODE_INSTALL),
+            detail,
+            install: Some(if has_node {
+                InstallHelp::TypeScript
+            } else {
+                InstallHelp::NodeAndTypeScript
+            }),
         };
     }
     if !has_node {
         return DoctorCheck {
             status: DoctorStatus::Missing,
             name: "TypeScript",
-            detail: format!("missing node >= 22.6.0; tsc {tsc_version}"),
-            install: Some(NODE_INSTALL),
+            detail: format!(
+                "{}; tsc {tsc_version}",
+                ui_text(lang, "doctor_node_required")
+            ),
+            install: Some(InstallHelp::Node),
         };
     }
-    let version = command_version("node", &["--version"]).unwrap_or_else(|| "unknown".to_string());
+    let version = command_version("node", &["--version"])
+        .unwrap_or_else(|| ui_text(lang, "doctor_unknown_version").to_string());
     let ok = node_supports_strip_types(&version);
     DoctorCheck {
         status: if ok {
@@ -179,23 +215,30 @@ where
         detail: if ok {
             format!("node {version} + tsc {tsc_version}")
         } else {
-            format!("Node.js >= 22.6.0 ({version}) + tsc {tsc_version}")
+            format!(
+                "{} ({version}); tsc {tsc_version}",
+                ui_text(lang, "doctor_node_required")
+            )
         },
-        install: (!ok).then_some(NODE_INSTALL),
+        install: (!ok).then_some(InstallHelp::Node),
     }
 }
 
-fn java_check<F>(has_command: &mut F) -> DoctorCheck
+fn java_check<F>(lang: &str, has_command: &mut F) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
 {
     let has_javac = has_command("javac");
     let has_java = has_command("java");
-    let missing = match (has_javac, has_java) {
-        (true, true) => "javac + java",
-        (false, true) => "missing javac",
-        (true, false) => "missing java",
-        (false, false) => "missing javac and java",
+    let detail = match (has_javac, has_java) {
+        (true, true) => "javac + java".to_string(),
+        (false, true) => missing_tool(lang, "javac"),
+        (true, false) => missing_tool(lang, "java"),
+        (false, false) => format!(
+            "{}; {}",
+            missing_tool(lang, "javac"),
+            missing_tool(lang, "java")
+        ),
     };
     DoctorCheck {
         status: if has_javac && has_java {
@@ -204,12 +247,12 @@ where
             DoctorStatus::Missing
         },
         name: "Java",
-        detail: missing.to_string(),
-        install: (!(has_javac && has_java)).then_some(JAVA_INSTALL),
+        detail,
+        install: (!(has_javac && has_java)).then_some(InstallHelp::Java),
     }
 }
 
-fn rust_check<F>(has_command: &mut F) -> DoctorCheck
+fn rust_check<F>(lang: &str, has_command: &mut F) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
 {
@@ -221,12 +264,16 @@ where
             DoctorStatus::Missing
         },
         name: "Rust",
-        detail: if ok { "rustc" } else { "missing rustc" }.to_string(),
-        install: (!ok).then_some(RUST_INSTALL),
+        detail: if ok {
+            "rustc".to_string()
+        } else {
+            missing_tool(lang, "rustc")
+        },
+        install: (!ok).then_some(InstallHelp::Rust),
     }
 }
 
-fn ai_check<F>(ai_provider: &str, has_command: &mut F) -> DoctorCheck
+fn ai_check<F>(lang: &str, ai_provider: &str, has_command: &mut F) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
 {
@@ -251,14 +298,18 @@ where
         detail: if ok {
             command.to_string()
         } else {
-            format!("missing {command}")
+            missing_tool(lang, command)
         },
         install: (!ok).then_some(if provider == "claude" {
-            CLAUDE_INSTALL
+            InstallHelp::Claude
         } else {
-            CODEX_INSTALL
+            InstallHelp::Codex
         }),
     }
+}
+
+fn missing_tool(lang: &str, tool: &str) -> String {
+    ui_text(lang, "doctor_missing_tool").replace("{tool}", tool)
 }
 
 fn push_check(lang: &str, lines: &mut Vec<String>, check: DoctorCheck) {
@@ -270,7 +321,33 @@ fn push_check(lang: &str, lines: &mut Vec<String>, check: DoctorCheck) {
     ));
     if let Some(install) = check.install {
         lines.push(format!("  {}:", ui_text(lang, "doctor_install")));
-        lines.extend(install.lines().map(|line| format!("  {line}")));
+        lines.extend(
+            install_lines(lang, install)
+                .into_iter()
+                .map(|line| format!("  {line}")),
+        );
+    }
+}
+
+fn install_lines(lang: &str, install: InstallHelp) -> Vec<String> {
+    match install {
+        InstallHelp::Python => PYTHON_INSTALL.lines().map(str::to_string).collect(),
+        InstallHelp::Node | InstallHelp::NodeAndTypeScript => {
+            let mut lines = NODE_INSTALL.lines().map(str::to_string).collect::<Vec<_>>();
+            lines.push(
+                ui_text(lang, "doctor_node_install_linux")
+                    .replace("{url}", "https://nodejs.org/en/download"),
+            );
+            if matches!(install, InstallHelp::NodeAndTypeScript) {
+                lines.push(TYPESCRIPT_INSTALL.to_string());
+            }
+            lines
+        }
+        InstallHelp::TypeScript => vec![TYPESCRIPT_INSTALL.to_string()],
+        InstallHelp::Java => JAVA_INSTALL.lines().map(str::to_string).collect(),
+        InstallHelp::Rust => RUST_INSTALL.lines().map(str::to_string).collect(),
+        InstallHelp::Codex => vec![ui_text(lang, "doctor_codex_install").to_string()],
+        InstallHelp::Claude => vec![ui_text(lang, "doctor_claude_install").to_string()],
     }
 }
 
@@ -311,11 +388,11 @@ fn version_at_least(version: &str, major: u64, minor: u64, patch: u64) -> bool {
 }
 
 const PYTHON_INSTALL: &str = "macOS: brew install python\nWindows: winget install -e --id Python.Python.3.12\nUbuntu/Debian: sudo apt install -y python3";
-const NODE_INSTALL: &str = "macOS: brew install node\nWindows: winget install -e --id OpenJS.NodeJS.LTS\nUbuntu/Debian: install Node.js LTS from https://nodejs.org/en/download";
+const NODE_INSTALL: &str =
+    "macOS: brew install node\nWindows: winget install -e --id OpenJS.NodeJS.LTS";
+const TYPESCRIPT_INSTALL: &str = "npm install -g typescript@5.9";
 const JAVA_INSTALL: &str = "macOS: brew install --cask temurin@21\nWindows: winget install -e --id EclipseAdoptium.Temurin.21.JDK\nUbuntu/Debian: sudo apt install -y openjdk-21-jdk";
 const RUST_INSTALL: &str = "macOS/Linux: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\nWindows: winget install -e --id Rustlang.Rustup";
-const CODEX_INSTALL: &str = "Install Codex CLI, or switch with /provider claude.";
-const CLAUDE_INSTALL: &str = "Install Claude Code, or switch with /provider codex.";
 
 #[cfg(test)]
 mod tests {
@@ -349,7 +426,7 @@ mod tests {
         );
 
         assert!(output.contains("UPDATE TypeScript"));
-        assert!(output.contains("Node.js >= 22.6.0"));
+        assert!(output.contains("node >= 22.6.0 required"));
     }
 
     #[test]
@@ -377,7 +454,7 @@ mod tests {
         );
 
         assert!(output.contains("MISSING TypeScript"));
-        assert!(output.contains("missing node >= 22.6.0"));
+        assert!(output.contains("node >= 22.6.0 required"));
         assert!(!output.contains("missing tsc"));
     }
 
@@ -449,5 +526,53 @@ mod tests {
 
         assert!(output.contains("UPDATE TypeScript"));
         assert!(output.contains("unreadable tsc version"));
+    }
+
+    #[test]
+    fn doctor_missing_guidance_localizes_prose_and_preserves_install_commands() {
+        let output = doctor_text_with("ja", "python", "codex", |_| false, |_, _| None);
+
+        for expected in [
+            "python3がありません",
+            "tscがありません",
+            "node >= 22.6.0が必要",
+            "javacがありません",
+            "rustcがありません",
+            "Codex CLIをインストール",
+            "Ubuntu/Debian: https://nodejs.org/en/downloadからNode.js LTSをダウンロード",
+        ] {
+            assert!(output.contains(expected), "{expected}: {output}");
+        }
+        for command in [
+            "brew install python",
+            "winget install -e --id OpenJS.NodeJS.LTS",
+            "npm install -g typescript@5.9",
+            "sudo apt install -y openjdk-21-jdk",
+            "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
+            "/provider claude",
+        ] {
+            assert!(output.contains(command), "{command}: {output}");
+        }
+        assert!(!output.contains("missing "), "{output}");
+        assert!(!output.contains("Install Codex"), "{output}");
+    }
+
+    #[test]
+    fn doctor_update_guidance_localizes_prose_and_preserves_raw_versions() {
+        let output = doctor_text_with(
+            "es",
+            "ts",
+            "codex",
+            |name| matches!(name, "node" | "tsc" | "codex"),
+            |name, _| match name {
+                "node" => Some("v22.5.0 raw".to_string()),
+                "tsc" => Some("Version 5.8.4 raw".to_string()),
+                _ => None,
+            },
+        );
+
+        assert!(output.contains("se requiere TypeScript 5.9.x"), "{output}");
+        assert!(output.contains("Version 5.8.4 raw"), "{output}");
+        assert!(!output.contains("TypeScript 5.9.x required"), "{output}");
     }
 }

@@ -9,6 +9,23 @@ use practicode::{
     },
     core::{AppState, Settings, syntax_lessons_for},
 };
+
+#[test]
+fn tui_run_does_not_eagerly_start_ai_model_discovery() {
+    let source = include_str!("../src/tui.rs");
+    let run_body = source
+        .split_once("pub fn run")
+        .unwrap()
+        .1
+        .split_once("pub fn handle_command_for_test")
+        .unwrap()
+        .0;
+
+    assert!(
+        !run_body.contains("start_model_check"),
+        "AI model discovery must stay lazy until /model or the AI model setting is used"
+    );
+}
 use std::fs;
 
 fn app_state(settings: Settings) -> AppState {
@@ -127,7 +144,7 @@ fn default_claude_command_uses_print_mode_and_accepts_edits() {
 
 #[test]
 fn provider_status_reports_cli_and_daemon_state() {
-    let status = provider_status("codex");
+    let status = provider_status("codex", "en");
     assert!(status.contains("Codex CLI"));
     assert!(
         status.contains("daemon")
@@ -159,7 +176,7 @@ fn lesson_ask_prompt_uses_lesson_tutor_context() {
     assert!(prompt.contains("current syntax lesson"));
     assert!(prompt.contains("딕셔너리 키가 왜 필요한지 모르겠어"));
     assert!(prompt.contains("py-lists-dicts"));
-    assert!(prompt.contains("리스트와 딕셔너리"));
+    assert!(prompt.contains("딕셔너리 키별로 점수 모으기"));
     assert!(prompt.contains("submissions/.syntax/python/py-lists-dicts/exercise.py"));
     assert!(prompt.contains("FAIL 0/1"));
     assert!(prompt.contains("Do not give the full exercise solution"));

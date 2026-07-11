@@ -236,7 +236,7 @@
       "kind": "lesson",
       "level": "intermediate",
       "title": "Resolve a public item through use",
-      "body": "A module controls an item path and pub controls visibility. A use declaration brings that path into scope; it does not make a private item public.",
+      "body": "A module controls an item path and pub controls visibility. A use declaration brings that path into scope; it does not make a private item public. The classifier's inclusive passing boundary is 80.",
       "example": "mod units {\n    pub fn twice(value: i32) -> i32 { value * 2 }\n}\n\nuse units::twice;\n\nfn main() {\n    println!(\"{}\", twice(21));\n}\n",
       "starter": "use std::io::{self, Read};\n\nmod grading {\n    pub fn verdict(score: i64) -> &'static str {\n        // TODO: include the documented boundary in the passing branch.\n        if score > 90 { \"pass\" } else { \"retry\" }\n    }\n}\n\nuse grading::verdict;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", verdict(input.trim().parse().unwrap()));\n}\n",
       "cases": [
@@ -380,7 +380,7 @@
       "kind": "lesson",
       "level": "intermediate",
       "title": "Move a String and return its owner",
-      "body": "Passing String by value transfers its fixed-size pointer, length, and capacity metadata while retaining one UTF-8 allocation. main trims line endings in that original buffer before moving it into describe.",
+      "body": "Passing String by value transfers its fixed-size pointer, length, and capacity metadata while retaining the existing UTF-8 buffer when one was allocated; empty input may remain allocation-free. main trims line endings in that original buffer before moving it into describe.",
       "example": "fn wrap(text: String) -> String {\n    format!(\"[{text}]\")\n}\n\nfn main() {\n    let owned = String::from(\"owned\");\n    println!(\"{}\", wrap(owned));\n}\n",
       "starter": "use std::io::{self, Read};\n\nfn trim_line_ending(text: &mut String) {\n    while text.ends_with('\\n') || text.ends_with('\\r') { text.pop(); }\n}\n\nfn describe(text: String) -> (String, usize) {\n    // TODO: measure the UTF-8 buffer before returning the same owner.\n    let bytes = text.chars().count();\n    (text, bytes)\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    trim_line_ending(&mut input);\n    let (text, bytes) = describe(input);\n    println!(\"{text}:{bytes}\");\n}\n",
       "cases": [
@@ -813,7 +813,7 @@
       "track": "core",
       "kind": "capstone",
       "level": "advanced",
-      "title": "Join workers around Arc<Mutex> state",
+      "title": "Capstone: join workers around Arc<Mutex> state",
       "body": "Each input owns one worker that adds its square to a shared i64. Arc shares ownership, Mutex serializes access, lock can block or report poisoning, and the guard scope releases the lock before join completion.",
       "example": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let total = Arc::new(Mutex::new(0));\n    let handles = (0..2).map(|_| {\n        let total = Arc::clone(&total);\n        thread::spawn(move || {\n            let mut guard = total.lock().expect(\"mutex poisoned\");\n            *guard += 1;\n        })\n    }).collect::<Vec<_>>();\n    for handle in handles { handle.join().expect(\"worker panicked\"); }\n    let answer = *total.lock().expect(\"mutex poisoned\");\n    println!(\"{answer}\");\n}\n",
       "starter": "use std::io::{self, Read};\nuse std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let total = Arc::new(Mutex::new(0_i64));\n    let mut handles = Vec::new();\n    for value in values {\n        let total = Arc::clone(&total);\n        handles.push(thread::spawn(move || {\n            // TODO: transform the owned value before entering the short lock scope.\n            let mut guard = total.lock().expect(\"worker mutex poisoned\");\n            *guard += value;\n        }));\n    }\n    for handle in handles { handle.join().expect(\"worker panicked\"); }\n    let answer = *total.lock().expect(\"main mutex poisoned\");\n    println!(\"{answer}\");\n}\n",

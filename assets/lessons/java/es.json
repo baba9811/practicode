@@ -4,424 +4,508 @@
   "ui_language": "es",
   "lessons": {
     "java-output": {
-      "title": "Salida estándar",
-      "concept": "Salida estándar importa cuando el juez compara cada carácter y salto de línea. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Salida estándar. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Salida estándar exacta",
+      "concept": "`System.out.print` emite su argumento y `println` además termina la línea. El evaluador normaliza CRLF a LF; cualquier otra diferencia de espacios o líneas vacías sigue siendo significativa.",
+      "worked_example": "El ejemplo construye `Mina:4` con un `String` y un `int`, e incluye un `\n` explícito en el texto entregado a `print`. La API no añade etiquetas ni conversiones ocultas.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Salida estándar en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Salida estándar.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Salida estándar importa cuando el juez compara cada carácter y salto de línea."
+        "Usar un espacio o guion cuando el separador requerido son dos puntos.",
+        "Llamar a `println` con una cadena que ya termina en nueva línea y producir una línea vacía adicional."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Salida estándar antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Salida estándar debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué sigue al dígito cuando `print` recibe una cadena terminada en `\n`?",
+        "¿Conservaría la salida exacta sustituir esa llamada por `println`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Salida estándar a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-variables-types": {
-      "title": "Variables y tipos",
-      "concept": "Variables y tipos importa cuando los valores primitivos y las referencias a objetos deben declararse antes de usarse. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Variables y tipos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Variables y tipos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Variables y tipos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Variables y tipos importa cuando los valores primitivos y las referencias a objetos deben declararse antes de usarse."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Variables y tipos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Variables y tipos debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Variables y tipos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-numbers-operators": {
-      "title": "Números y operadores",
-      "concept": "Números y operadores importa cuando la división y el resto deben mantenerse enteros en muchos problemas. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Números y operadores. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Números y operadores en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Números y operadores.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Números y operadores importa cuando la división y el resto deben mantenerse enteros en muchos problemas."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Números y operadores antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Números y operadores debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Números y operadores a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-strings": {
-      "title": "Cadenas",
-      "concept": "Cadenas importa cuando la limpieza de texto y substring ocurren antes de comparar o imprimir. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Cadenas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Cadenas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Cadenas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Cadenas importa cuando la limpieza de texto y substring ocurren antes de comparar o imprimir."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Cadenas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Cadenas debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Cadenas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-control-flow": {
-      "title": "Flujo de control",
-      "concept": "Flujo de control importa cuando ramas y bucles deciden qué valores entran al acumulador. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Flujo de control. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Flujo de control en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Flujo de control.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Flujo de control importa cuando ramas y bucles deciden qué valores entran al acumulador."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Flujo de control antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Flujo de control debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Flujo de control a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-methods": {
-      "title": "Métodos",
-      "concept": "Métodos importa cuando un cálculo reutilizable necesita un límite con nombre. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Métodos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Métodos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Métodos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Métodos importa cuando un cálculo reutilizable necesita un límite con nombre."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Métodos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Métodos debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Métodos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Analiza el nombre y la puntuación, compón una línea separada por dos puntos y emite exactamente una terminación de línea.",
+      "objective": "Producir una salida limpia cuyo separador y final procedan de decisiones de formato explícitas.",
+      "language_delta": "Java dirige la consola a través del flujo `System.out` y distingue `print` de `println`, en vez de ofrecer una función global.",
+      "prediction_prompt": "Escribe la secuencia completa de caracteres del ejemplo, incluida la nueva línea final.",
+      "transfer_trap": "Dos resultados visualmente iguales pueden diferir por un salto ausente o duplicado; solo CRLF y LF se normalizan aquí."
     },
     "java-input": {
-      "title": "Lectura de entrada",
-      "concept": "Lectura de entrada importa cuando stdin llega como bytes y debe convertirse en tokens tipados. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Lectura de entrada. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Entrada estándar en UTF-8",
+      "concept": "`System.in` proporciona bytes, no texto ya decodificado. `readAllBytes` con `StandardCharsets.UTF_8` hace explícito el juego de caracteres; los tipos fuera de `java.lang` requieren importación o nombre completo.",
+      "worked_example": "Un `ByteArrayInputStream` representa la entrada, sus bytes se decodifican de forma explícita y se suman dos tokens. La línea de demostración queda etiquetada y no coincide con los casos.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Lectura de entrada en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Lectura de entrada.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Lectura de entrada importa cuando stdin llega como bytes y debe convertirse en tokens tipados."
+        "Construir un `String` con el juego de caracteres predeterminado de la plataforma.",
+        "Dividir una entrada vacía e intentar convertir un token que también está vacío."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Lectura de entrada antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Lectura de entrada debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Por qué se importa `StandardCharsets` mientras `String` no necesita importación?",
+        "¿Qué rama impide que la entrada vacía alcance `Integer.parseInt`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Lectura de entrada a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Decodifica toda la entrada como UTF-8, suma cada token entero con signo y conserva cero cuando no exista ninguno.",
+      "objective": "Sumar enteros válidos separados por los espacios en blanco reconocidos por la expresión `\\s+`, devolviendo cero para texto en blanco.",
+      "language_delta": "Otros entornos entregan texto directamente; Java expone un `InputStream`, por lo que elegir la codificación es responsabilidad del programa.",
+      "prediction_prompt": "Predice primero la suma de tokens en varias líneas y después el resultado de recibir cero bytes.",
+      "transfer_trap": "Una importación solo acorta un nombre de tipo en el código; no instala ni carga dinámicamente la clase del JDK."
     },
-    "java-arrays-collections": {
-      "title": "Arrays y colecciones",
-      "concept": "Arrays y colecciones importa cuando arrays fijos, List expandible, Map por clave y Set único resuelven tareas distintas. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Arrays y colecciones. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "java-variables-types": {
+      "title": "Valores tipados y enlaces `final`",
+      "concept": "Cada declaración local fija un tipo de compilación. Los primitivos contienen valores, las referencias señalan objetos, `final` impide reasignar y el estado `static` pertenece a la clase.",
+      "worked_example": "La muestra mantiene final el nombre, compara una puntuación mutable con su umbral y guarda el resultado en un booleano antes de formar el informe.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Arrays y colecciones en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Arrays y colecciones.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Arrays y colecciones importa cuando arrays fijos, List expandible, Map por clave y Set único resuelven tareas distintas."
+        "Considerar fallida una puntuación igual al umbral aunque la regla diga como mínimo.",
+        "Suponer que una referencia `final` vuelve profundamente inmutable todo objeto alcanzable."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Arrays y colecciones antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Arrays y colecciones debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué declaración de la muestra puede reasignarse y cuál no?",
+        "¿Qué booleano resulta si puntuación y umbral valen cero?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Arrays y colecciones a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Conserva los valores analizados en tipos adecuados y deriva el informe usando una comparación inclusiva con el umbral.",
+      "objective": "Conectar `String`, `int` y `boolean` sin perder el caso exacto de frontera.",
+      "language_delta": "Los tipos locales y `final` se comprueban al compilar; un enlace fijo no garantiza que el objeto referenciado sea inmutable.",
+      "prediction_prompt": "Evalúa la comparación con una puntuación superior y luego con otra exactamente igual al umbral.",
+      "transfer_trap": "Java no aplica la verdad implícita de JavaScript: un entero no puede ocupar directamente una condición booleana."
     },
-    "java-classes-objects": {
-      "title": "Clases y objetos",
-      "concept": "Clases y objetos importa cuando los objetos necesitan estado de instancia y comportamiento. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Clases y objetos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "java-numbers-operators": {
+      "title": "Aritmética entera truncada",
+      "concept": "Con dos operandos `int`, `/` genera un cociente truncado hacia cero y `%` el resto correspondiente. Los tipos numéricos de los parámetros también intervienen en la elección de sobrecarga.",
+      "worked_example": "Diecinueve dividido entre cuatro produce cociente cuatro y resto tres. Las etiquetas diferencian esa salida de demostración del formato compacto evaluado.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Clases y objetos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Clases y objetos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Clases y objetos importa cuando los objetos necesitan estado de instancia y comportamiento."
+        "Sustituir `/` por `Math.floorDiv` y cambiar los cocientes negativos.",
+        "Calcular el resto con reglas de módulo inferior en vez del operador `%` de Java."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Clases y objetos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Clases y objetos debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "Con dividendo negativo y divisor positivo, ¿hacia qué dirección se trunca?",
+        "¿Cómo verificas `dividend == quotient * divisor + remainder` en cada caso?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Clases y objetos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Analiza dos enteros con divisor no nulo e imprime el cociente y resto de Java separados por dos puntos.",
+      "objective": "Calcular división entera con signo sin importar el redondeo inferior de otro lenguaje.",
+      "language_delta": "`//` de Python redondea hacia menos infinito; `/` entre enteros Java trunca hacia cero.",
+      "prediction_prompt": "Predice ambos campos de `-17 / 5` y `-17 % 5` antes de ejecutar.",
+      "transfer_trap": "Cambiar un operando a punto flotante selecciona otra aritmética y deja de demostrar truncamiento entero."
     },
-    "java-constructors": {
-      "title": "Constructores",
-      "concept": "Constructores importa cuando los objetos nuevos deben empezar con campos válidos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Constructores. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "java-strings": {
+      "title": "Limpieza e igualdad de cadenas",
+      "concept": "`strip` elimina de los bordes los puntos de código reconocidos por `Character.isWhitespace` y devuelve otro `String`. Los índices cuentan unidades UTF-16; `.equals` compara contenido y `==`, referencias.",
+      "worked_example": "La muestra recorta espacios de una palabra entre llaves, comprueba los delimitadores y extrae el interior con `substring`. La cadena original permanece intacta.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Constructores en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Constructores.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Constructores importa cuando los objetos nuevos deben empezar con campos válidos."
+        "Usar `==` para decidir si dos cadenas creadas por separado contienen el mismo texto.",
+        "Quitar la primera y última unidad sin comprobar antes que formen una pareja válida de delimitadores."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Constructores antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Constructores debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Por qué el índice final de `substring` es `length() - 1`?",
+        "¿Qué cuenta `length()` cuando un símbolo usa un par sustituto UTF-16?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Constructores a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Aplica `strip` y elimina una pareja exterior `[]` o `{}` sin alterar el contenido Unicode interno.",
+      "objective": "Normalizar texto delimitado sin mutar cadenas ni depender de identidad de referencia.",
+      "language_delta": "Java y JavaScript indexan unidades UTF-16; Python indexa puntos de código Unicode.",
+      "prediction_prompt": "Sigue la longitud recortada y los límites de `substring` para la entrada coreana entre corchetes.",
+      "transfer_trap": "Ni una unidad UTF-16 ni un punto de código equivalen necesariamente a un grafema percibido."
     },
-    "java-encapsulation": {
-      "title": "Encapsulación",
-      "concept": "Encapsulación importa cuando los llamadores deben cambiar estado mediante métodos y no campos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Encapsulación. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "java-control-flow": {
+      "title": "Ramas y bucles acotados",
+      "concept": "Un bucle `for` controla el intervalo numérico inclusivo y un `if` filtra los impares. Java exige una expresión booleana, por lo que la comparación del resto debe ser explícita.",
+      "worked_example": "El contador avanza del uno al siete. Solo los valores cuyo resto al dividir por dos no es cero entran en el acumulador, que produce una suma impar etiquetada.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Encapsulación en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Encapsulación.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Encapsulación importa cuando los llamadores deben cambiar estado mediante métodos y no campos."
+        "Usar `< limit` y omitir silenciosamente el límite superior cuando es impar.",
+        "Escribir un entero como condición de `if`, como si Java aceptara verdad numérica."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Encapsulación antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Encapsulación debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué valores contribuyen cuando el límite es seis?",
+        "¿Por qué la condición usa `<=` y no `<`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Encapsulación a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-static-members": {
-      "title": "Miembros static",
-      "concept": "Miembros static importa cuando un valor pertenece a la clase y no a una instancia. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Miembros static. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Miembros static en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Miembros static.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Miembros static importa cuando un valor pertenece a la clase y no a una instancia."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Miembros static antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Miembros static debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Miembros static a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Recorre el intervalo inclusivo, acumula únicamente enteros impares y después imprime el total calculado.",
+      "objective": "Coordinar límite, rama de paridad y acumulador para cero y límites positivos.",
+      "language_delta": "Las condiciones Java deben tener tipo booleano, a diferencia de lenguajes que convierten enteros cero y no cero.",
+      "prediction_prompt": "Enumera todas las visitas con límite tres y marca cuáles modifican el total.",
+      "transfer_trap": "Una API de rango de otro lenguaje puede excluir el extremo; este bucle Java expresa su inclusión directamente."
     },
     "java-enum-switch": {
-      "title": "Enum y switch",
-      "concept": "Enum y switch importa cuando un conjunto fijo de estados debe mapearse a resultados explícitos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Enum y switch. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Expresiones `switch` exhaustivas sobre un `enum`",
+      "concept": "Un `enum` define un conjunto finito de constantes únicas. Una expresión `switch` asigna un valor a cada constante mediante reglas con flecha, sin ejecución en cascada accidental hacia el caso siguiente.",
+      "worked_example": "El ejemplo transforma `STARTED` y `STOPPED` en acciones distintas, guarda el resultado del `switch` en un `String` y solo entonces añade una etiqueta de muestra.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Enum y switch en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Enum y switch.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Enum y switch importa cuando un conjunto fijo de estados debe mapearse a resultados explícitos."
+        "Añadir `default` y ocultar una constante que quede sin tratar cuando evolucione el `enum`.",
+        "Esperar que un caso con flecha continúe ejecutando el cuerpo siguiente."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Enum y switch antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Enum y switch debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué informa el compilador si falta una constante y no existe `default`?",
+        "¿Puede una expresión `switch` ejecutar dos reglas con flecha para un solo estado?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Enum y switch a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Corrige la correspondencia textual de cada estado y conserva la exhaustividad de la expresión `switch`.",
+      "objective": "Convertir un estado cerrado en texto sin resultado mutable ni ejecución en cascada entre casos.",
+      "language_delta": "Las expresiones `switch` producen valores; las formas antiguas de sentencia solían necesitar asignación y `break`.",
+      "prediction_prompt": "Elige la regla exacta de `BLOCKED` y decide si puede ejecutarse una posterior.",
+      "transfer_trap": "La exhaustividad del `enum` no valida cadenas arbitrarias: `valueOf` todavía rechaza nombres desconocidos."
     },
-    "java-exceptions": {
-      "title": "Excepciones",
-      "concept": "Excepciones importa cuando una entrada inválida debe recuperarse sin ocultar fallos no relacionados. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Excepciones. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "java-methods": {
+      "title": "Punto de control: método estático tipado",
+      "concept": "La firma fija parámetros y retorno, y cada argumento se copia a una variable de parámetro. El cálculo permanece en un método estático tipado en vez de repetirse en `main`.",
+      "worked_example": "`area(int, int)` contiene el cálculo y `main` le entrega dimensiones de muestra separadas. El valor devuelto cruza la frontera antes de formatearse.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Excepciones en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Excepciones.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Excepciones importa cuando una entrada inválida debe recuperarse sin ocultar fallos no relacionados."
+        "Repetir la multiplicación en `main` en lugar de completar el método nombrado.",
+        "Creer que un método sustituye la variable de referencia de quien llama por compartir el mismo objeto."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Excepciones antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Excepciones debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué retorno y qué dos parámetros declara `area`?",
+        "¿Por qué debe `main` llamar al método en vez de repetir la expresión?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Excepciones a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-generics": {
-      "title": "Genéricos",
-      "concept": "Genéricos importa cuando un método debe conservar el tipo de elemento del llamador. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Genéricos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Genéricos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Genéricos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Genéricos importa cuando un método debe conservar el tipo de elemento del llamador."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Genéricos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Genéricos debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Genéricos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-interfaces": {
-      "title": "Interfaces",
-      "concept": "Interfaces importa cuando los llamadores deben depender del comportamiento y no de una clase concreta. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Interfaces. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Interfaces en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Interfaces.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Interfaces importa cuando los llamadores deben depender del comportamiento y no de una clase concreta."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Interfaces antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Interfaces debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Interfaces a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-inheritance-composition": {
-      "title": "Herencia y composición",
-      "concept": "Herencia y composición importa cuando una subclase también necesita un objeto auxiliar. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Herencia y composición. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Herencia y composición en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Herencia y composición.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Herencia y composición importa cuando una subclase también necesita un objeto auxiliar."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Herencia y composición antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Herencia y composición debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Herencia y composición a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-records": {
-      "title": "Records",
-      "concept": "Records importa cuando los portadores de datos inmutables necesitan menos repetición. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Records. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Records en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Records.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Records importa cuando los portadores de datos inmutables necesitan menos repetición."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Records antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Records debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Records a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-optional": {
-      "title": "Optional",
-      "concept": "Optional importa cuando un valor ausente debe manejarse explícitamente. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Optional. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Optional en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Optional.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Optional importa cuando un valor ausente debe manejarse explícitamente."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Optional antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Optional debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Optional a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-streams-lambdas": {
-      "title": "Streams y lambdas",
-      "concept": "Streams y lambdas importa cuando el procesamiento de colecciones es más claro como tubería. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Streams y lambdas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Streams y lambdas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Streams y lambdas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Streams y lambdas importa cuando el procesamiento de colecciones es más claro como tubería."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Streams y lambdas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Streams y lambdas debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Streams y lambdas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-comparators-sorting": {
-      "title": "Comparadores y ordenación",
-      "concept": "Comparadores y ordenación importa cuando los objetos necesitan orden separado de su forma de datos. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Comparadores y ordenación. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Comparadores y ordenación en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Comparadores y ordenación.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Comparadores y ordenación importa cuando los objetos necesitan orden separado de su forma de datos."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Comparadores y ordenación antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Comparadores y ordenación debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Comparadores y ordenación a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-try-with-resources": {
-      "title": "try-with-resources",
-      "concept": "try-with-resources importa cuando los recursos deben cerrarse aunque el código salga temprano. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de try-with-resources. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de try-with-resources en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de try-with-resources.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: try-with-resources importa cuando los recursos deben cerrarse aunque el código salga temprano."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica try-with-resources antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de try-with-resources debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando try-with-resources a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-packages-imports": {
-      "title": "Paquetes e imports",
-      "concept": "Paquetes e imports importa cuando los ejercicios de archivo único aún necesitan clases de paquetes JDK. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Paquetes e imports. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Paquetes e imports en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Paquetes e imports.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Paquetes e imports importa cuando los ejercicios de archivo único aún necesitan clases de paquetes JDK."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Paquetes e imports antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Paquetes e imports debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Paquetes e imports a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-annotations": {
-      "title": "Anotaciones",
-      "concept": "Anotaciones importa cuando los metadatos pertenecen a declaraciones y no a lógica de ejecución. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Anotaciones. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Anotaciones en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Anotaciones.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Anotaciones importa cuando los metadatos pertenecen a declaraciones y no a lógica de ejecución."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Anotaciones antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Anotaciones debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Anotaciones a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-sealed-classes": {
-      "title": "Clases sealed",
-      "concept": "Clases sealed importa cuando una jerarquía de dominio debe listar implementaciones permitidas. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Clases sealed. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Clases sealed en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Clases sealed.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Clases sealed importa cuando una jerarquía de dominio debe listar implementaciones permitidas."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Clases sealed antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Clases sealed debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Clases sealed a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-testing-assert": {
-      "title": "Pruebas y assert",
-      "concept": "Pruebas y assert importa cuando las comprobaciones pequeñas deben fallar cerca del método roto. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Pruebas y assert. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Pruebas y assert en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Pruebas y assert.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Pruebas y assert importa cuando las comprobaciones pequeñas deben fallar cerca del método roto."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Pruebas y assert antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Pruebas y assert debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Pruebas y assert a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "java-equality-hashcode": {
-      "title": "equals y hashCode",
-      "concept": "equals y hashCode importa cuando HashSet debe reconocer objetos de valor iguales. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de equals y hashCode. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de equals y hashCode en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de equals y hashCode.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: equals y hashCode importa cuando HashSet debe reconocer objetos de valor iguales."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica equals y hashCode antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de equals y hashCode debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando equals y hashCode a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Completa el método que devuelve el área y deja el análisis de entrada y el formato de salida dentro de `main`.",
+      "objective": "Demostrar una frontera reutilizable con retorno en vez de concentrar toda la lógica en la entrada.",
+      "language_delta": "Java comprueba la firma al compilar y permite llamar a este método `static` sin construir un objeto `Solution`.",
+      "prediction_prompt": "Sigue ambos enteros desde los parámetros, por `return`, hasta el `println` de quien llama.",
+      "transfer_trap": "Pasar un objeto copia su referencia; no concede al método la facultad de reemplazar la variable exterior."
     },
     "java-overloading-varargs": {
-      "title": "Sobrecarga y varargs",
-      "concept": "Sobrecarga y varargs importa cuando las llamadas eligen firmas y agrupan argumentos extra. La lección se mantiene en un solo Solution.java para que se vea la preparación del valor, la llamada a la API de Java y la línea exacta de stdout.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Sobrecarga y varargs. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Sobrecargas y argumentos variables (`varargs`)",
+      "concept": "La sobrecarga ofrece varias firmas para un nombre. El compilador elige una aplicable y un parámetro de argumentos variables `int...` se representa como `int[]` dentro del método.",
+      "worked_example": "La sobrecarga con argumentos variables suma dos puntuaciones y delega el entero calculado a la firma de aridad fija. Esa segunda llamada selecciona la versión de aridad fija.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Sobrecarga y varargs en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Sobrecarga y varargs.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Sobrecarga y varargs importa cuando las llamadas eligen firmas y agrupan argumentos extra."
+        "Devolver la cantidad de argumentos cuando se solicita la suma de sus valores.",
+        "Suponer que la selección de sobrecarga espera a inspeccionar el contenido del array en ejecución."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Sobrecarga y varargs antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Sobrecarga y varargs debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Por qué `label(name, total)` elige la firma de dos argumentos?",
+        "¿Qué array recibe el método variable para un usuario seguido de un único cero?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Sobrecarga y varargs a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Reduce el array de puntuaciones y delega el resultado numérico a la sobrecarga encargada del formato.",
+      "objective": "Observar la selección en compilación y la naturaleza de array de la aridad variable.",
+      "language_delta": "A diferencia de los parámetros `rest` de JavaScript, los argumentos variables de Java participan en la aplicabilidad y la prioridad estáticas.",
+      "prediction_prompt": "Identifica la sobrecarga elegida en cada llamada antes de calcular la salida.",
+      "transfer_trap": "Añadir una firma demasiado amplia puede volver ambigua una llamada aunque cada implementación aislada sea válida."
+    },
+    "java-packages-imports": {
+      "title": "Importaciones y nombres completamente cualificados",
+      "concept": "Una importación permite usar un nombre de tipo simple. La misma unidad puede referirse a otro tipo por su nombre de paquete, como `java.util.List` con un `ArrayList` importado.",
+      "worked_example": "La variable expone la interfaz `List` y el constructor nombra `ArrayList` mediante importación. Unir las palabras almacenadas demuestra que la colección se usa de verdad.",
+      "common_mistakes": [
+        "Creer que una importación descarga una biblioteca o ejecuta su inicialización.",
+        "Importar dos tipos con el mismo nombre simple y esperar que Java adivine el deseado."
+      ],
+      "self_check": [
+        "¿Qué nombre funcionaría si se eliminara la importación de `ArrayList`?",
+        "¿Por qué `String` puede escribirse sin importar `java.lang.String`?"
+      ],
+      "exercise_prompt": "Llena la `List` cualificada con la implementación importada y concatena sus tokens sin separadores.",
+      "objective": "Distinguir la comodidad del espacio de nombres de la disponibilidad del tipo observando una colección real.",
+      "language_delta": "Las importaciones Java cambian el contexto de nombres de la unidad; no ejecutan módulos Python ni cargan módulos JavaScript.",
+      "prediction_prompt": "Resuelve cada nombre simple y cualificado del ejemplo hasta su paquete.",
+      "transfer_trap": "Una importación con asterisco no incluye subpaquetes ni resuelve un nombre simple ambiguo."
+    },
+    "java-arrays-collections": {
+      "title": "Observaciones sobre colecciones",
+      "concept": "Los arrays tienen longitud fija, mientras que los tipos genéricos `List`, `Map` y `Set` ofrecen comportamientos de colección distintos. Los `Stream` pueden derivar agregados de esas vistas sin modificar las colecciones fuente.",
+      "worked_example": "Cada valor del array entra en una lista, un mapa de frecuencias y un conjunto. La suma se reconstruye multiplicando cada clave por su conteo, de modo que cada campo observa su estructura.",
+      "common_mistakes": [
+        "Imprimir la longitud del array cuando el contrato pide una suma derivada de entradas del mapa.",
+        "Confundir el tamaño de la lista, la cantidad de elementos distintos del conjunto y el número de claves del mapa cuando aparecen duplicados."
+      ],
+      "self_check": [
+        "Para `2 2 3`, ¿qué contiene cada colección al terminar el bucle?",
+        "¿Qué operación terminal calcula el total del flujo de entradas?"
+      ],
+      "exercise_prompt": "Llena las tres vistas y calcula el primer campo desde las frecuencias del mapa, no directamente desde el array fuente.",
+      "objective": "Explicar tres semánticas observables mediante un informe sensible a duplicados.",
+      "language_delta": "Los arrays Java son objetos reificados y fijos; los tipos genéricos de colección se comprueban y en gran parte se borran.",
+      "prediction_prompt": "Dibuja los estados de `List`, `Map` y `Set` para una entrada repetida antes de calcular.",
+      "transfer_trap": "Un flujo es perezoso hasta una operación terminal y no puede reutilizarse después de consumirlo."
+    },
+    "java-generics": {
+      "title": "Conservar el tipo de elemento con genéricos",
+      "concept": "Un parámetro de tipo enlaza entrada y salida: `<T> T last(List<T>)` devuelve el mismo tipo que admite la lista. Un tipo crudo elimina esa garantía útil.",
+      "worked_example": "La inferencia elige `String` para la lista de colores. El auxiliar selecciona la última posición y devuelve una cadena sin conversión explícita.",
+      "common_mistakes": [
+        "Usar un `List` crudo y desplazar a ejecución un error que podía evitarse al compilar.",
+        "Indexar con cero y devolver accidentalmente el primer elemento cuando hay varios."
+      ],
+      "self_check": [
+        "¿Qué representa `T` para un `List<Integer>`?",
+        "¿Qué precondición hace segura la posición `size() - 1`?"
+      ],
+      "exercise_prompt": "Completa la selección reutilizable del último elemento y conserva el tipo declarado por la lista de quien llama.",
+      "objective": "Expresar con una variable de tipo una relación fiable para quien llama, sin conversiones.",
+      "language_delta": "Los genéricos Java suelen borrarse, a diferencia de los arrays reificados, pero sus relaciones estáticas previenen llamadas inválidas.",
+      "prediction_prompt": "Infiere `T` y el índice elegido para cada lista de palabras suministrada.",
+      "transfer_trap": "El borrado no vuelve seguras las colecciones crudas; solo retira gran parte de la representación genérica en ejecución."
+    },
+    "java-streams-lambdas": {
+      "title": "Canalizaciones perezosas de `Stream`",
+      "concept": "Un flujo describe el procesamiento hasta que una operación terminal pide resultados. Aquí `IntStream` filtra con una lambda, eleva al cuadrado mediante `IntStream.map` y `sum` recorre una vez.",
+      "worked_example": "`IntStream.of` crea dos valores distintos, el predicado conserva los pares y el mapeo los eleva antes de que el total terminal reciba una etiqueta.",
+      "common_mistakes": [
+        "Construir `filter` y `map` sin invocar ninguna operación terminal.",
+        "Intentar consumir de nuevo el mismo objeto `Stream` después de `sum`."
+      ],
+      "self_check": [
+        "¿En qué momento se evalúan realmente el predicado y el mapeo?",
+        "¿Por qué cero supera el filtro par pero no aumenta la suma de cuadrados?"
+      ],
+      "exercise_prompt": "Conserva los enteros pares, elévalos al cuadrado y produce una única suma terminal de la secuencia analizada.",
+      "objective": "Conectar operaciones intermedias perezosas con un resultado numérico observable.",
+      "language_delta": "Los flujos Java son recorridos de un solo uso, no contenedores reutilizables ni arrays JavaScript.",
+      "prediction_prompt": "Escribe la secuencia tras filtrar y después de mapear el caso con negativos.",
+      "transfer_trap": "El orden y la pereza de un flujo no implican paralelismo; esa es una elección aparte."
+    },
+    "java-comparators-sorting": {
+      "title": "Cadenas de comparadores",
+      "concept": "`comparingInt`, `reversed` y `thenComparing` expresan directamente cada regla. Así se evita restar puntuaciones, operación que puede desbordarse con enteros extremos.",
+      "worked_example": "`Kai` y `Bea` empatan; la segunda comparación ascendente coloca a `Bea` primero. La muestra lee ese registro tras ordenar.",
+      "common_mistakes": [
+        "Invertir toda la cadena y cambiar sin querer también el desempate por nombre.",
+        "Devolver `right.score() - left.score()` y violar el orden por desbordamiento."
+      ],
+      "self_check": [
+        "¿Qué etapa decide entre puntuaciones iguales?",
+        "¿Por qué un único usuario con puntuación negativa sigue siendo ganador?"
+      ],
+      "exercise_prompt": "Compón puntuación descendente con nombre ascendente e imprime el primer usuario resultante.",
+      "objective": "Codificar una regla estable de negocio como composición legible de comparadores.",
+      "language_delta": "Los objetos `Comparator` vuelven reutilizable un orden; el operador `<` no ordena directamente registros arbitrarios.",
+      "prediction_prompt": "Ordena a mano el caso de tres usuarios aplicando una sola etapa cada vez.",
+      "transfer_trap": "`reversed()` afecta al comparador construido hasta ese punto; su posición modifica los empates."
+    },
+    "java-classes-objects": {
+      "title": "Estado independiente por instancia",
+      "concept": "Cada objeto `Counter` posee su propio campo `value`. El método `add` recibe un parámetro local `delta` y debe actualizar el campo de quien lo recibe mediante `this` o un nombre inequívoco.",
+      "worked_example": "Un contador comienza en diez y recibe un incremento en `add`. El método cambia el campo de esa instancia y `main` observa doce después.",
+      "common_mistakes": [
+        "Modificar solo la variable de parámetro y esperar que el campo del objeto la siga.",
+        "Declarar todo el estado `static` y hacer que instancias independientes compartan un valor."
+      ],
+      "self_check": [
+        "¿Qué almacenamiento cambia en `add` y qué variable solo transporta el argumento?",
+        "¿Qué ocurriría con dos contadores iniciados en valores diferentes?"
+      ],
+      "exercise_prompt": "Envía el incremento analizado a un método de `Counter` que actualice el estado propio de la instancia receptora.",
+      "objective": "Observar identidad y mutación encapsulada mediante una instancia mínima.",
+      "language_delta": "Los campos de instancia viven en cada objeto; un parámetro es una variable local creada para una llamada concreta.",
+      "prediction_prompt": "Sigue por separado el campo del contador y el parámetro `delta` antes y después de llamar.",
+      "transfer_trap": "El acceso privado bloquea escrituras exteriores, pero solo la lógica del método puede proteger una invariante."
+    },
+    "java-constructors": {
+      "title": "Invariantes establecidas por el constructor",
+      "concept": "Un constructor lleva el nombre de la clase y carece de tipo de retorno. Antes de terminar debe asignar todos los campos `final` vacíos; `this.field` distingue campos de parámetros homónimos.",
+      "worked_example": "El constructor de `Rectangle` transfiere dos argumentos a dimensiones finales. Desde entonces, `area` puede asumir que ambos campos fueron establecidos.",
+      "common_mistakes": [
+        "Escribir `void Rectangle(...)` y declarar un método en lugar de un constructor.",
+        "Asignar un parámetro a sí mismo y dejar sin inicializar el campo del mismo nombre."
+      ],
+      "self_check": [
+        "¿Qué identifica el lado izquierdo de `this.width = width`?",
+        "¿Por qué se rechaza una ruta que omita un campo final?"
+      ],
+      "exercise_prompt": "Inicializa ambas dimensiones desde los argumentos para que `area` utilice campos finales válidos, sin valores provisionales.",
+      "objective": "Establecer una vez el estado del objeto al construirlo.",
+      "language_delta": "Los constructores Java son declaraciones especiales, no funciones inicializadoras normales que devuelven un valor.",
+      "prediction_prompt": "Resuelve cada campo y parámetro homónimo en las asignaciones antes de calcular el área.",
+      "transfer_trap": "Los campos finales no pueden reasignarse, pero no congelan recursivamente los objetos referenciados."
+    },
+    "java-encapsulation": {
+      "title": "Estado privado con reglas aplicadas",
+      "concept": "Un campo privado oculta su representación. La operación expuesta todavía debe validar los cambios solicitados: visibilidad e invariantes resuelven problemas diferentes.",
+      "worked_example": "`Account` acepta dos depósitos positivos e ignora la petición negativa. Su método de consulta expone únicamente el saldo entero resultante.",
+      "common_mistakes": [
+        "Suponer que `private` rechaza automáticamente valores inválidos enviados a un método.",
+        "Devolver una colección interna mutable y permitir que se eluda la frontera prevista."
+      ],
+      "self_check": [
+        "¿Qué llamada deja sin cambios el saldo de la muestra?",
+        "¿Podría el código interno asignar todavía un valor inválido al campo privado?"
+      ],
+      "exercise_prompt": "Coloca la regla de positividad dentro de `deposit` e informa del estado únicamente mediante su método de consulta.",
+      "objective": "Aplicar una invariante pequeña en el método propietario de la transición.",
+      "language_delta": "Los modificadores de acceso regulan miembros en compilación y ejecución; no implementan automáticamente validación de dominio.",
+      "prediction_prompt": "Aplica cada incremento en orden y registra si la condición de validación lo acepta.",
+      "transfer_trap": "Un getter rompe el encapsulamiento si devuelve un objeto interno mutable en vez de una vista o copia segura."
+    },
+    "java-static-members": {
+      "title": "Constantes estáticas pertenecientes a la clase",
+      "concept": "Un campo `static` pertenece a la clase y se comparte entre llamadas e instancias. `static final` fija su enlace, aunque un objeto alcanzado por él todavía podría ser mutable.",
+      "worked_example": "El método de escala lee `FACTOR` en contexto de clase y multiplica un valor de muestra. Ningún miembro estático necesita una instancia.",
+      "common_mistakes": [
+        "Crear un objeto solo para llamar a una utilidad estática y ocultar que pertenece a la clase.",
+        "Leer `final` como promesa de inmutabilidad profunda para cualquier tipo de campo."
+      ],
+      "self_check": [
+        "¿Cuántos almacenamientos de `FACTOR` existen si se crean diez objetos?",
+        "¿Puede `scale` leer un campo de instancia sin recibir o crear una?"
+      ],
+      "exercise_prompt": "Corrige el factor compartido para que el método estático escale entradas positivas, cero y negativas.",
+      "objective": "Usar estado de clase de forma deliberada y separarlo de los campos por objeto.",
+      "language_delta": "`static` adjunta el miembro a una clase declarada, no a un enlace libre de módulo.",
+      "prediction_prompt": "Sustituye el factor de clase en la multiplicación para cada entrada con signo.",
+      "transfer_trap": "Un campo estático mutable comparte estado entre todas las instancias y suele necesitar sincronización."
+    },
+    "java-interfaces": {
+      "title": "Comportamiento a través de una interfaz",
+      "concept": "Una interfaz nombra un contrato público. El código que recibe `Named` puede llamar a `name()` sin conocer si la implementación es `record`, clase u otro tipo declarado.",
+      "worked_example": "Un `record User` implementa `Named` mediante su método de acceso. El renderizador solo consume la interfaz y convierte el nombre con reglas de mayúsculas estables.",
+      "common_mistakes": [
+        "Reducir la visibilidad del método implementado aunque los métodos de interfaz sean públicos.",
+        "Tipar el renderizador como `User` y acoplarlo sin necesidad a una implementación."
+      ],
+      "self_check": [
+        "¿Qué método está disponible mediante una variable `Named`?",
+        "¿Puede participar otra clase sin extender `User`?"
+      ],
+      "exercise_prompt": "Implementa la conversión a mayúsculas dentro del auxiliar que recibe el contrato de interfaz, no una representación concreta.",
+      "objective": "Invocar comportamiento compartido contra un contrato nominal.",
+      "language_delta": "Las interfaces Java son nominales y deben declararse; TypeScript suele aceptar compatibilidad estructural implícita.",
+      "prediction_prompt": "Sigue el método de acceso del `record` a través de `Named` antes de aplicar `Locale.ROOT`.",
+      "transfer_trap": "Los métodos predeterminados aportan comportamiento, pero los campos de interfaz no se vuelven estado por instancia."
+    },
+    "java-inheritance-composition": {
+      "title": "Herencia junto con composición",
+      "concept": "La herencia modela una relación sustituible «es un» y la composición una relación «tiene un». `Player` reutiliza la puntuación base y posee por separado un `Bonus`.",
+      "worked_example": "La construcción envía el valor base a `super` y crea el `record` compuesto para la bonificación. `total` lee ambas fuentes y obtiene doce.",
+      "common_mistakes": [
+        "Ignorar el campo compuesto y devolver únicamente el estado heredado.",
+        "Heredar solo para reutilizar código aunque el subtipo no respete las expectativas de la base."
+      ],
+      "self_check": [
+        "¿Qué constructor inicializa el campo protegido de la base?",
+        "¿Por qué `Bonus` es un campo y no la superclase de `Player`?"
+      ],
+      "exercise_prompt": "Combina en `total` el valor heredado de la base con la bonificación almacenada por composición.",
+      "objective": "Separar dos mecanismos de reutilización según su relación semántica.",
+      "language_delta": "Java permite una superclase y varias interfaces, lo que vuelve especialmente útil componer partes independientes.",
+      "prediction_prompt": "Sigue los dos argumentos del constructor hacia sus objetos distintos antes de sumarlos.",
+      "transfer_trap": "La visibilidad protegida permite accesos concretos; no convierte una relación de posesión en subtipo válido."
+    },
+    "java-exceptions": {
+      "title": "Recuperación precisa de excepciones",
+      "concept": "`Integer.parseInt` comunica sintaxis mal formada con `NumberFormatException`, que no es comprobada. Capturarla justo en la frontera de análisis evita confundir otros defectos con entrada inválida.",
+      "worked_example": "Analizar `oops` entra en el `catch` concreto y devuelve el valor alternativo. Otros fallos inesperados no quedan absorbidos por este auxiliar.",
+      "common_mistakes": [
+        "Capturar `Exception` y ocultar errores de programación no relacionados.",
+        "Esperar que `parseInt` devuelva un `Optional` o centinela en vez de lanzar ante texto mal formado."
+      ],
+      "self_check": [
+        "¿Un entero negativo válido entra en el bloque `catch`?",
+        "¿Por qué capturar `NumberFormatException` es más seguro que capturar cualquier excepción?"
+      ],
+      "exercise_prompt": "Devuelve el entero analizado o el valor alternativo suministrado únicamente cuando la sintaxis numérica sea inválida.",
+      "objective": "Recuperarse en la frontera relevante más pequeña sin enmascarar otros fallos.",
+      "language_delta": "Java distingue excepciones comprobadas de subclases no comprobadas de `RuntimeException`, como `NumberFormatException`.",
+      "prediction_prompt": "Elige la ruta `try` o `catch` para cada token antes de evaluar su alternativa.",
+      "transfer_trap": "Un entero negativo válido es un dato; solo la sintaxis numérica mal formada selecciona la recuperación."
+    },
+    "java-optional": {
+      "title": "Filtrado y alternativa con `Optional`",
+      "concept": "`Optional` representa un resultado posiblemente ausente. `filter` conserva un valor presente si cumple el predicado y `orElse` aporta una alternativa sin usar `get()`.",
+      "worked_example": "La palabra presente `cat` tiene tres caracteres y satisface el predicado de longitud máxima de tres, por lo que no se elige la alternativa. Una etiqueta distingue la línea de demostración.",
+      "common_mistakes": [
+        "Llamar a `get()` sin probar presencia y arriesgar `NoSuchElementException`.",
+        "Usar `Optional` indiscriminadamente en campos y parámetros en vez de como retorno que hace explícita la ausencia."
+      ],
+      "self_check": [
+        "¿Ejecuta `filter` su predicado si el `Optional` ya está vacío?",
+        "¿Qué ruta produce `missing` para el guion centinela?"
+      ],
+      "exercise_prompt": "Construye ausencia para el guion `-`, conserva únicamente los tokens presentes de como máximo tres caracteres y elige de forma declarativa el valor alternativo.",
+      "objective": "Separar la entrada ausente y el texto demasiado largo del texto presente aceptado de como máximo tres caracteres, sin extracción insegura.",
+      "language_delta": "`Optional` es un contenedor explícito; una referencia anulable no ofrece por sí misma una ruta de manejo mediante métodos.",
+      "prediction_prompt": "Para cada uno de los cuatro casos, marca el `Optional` como presente o vacío después de construirlo y de nuevo después de filtrarlo.",
+      "transfer_trap": "`Optional` no sustituye excepciones cuando un fallo necesita información diagnóstica."
+    },
+    "java-try-with-resources": {
+      "title": "Recursos observables con `try-with-resources`",
+      "concept": "Una declaración `try-with-resources` cierra su `AutoCloseable` tanto en salida normal como abrupta. Leer el recurso declarado hace observable su ciclo de vida.",
+      "worked_example": "El `ByteArrayInputStream` administrado contiene bytes de muestra. Dentro del bloque se leen, decodifican como UTF-8, recortan y convierten a mayúsculas antes del cierre automático.",
+      "common_mistakes": [
+        "Declarar un recurso pero seguir leyendo desde otro flujo que no está administrado.",
+        "Olvidar que un fallo de cierre puede quedar suprimido si el cuerpo ya lanzó una excepción."
+      ],
+      "self_check": [
+        "¿Qué objeto recibe con garantía `close()` al salir del bloque?",
+        "¿En qué texto deben convertirse cero bytes antes de imprimir?"
+      ],
+      "exercise_prompt": "Normaliza los bytes realmente leídos del flujo administrado y asigna a un contenido vacío su representación nombrada.",
+      "objective": "Vincular el ciclo de vida determinista del recurso con la ruta de datos que alcanza la salida.",
+      "language_delta": "La sentencia incorpora limpieza similar a RAII en el control de flujo aunque la memoria general sea recolectada.",
+      "prediction_prompt": "Sigue bytes, construcción, lectura, decodificación, `strip` y mayúsculas en ese orden.",
+      "transfer_trap": "La recolección de basura no sustituye un cierre oportuno de archivos, sockets u otros recursos externos."
+    },
+    "java-equality-hashcode": {
+      "title": "Consistencia entre igualdad y hash",
+      "concept": "La igualdad lógica debe ser reflexiva, simétrica, transitiva, consistente y segura ante nulo. Si dos objetos son iguales, sus códigos hash también deben coincidir.",
+      "worked_example": "Un `record` genera `equals` y `hashCode` por componentes; por eso dos `Point` idénticos se reducen a una entrada de `HashSet`.",
+      "common_mistakes": [
+        "Comparar una sola coordenada y declarar iguales puntos diferentes.",
+        "Sobrescribir `equals` y conservar un `hashCode` que difiera para objetos iguales."
+      ],
+      "self_check": [
+        "¿Por qué objetos desiguales pueden compartir hash aunque los iguales no pueden diferir?",
+        "¿Cómo combina `instanceof Point other` la prueba y la conversión?"
+      ],
+      "exercise_prompt": "Incluye ambas coordenadas en `equals`, conserva la regla del hash y observa después el tamaño de `HashSet`.",
+      "objective": "Implementar un contrato de valor correcto dentro de colecciones hash.",
+      "language_delta": "`Object` usa igualdad de identidad; los `record` adoptan automáticamente semántica por componentes.",
+      "prediction_prompt": "Clasifica cada pareja de puntos antes de decidir si el conjunto añade una segunda entrada.",
+      "transfer_trap": "Una buena distribución mejora el rendimiento; la igualdad que implica el mismo hash es el requisito de corrección."
+    },
+    "java-records": {
+      "title": "Punto de control: instantánea defensiva con `record`",
+      "concept": "Los `record` fijan referencias de componentes y generan miembros de valor, pero solo son superficialmente inmutables. `List.copyOf` en el constructor compacto separa la lista mutable y rechaza elementos nulos.",
+      "worked_example": "El constructor copia `[4, 5]`; añadir después otro valor a la lista original no cambia la lista almacenada, cuya suma permanece en nueve.",
+      "common_mistakes": [
+        "Llamar profundamente inmutable al `record` mientras guarda directamente una `List` mutable del llamador.",
+        "Añadir estado mutable ajeno a los componentes y romper la coherencia de igualdad y hash."
+      ],
+      "self_check": [
+        "¿Qué referencia se reasigna a la copia dentro del constructor compacto?",
+        "¿Por qué quitar un elemento de la fuente afecta al componente si ambos conservaron la misma lista?"
+      ],
+      "exercise_prompt": "Copia defensivamente el componente de lista antes de que la fuente pierda su último elemento y suma después la instantánea retenida.",
+      "objective": "Demostrar la inmutabilidad superficial y reparar la frontera de alias mediante una copia inmutable.",
+      "language_delta": "Un `record` Java es dato nominal conciso, no un grafo recursivamente congelado ni un tipo estructural TypeScript.",
+      "prediction_prompt": "Dibuja las referencias antes y después de `List.copyOf` y elimina luego el último elemento fuente.",
+      "transfer_trap": "Un componente final impide reasignar; no evita mutar un objeto almacenado sin copia defensiva."
+    },
+    "java-annotations": {
+      "title": "Metadatos de anotación en ejecución",
+      "concept": "`@Target(METHOD)` limita la colocación y `@Retention(RUNTIME)` conserva metadatos para reflexión. Sin retención en ejecución, `getAnnotation` no puede observar el prefijo.",
+      "worked_example": "La reflexión encuentra `normalize` y lee su etiqueta `trace`. La llamada normal transforma el texto y los metadatos reflejados aportan el prefijo.",
+      "common_mistakes": [
+        "Confiar en la retención predeterminada `CLASS` cuando se necesita reflexión durante la ejecución.",
+        "Buscar otra firma de método y no obtener el objeto de reflexión esperado."
+      ],
+      "self_check": [
+        "¿Qué política permite a la VM exponer la anotación a reflexión?",
+        "¿Qué destino impide colocar `Label` sobre un campo?"
+      ],
+      "exercise_prompt": "Cambia la declaración de la anotación para que sus metadatos de método sobrevivan en el programa ejecutado.",
+      "objective": "Observar mediante reflexión el valor anotado en vez de tratarlo como decoración sin uso.",
+      "language_delta": "Las anotaciones Java necesitan retención explícita para uso dinámico; muchas de tipos solo requieren visibilidad al compilar.",
+      "prediction_prompt": "Predice si `getAnnotation` devuelve objeto o nulo antes y después de añadir retención.",
+      "transfer_trap": "La retención controla disponibilidad, no comportamiento; el código todavía debe leer y aplicar los metadatos."
+    },
+    "java-sealed-classes": {
+      "title": "Formas selladas y `switch` con patrones",
+      "concept": "Una interfaz sellada restringe implementadores directos según `permits`; en una misma unidad pueden inferirse si se omite la cláusula. Java 21 deconstruye `record` en un `switch` exhaustivo sin `default`.",
+      "worked_example": "El patrón `Rect` enlaza ancho y alto y calcula su métrica. `Circle` y `Dot` siguen apareciendo como alternativas explícitas del `switch`.",
+      "common_mistakes": [
+        "Usar solo métodos virtuales y no demostrar que la jerarquía está cerrada a subtipos directos ajenos.",
+        "Añadir `default` y ocultar al compilador una forma nueva permitida."
+      ],
+      "self_check": [
+        "¿Qué componentes de `record` se multiplican en la rama rectangular?",
+        "¿Por qué puede compilar el `switch` de Java 21 sin `default`?"
+      ],
+      "exercise_prompt": "Corrige la rama con patrón `Circle` y conserva la exhaustividad sobre toda la jerarquía sellada.",
+      "objective": "Usar el conocimiento de subtipos cerrados y la deconstrucción de `record` en una expresión observable.",
+      "language_delta": "Los tipos sellados cierran nominalmente una jerarquía, a diferencia de una clase base abierta o una unión estructural inferida.",
+      "prediction_prompt": "Selecciona el patrón de cada token de forma y enlaza sus componentes antes de calcular.",
+      "transfer_trap": "Sellar controla la extensión directa; no vuelve automáticamente inmutables las instancias."
+    },
+    "java-testing-assert": {
+      "title": "Proyecto final: comprobaciones siempre activas",
+      "concept": "El proyecto combina UTF-8, métodos, `record`, colecciones, flujos, comparadores y alternativas. `assert` suele estar desactivado sin `-ea`; una regla obligatoria usa aquí un método que lanza `AssertionError`.",
+      "worked_example": "Dos registros empatados se ordenan por nombre; `check` verifica la alternativa vacía y luego se imprime un ganador etiquetado. Esa llamada se ejecuta sin depender de `-ea`.",
+      "common_mistakes": [
+        "Usar `assert` para validación obligatoria aunque el evaluador no habilita aserciones Java.",
+        "Ordenar solo por puntuación y dejar que la llegada decida los empates."
+      ],
+      "self_check": [
+        "¿Qué comprobación sigue activa cuando la JVM se inicia sin `-ea`?",
+        "¿Cómo combinan el comparador y `Optional` la selección y la alternativa vacía?"
+      ],
+      "exercise_prompt": "Completa la selección determinista del mejor usuario y conserva la comprobación explícita del resultado vacío antes de emitirlo.",
+      "objective": "Integrar la ruta principal en un programa de `record` y colecciones que pueda comprobarse siempre.",
+      "language_delta": "Tanto el `assert` de Python, eliminable bajo optimización, como el de Java, desactivado de forma predeterminada, pueden desaparecer; una llamada ordinaria se evalúa siempre.",
+      "prediction_prompt": "Ordena el empate con ambas etapas y sigue por separado la lista vacía a través de su alternativa y `check`.",
+      "transfer_trap": "Las aserciones expresan supuestos internos; la entrada no confiable exige control normal y fallos claros."
     }
   }
 }

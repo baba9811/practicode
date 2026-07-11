@@ -102,10 +102,14 @@ impl PracticodeApp {
                     LearningView::Code => self.code_area = body,
                     LearningView::Result => self.output_area = body,
                 },
-                AppMode::Problems => {
+                AppMode::Problems if wide => {
                     self.left_area = panes[0];
                     self.code_area = panes[1];
                 }
+                AppMode::Problems => match self.practice_view {
+                    PracticeView::Problem => self.left_area = body,
+                    PracticeView::Code => self.code_area = body,
+                },
             }
         }
 
@@ -133,60 +137,48 @@ impl PracticodeApp {
 
         if !self.show_output {
             if self.mode == AppMode::Home {
-                if wide {
-                    let left = Paragraph::new(self.home_text())
-                        .style(Self::pane_style(light))
-                        .block(Self::block(
-                            ui_text(&self.state.settings.ui_language, "home"),
-                            light,
-                            self.focus == Focus::Home,
-                        ))
-                        .wrap(Wrap { trim: false });
-                    frame.render_widget(left, self.home_area);
-                } else {
-                    for (area, choice, title, description) in [
-                        (
-                            self.home_learn_area,
-                            HomeChoice::Learn,
-                            ui_text(&self.state.settings.ui_language, "home_learn_choice"),
-                            ui_text(&self.state.settings.ui_language, "home_learn_description"),
+                for (area, choice, title, description) in [
+                    (
+                        self.home_learn_area,
+                        HomeChoice::Learn,
+                        ui_text(&self.state.settings.ui_language, "home_learn_choice"),
+                        ui_text(&self.state.settings.ui_language, "home_learn_description"),
+                    ),
+                    (
+                        self.home_problems_area,
+                        HomeChoice::Problems,
+                        ui_text(&self.state.settings.ui_language, "home_practice_choice"),
+                        ui_text(
+                            &self.state.settings.ui_language,
+                            "home_practice_description",
                         ),
-                        (
-                            self.home_problems_area,
-                            HomeChoice::Problems,
-                            ui_text(&self.state.settings.ui_language, "home_practice_choice"),
-                            ui_text(
-                                &self.state.settings.ui_language,
-                                "home_practice_description",
-                            ),
-                        ),
-                    ] {
-                        frame.render_widget(
-                            Paragraph::new(description)
-                                .style(Self::pane_style(light))
-                                .block(Self::block(
-                                    title,
-                                    light,
-                                    self.focus == Focus::Home && self.home_choice == choice,
-                                ))
-                                .wrap(Wrap { trim: false }),
-                            area,
-                        );
-                    }
-                    let help_area = Rect::new(
-                        self.home_area.x,
-                        self.home_problems_area.bottom(),
-                        self.home_area.width,
-                        self.home_area
-                            .bottom()
-                            .saturating_sub(self.home_problems_area.bottom()),
-                    );
+                    ),
+                ] {
                     frame.render_widget(
-                        Paragraph::new(ui_text(&self.state.settings.ui_language, "home_help"))
-                            .style(Self::pane_style(light)),
-                        help_area,
+                        Paragraph::new(description)
+                            .style(Self::pane_style(light))
+                            .block(Self::block(
+                                title,
+                                light,
+                                self.focus == Focus::Home && self.home_choice == choice,
+                            ))
+                            .wrap(Wrap { trim: false }),
+                        area,
                     );
                 }
+                let help_area = Rect::new(
+                    self.home_area.x,
+                    self.home_problems_area.bottom(),
+                    self.home_area.width,
+                    self.home_area
+                        .bottom()
+                        .saturating_sub(self.home_problems_area.bottom()),
+                );
+                frame.render_widget(
+                    Paragraph::new(ui_text(&self.state.settings.ui_language, "home_help"))
+                        .style(Self::pane_style(light)),
+                    help_area,
+                );
 
                 if self.output_area.width > 0 {
                     let right = Paragraph::new(self.home_preview_text())
@@ -252,12 +244,17 @@ impl PracticodeApp {
                 .visible_text(self.code_area.height.saturating_sub(2) as usize);
             let title = if self.mode == AppMode::Learn {
                 format!(
-                    "{} · exercise.{}",
+                    "{} · {}.{}",
                     ui_text(&self.state.settings.ui_language, "learning_view_code"),
+                    ui_text(&self.state.settings.ui_language, "pane_exercise"),
                     ext_for(&self.state.settings.language)
                 )
             } else {
-                format!("solution.{}", ext_for(&self.state.settings.language))
+                format!(
+                    "{}.{}",
+                    ui_text(&self.state.settings.ui_language, "pane_solution"),
+                    ext_for(&self.state.settings.language)
+                )
             };
             let code = Paragraph::new(code)
                 .style(Self::pane_style(light))
@@ -281,7 +278,7 @@ impl PracticodeApp {
             frame.render_widget(result, self.output_area);
         }
 
-        let status = Paragraph::new(self.status_text()).style(if light {
+        let status = Paragraph::new(self.status_text_for_width(size.width)).style(if light {
             Style::default()
                 .fg(Color::Blue)
                 .bg(Color::Rgb(219, 234, 254))
@@ -482,7 +479,13 @@ impl PracticodeApp {
         if suggestions.is_empty() || command_area.y < 3 {
             return;
         }
-        let height = ((suggestions.len() + 3) as u16).min(14).min(command_area.y);
+        let show_ai_disclosure = suggestions
+            .iter()
+            .any(|hint| matches!(hint.desc_key, "cmd_hint" | "cmd_ask" | "cmd_ai"));
+        let disclosure_rows = usize::from(show_ai_disclosure);
+        let height = ((suggestions.len() + disclosure_rows + 3) as u16)
+            .min(14)
+            .min(command_area.y);
         let area = Rect::new(
             command_area.x,
             command_area.y - height,
@@ -491,7 +494,7 @@ impl PracticodeApp {
         );
         self.command_palette_area = area;
         let selected = self.command_palette_cursor.min(suggestions.len() - 1);
-        let visible = height.saturating_sub(3) as usize;
+        let visible = height.saturating_sub(3 + disclosure_rows as u16).max(1) as usize;
         let start = selected.saturating_sub(visible.saturating_sub(1));
         let mut lines = suggestions
             .iter()
@@ -507,6 +510,11 @@ impl PracticodeApp {
                 )
             })
             .collect::<Vec<_>>();
+        if show_ai_disclosure {
+            lines.push(
+                ui_text(&self.state.settings.ui_language, "ai_context_disclosure").to_string(),
+            );
+        }
         lines.push(ui_text(&self.state.settings.ui_language, "palette_hint").to_string());
         frame.render_widget(Clear, area);
         let light = self.state.settings.theme == "light";
@@ -732,6 +740,14 @@ mod tests {
             .collect()
     }
 
+    fn status_row_text(terminal: &Terminal<TestBackend>) -> String {
+        let buffer = terminal.backend().buffer();
+        let row = buffer.area.height - 2;
+        (0..buffer.area.width)
+            .map(|x| buffer[(x, row)].symbol())
+            .collect()
+    }
+
     fn draw_at(app: &mut PracticodeApp, width: u16, height: u16) -> Terminal<TestBackend> {
         let backend = TestBackend::new(width, height);
         let mut terminal = Terminal::new(backend).unwrap();
@@ -747,12 +763,16 @@ mod tests {
 
             let _terminal = draw_at(&mut app, width, height);
 
-            assert_eq!(app.left_area, Rect::default(), "{width}x{height}");
+            assert_eq!(
+                app.left_area,
+                Rect::new(0, 0, width, height - 2),
+                "{width}x{height}"
+            );
             assert_eq!(app.output_area, Rect::default(), "{width}x{height}");
-            assert_eq!(app.code_area, Rect::new(0, 0, width, height - 2));
+            assert_eq!(app.code_area, Rect::default(), "{width}x{height}");
             assert_eq!(app.command_area.height, 1);
             if width == 80 {
-                assert!(app.code_area.width.saturating_sub(2) > 60);
+                assert!(app.left_area.width.saturating_sub(2) > 60);
             }
         }
 
@@ -810,7 +830,13 @@ mod tests {
         app.handle_command("learn python").unwrap();
 
         let _terminal = draw_at(&mut app, 80, 24);
+        assert_eq!(app.left_area, Rect::new(0, 0, 80, 22));
+
+        app.handle_key(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
+            .unwrap();
+        let _terminal = draw_at(&mut app, 80, 24);
         assert_eq!(app.code_area, Rect::new(0, 0, 80, 22));
+        assert_eq!(app.left_area, Rect::default());
 
         app.handle_key(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
             .unwrap();
@@ -865,6 +891,33 @@ mod tests {
     }
 
     #[test]
+    fn ai_palette_disclosure_is_fully_visible_at_supported_widths() {
+        for language in UI_LANGUAGES {
+            for command in ["/hint", "/ask"] {
+                for width in [60, 80, 100] {
+                    let mut app = PracticodeApp::new(tmp_root(&format!(
+                        "ai-disclosure-{language}-{command}-{width}"
+                    )))
+                    .unwrap();
+                    app.set_ui_language(language).unwrap();
+                    app.focus_command();
+                    app.command = command.to_string();
+                    app.command_cursor = char_len(command);
+
+                    let terminal = draw_at(&mut app, width, 24);
+                    let rendered = buffer_text(&terminal).replace(' ', "");
+                    let expected = ui_text(language, "ai_context_disclosure").replace(' ', "");
+                    assert!(!expected.is_empty(), "{language}: missing disclosure copy");
+                    assert!(
+                        rendered.contains(&expected),
+                        "{language} {command} {width}: {rendered}"
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
     fn narrow_home_cards_match_their_mouse_hitboxes_in_long_locales() {
         for language in ["ko", "es"] {
             let mut app = PracticodeApp::new(tmp_root(&format!("home-cards-{language}"))).unwrap();
@@ -895,6 +948,76 @@ mod tests {
     }
 
     #[test]
+    fn wide_home_cards_match_their_mouse_hitboxes_in_all_locales() {
+        for language in UI_LANGUAGES {
+            let mut app =
+                PracticodeApp::new(tmp_root(&format!("wide-home-cards-{language}"))).unwrap();
+            app.set_ui_language(language).unwrap();
+            app.action_home().unwrap();
+            let terminal = draw_at(&mut app, 140, 30);
+            let buffer = terminal.backend().buffer();
+
+            assert_eq!(
+                buffer[(app.home_problems_area.x, app.home_problems_area.y)].symbol(),
+                "┌",
+                "{language}"
+            );
+            app.handle_mouse(MouseEvent {
+                kind: MouseEventKind::Down(MouseButton::Left),
+                column: app.home_problems_area.x + 2,
+                row: app.home_problems_area.y + 2,
+                modifiers: KeyModifiers::NONE,
+            })
+            .unwrap();
+            assert_eq!(app.mode, AppMode::Problems, "{language}");
+        }
+    }
+
+    #[test]
+    fn narrow_practice_opens_on_problem_and_f6_toggles_full_width_panes() {
+        let mut app = PracticodeApp::new(tmp_root("narrow-practice-toggle")).unwrap();
+        app.action_practice().unwrap();
+
+        let _terminal = draw_at(&mut app, 60, 16);
+        assert_eq!(app.left_area, Rect::new(0, 0, 60, 14));
+        assert_eq!(app.code_area, Rect::default());
+
+        app.handle_key(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
+            .unwrap();
+        let _terminal = draw_at(&mut app, 60, 16);
+        assert_eq!(app.left_area, Rect::default());
+        assert_eq!(app.code_area, Rect::new(0, 0, 60, 14));
+
+        app.handle_key(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
+            .unwrap();
+        let _terminal = draw_at(&mut app, 60, 16);
+        assert_eq!(app.left_area, Rect::new(0, 0, 60, 14));
+        assert_eq!(app.code_area, Rect::default());
+    }
+
+    #[test]
+    fn narrow_problem_scroll_uses_wrapped_visual_rows() {
+        let mut app = PracticodeApp::new(tmp_root("wrapped-problem-scroll")).unwrap();
+        app.problem.statement.insert(
+            "en".to_string(),
+            "Read every wrapped word before editing. ".repeat(80),
+        );
+        app.action_practice().unwrap();
+        let _terminal = draw_at(&mut app, 60, 16);
+
+        for _ in 0..3 {
+            app.handle_key(KeyEvent::new(KeyCode::PageDown, KeyModifiers::NONE))
+                .unwrap();
+        }
+
+        assert!(
+            app.left_scroll > 10,
+            "scroll stopped at {}",
+            app.left_scroll
+        );
+    }
+
+    #[test]
     fn command_cursor_stays_on_the_single_input_row_with_hangul() {
         let mut app = PracticodeApp::new(tmp_root("command-cursor-ko")).unwrap();
         app.set_ui_language("ko").unwrap();
@@ -920,6 +1043,89 @@ mod tests {
                 app.action_learn("python").unwrap();
                 for (width, height) in [(60, 16), (80, 24), (100, 30), (140, 40)] {
                     let _terminal = draw_at(&mut app, width, height);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn compact_learning_status_keeps_every_primary_action_visible() {
+        for language in UI_LANGUAGES {
+            for width in [60, 80, 99, 100] {
+                let mut app =
+                    PracticodeApp::new(tmp_root(&format!("compact-status-{language}-{width}")))
+                        .unwrap();
+                app.set_ui_language(language).unwrap();
+                app.action_learn("python").unwrap();
+                let terminal = draw_at(&mut app, width, 24);
+                let row = terminal.backend().buffer().area.height - 2;
+                let rendered = (0..width)
+                    .map(|x| terminal.backend().buffer()[(x, row)].symbol())
+                    .collect::<String>();
+
+                for action in ["/next", "F5", "F6", "F1"] {
+                    assert!(
+                        rendered.contains(action),
+                        "{language} {width}: missing {action} in {rendered:?}"
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn compact_practice_status_keeps_navigation_and_judging_visible() {
+        for language in UI_LANGUAGES {
+            let mut app =
+                PracticodeApp::new(tmp_root(&format!("compact-practice-status-{language}")))
+                    .unwrap();
+            app.set_ui_language(language).unwrap();
+            app.action_practice().unwrap();
+            let terminal = draw_at(&mut app, 60, 24);
+            let row = terminal.backend().buffer().area.height - 2;
+            let rendered = (0..60)
+                .map(|x| terminal.backend().buffer()[(x, row)].symbol())
+                .collect::<String>();
+
+            for action in ["F1", "F6", "/run", "/next"] {
+                assert!(
+                    rendered.contains(action),
+                    "{language}: missing {action} in {rendered:?}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn overlay_status_takes_priority_over_mode_at_narrow_and_wide_widths() {
+        for language in UI_LANGUAGES {
+            for width in [60, 121] {
+                let cases = [
+                    ("help", "hint_output"),
+                    ("profile", "hint_settings"),
+                    ("problems", "hint_list"),
+                    ("note", "hint_notes"),
+                ];
+                for (command, hint_key) in cases {
+                    let mut app = PracticodeApp::new(tmp_root(&format!(
+                        "overlay-status-{language}-{width}-{command}"
+                    )))
+                    .unwrap();
+                    app.set_ui_language(language).unwrap();
+                    app.action_learn("python").unwrap();
+                    app.handle_command(command).unwrap();
+
+                    let terminal = draw_at(&mut app, width, 24);
+                    let rendered = status_row_text(&terminal).replace(' ', "");
+                    let expected = ui_text(language, hint_key).replace(' ', "");
+                    assert!(
+                        rendered.contains(&expected),
+                        "{language} {width} {command}: {rendered}"
+                    );
+                    assert!(
+                        !rendered.contains("F5"),
+                        "{language} {width} {command}: mode hint leaked: {rendered}"
+                    );
                 }
             }
         }
@@ -1061,6 +1267,24 @@ mod tests {
     }
 
     #[test]
+    fn output_scroll_uses_wrapped_visual_rows() {
+        let mut app = PracticodeApp::new(tmp_root("wrapped-output-scroll")).unwrap();
+        app.write_text_output(&"Inspect this wrapped output safely. ".repeat(80));
+        let _terminal = draw_at(&mut app, 60, 16);
+
+        for _ in 0..3 {
+            app.handle_key(KeyEvent::new(KeyCode::PageDown, KeyModifiers::NONE))
+                .unwrap();
+        }
+
+        assert!(
+            app.output_scroll > 10,
+            "scroll stopped at {}",
+            app.output_scroll
+        );
+    }
+
+    #[test]
     fn home_pane_title_is_active_when_home_has_focus() {
         let mut app = PracticodeApp::new(tmp_root("home-active-title")).unwrap();
 
@@ -1117,5 +1341,29 @@ mod tests {
         let text = app.output_text();
 
         assert_eq!(text.lines[0].spans[0].style.fg, Some(Color::Yellow));
+    }
+
+    #[test]
+    fn editor_pane_titles_are_localized_in_every_supported_locale() {
+        for language in UI_LANGUAGES {
+            let mut app =
+                PracticodeApp::new(tmp_root(&format!("localized-pane-title-{language}"))).unwrap();
+            app.set_ui_language(language).unwrap();
+            app.action_learn("rust").unwrap();
+            let learn = draw_at(&mut app, 120, 30);
+            let learn_text = buffer_text(&learn).replace(' ', "");
+            let expected = ui_text(language, "pane_exercise").replace(' ', "");
+            assert!(learn_text.contains(&expected), "{language}: {learn_text}");
+
+            app.action_practice().unwrap();
+            app.action_edit().unwrap();
+            let practice = draw_at(&mut app, 120, 30);
+            let practice_text = buffer_text(&practice).replace(' ', "");
+            let expected = ui_text(language, "pane_solution").replace(' ', "");
+            assert!(
+                practice_text.contains(&expected),
+                "{language}: {practice_text}"
+            );
+        }
     }
 }

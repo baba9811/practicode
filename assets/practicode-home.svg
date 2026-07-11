@@ -1,36 +1,40 @@
-<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="720" fill="#070b12"/>
-  <rect x="54" y="42" width="1092" height="636" rx="10" fill="#0b111a" stroke="#214c5c" stroke-width="2"/>
-
-  <rect x="76" y="68" width="560" height="500" rx="4" fill="#0f1720" stroke="#f8e71c" stroke-width="2"/>
-  <rect x="664" y="68" width="458" height="500" rx="4" fill="#0d141c" stroke="#00c2d1" stroke-width="2"/>
-
-  <text x="92" y="91" fill="#f8e71c" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">&gt; Home</text>
-  <text x="680" y="91" fill="#16d6e8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">Preview</text>
-
-  <text x="96" y="136" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="700">Practicode</text>
-
-  <text x="96" y="208" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="700">&gt; Learn syntax</text>
-  <text x="126" y="242" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Read a short syntax lesson.</text>
-  <text x="126" y="274" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Validate the exercise.</text>
-
-  <text x="96" y="344" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="700">  Practice coding tests</text>
-  <text x="126" y="378" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Solve stdin/stdout problems.</text>
-
-  <text x="96" y="464" fill="#a6adc8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">Arrows choose | Enter/Space open | / commands</text>
-
-  <text x="694" y="144" fill="#f8fafc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="700">Learning</text>
-  <text x="694" y="202" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Language: Python</text>
-  <text x="694" y="244" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Progress: 0/12</text>
-
-  <rect x="694" y="306" width="368" height="98" rx="4" fill="#101d28" stroke="#29495a"/>
-  <text x="718" y="346" fill="#7dd3fc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">/run validates exercises</text>
-  <text x="718" y="382" fill="#7dd3fc" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="17">/next opens the next lesson</text>
-
-  <rect x="76" y="580" width="1046" height="30" fill="#152033"/>
-  <text x="94" y="601" fill="#c8d3f5" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">PRACTICODE | home | Arrows choose | Enter/Space open | / commands</text>
-
-  <rect x="76" y="622" width="1046" height="48" rx="2" fill="#0b1017" stroke="#00c2d1" stroke-width="2"/>
-  <text x="94" y="643" fill="#16d6e8" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700">Command</text>
-  <text x="94" y="660" fill="#64748b" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Type /, move with up/down, Enter runs</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1112" height="630" viewBox="0 0 1112 630" role="img" aria-label="Practicode · Home">
+<rect width="1112" height="630" rx="14" fill="#0f172a"/>
+<rect x="1" y="1" width="1110" height="628" rx="13" fill="none" stroke="#334155"/>
+<circle cx="18" cy="18" r="5" fill="#fb7185"/><circle cx="34" cy="18" r="5" fill="#fbbf24"/><circle cx="50" cy="18" r="5" fill="#4ade80"/>
+<text x="70" y="23" fill="#94a3b8" font-size="13" font-family="ui-monospace, SFMono-Regular, Consolas, Liberation Mono, monospace">Practicode · Home</text>
+<g fill="#e5e7eb" font-size="14" font-family="ui-monospace, SFMono-Regular, Consolas, Liberation Mono, monospace" xml:space="preserve">
+<text x="16" y="48">┌&gt; Continue today's session──────────────────────┐┌Preview─────────────────────────────────────────────────────────────┐</text>
+<text x="16" y="66">│Review what's due, learn one core item, and     ││Continue today's session                                            │</text>
+<text x="16" y="84">│validate the exercise.                          ││                                                                    │</text>
+<text x="16" y="102">│                                                ││Language: Python                                                    │</text>
+<text x="16" y="120">│                                                ││Progress: 0/12                                                      │</text>
+<text x="16" y="138">│                                                ││Due: 0                                                              │</text>
+<text x="16" y="156">└────────────────────────────────────────────────┘│Next step: Language delta                                           │</text>
+<text x="16" y="174">┌Practice coding tests───────────────────────────┐│                                                                    │</text>
+<text x="16" y="192">│Solve stdin/stdout coding-test problems.        ││                                                                    │</text>
+<text x="16" y="210">│                                                ││                                                                    │</text>
+<text x="16" y="228">│                                                ││                                                                    │</text>
+<text x="16" y="246">│                                                ││                                                                    │</text>
+<text x="16" y="264">│                                                ││                                                                    │</text>
+<text x="16" y="282">└────────────────────────────────────────────────┘│                                                                    │</text>
+<text x="16" y="300">Arrows choose | Enter/Space open | / commands     │                                                                    │</text>
+<text x="16" y="318">                                                  │                                                                    │</text>
+<text x="16" y="336">                                                  │                                                                    │</text>
+<text x="16" y="354">                                                  │                                                                    │</text>
+<text x="16" y="372">                                                  │                                                                    │</text>
+<text x="16" y="390">                                                  │                                                                    │</text>
+<text x="16" y="408">                                                  │                                                                    │</text>
+<text x="16" y="426">                                                  │                                                                    │</text>
+<text x="16" y="444">                                                  │                                                                    │</text>
+<text x="16" y="462">                                                  │                                                                    │</text>
+<text x="16" y="480">                                                  │                                                                    │</text>
+<text x="16" y="498">                                                  │                                                                    │</text>
+<text x="16" y="516">                                                  │                                                                    │</text>
+<text x="16" y="534">                                                  │                                                                    │</text>
+<text x="16" y="552">                                                  │                                                                    │</text>
+<text x="16" y="570">                                                  └────────────────────────────────────────────────────────────────────┘</text>
+<text x="16" y="588"> F1 help | arrows choose | Enter open                                                                                   </text>
+<text x="16" y="606">Command: Type /, move with up/down, Enter runs                                                                          </text>
+</g>
 </svg>

@@ -4,439 +4,526 @@
   "ui_language": "zh",
   "lessons": {
     "rust-output": {
-      "title": "输出",
-      "concept": "输出 的 Rust 语法目标是：用 println! 格式化值，并精确匹配评测需要的 stdout。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示输出的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "让标准输出精确匹配",
+      "concept": "宏 `println!` 会在编译期检查格式字符串与实参关系，并在渲染文本后恰好附加一个换行；格式字符串中的标点同样属于输出。",
+      "worked_example": "示例用连字符连接工具名与版本号，展示捕获式格式参数以及整数的自动格式化，却没有复制练习要求的冒号记录。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把输出的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决输出练习里的 TODO。",
-        "没有确认“输出 的 Rust 语法目标是：用 println!”这个要点，只去凑 judge 输出。"
+        "忘记感叹号，把 `println!` 当成普通函数调用。",
+        "在冒号两侧增加空格，数值虽对但标准输出已经改变。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用输出，然后才到达 `example:` 输出？",
-        "输出练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "格式字符串产生哪些字符，宏又额外增加哪一个字符？",
+        "若契约不允许末尾换行，应选择 `print!` 还是 `println!`？"
       ],
-      "exercise_prompt": "完成 TODO，把输出应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "读取姓名与分数，通过格式字符串生成案例要求的分隔记录，再由 `println!` 写出；冒号周围不得有空格，行尾只能出现一次。",
+      "objective": "产生经过编译期格式检查且字节与标准输出契约一致的一行文本。",
+      "language_delta": "Rust 格式化把模板与带类型实参分开，并在编译期验证两者关系，不必依赖多次字符串连接。",
+      "prediction_prompt": "运行前判断花括号外的标点是否会随每个替换值重复，并写出最终行尾。",
+      "transfer_trap": "`println!` 不是普通可变参数函数，而是使用静态已知格式字符串展开的宏。"
     },
     "rust-variables": {
-      "title": "绑定与可变性",
-      "concept": "绑定与可变性 的 Rust 语法目标是：优先使用不可变 let 绑定，只在值确实变化的位置使用 mut。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示绑定与可变性的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "用一个可变绑定追踪状态",
+      "concept": "`mut` 允许对同一储存位置再次赋值；随后同名的 `let` 是遮蔽，会创建新绑定，甚至可以改变类型，并非修改旧绑定。",
+      "worked_example": "示例先把 `value` 从 2 改为 5，再以同名新绑定保存其两倍。一次赋值与一次遮蔽在短程序中分别可见。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把绑定与可变性的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决绑定与可变性练习里的 TODO。",
-        "没有确认“绑定与可变性 的 Rust 语法目标是：优先使用不可变 let 绑定，只在值确实变化的位置使用 mut。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "未声明 `mut` 就使用增强赋值，编译器会拒绝写入。",
+        "把遮蔽描述为原地更新，忽略旧绑定在何时不可再访问。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用绑定与可变性，然后才到达 `example:` 输出？",
-        "绑定与可变性练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "示例哪一行修改储存，哪一行建立同名新绑定？",
+        "标签只在累加后输出，是否因此也需要 `mut`？"
       ],
-      "exercise_prompt": "完成 TODO，把绑定与可变性应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "保持第一个标签绑定不可变，把其后每个整数加入一个从加法单位元开始的可变累加器；不得使用乘积或依赖固定项数。",
+      "objective": "清楚区分有意变化的运行总和与始终不变的上下文标签。",
+      "language_delta": "Rust 要求显式声明绑定可变性；遮蔽却可以在不使用 `mut` 的情况下建立不同类型的新值。",
+      "prediction_prompt": "检查最终格式行前，先预测循环每次迭代后的累计总和。",
+      "transfer_trap": "后续数字元组练习会加入显式数值类型与元组访问，但 `mut` 和遮蔽的区别保持不变。"
     },
     "rust-numbers-tuples": {
-      "title": "数字与元组",
-      "concept": "数字与元组 的 Rust 语法目标是：结合显式数字类型与 pair.0、pair.1 这样的元组字段访问。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示数字与元组的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "用元组观察有符号除法",
+      "concept": "对合法 `i64` 操作数，`/` 的商朝零截断，`%` 返回配套余数。除数保证非零，并排除会溢出的 `i64::MIN / -1` 组合。",
+      "worked_example": "23 除以 4 产生正商 5 与余数 3，可分别通过元组位置 `.0` 和 `.1` 观察。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把数字与元组的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决数字与元组练习里的 TODO。",
-        "没有确认“数字与元组 的 Rust 语法目标是：结合显式数字类型与 pair.0、pair.1 这样的元组字段访问。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "沿用 Python 向下取整直觉，负被除数时得到错误商。",
+        "交换元组位置，代码仍能编译却反转输出字段。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用数字与元组，然后才到达 `example:` 输出？",
-        "数字与元组练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "-17 除以 5 时，截断朝零还是朝负无穷？",
+        "如何核验除法恒等式，并指出被排除的溢出组合？"
       ],
-      "exercise_prompt": "完成 TODO，把数字与元组应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-strings": {
-      "title": "字符串",
-      "concept": "字符串 的 Rust 语法目标是：区分何时需要拥有所有权的 String，何时借用的 &str 切片就足够。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示字符串的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把字符串的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决字符串练习里的 TODO。",
-        "没有确认“字符串 的 Rust 语法目标是：区分何时需要拥有所有权的 String，何时借用的 &str 切片就足够。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用字符串，然后才到达 `example:` 输出？",
-        "字符串练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把字符串应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-control-flow": {
-      "title": "控制流",
-      "concept": "控制流 的 Rust 语法目标是：把 if 当作表达式并用 for 范围构造值，而不是机械地写分支。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示控制流的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把控制流的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决控制流练习里的 TODO。",
-        "没有确认“控制流 的 Rust 语法目标是：把 if 当作表达式并用 for 范围构造值，而不是机械地写分支。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用控制流，然后才到达 `example:` 输出？",
-        "控制流练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把控制流应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-functions": {
-      "title": "函数",
-      "concept": "函数 的 Rust 语法目标是：用参数类型和返回类型清楚表达计算边界。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示函数的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把函数的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决函数练习里的 TODO。",
-        "没有确认“函数 的 Rust 语法目标是：用参数类型和返回类型清楚表达计算边界。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用函数，然后才到达 `example:` 输出？",
-        "函数练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把函数应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-structs-impl": {
-      "title": "结构体与 impl",
-      "concept": "结构体与 impl 的 Rust 语法目标是：把领域字段组织到 struct 中，并把依赖这些字段的行为放进 impl。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示结构体与 impl的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把结构体与 impl的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决结构体与 impl练习里的 TODO。",
-        "没有确认“结构体与 impl 的 Rust 语法目标是：把领域字段组织到 struct 中，并把依赖这些字段的行为放进 impl。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用结构体与 impl，然后才到达 `example:` 输出？",
-        "结构体与 impl练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把结构体与 impl应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-enum-match": {
-      "title": "枚举与 match",
-      "concept": "枚举与 match 的 Rust 语法目标是：用 enum 变体建模不同情况，并用 match 穷尽处理每一种情况。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示枚举与 match的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把枚举与 match的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决枚举与 match练习里的 TODO。",
-        "没有确认“枚举与 match 的 Rust 语法目标是：用 enum 变体建模不同情况，并用 match 穷尽处理每一种情况。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用枚举与 match，然后才到达 `example:` 输出？",
-        "枚举与 match练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把枚举与 match应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-option": {
-      "title": "Option 与 if let",
-      "concept": "Option 与 if let 的 Rust 语法目标是：用 Option<T> 明确表示可能缺失的值，并安全处理 Some 分支。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Option 与 if let的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把Option 与 if let的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Option 与 if let练习里的 TODO。",
-        "没有确认“Option 与 if let 的 Rust 语法目标是：用 Option<T> 明确表示可能缺失的值，并安全处理 Some 分支。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用Option 与 if let，然后才到达 `example:` 输出？",
-        "Option 与 if let练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把Option 与 if let应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-modules-use": {
-      "title": "模块与 use",
-      "concept": "模块与 use 的 Rust 语法目标是：用 mod、pub、use 控制命名空间、可见性与本地路径。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示模块与 use的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把模块与 use的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决模块与 use练习里的 TODO。",
-        "没有确认“模块与 use 的 Rust 语法目标是：用 mod、pub、use 控制命名空间、可见性与本地路径。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用模块与 use，然后才到达 `example:` 输出？",
-        "模块与 use练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把模块与 use应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "解析两个整数，确认除数非零且不出现最小整数除以负一，再按商、余数顺序建立元组并输出两个位置。",
+      "objective": "尊重 Rust 有符号算术，同时正确计算并拆解一个双值结果。",
+      "language_delta": "Rust 整数 `/` 在符号不同时朝零截断，Python 的 `//` 却朝负无穷取整。",
+      "prediction_prompt": "调用 `rustc` 前，计算混合符号案例的商与余数。",
+      "transfer_trap": "不能仅凭斜线符号推断浮点除法；这里的整数操作数决定了截断行为。"
     },
     "rust-input": {
-      "title": "输入解析",
-      "concept": "输入解析 的 Rust 语法目标是：一次读取 stdin，把文本拆成 token，再转换成有类型的值。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示输入解析的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "消费空白分隔的输入流",
+      "concept": "`Read::read_to_string` 把完整标准输入填入自有 `String`，随后 `split_whitespace` 跨任意行边界访问每个片段；空输入产生空迭代器。",
+      "worked_example": "字节切片同样实现 `Read`，因此示例可确定地练习 `read_to_string`，无需依赖交互终端。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把输入解析的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决输入解析练习里的 TODO。",
-        "没有确认“输入解析 的 Rust 语法目标是：一次读取 stdin，把文本拆成 token，再转换成有类型的值。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "只读一行，悄悄遗漏换行后的合法片段。",
+        "在未保证输入有效时随意 `unwrap`，把畸形数据变成难解释的崩溃。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用输入解析，然后才到达 `example:` 输出？",
-        "输入解析练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "空迭代器调用 `sum` 为何得到加法单位元？",
+        "哪个导入特征让标准输入拥有 `read_to_string` 方法？"
       ],
-      "exercise_prompt": "完成 TODO，把输入解析应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "把标准输入读到结束，按所有空白解析保证合法的有符号整数，并用加法汇总；单行、多行与空输入不得采用不同捷径。",
+      "objective": "通过一条片段化路径处理单行、多行和空的合法输入。",
+      "language_delta": "Rust 数字解析返回 `Result` 而不执行隐式强制转换；此处只有因为契约保证整数片段才可使用 `unwrap`。",
+      "prediction_prompt": "先判断 `split_whitespace` 后，多行案例与用空格写在一行的案例是否仍有差异。",
+      "transfer_trap": "后续 `Vec` 与 `HashMap` 会复用这份自有片段缓冲，同时表达有序值与按键频率。"
     },
     "rust-vec-hashmap": {
-      "title": "Vec 与 HashMap",
-      "concept": "Vec 与 HashMap 的 Rust 语法目标是：有顺序的数据使用 Vec，按键计数和查找使用 HashMap 的 entry API。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Vec 与 HashMap的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "组合顺序序列与按键查找",
+      "concept": "第一个片段是查询，其余借用词按顺序保存在 `Vec`，同时由 `HashMap` 的 `entry` 接口记录频率。标准散列表不承诺迭代顺序。",
+      "worked_example": "示例统计 red、blue、red 三个颜色标签，最后只输出两个不同键的数量，没有打印任何次序未定义的映射遍历结果。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把Vec 与 HashMap的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Vec 与 HashMap练习里的 TODO。",
-        "没有确认“Vec 与 HashMap 的 Rust 语法目标是：有顺序的数据使用 Vec，按键计数和查找使用 HashMap 的 entry API。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "直接打印 `HashMap` 迭代结果，使输出依赖未指定顺序。",
+        "使用索引读取缺失查询，导致程序崩溃。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用Vec 与 HashMap，然后才到达 `example:` 输出？",
-        "Vec 与 HashMap练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "哪个容器回答值的总数，哪个回答查询出现次数？",
+        "为何 `get`、`copied` 与 `unwrap_or` 能不修改映射地处理缺键？"
       ],
-      "exercise_prompt": "完成 TODO，把Vec 与 HashMap应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "保持全部值片段的原顺序，并通过 `entry` 填充频率映射，最后报告值数量和查询次数；缺失查询不得插入或崩溃。",
+      "objective": "在同一程序中为有序储存选择 `Vec`，为安全按键聚合选择 `HashMap`。",
+      "language_delta": "不同于某些保持插入次序的字典，Rust 标准 `HashMap` 有意不提供迭代顺序保证。",
+      "prediction_prompt": "追踪查询缺失案例，并判断 `get` 是否会创建任何映射条目。",
+      "transfer_trap": "无需用两次查找替代 `entry`；占用或空缺操作已经直接表达更新意图。"
     },
-    "rust-borrowing-slices": {
-      "title": "借用与切片",
-      "concept": "借用与切片 的 Rust 语法目标是：传递借用的切片，让函数读取数据而不取得所有权。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示借用与切片的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "rust-control-flow": {
+      "title": "让分支返回标签",
+      "concept": "Rust 的 `if` 是表达式，奇偶分支会产生稍后输出的字符串；两个分支必须具有兼容类型。范围 `1..=n` 包含终点。",
+      "worked_example": "示例先根据七大于五选择就绪标签，再独立消费从一到三且包含终点的整数范围，计算出对应三角数六。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把借用与切片的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决借用与切片练习里的 TODO。",
-        "没有确认“借用与切片 的 Rust 语法目标是：传递借用的切片，让函数读取数据而不取得所有权。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "写成 `1..n`，漏掉上界并改变每个正数总和。",
+        "一条分支返回字符串、另一条返回整数，使单个表达式没有统一类型。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用借用与切片，然后才到达 `example:` 输出？",
-        "借用与切片练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "`1..=0` 产生什么序列，`sum` 对它返回哪个单位元？",
+        "奇偶判断与总和计算的先后会改变所有权吗？"
       ],
-      "exercise_prompt": "完成 TODO，把借用与切片应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-result": {
-      "title": "Result 与 ?",
-      "concept": "Result 与 ? 的 Rust 语法目标是：用 Result<T, E> 返回可恢复错误，并用 ? 运算符向调用方传播。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Result 与 ?的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把Result 与 ?的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Result 与 ?练习里的 TODO。",
-        "没有确认“Result 与 ?”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用Result 与 ?，然后才到达 `example:` 输出？",
-        "Result 与 ?练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把Result 与 ?应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-ownership": {
-      "title": "所有权与借用",
-      "concept": "所有权与借用 的 Rust 语法目标是：追踪 String 何时移动、何时返回，以及引用何时只是借用它。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示所有权与借用的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把所有权与借用的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决所有权与借用练习里的 TODO。",
-        "没有确认“所有权与借用 的 Rust 语法目标是：追踪 String 何时移动、何时返回，以及引用何时只是借用它。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用所有权与借用，然后才到达 `example:` 输出？",
-        "所有权与借用练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把所有权与借用应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "把输入分类为奇数或偶数，再与从一到输入值的包含终点总和配成一条记录；零应形成空范围和偶数标签。",
+      "objective": "从带类型的分支表达式与边界敏感的范围计算构造一次输出。",
+      "language_delta": "Rust 条件必须是 `bool`，不存在 C、JavaScript 或 Python 式数字真假性。",
+      "prediction_prompt": "输入四时，先列出范围中每个元素，再预测显示的总和。",
+      "transfer_trap": "迭代器练习会以惰性适配器重述遍历，此处先把同等范围边界清楚展示。"
     },
     "rust-iterators": {
-      "title": "迭代器与闭包",
-      "concept": "迭代器与闭包 的 Rust 语法目标是：用闭包组合惰性 iterator 适配器，并用 sum 或 collect 消费它们。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示迭代器与闭包的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "由终止求和驱动筛选与映射",
+      "concept": "解析产生自有整数；`filter` 为谓词借用候选项，`map` 接收通过者，最终 `sum` 才真正消费整条流水线。",
+      "worked_example": "无界范围之所以安全，是因为 `take` 在 `collect` 请求具体 `Vec` 前限制了消费数量。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把迭代器与闭包的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决迭代器与闭包练习里的 TODO。",
-        "没有确认“迭代器与闭包 的 Rust 语法目标是：用闭包组合惰性 iterator 适配器，并用 sum 或 collect 消费它们。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "只创建筛选与映射适配器，没有终止操作，因此任何转换都未发生。",
+        "省略平方映射，算成偶数原值之和。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用迭代器与闭包，然后才到达 `example:` 输出？",
-        "迭代器与闭包练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "迭代在调用哪个方法时真正开始？",
+        "零为何通过偶数谓词，却在平方后不增加结果？"
       ],
-      "exercise_prompt": "完成 TODO，把迭代器与闭包应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "解析整数流，惰性保留偶数并平方，再由一个终止 `sum` 消费为总和；负数与全奇数输入都不建立中间集合。",
+      "objective": "通过所有权明确的适配器和一个终止消费者表达多阶段遍历。",
+      "language_delta": "Rust 迭代链类似其他语言的流，但适配器类型还编码借用方式与元素所有权。",
+      "prediction_prompt": "对 -2、-1、0，依次预测筛选后与映射后的项目序列。",
+      "transfer_trap": "不要在每个适配器间 `collect`；`sum` 可直接拉取元素，中间 `Vec` 没有必要。"
+    },
+    "rust-functions": {
+      "title": "检查点：值穿过函数边界",
+      "concept": "面积函数按值接收两个 `i64`，并由末尾表达式返回 `i64`；入口函数继续独自负责读取与输出。末尾分号会把块结果改成单元值。",
+      "worked_example": "独立问候函数借助 `format!` 返回分配的 `String`，用非数值数据展示表达式返回写法。",
+      "common_mistakes": [
+        "在宽乘高后添加分号，使函数体结果变成单元值。",
+        "在面积函数中打印而不是返回，把计算耦合到单一输出场景。"
+      ],
+      "self_check": [
+        "面积函数能否连续调用两次而不保留第一次隐藏状态？",
+        "签名的哪一段向编译器与调用方承诺返回 `i64`？"
+      ],
+      "exercise_prompt": "解析宽高，调用没有隐藏状态的面积函数，并只输出其返回值；乘法必须作为正确类型的末尾表达式，不能改在入口重复计算。",
+      "objective": "在可复用函数边界区分带类型计算、标准输入与标准输出。",
+      "language_delta": "Rust 末尾表达式无需写 `return`，但分号位置会直接改变块的语义与类型。",
+      "prediction_prompt": "编译前分别预测乘法末尾有分号与无分号时的函数体类型。",
+      "transfer_trap": "模块、泛型、特征和宏会扩展此边界，但都不改变返回表达式与输出职责的区分。"
+    },
+    "rust-modules-use": {
+      "title": "缩短公开模块路径",
+      "concept": "模块用 `pub` 暴露评分函数，`use` 在外围作用域引入短名称；可见性和名称解析是两项独立决定。",
+      "worked_example": "嵌套 `units` 中的项目公开后先被导入，入口再调用它，完整展示从限定路径到短名称的过程。",
+      "common_mistakes": [
+        "为私有同级函数添加 `use`，却以为能绕过隐私规则。",
+        "从错误模块写相对路径，解析到不同命名空间或直接失败。"
+      ],
+      "self_check": [
+        "没有 `use` 时，入口能直接调用 `grading::verdict` 吗？",
+        "哪个关键字决定模块外代码能否调用评分函数？"
+      ],
+      "exercise_prompt": "保留评分函数的公开性与导入路径，只修正包含边界，使 80 分及以上都通过；79、80、91 应展示边界两侧。",
+      "objective": "通过 `use` 解析公开项目，并应用包含 80 分的分类规则。",
+      "language_delta": "Rust `use` 更像词法别名，而不是在运行时加载包的导入操作。",
+      "prediction_prompt": "先判断 79、80、91 的结果，再说明 `use` 只改变路径还是也改变函数行为。",
+      "transfer_trap": "Cargo 包和 crate 定义更大的构建边界，此单文件练习只覆盖语言模块及路径。"
     },
     "rust-generics": {
-      "title": "泛型",
-      "concept": "泛型 的 Rust 语法目标是：编写作用于 T 的函数，同时保留编译期的具体类型检查。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示泛型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "从泛型切片复制最后元素",
+      "concept": "辅助函数接收实现 `Copy` 的任意 `T` 的共享切片；`copied` 把 `Option<&T>` 变为 `Option<T>`，并未声称每种 Rust 类型都能廉价复制。",
+      "worked_example": "配套函数从借用的 `[8_u8, 9]` 数组取得首个 `u8`，再以调试格式展示其 `Option` 结果，全程无需强制转换。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把泛型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决泛型练习里的 TODO。",
-        "没有确认“泛型 的 Rust 语法目标是：编写作用于 T 的函数，同时保留编译期的具体类型检查。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "省略 `Copy` 约束，便无法通过 `copied` 取出 `T` 值。",
+        "无条件调用 `clone`，扩大到 `Clone` 并可能隐藏昂贵操作。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用泛型，然后才到达 `example:` 输出？",
-        "泛型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "函数借用了什么，又返回了哪个小值？",
+        "`String` 是否满足该约束；若不满足，接口是否应返回引用？"
       ],
-      "exercise_prompt": "完成 TODO，把泛型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "实现泛型切片最后元素辅助函数，并把它用于解析后的整数切片；不得移动切片内容，也不要把精确的 `Copy` 约束扩大。",
+      "objective": "使用恰好能证明共享借用中复制值合理的特征约束。",
+      "language_delta": "泛型写法类似模板，但 Rust 检查一个受约束定义，而不是等到后续展开才接受任意操作。",
+      "prediction_prompt": "入口调用 `unwrap` 前，预测单元素切片产生的 `Option`。",
+      "transfer_trap": "不要为熟悉感改用更宽的 `Clone`；数值练习真正需要的行为就是 `Copy`。"
     },
     "rust-traits": {
-      "title": "trait 与边界",
-      "concept": "trait 与边界 的 Rust 语法目标是：用 trait 描述所需行为，并用边界在泛型代码中调用该行为。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示trait 与边界的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "借用实现共享摘要行为",
+      "concept": "分数卡通过借用 `self` 实现摘要特征，泛型渲染函数接受任何满足该约束的借用值，并返回生成文本，不会取得卡片所有权。",
+      "worked_example": "`Size` 示例为任意元素类型的 `Vec` 实现返回长度的小型行为，再以普通点语法在三项向量上调用方法。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把trait 与边界的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决trait 与边界练习里的 TODO。",
-        "没有确认“trait 与边界 的 Rust 语法目标是：用 trait 描述所需行为，并用边界在泛型代码中调用该行为。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "试图从共享借用移出姓名字段，既不允许也没有格式化必要。",
+        "把渲染参数固定为分数卡，丢失特征契约提供的复用。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用trait 与边界，然后才到达 `example:` 输出？",
-        "trait 与边界练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "调用摘要后，卡片是否仍归原所有者使用？",
+        "泛型函数在哪里声明 `T` 必须实现摘要特征？"
       ],
-      "exercise_prompt": "完成 TODO，把trait 与边界应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-lifetimes": {
-      "title": "生命周期",
-      "concept": "生命周期 的 Rust 语法目标是：标注借用输入与借用输出之间的关系，而不是延长存储时间。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示生命周期的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把生命周期的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决生命周期练习里的 TODO。",
-        "没有确认“生命周期 的 Rust 语法目标是：标注借用输入与借用输出之间的关系，而不是延长存储时间。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用生命周期，然后才到达 `example:` 输出？",
-        "生命周期练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把生命周期应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-traits-lifetimes": {
-      "title": "trait 对象与 dyn 分发",
-      "concept": "trait 对象与 dyn 分发 的 Rust 语法目标是：当运行时分发的灵活性比单一泛型类型更重要时使用 &dyn Trait。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示trait 对象与 dyn 分发的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把trait 对象与 dyn 分发的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决trait 对象与 dyn 分发练习里的 TODO。",
-        "没有确认“trait 对象与 dyn 分发 的 Rust 语法目标是：当运行时分发的灵活性比单一泛型类型更重要时使用 &dyn Trait。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用trait 对象与 dyn 分发，然后才到达 `example:` 输出？",
-        "trait 对象与 dyn 分发练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把trait 对象与 dyn 分发应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-testing": {
-      "title": "测试与断言",
-      "concept": "测试与断言 的 Rust 语法目标是：把纯逻辑从 main 分离出来，让 #[test] 函数和 assert 宏验证行为。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示测试与断言的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把测试与断言的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决测试与断言练习里的 TODO。",
-        "没有确认“测试与断言 的 Rust 语法目标是：把纯逻辑从 main 分离出来，让 #[test] 函数和 assert 宏验证行为。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用测试与断言，然后才到达 `example:` 输出？",
-        "测试与断言练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把测试与断言应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-smart-pointers": {
-      "title": "智能指针",
-      "concept": "智能指针 的 Rust 语法目标是：用 Box<T> 拥有堆上的数据，同时利用类似指针的解引用行为。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示智能指针的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把智能指针的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决智能指针练习里的 TODO。",
-        "没有确认“智能指针 的 Rust 语法目标是：用 Box<T> 拥有堆上的数据，同时利用类似指针的解引用行为。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用智能指针，然后才到达 `example:` 输出？",
-        "智能指针练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把智能指针应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-interior-mutability": {
-      "title": "内部可变性",
-      "concept": "内部可变性 的 Rust 语法目标是：当运行时借用检查是最简单且正确的模型时使用 RefCell<T>。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示内部可变性的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把内部可变性的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决内部可变性练习里的 TODO。",
-        "没有确认“内部可变性 的 Rust 语法目标是：当运行时借用检查是最简单且正确的模型时使用 RefCell<T>。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用内部可变性，然后才到达 `example:` 输出？",
-        "内部可变性练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把内部可变性应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-concurrency": {
-      "title": "线程与 join",
-      "concept": "线程与 join 的 Rust 语法目标是：把工作移动到 thread::spawn 中，并用 join 安全取回 worker 结果。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示线程与 join的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把线程与 join的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决线程与 join练习里的 TODO。",
-        "没有确认“线程与 join 的 Rust 语法目标是：把工作移动到 thread::spawn 中，并用 join 安全取回 worker 结果。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用线程与 join，然后才到达 `example:` 输出？",
-        "线程与 join练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把线程与 join应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-shared-state": {
-      "title": "Arc 与 Mutex 的共享状态",
-      "concept": "Arc 与 Mutex 的共享状态 的 Rust 语法目标是：用 Arc<T> 共享所有权，并用 Mutex<T> 保证一次只允许一个修改。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Arc 与 Mutex 的共享状态的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把Arc 与 Mutex 的共享状态的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Arc 与 Mutex 的共享状态练习里的 TODO。",
-        "没有确认“Arc 与 Mutex 的共享状态 的 Rust 语法目标是：用 Arc<T> 共享所有权，并用 Mutex<T> 保证一次只允许一个修改。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用Arc 与 Mutex 的共享状态，然后才到达 `example:` 输出？",
-        "Arc 与 Mutex 的共享状态练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把Arc 与 Mutex 的共享状态应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-async-await": {
-      "title": "async 与 await",
-      "concept": "async 与 await 的 Rust 语法目标是：理解 async 会创建 Future，而运行它需要 executor 或 runtime。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示async 与 await的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把async 与 await的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决async 与 await练习里的 TODO。",
-        "没有确认“async 与 await 的 Rust 语法目标是：理解 async 会创建 Future，而运行它需要 executor 或 runtime。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用async 与 await，然后才到达 `example:` 输出？",
-        "async 与 await练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把async 与 await应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "从输入建立分数卡，并通过受摘要特征约束的辅助函数借用姓名与分数进行渲染；不得克隆或移出自有字段。",
+      "objective": "定义共享行为，并在不放弃实现值所有权的前提下调用它。",
+      "language_delta": "Rust 特征可通过泛型提供静态分派，不需要继承式对象层次。",
+      "prediction_prompt": "判断两个互不相关、但都实现摘要特征的结构能否交给同一渲染函数。",
+      "transfer_trap": "不要为了消除借用错误就克隆自有字段，格式化接口本来可以接收可显示值的引用。"
     },
     "rust-macros": {
-      "title": "macro_rules!",
-      "concept": "macro_rules! 的 Rust 语法目标是：用 macro_rules! 匹配 token 模式，并在编译期展开重复的 Rust 代码。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示macro_rules!的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "在导出宏中卫生地引用定义方 crate",
+      "concept": "导出的 `greet!` 展开为 `$crate::helper`，先把辅助函数解析锚定在定义方 crate 根，再像普通代码一样进行类型检查。",
+      "worked_example": "嵌套模块中的 `caller::run` 调用导出宏 `increment!`，但 `$crate` 仍把 `helper` 解析到定义方 crate 根。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把macro_rules!的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决macro_rules!练习里的 TODO。",
-        "没有确认“macro_rules!”这个要点，只去凑 judge 输出。"
+        "忘记感叹号，编译器便寻找普通函数而不是调用宏。",
+        "在展开中使用输入表达式两次，使其中副作用也执行两次。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用macro_rules!，然后才到达 `example:` 输出？",
-        "macro_rules!练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "从不同路径调用宏时，`$crate` 为何仍能稳定找到辅助函数？",
+        "宏匹配结束后，展开的辅助调用在哪里接受类型检查？"
       ],
-      "exercise_prompt": "完成 TODO，把macro_rules!应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "rust-unsafe": {
-      "title": "unsafe Rust",
-      "concept": "unsafe Rust 的 Rust 语法目标是：把编译器无法验证的操作放入 unsafe 块，同时让周围 API 尽量保持安全。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示unsafe Rust的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把unsafe Rust的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决unsafe Rust练习里的 TODO。",
-        "没有确认“unsafe Rust 的 Rust 语法目标是：把编译器无法验证的操作放入 unsafe 块，同时让周围 API 尽量保持安全。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用unsafe Rust，然后才到达 `example:` 输出？",
-        "unsafe Rust练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把unsafe Rust应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "补全定义方 crate 根的问候辅助函数，让嵌套调用者经 `#[macro_export]` 与 `$crate` 取得正确结果；输入姓名只在入口去空白一次。",
+      "objective": "导出一个通过 `$crate` 卫生解析辅助函数的宏。",
+      "language_delta": "宏在运行时之前操作 Rust 语法，不是字符串替换，也不是反射。",
+      "prediction_prompt": "在嵌套调用函数中展开 `crate::greet!(name)`，指出 `rustc` 解析的确切辅助路径。",
+      "transfer_trap": "导出宏若要调用自身 crate 的辅助项目，调用方相对路径很脆弱，必须由 `$crate` 锚定。"
     },
     "rust-cargo-workspaces": {
-      "title": "Cargo 包与工作空间",
-      "concept": "Cargo 包与工作空间 的 Rust 语法目标是：理解何时需要超出单文件的 Cargo 包结构与 cargo check --workspace。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Cargo 包与工作空间的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "识别 Cargo 工作空间命令范围",
+      "concept": "工作空间协调多个成员包与共享构建目录。此单文件运行器只能验证面向全部成员的命令文本，不能创建清单或证明真实多包构建。",
+      "worked_example": "示例打印元数据检查命令，并明确不暗示纯 `rustc` 文件已经加载任何 Cargo 清单。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把Cargo 包与工作空间的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Cargo 包与工作空间练习里的 TODO。",
-        "没有确认“Cargo 包与工作空间 的 Rust 语法目标是：理解何时需要超出单文件的 Cargo 包结构与 cargo check --workspace。阅读示例时，依次追踪值在哪里创建、在哪里移动或借用，以及哪个表达式最终到达 stdout。”这个要点，只去凑 judge 输出。"
+        "在某个成员内运行普通测试，却以为必然覆盖工作空间每个成员。",
+        "把三条文本映射当作已经验证工作空间配置。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用Cargo 包与工作空间，然后才到达 `example:` 输出？",
-        "Cargo 包与工作空间练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "哪个标志让 `cargo check` 或 `cargo test` 选择整个工作空间？",
+        "格式化命令为何在双连字符后把检查参数转交给 `rustfmt`？"
       ],
-      "exercise_prompt": "完成 TODO，把Cargo 包与工作空间应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "仅把 `check`、`test`、`fmt` 三种意图映射为文档规定的工作空间命令；不要声称执行真实多包构建，也不得混淆 Cargo 与 `rustfmt` 参数。",
+      "objective": "识别安全的全工作空间维护命令，同时如实限定运行器能力。",
+      "language_delta": "Cargo 工作空间属于构建工具，并非普通 `rustc` 能验证的 Rust 语言构造。",
+      "prediction_prompt": "意图为 `fmt` 时，区分哪些参数由 Cargo 处理，哪些传给 `rustfmt`。",
+      "transfer_trap": "只有评测器能创建临时工作空间并检查真实成员行为后，此主题才适合提升为核心路径。"
+    },
+    "rust-ownership": {
+      "title": "转移并取回 `String` 所有权",
+      "concept": "入口先在原 `String` 缓冲中就地删除行尾，再把所有者移动给描述函数。`String` 元数据包含指针、长度和容量；非空值拥有 `UTF-8` 缓冲，空值可能不分配。",
+      "worked_example": "`wrap` 消费 `String` 的元数据并取得既有缓冲所有权，移动后入口不能再次使用旧绑定。",
+      "common_mistakes": [
+        "按值传递后仍读取调用方绑定，触发已移动值错误。",
+        "每逢所有权错误就增加 `clone`，制造不必要的分配而不调整参数或返回形态。"
+      ],
+      "self_check": [
+        "所有权在何次调用离开入口，又在何种模式绑定中回来？",
+        "为何描述函数可先调用 `len`，随后再把文本移入元组？"
+      ],
+      "exercise_prompt": "在原标准输入 `String` 中去掉 `CR` 与 `LF` 行尾，再把同一所有者移动进描述函数，并连同 `UTF-8` 字节长度返回；禁止克隆。",
+      "objective": "不复制缓冲地跨按值函数边界移动并返回同一个 `String`，空输入可以保持无分配。",
+      "language_delta": "移动 `String` 会转移固定大小的指针、长度和容量元数据，既不复制堆缓冲，也不是只传一个指针字。",
+      "prediction_prompt": "先预测 é 的字节数，再与后续 Unicode 标量计数区分。",
+      "transfer_trap": "`Box` 与 `Arc` 表达其他所有权结构，`RefCell` 把借用检查延后；普通移动应先于这些扩展掌握。"
+    },
+    "rust-smart-pointers": {
+      "title": "间接拥有递归节点",
+      "concept": "递归列表的 `Cons` 通过 `Box<List>` 保存尾部，使每个枚举值具有有限已知大小，同时维持整条链的排他所有权。",
+      "worked_example": "示例建立分别保存 4 和 5 的两个装箱链接，并通过共享引用递归遍历得到九，因此求和过程不会消费列表。",
+      "common_mistakes": [
+        "把 `List` 直接放进 `Cons`，形成无限大小类型而被编译器拒绝。",
+        "声称 `Box` 必然加速；这里关键是带所有权、已知指针大小的间接层。"
+      ],
+      "self_check": [
+        "即使剩余列表任意长，`Cons` 的哪个部分大小固定？",
+        "为什么从反向迭代折叠能保留原片段顺序？"
+      ],
+      "exercise_prompt": "把全部解析整数反向折叠成由 `Box` 连接的递归 `Cons` 节点，再通过共享借用遍历求和；空输入应构造 `Nil`。",
+      "objective": "以 `Box` 让具有所有权的递归数据类型可表示，并在不移动节点的情况下访问。",
+      "language_delta": "垃圾回收语言可能隐藏递归间接层，Rust 要求所有权边在类型中明确出现。",
+      "prediction_prompt": "求递归总和前，画出三个片段形成的 `Cons` 链。",
+      "transfer_trap": "`Arc` 与 `Rc` 用于共享所有权，此列表每条尾边恰有一个所有者，只需要 `Box`。"
+    },
+    "rust-interior-mutability": {
+      "title": "在不可变所有者内部运行时可变借用",
+      "concept": "事件日志通过 `&self` 暴露记录操作，`RefCell` 在运行时检查共享与可变借用。可变守卫在推入元素后结束，最终共享借用才不会重叠。",
+      "worked_example": "`Cell` 可处理 `Copy` 整数而不借出引用，所以示例能通过不可变绑定把访问计数从四增加到五。",
+      "common_mistakes": [
+        "持有 `borrow_mut` 时又请求 `borrow`，因重叠访问在运行时触发 `panic`。",
+        "把 `RefCell` 当同步工具；它不是 `Sync`，不能保护多线程共享修改。"
+      ],
+      "self_check": [
+        "记录方法中的 `RefMut` 守卫在什么位置结束生存？",
+        "所有者未声明 `mut` 时，哪条排他规则仍会被执行？"
+      ],
+      "exercise_prompt": "经 `&self` 为每个输入片段追加一条事件，保持每次可变借用短且不重叠，最后用共享借用报告 `RefCell<Vec<String>>` 的长度。",
+      "objective": "只在短小、无重叠、单线程作用域内应用内部可变性。",
+      "language_delta": "`RefCell<T>` 在 `T: Send` 时可随所有权移到别的线程，但它不是 `Sync`；共享并发修改应使用 `Mutex`。",
+      "prediction_prompt": "若记录方法持有一个可变守卫时又请求第二个，预测运行结果。",
+      "transfer_trap": "`RefCell` 只是把排他检查推迟到执行期，并未删除规则或提供线程同步。"
+    },
+    "rust-strings": {
+      "title": "区分 `UTF-8` 文本的三种视图",
+      "concept": "`String` 与 `str` 储存 `UTF-8`；`len` 报告字节数，`chars` 产生 Unicode 标量，范围切片则必须从合法字符边界开始并结束。",
+      "worked_example": "螃蟹标量占四字节，示例从 `🦀ace` 安全切出首个四字节范围，并同时显示整段文本的字节数与标量数并不相同。",
+      "common_mistakes": [
+        "尝试 `text[0]`，忽略一个字节不一定对应一个字符。",
+        "在任意字节偏移切片，即使偏移小于长度也可能崩溃。"
+      ],
+      "self_check": [
+        "案例写法中的重音 e 含几个字节和几个标量？",
+        "螃蟹前缀范围为何是四字节而不是一字节？"
+      ],
+      "exercise_prompt": "对输入文本分别报告 `UTF-8` 字节长度、Unicode 标量数量与首个标量；三项必须用适合各自视图的操作，不能按整数索引字符串。",
+      "objective": "依据所问度量正确选择 `len`、`chars` 与边界安全的首标量查找。",
+      "language_delta": "Rust 的 `UTF-8` 字节长度不同于 Java 与 JavaScript 的 `UTF-16` 单元长度；字素分割还需要额外 Unicode 逻辑。",
+      "prediction_prompt": "编译前预测螃蟹加字母案例的三个输出字段。",
+      "transfer_trap": "不要把 ASCII 索引直觉移到 `str`；字节位置只是带有效性约束的储存偏移。"
+    },
+    "rust-borrowing-slices": {
+      "title": "检查点：借出自有输入的切片",
+      "concept": "入口拥有 `String` 缓冲，首词函数临时借用它，并返回指向同一储存的 `&str`；整个过程不为单词另行分配。",
+      "worked_example": "`key` 使用 `split_once` 借出自有记录的前缀，该切片只在记录仍存活时有效。",
+      "common_mistakes": [
+        "返回局部 `String` 的切片会指向已释放储存，因此被拒绝。",
+        "在首词函数内调用 `to_owned`，改变接口并增加本可避免的分配。"
+      ],
+      "self_check": [
+        "打印返回切片期间，哪个值必须继续存活？",
+        "空输入为何能安全返回空借用字符串而无需 `unwrap`？"
+      ],
+      "exercise_prompt": "借用完整标准输入缓冲，通过空白迭代返回第一个词的 `&str`；有前导空白和完全为空时都不得分配或崩溃。",
+      "objective": "把返回切片关联到调用方拥有的 `String`，并安全处理没有单词的情况。",
+      "language_delta": "Rust 引用携带编译期有效期关系，垃圾回收语言往往允许子串值而不暴露其所有权联系。",
+      "prediction_prompt": "使用 `split_whitespace` 时，前导空白是否属于返回切片？",
+      "transfer_trap": "生命周期、动态特征结果与不安全指针义务都建立在所有者限制的关系上，不会延长数据本身。"
+    },
+    "rust-lifetimes": {
+      "title": "命名返回选择共享的生命周期",
+      "concept": "较长函数可能返回任一参数，因此必须用一个显式生命周期参数把两个输入引用与输出关联；调用方仍拥有全部底层文本，注解不会延长储存。",
+      "worked_example": "较短函数有两个借用输入，输出省略规则无法判断返回来自哪一个，所以需要显式 `'a` 表达共同关系。",
+      "common_mistakes": [
+        "相信输出省略能在两个输入引用间自动选择，实际必须写明关系。",
+        "用 `str::len` 比较，得到 `UTF-8` 字节数而非要求的 Unicode 标量数。"
+      ],
+      "self_check": [
+        "生命周期参数在运行时分配或保留了什么？什么也没有。",
+        "为何返回引用必须由实际被选输入能够支持的时段覆盖？"
+      ],
+      "exercise_prompt": "以竖线拆分输入，比较两侧 Unicode 标量数量并返回较长一侧的借用；相等时选择左侧，且输出引用继续受输入缓冲限制。",
+      "objective": "在不改变所有权或储存时长的情况下标注引用关系。",
+      "language_delta": "生命周期是关于借用的编译期推理，不同于会主动延长分配生存的引用计数句柄。",
+      "prediction_prompt": "分别按字节与标量比较 é 和 aa，解释为何所需优胜方会改变。",
+      "transfer_trap": "不要添加 `'static` 只为消除错误，那会要求全局持久数据，而不是描述实际调用方借用。"
+    },
+    "rust-traits-lifetimes": {
+      "title": "动态分派并借出结果",
+      "concept": "渲染函数接收 `&dyn Draw`，经虚表选择具体实现，并返回从组件借出的 `&str`；结果不能比该组件借用存活更久。",
+      "worked_example": "`Named` 示例把标签通过特征对象传入，再借出其内部文本，无需克隆自有 `String`。",
+      "common_mistakes": [
+        "添加不受 `Self: Sized` 限制的泛型方法，使特征无法用于动态分派。",
+        "返回 `draw` 内临时创建字符串的引用，形成悬垂并被拒绝。"
+      ],
+      "self_check": [
+        "渲染返回后，哪些文本仍归按钮或标签所有？",
+        "哪个调用动态分派，返回 `str` 又推断出怎样的生命周期？"
+      ],
+      "exercise_prompt": "按输入建立按钮或标签，通过短期 `&dyn Draw` 引用渲染其完整借用文本；不得删除首标量、克隆文本或返回临时值引用。",
+      "objective": "把对象安全的运行时分派与跟随对象借用的结果组合起来。",
+      "language_delta": "Rust 特征对象显式进行动态分派，泛型特征约束通常会为每种具体类型单态化。",
+      "prediction_prompt": "预测 `label:Rust` 选择哪个实现，以及返回切片能保持有效到何时。",
+      "transfer_trap": "无需自动装箱每个值；入口拥有具体组件，短期 `&dyn Draw` 借用已经足够。"
+    },
+    "rust-unsafe": {
+      "title": "把安全义务限制在局部",
+      "concept": "安全包装函数可把有效共享引用转成原始指针，并只执行一次不安全读取；注释必须说明存活、对齐和可复制性前提。",
+      "worked_example": "示例先证明索引零存在，再于小型 `unsafe` 区块调用 `get_unchecked`，使不变量可单独审查。",
+      "common_mistakes": [
+        "把 `unsafe` 当成通用逃生口，它不会让悬垂或未对齐指针变合法。",
+        "把 Rust 2024 的默认警告误称硬错误；只有拒绝相应 `lint` 后才会升级。"
+      ],
+      "self_check": [
+        "哪些指针事实使 `read` 在该行有效？",
+        "哪个安全引用保证读取期间指向值仍然存活？"
+      ],
+      "exercise_prompt": "从已解析整数的共享引用取得有效原始指针，在安全函数内部用一个显式 `unsafe` 区块复制读取，并紧邻写明完整不变量。",
+      "objective": "把不安全代码限制为一项可审查操作，同时维持调用方的安全契约。",
+      "language_delta": "Rust 2024 的 `unsafe_op_in_unsafe_fn` 默认发出警告；显式区块让审计范围可见，设置为拒绝时才成为错误。",
+      "prediction_prompt": "假设读取前引用已失效，指出注释中的哪条安全事实会变成假。",
+      "transfer_trap": "若包装层能在内部建立所有前置条件，调用方无需额外义务，就不应把整个函数标成不安全。"
+    },
+    "rust-structs-impl": {
+      "title": "把借用行为放在数据旁",
+      "concept": "矩形拥有两个尺寸，面积方法只借用 `&self`，计算后实例仍可使用；点语法会自动提供接收者引用。",
+      "worked_example": "计数器以数值 11 建立实例，只读方法返回其两倍；接收者在调用中被共享借用，而不是消费或可变借用。",
+      "common_mistakes": [
+        "把面积接收者写成 `self`，尽管计算只读字段却消费矩形。",
+        "把 `Rectangle::area` 当成无接收者关联函数，忽略显式 `&self` 参数。"
+      ],
+      "self_check": [
+        "面积方法能连续调用两次吗，哪个接收者选择使之成立？",
+        "以后怎样用特征为多种类型提供类似方法行为？"
+      ],
+      "exercise_prompt": "从解析尺寸构造矩形，通过借用接收者的面积方法计算乘积并输出；方法不得消费或可变借用实例，也不能把乘法改成加法。",
+      "objective": "把相关字段建模为结构，并通过 `impl` 附加不消费对象的行为。",
+      "language_delta": "Rust 方法显式说明接收者所有权，不隐藏一次对象调用究竟消费、修改还是借用目标。",
+      "prediction_prompt": "纯乘法是否需要把 `&self` 改为 `&mut self`？执行前说明原因。",
+      "transfer_trap": "泛型与特征可在结构上叠加复用行为，此核心练习用一个具体 `impl` 保持边界最清楚。"
+    },
+    "rust-enum-match": {
+      "title": "穷尽处理封闭选择",
+      "concept": "命令枚举表示加法、乘法或退出，并让不同变体携带各自数据。求值函数明确列出每一项，日后新增变体时 `rustc` 会指出遗漏。",
+      "worked_example": "交通灯匹配覆盖红、黄、绿三个无负载变体，并由表达式为黄色返回三秒这一 `u8` 持续时间。",
+      "common_mistakes": [
+        "使用通配分支，枚举增长时失去有用的非穷尽诊断。",
+        "先读取负载再判断命令，使没有负载的退出变体难以安全表示。"
+      ],
+      "self_check": [
+        "哪些变体拥有两个整数，哪个没有负载？",
+        "下划线吞掉所有未匹配命令后，会失去什么编译器帮助？"
+      ],
+      "exercise_prompt": "把一条输入解析为对应命令枚举，再用显式加法、乘法与退出分支穷尽求值；不得以通配分支返回哨兵。",
+      "objective": "以携带负载的变体与完整模式匹配表示封闭命令集合。",
+      "language_delta": "Rust 在静态阶段检查 `match` 穷尽性，某些语言的 `switch` 仍允许遗漏或贯穿。",
+      "prediction_prompt": "计算结果前，先写出每个分支中能够绑定的名称。",
+      "transfer_trap": "`Option` 也是枚举，后续练习中的 `Some` 与 `None` 同样需要有意处理。"
+    },
+    "rust-option": {
+      "title": "按存在性分支而不强取",
+      "concept": "非空文本的第一个 Unicode 标量是 `Some(char)`，空文本则是 `None`。显式匹配能为两种正常状态产生有意义输出。",
+      "worked_example": "`checked_half` 只在整数为偶数时用 `then_some` 构造 `Option`，调试格式会显示外层容器。",
+      "common_mistakes": [
+        "对预期空输入调用 `unwrap`，把正常缺失当作程序员错误崩溃。",
+        "使用 `bytes().next`，取得首个 `UTF-8` 字节而非首个 Unicode 标量。"
+      ],
+      "self_check": [
+        "`chars().next()` 的 `Some` 中储存什么负载类型？",
+        "去除行尾后字符串长度为零时会进入哪个分支？"
+      ],
+      "exercise_prompt": "检查可选的首个 Unicode 标量，有值时输出该字符，缺失时输出约定单词；韩文与空输入都不得使用字节或强取。",
+      "objective": "不借助空引用、哨兵或崩溃，穷尽处理正常缺失值。",
+      "language_delta": "`Option` 把缺失编码进类型，不像可空引用那样可能直到运行时才被遗忘。",
+      "prediction_prompt": "不要按原始字节推断，先预测韩文案例选择的首标量。",
+      "transfer_trap": "只有缺失真正违反不变量时才适合 `unwrap`；空用户输入已明确属于此练习。"
+    },
+    "rust-result": {
+      "title": "让解析错误穿过纯辅助函数",
+      "concept": "`try_fold` 让每次整数转换都可使用 `?`；首个 `ParseIntError` 会立即离开辅助函数，入口再决定如何把失败显示给用户。",
+      "worked_example": "`positive` 先用问号传播解析失败，再执行领域检查，说明传播与恢复是两项独立决定。",
+      "common_mistakes": [
+        "把 `?` 当成捕获操作，忽略它会从外围函数立即返回错误。",
+        "对每个片段强取，使入口无法把畸形输入转换成受控错误行。"
+      ],
+      "self_check": [
+        "包含问号的函数必须返回什么类型？",
+        "一次解析得到 `Err` 后，`try_fold` 还会访问后续片段吗？"
+      ],
+      "exercise_prompt": "通过 `Result` 与 `try_fold` 汇总全部合法整数，传播首次解析错误；入口匹配成功总和或稳定错误标记，不得在辅助函数内崩溃。",
+      "objective": "保留原错误路径，同时把可能失败的转换与面向用户的恢复分开。",
+      "language_delta": "Rust `Result` 在签名中显式表示可恢复失败，不使用可跨越无标记调用边界的异常。",
+      "prediction_prompt": "追踪先输入二再输入 bad 的累加器，并指出控制流返回的确切位置。",
+      "transfer_trap": "纯辅助函数可由可执行断言检查，异步函数也可让最终输出包含成功或失败；两者都不等于吞错。"
+    },
+    "rust-testing": {
+      "title": "在评测实际执行路径保留检查",
+      "concept": "普通二进制会在读取输入前直接调用 `assert_eq!`，所以这些检查确实运行。带 `#[test]` 的函数只有通过 `cargo test` 或 `rustc --test` 建立测试框架后才执行。",
+      "worked_example": "三倍函数以四得到十二，先执行内联相等断言，再输出与答案无关的状态行，证明普通二进制无需测试框架也会运行检查。",
+      "common_mistakes": [
+        "认为普通 `rustc` 二进制会自动运行 `#[test]`，其实测试框架从未建立。",
+        "用断言验证不可信输入，程序会崩溃而不是返回受控错误。"
+      ],
+      "self_check": [
+        "内联相等检查失败后，执行还能到达后面的 `println!` 吗？",
+        "哪些命令会启用测试框架，普通 `rustc` 又为什么不会？"
+      ],
+      "exercise_prompt": "实现加二函数，保留两个在普通二进制中实际执行的边界断言，移除故意的编译阻断后再处理标准输入并输出函数结果。",
+      "objective": "在此练习评测使用的同一种执行模式中留下可运行正确性检查。",
+      "language_delta": "Rust 测试属性依赖编译模式；入口中始终调用的断言无需测试框架，`#[test]` 则需要专门生成并运行框架。",
+      "prediction_prompt": "若加二函数原样返回输入而两个内联检查仍在，预测进程会如何结束。",
+      "transfer_trap": "此练习只教授可执行断言与运行器边界，不能据此声称已掌握完整单元测试。"
+    },
+    "rust-async-await": {
+      "title": "用有意受限的执行器运行等待",
+      "concept": "加倍函数等待 `std::future::ready`，小型执行器只轮询所得 `Future` 一次。若返回 `Pending` 就立即报错，因为它没有唤醒后重新轮询的循环。",
+      "worked_example": "消息函数包含真实 `.await`，并由同一单轮询机制驱动；程序观察到执行，而不是只创建后丢弃 `Future`。",
+      "common_mistakes": [
+        "只调用异步函数却不轮询，其函数体完全不会执行。",
+        "把单轮询辅助器用于计时器、输入输出或任何可能暂停的 `Future`。"
+      ],
+      "self_check": [
+        "异步调用时还是首次 `poll` 时，函数体才真正开始？",
+        "哪个明确限制让无操作唤醒器在此练习中可接受？"
+      ],
+      "exercise_prompt": "在立即就绪的 `Future` 内把解析数字变为两倍，并由单轮询执行器驱动到输出；不得把辅助器扩展到可能返回 `Pending` 的工作。",
+      "objective": "观察真实 `.await`，同时诚实保留执行器只能单次轮询的上限。",
+      "language_delta": "Rust 异步体在执行器轮询前保持惰性，不会像急切安排的任务抽象那样自动开始。",
+      "prediction_prompt": "预测立即就绪值会进入哪个 `Poll` 分支，并说明为何不需要第二次轮询。",
+      "transfer_trap": "工作可能返回 `Pending` 时应采用生产执行器，不能把教学辅助器偷偷发展成调度器。"
+    },
+    "rust-concurrency": {
+      "title": "等待自有工作线程结果",
+      "concept": "解析的 `i64` 实现 `Copy`，所以 `move` 闭包取得自己的复制值，不会使调用方绑定失效。`join` 与工作线程同步并返回计算结果。",
+      "worked_example": "示例创建计算六乘七的线程句柄，并在输出 42 前连接，因此主程序不会在工作结果可用前退出。",
+      "common_mistakes": [
+        "丢弃 `JoinHandle` 只会分离线程，并不会自动等待。",
+        "把栈借用捕获进新线程，通常无法满足线程可能活得更久的 `'static` 要求。"
+      ],
+      "self_check": [
+        "哪个复制值跨过线程边界，调用方原整数为何仍可使用？",
+        "线程崩溃使 `join` 返回错误时，`expect` 会把它转成什么？"
+      ],
+      "exercise_prompt": "把解析后的 `Copy` 整数移动进一个工作线程，在闭包内计算两倍，随后 `join` 并输出返回值；不得依赖调度先后或进程退出。",
+      "objective": "显式协调一个线程结果，而不是依赖时间或关闭进程。",
+      "language_delta": "不同于惰性 `Future`，`spawn` 创建独立调度的操作系统线程，它可能在调用方继续前或后开始；`join` 才是同步点。",
+      "prediction_prompt": "不假设谁先取得处理器时间，只判断 `join` 最终保证返回哪个结果。",
+      "transfer_trap": "单个返回值无需共享修改；`Arc` 与 `Mutex` 应留给多工作线程综合题。"
+    },
+    "rust-shared-state": {
+      "title": "综合：限制已连接线程的共享修改",
+      "concept": "入口拥有输入 `Vec`，为每个整数创建工作线程。闭包拥有该值和一份 `Arc`，先在锁外计算平方，再短暂锁定并让 `MutexGuard` 尽快离开作用域。",
+      "worked_example": "示例启动两个真实线程，消费全部句柄完成连接，然后才读取受保护总和，因此更新不会在最终读取后才到达。",
+      "common_mistakes": [
+        "把 `lock` 当成立即字段读取；它可能阻塞，也可能因持锁线程崩溃返回中毒错误。",
+        "持有守卫做无关计算，延长争用；平方应在取得互斥锁前完成。"
+      ],
+      "self_check": [
+        "入口取得最终守卫前，所有 `JoinHandle` 是否都已消费？",
+        "此处如何同时用到迭代、`Arc` 所有权、线程移动、短锁作用域与中毒处理？"
+      ],
+      "exercise_prompt": "为每个输入建立并连接一个线程，在线程内先计算平方，再把它加入共享 `Arc<Mutex<i64>>` 总和；空输入仍应确定地输出零。",
+      "objective": "在一个有界程序中整合所有权、迭代、线程、同步与确定输出。",
+      "language_delta": "`Arc` 管理共享生存期，`Mutex` 管理排他访问；`RefCell` 不是 `Sync`，无法保护并发共享修改。",
+      "prediction_prompt": "解释为何所有线程都连接后，调度次序无法改变最终平方和。",
+      "transfer_trap": "此处需要共享的 `Arc` 而非单所有者 `Box`；`RefCell<T>` 即使可随所有权移动，也不能被多线程并发共享，且互斥锁已使不安全代码多余。"
     }
   }
 }

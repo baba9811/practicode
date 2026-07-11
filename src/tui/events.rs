@@ -99,6 +99,9 @@ impl PracticodeApp {
             && self.mode != AppMode::Home
             && self.left_area.contains(position)
         {
+            if self.mode == AppMode::Problems {
+                self.practice_view = PracticeView::Problem;
+            }
             self.focus = Focus::Left;
         } else if !self.show_output
             && self.mode == AppMode::Learn
@@ -244,7 +247,13 @@ impl PracticodeApp {
                 KeyCode::Esc => {
                     self.settings_cursor = None;
                     self.show_output = false;
-                    self.focus = Focus::Code;
+                    self.focus = if self.mode == AppMode::Problems
+                        && self.practice_view == PracticeView::Problem
+                    {
+                        Focus::Left
+                    } else {
+                        Focus::Code
+                    };
                 }
                 _ => self.handle_global_shortcut(key)?,
             }
@@ -279,6 +288,7 @@ impl PracticodeApp {
                 self.show_current_syntax_lesson();
             } else {
                 self.show_output = false;
+                self.practice_view = PracticeView::Code;
                 self.focus = Focus::Code;
             }
             return Ok(());
@@ -341,33 +351,35 @@ impl PracticodeApp {
     }
 
     fn scroll_left(&mut self, delta: isize) {
-        let text = if self.mode == AppMode::Learn {
-            render_markdown_plain(&self.output)
+        let width = self.left_area.width.saturating_sub(2).max(1);
+        let lines = if self.mode == AppMode::Learn {
+            Paragraph::new(render_markdown_plain(&self.output))
+                .wrap(Wrap { trim: false })
+                .line_count(width)
         } else {
-            render_problem_tui(&self.problem, &self.state.settings.ui_language)
+            Paragraph::new(problem_view::render(
+                &self.problem,
+                &self.state.settings.ui_language,
+                self.state.settings.theme == "light",
+            ))
+            .wrap(Wrap { trim: false })
+            .line_count(width)
         };
-        self.left_scroll = scrolled(
-            self.left_scroll,
-            delta,
-            text.lines().count(),
-            self.left_area,
-        );
+        self.left_scroll = scrolled(self.left_scroll, delta, lines, self.left_area);
     }
 
     fn scroll_output(&mut self, delta: isize) {
-        let text = if !self.show_output && self.mode == AppMode::Learn {
-            self.learn_result.clone()
-        } else if self.output_is_markdown {
-            render_markdown_plain(&self.output)
+        let width = self.output_area.width.saturating_sub(2).max(1);
+        let lines = if !self.show_output && self.mode == AppMode::Learn {
+            Paragraph::new(self.learn_result.clone())
+                .wrap(Wrap { trim: false })
+                .line_count(width)
         } else {
-            self.output.clone()
+            Paragraph::new(self.output_text())
+                .wrap(Wrap { trim: false })
+                .line_count(width)
         };
-        self.output_scroll = scrolled(
-            self.output_scroll,
-            delta,
-            text.lines().count(),
-            self.output_area,
-        );
+        self.output_scroll = scrolled(self.output_scroll, delta, lines, self.output_area);
     }
 
     pub(super) fn focus_command(&mut self) {

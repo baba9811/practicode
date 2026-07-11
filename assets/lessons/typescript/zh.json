@@ -4,424 +4,508 @@
   "ui_language": "zh",
   "lessons": {
     "ts-output": {
-      "title": "控制台与 stdout",
-      "concept": "控制台输出是评测比较的契约，因此要区分 console.log 的自动换行和 process.stdout.write 的逐字节输出。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示控制台与 stdout的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "精确写入标准输出",
+      "concept": "`process.stdout.write` 只写入提供的字符串，不会自动增加分隔符或换行。因此冒号与末尾换行都是程序契约的一部分；类型注解在 Node 执行前会被移除。",
+      "worked_example": "示例保留带类型的姓名和分数，却刻意写出不同的 `demo Mina=4` 记录。注解不会进入 JavaScript，模板字符串里的等号与换行却会成为可观察文本。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把控制台与 stdout的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决控制台与 stdout练习里的 TODO。",
-        "没有确认“控制台输出是评测比较的契约，因此要区分 console.log 的自动换行和 process.stdout.write 的逐字节输出。”这个要点，只去凑 judge 输出。"
+        "改用 `console.log`，失去对最后换行的明确控制。",
+        "直接连接姓名和分数，产生 `Ada7` 这类边界不清的输出。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用控制台与 stdout，然后才到达 `example:` 输出？",
-        "控制台与 stdout练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "示例中姓名后紧接着的确切字符是什么？",
+        "写入调用的哪一段负责产生行尾？"
       ],
-      "exercise_prompt": "完成 TODO，把控制台与 stdout应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-let-const": {
-      "title": "let 与 const",
-      "concept": "const 标出不会重新赋值的绑定，let 则让解题过程中会变化的累加值更清楚。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示let 与 const的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把let 与 const的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决let 与 const练习里的 TODO。",
-        "没有确认“const 标出不会重新赋值的绑定，let 则让解题过程中会变化的累加值更清楚。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用let 与 const，然后才到达 `example:` 输出？",
-        "let 与 const练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把let 与 const应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-primitives": {
-      "title": "基础类型",
-      "concept": "string、number 和 boolean 注解描述了解析与分支代码期望的标量值。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示基础类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把基础类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决基础类型练习里的 TODO。",
-        "没有确认“string、number 和 boolean 注解描述了解析与分支代码期望的标量值。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用基础类型，然后才到达 `example:` 输出？",
-        "基础类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把基础类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-strings-templates": {
-      "title": "字符串与模板",
-      "concept": "模板字面量把格式和数值放在一起，trim 等字符串方法会返回新的字符串。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示字符串与模板的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把字符串与模板的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决字符串与模板练习里的 TODO。",
-        "没有确认“模板字面量把格式和数值放在一起，trim 等字符串方法会返回新的字符串。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用字符串与模板，然后才到达 `example:` 输出？",
-        "字符串与模板练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把字符串与模板应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-arrays-tuples": {
-      "title": "数组与元组",
-      "concept": "数组保存有顺序的同类值，元组在小记录中同时固定位置和类型。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示数组与元组的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把数组与元组的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决数组与元组练习里的 TODO。",
-        "没有确认“数组保存有顺序的同类值，元组在小记录中同时固定位置和类型。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用数组与元组，然后才到达 `example:` 输出？",
-        "数组与元组练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把数组与元组应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-objects": {
-      "title": "对象类型",
-      "concept": "对象类型把必需字段写清楚，避免计算时漏掉 width、height 等属性。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示对象类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把对象类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决对象类型练习里的 TODO。",
-        "没有确认“对象类型把必需字段写清楚，避免计算时漏掉 width、height 等属性。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用对象类型，然后才到达 `example:` 输出？",
-        "对象类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把对象类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-functions": {
-      "title": "函数",
-      "concept": "函数参数和返回类型把已解析输入、计算与输出之间的边界写清楚。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示函数的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把函数的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决函数练习里的 TODO。",
-        "没有确认“函数参数和返回类型把已解析输入、计算与输出之间的边界写清楚。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用函数，然后才到达 `example:` 输出？",
-        "函数练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把函数应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "读取标准输入中的姓名与分数，通过 `process.stdout.write` 形成一条冒号分隔记录，并确保末尾恰好只有一个换行。",
+      "objective": "每组输入都能得到 `name:score` 形态且没有额外空格、说明文字或重复换行。",
+      "language_delta": "`console.log` 会自行附加换行，而 `process.stdout.write` 不添加任何字符；Node 只运行擦除类型后的 JavaScript。",
+      "prediction_prompt": "执行前逐字符写出一个 Unicode 姓名与两位分数经过模板插值后的完整输出。",
+      "transfer_trap": "浏览器控制台主要供检查值，在线评测比较的却是程序标准输出；两种表面相似的显示不能混用。"
     },
     "ts-input": {
-      "title": "Node stdin 解析",
-      "concept": "Node 解法通常一次读取文件描述符 0，按空白切分，再在数值计算前转换 token。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Node stdin 解析的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "解析 Node 标准输入",
+      "concept": "Node 把重定向标准输入暴露为文件描述符零。一次读取、去除外围空白，并为空字符串设置分支，可建立稳定的数字片段流水线。",
+      "worked_example": "固定文本 `4 6` 与练习案例不同；它先按空白拆分，再用 `Number` 转换，最后从零开始折叠，两项合计为十。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把Node stdin 解析的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Node stdin 解析练习里的 TODO。",
-        "没有确认“Node 解法通常一次读取文件描述符 0，按空白切分，再在数值计算前转换 token。”这个要点，只去凑 judge 输出。"
+        "对空白后的空字符串直接拆分，把唯一的空片段转换成伪造的零。",
+        "只读取第一行，输入数字分布到多行时遗漏后续内容。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用Node stdin 解析，然后才到达 `example:` 输出？",
-        "Node stdin 解析练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "去除空白后没有字符时，为什么数字数组必须为空？",
+        "折叠初始值如何决定空输入的总和？"
       ],
-      "exercise_prompt": "完成 TODO，把Node stdin 解析应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "去掉只取首项的捷径，遍历完整的空白分隔数字序列求和；单行、多行与空输入都必须沿同一解析路径处理。",
+      "objective": "同一行、跨多行以及完全为空的标准输入，都能得到正确算术总和。",
+      "language_delta": "`readFileSync(0, \"utf8\")` 是 Node 运行时接口；TypeScript 只检查声明形状，并不代替实际读取。",
+      "prediction_prompt": "输入先是 -1，下一行是 5 和 2 时，先列出数组内容，再计算折叠结果。",
+      "transfer_trap": "其他语言常见的逐次提示式读取并不匹配 Node 一次读取完整输入流的方式，照搬会使换行布局影响逻辑。"
     },
-    "ts-control-flow": {
-      "title": "控制流",
-      "concept": "if 和循环决定哪些值进入累加，因此分支条件必须符合题目的数据规则。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示控制流的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "ts-primitives": {
+      "title": "把文本转换为基本值",
+      "concept": "`string` 注解只向检查器描述值，而 `Number` 才执行运行时转换。通过与否必须比较数值分数和门槛，不能比较文本拼写或长度。",
+      "worked_example": "示例声明一个字符串、一个数字和一个布尔值，再输出独立演示记录。三个运行时值都已经具有注解所描述的基本形态。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把控制流的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决控制流练习里的 TODO。",
-        "没有确认“if 和循环决定哪些值进入累加，因此分支条件必须符合题目的数据规则。”这个要点，只去凑 judge 输出。"
+        "只把输入片段标注成 `number`，却没有真正转换字符串。",
+        "依赖关系运算的隐式强制转换，使非法数字从何处进入计算变得不清楚。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用控制流，然后才到达 `example:` 输出？",
-        "控制流练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "练习中哪个表达式把片段从字符串语义变成数字语义？",
+        "门槛为零且分数也为零时，为什么应当通过？"
       ],
-      "exercise_prompt": "完成 TODO，把控制流应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "显式转换分数和门槛两个数字字段，使用包含相等边界的比较，同时让姓名始终保持文本值并原样进入记录。",
+      "objective": "三个边界案例都能输出已解析分数以及正确的通过或重试分类。",
+      "language_delta": "TypeScript 5.9 可拒绝不一致的基本类型用法，但注解会被擦除，无法替标准输入执行数值转换。",
+      "prediction_prompt": "在求值比较运算符前，先判断输入 `Bo 0 0` 应进入哪个状态。",
+      "transfer_trap": "某些带运行时类型声明的语言可能在赋值处触发转换；TypeScript 声明本身绝不会改变输入值。"
     },
-    "ts-union-narrowing": {
-      "title": "联合与收窄",
-      "concept": "联合类型的值在使用仅属于字符串或数字的操作前，需要先通过运行时检查收窄。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示联合与收窄的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "ts-let-const": {
+      "title": "累加值可重绑，标签保持固定",
+      "concept": "稳定标签使用 `const`，需要变化的总和使用 `let`。两个关键字约束的是绑定能否再次赋值，并不说明绑定所指对象是否被冻结。",
+      "worked_example": "示例让 `demo` 标签保持不变，把总和从 5 加上 -2 后变为 3。数值绑定发生重赋值，而标签绑定没有变化。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把联合与收窄的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决联合与收窄练习里的 TODO。",
-        "没有确认“联合类型的值在使用仅属于字符串或数字的操作前，需要先通过运行时检查收窄。”这个要点，只去凑 judge 输出。"
+        "用 `const` 声明累加器，随后又尝试给它分配新的数值。",
+        "误认为 `const` 指向的对象不能修改任何可写属性。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用联合与收窄，然后才到达 `example:` 输出？",
-        "联合与收窄练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "两个示例绑定中，哪一个接收了第二次赋值？",
+        "若 `settings` 指向可变对象，`const` 会禁止修改其 `enabled` 属性吗？"
       ],
-      "exercise_prompt": "完成 TODO，把联合与收窄应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "固定输入标签，把两个已转换数字累加到允许重赋值的总和变量中；正数、负数与零都不得通过硬编码输出处理。",
+      "objective": "标签始终原样保留，而三种加法组合都产生正确的算术结果。",
+      "language_delta": "JavaScript 在运行时执行 `const` 绑定规则，数值注解则是随后会被擦除的检查信息。",
+      "prediction_prompt": "针对 `net -2 5`，按每次赋值顺序追踪总和变量的值。",
+      "transfer_trap": "Rust 的不可变绑定和 Java 的 `final` 引用拥有不同所有权及对象修改后果，不能只凭相似名称类推。"
     },
-    "ts-literal-types": {
-      "title": "字面量类型",
-      "concept": "字面量联合把命令或模式限制为 'left'、'right' 这样的精确值。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示字面量类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "ts-strings-templates": {
+      "title": "只整理姓名，保留分数字符",
+      "concept": "竖线分隔的两个字段采用不同空白规则：仅删除一个末尾 `LF` 或 `CRLF`，去除姓名两侧空白，却保留分数字段中的每个字符，包括结尾空格。",
+      "worked_example": "固定记录 Mira 的分数后带两个空格和一个换行。锚定正则只去掉换行，因此模板插值时两个分数空格仍然存在。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把字面量类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决字面量类型练习里的 TODO。",
-        "没有确认“字面量联合把命令或模式限制为 'left'、'right' 这样的精确值。”这个要点，只去凑 judge 输出。"
+        "对整条记录调用 `trimEnd`，悄悄删除有意义的分数填充。",
+        "把字符串长度当成用户看到的字符数，忽略代理对会占两个 `UTF-16` 单元。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用字面量类型，然后才到达 `example:` 输出？",
-        "字面量类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "删除末尾换行后，`  Mira |9  ` 两个字段各保留哪些空格？",
+        "为什么只整理姓名不会碰到分数末尾的两个空格？"
       ],
-      "exercise_prompt": "完成 TODO，把字面量类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "先精确移除一个末尾 `CRLF` 或 `LF`，仅对竖线左侧姓名去除空白，再把右侧分数字符毫无删改地放到冒号后。",
+      "objective": "三条记录都能规范姓名，并完整保留分数字段末端具有意义的空格。",
+      "language_delta": "JavaScript 的 `trimEnd` 删除全部尾随空白，锚定替换却只移除一段传输行尾；索引仍按 `UTF-16` 单元计算。",
+      "prediction_prompt": "标出 ` Ada |7  ` 后跟一个 `LF` 经末尾正则处理后仍留下的每个空格。",
+      "transfer_trap": "其他语言的通用去空白操作也可能删除有效载荷；这里只应移除传输换行，不能清洗整个记录。"
     },
-    "ts-optional-nullish": {
-      "title": "可选与空值合并",
-      "concept": "可选字段可能是 undefined，而 ?? 会保留分数 0 这样的有效假值。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示可选与空值合并的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "ts-arrays-tuples": {
+      "title": "用元组返回姓名与总和",
+      "concept": "第一个输入片段是姓名，其余片段组成数字数组。类型 `[string, number]` 固定两个位置的静态含义，但运行时仍是普通 JavaScript 数组。",
+      "worked_example": "示例先汇总独立数组 `[1, 4]`，再把 Neo 与总和放入带类型的二元组。通过位置零和一读取，能看到运行时容器仍为数组。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把可选与空值合并的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决可选与空值合并练习里的 TODO。",
-        "没有确认“可选字段可能是 undefined，而 ??”这个要点，只去凑 judge 输出。"
+        "把每个片段都当成数字，折叠前丢失开头姓名。",
+        "误以为元组注解会创建不同于 `Array` 的运行时容器。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用可选与空值合并，然后才到达 `example:` 输出？",
-        "可选与空值合并练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "示例二元组的第二位置允许什么类型？",
+        "输入只有 `Bo` 而没有数字尾部时，总和应该如何得到？"
       ],
-      "exercise_prompt": "完成 TODO，把可选与空值合并应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-interfaces-aliases": {
-      "title": "接口与类型别名",
-      "concept": "接口为对象契约命名，类型别名还能为联合、元组和组合类型表达式命名。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示接口与类型别名的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把接口与类型别名的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决接口与类型别名练习里的 TODO。",
-        "没有确认“接口为对象契约命名，类型别名还能为联合、元组和组合类型表达式命名。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用接口与类型别名，然后才到达 `example:` 输出？",
-        "接口与类型别名练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把接口与类型别名应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-generics": {
-      "title": "泛型",
-      "concept": "泛型让可复用代码在读取数组或返回值时保留调用方的元素类型。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示泛型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把泛型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决泛型练习里的 TODO。",
-        "没有确认“泛型让可复用代码在读取数组或返回值时保留调用方的元素类型。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用泛型，然后才到达 `example:` 输出？",
-        "泛型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把泛型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-keyof-typeof": {
-      "title": "keyof 与 typeof",
-      "concept": "typeof 捕获值的静态形状，keyof 把这个形状转换为允许的键联合。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示keyof 与 typeof的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把keyof 与 typeof的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决keyof 与 typeof练习里的 TODO。",
-        "没有确认“typeof 捕获值的静态形状，keyof 把这个形状转换为允许的键联合。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用keyof 与 typeof，然后才到达 `example:` 输出？",
-        "keyof 与 typeof练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把keyof 与 typeof应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-indexed-access": {
-      "title": "索引访问类型",
-      "concept": "索引访问类型复用已有模型中的属性类型和元素类型，避免手写重复。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示索引访问类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把索引访问类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决索引访问类型练习里的 TODO。",
-        "没有确认“索引访问类型复用已有模型中的属性类型和元素类型，避免手写重复。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用索引访问类型，然后才到达 `example:` 输出？",
-        "索引访问类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把索引访问类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-mapped-types": {
-      "title": "映射类型",
-      "concept": "映射类型转换对象类型中的每个键，让派生形状与来源保持一致。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示映射类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把映射类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决映射类型练习里的 TODO。",
-        "没有确认“映射类型转换对象类型中的每个键，让派生形状与来源保持一致。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用映射类型，然后才到达 `example:` 输出？",
-        "映射类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把映射类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-conditional-types": {
-      "title": "条件类型",
-      "concept": "条件类型根据类型关系选择分支，infer 会抽出匹配到的部分。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示条件类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把条件类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决条件类型练习里的 TODO。",
-        "没有确认“条件类型根据类型关系选择分支，infer 会抽出匹配到的部分。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用条件类型，然后才到达 `example:` 输出？",
-        "条件类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把条件类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-utility-types": {
-      "title": "工具类型",
-      "concept": "Pick 和 Partial 等工具类型无需自定义新辅助类型，就能表达常见对象转换。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示工具类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把工具类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决工具类型练习里的 TODO。",
-        "没有确认“Pick 和 Partial 等工具类型无需自定义新辅助类型，就能表达常见对象转换。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用工具类型，然后才到达 `example:` 输出？",
-        "工具类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把工具类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-discriminated-unions": {
-      "title": "可辨识联合",
-      "concept": "共享的字面量标签让 switch 收窄每个变体，使矩形字段只在矩形上使用。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示可辨识联合的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把可辨识联合的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决可辨识联合练习里的 TODO。",
-        "没有确认“共享的字面量标签让 switch 收窄每个变体，使矩形字段只在矩形上使用。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用可辨识联合，然后才到达 `example:` 输出？",
-        "可辨识联合练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把可辨识联合应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-async-promise": {
-      "title": "async 与 Promise",
-      "concept": "async 函数返回 Promise，await 是已完成数值重新进入普通流程的位置。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示async 与 Promise的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把async 与 Promise的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决async 与 Promise练习里的 TODO。",
-        "没有确认“async 函数返回 Promise，await 是已完成数值重新进入普通流程的位置。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用async 与 Promise，然后才到达 `example:` 输出？",
-        "async 与 Promise练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把async 与 Promise应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-error-handling": {
-      "title": "错误处理",
-      "concept": "catch 接收 unknown 的失败值，因此在选择恢复值前应先收窄。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示错误处理的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把错误处理的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决错误处理练习里的 TODO。",
-        "没有确认“catch 接收 unknown 的失败值，因此在选择恢复值前应先收窄。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用错误处理，然后才到达 `example:` 输出？",
-        "错误处理练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把错误处理应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-modules": {
-      "title": "模块与 export",
-      "concept": "export 标记文件提供给其他文件的值；模块系统仍由 Node 的规则决定。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示模块与 export的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把模块与 export的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决模块与 export练习里的 TODO。",
-        "没有确认“export 标记文件提供给其他文件的值；模块系统仍由 Node 的规则决定。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用模块与 export，然后才到达 `example:` 输出？",
-        "模块与 export练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把模块与 export应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-classes": {
-      "title": "类与访问修饰符",
-      "concept": "类把方法绑定到状态上，private 说明哪些状态应留在方法边界之后。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示类与访问修饰符的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把类与访问修饰符的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决类与访问修饰符练习里的 TODO。",
-        "没有确认“类把方法绑定到状态上，private 说明哪些状态应留在方法边界之后。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用类与访问修饰符，然后才到达 `example:` 输出？",
-        "类与访问修饰符练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把类与访问修饰符应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-readonly": {
-      "title": "readonly",
-      "concept": "readonly 允许读取配置类数据，同时防止通过该类型替换或修改它。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示readonly的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把readonly的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决readonly练习里的 TODO。",
-        "没有确认“readonly 允许读取配置类数据，同时防止通过该类型替换或修改它。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用readonly，然后才到达 `example:` 输出？",
-        "readonly练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把readonly应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "ts-satisfies-as-const": {
-      "title": "satisfies 与 as const",
-      "concept": "as const 保留路由字面量，satisfies 在不扩大这些字面量的情况下检查更宽的 Record 契约。 这个语法让运行时的值和 TypeScript 期望的形状保持在同一条路径上。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示satisfies 与 as const的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把satisfies 与 as const的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决satisfies 与 as const练习里的 TODO。",
-        "没有确认“as const 保留路由字面量，satisfies 在不扩大这些字面量的情况下检查更宽的 Record 契约。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用satisfies 与 as const，然后才到达 `example:` 输出？",
-        "satisfies 与 as const练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把satisfies 与 as const应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "汇总姓名后的完整数字数组，把原姓名与总和放进声明好的二元组；负数尾部和空数字尾部都须由同一折叠处理。",
+      "objective": "多项数值、含负数数值和没有数值三类输入都能通过一种二元形态表示。",
+      "language_delta": "元组的位置检查在 Node 执行前消失；后续可迭代与数组方法练习会用其他方式消费同一序列。",
+      "prediction_prompt": "对 `Lin -1 4 2`，先列出数字数组，再写出二元组第二位置的值。",
+      "transfer_trap": "TypeScript 元组在运行时并不是小型不可变记录，这与某些语言的值记录构造不同。"
     },
     "ts-iterables": {
-      "title": "可迭代对象",
-      "concept": "for...of 可消费任何可迭代对象，因此数组、字符串和 Set 能共享同一种循环形态。 在 stdin/stdout 解法中，它能避免只拼出输出而丢掉类型应保证的数据流。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示可迭代对象的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "用 `for...of` 消费可迭代对象",
+      "concept": "`Iterable<string>` 承诺迭代协议，不承诺数字索引。`for...of` 通过该协议取值，因此可处理数组、集合、字符串和自定义可迭代对象。",
+      "worked_example": "示例把含 T、S 的集合交给收集函数，按插入顺序得到两项，无需调用数组专属方法，也没有假设输入存在数字索引。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把可迭代对象的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决可迭代对象练习里的 TODO。",
-        "没有确认“for...of 可消费任何可迭代对象，因此数组、字符串和 Set 能共享同一种循环形态。”这个要点，只去凑 judge 输出。"
+        "对可迭代接口使用数字索引，尽管接口并未保证这些属性。",
+        "迭代器已经推进到结束后仍重复使用，期待旧值重现。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用可迭代对象，然后才到达 `example:` 输出？",
-        "可迭代对象练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "`for...of` 要求输入实现哪一种能力？",
+        "空片段列表为什么仍应产生一个输出换行？"
       ],
-      "exercise_prompt": "完成 TODO，把可迭代对象应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "通过迭代协议访问标准输入的全部片段，并按遇见顺序连接；不得只读取数组中的某个固定位置，也要覆盖空序列。",
+      "objective": "不依赖数组索引，正确连接两项、三项或零项输入。",
+      "language_delta": "TypeScript 的可迭代类型只描述 JavaScript 迭代协议，不会在运行时增加集合储存或重放行为。",
+      "prediction_prompt": "逐步写出处理 `a b c` 时，每次迭代后累积文本的状态。",
+      "transfer_trap": "Python 迭代器与 Java 流同样会被消费，但重放规则和所有权约定并不相同。"
     },
     "ts-array-methods": {
-      "title": "map、filter 与 reduce",
-      "concept": "filter 选择元素，map 转换元素，reduce 把序列折叠成最终答案。 这里的类型注解不是装饰，而是在说明哪些值可以穿过这个边界。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示map、filter 与 reduce的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "安全地筛选、平方并折叠",
+      "concept": "清晰的数组流水线先选择偶数，再计算其平方，最后折叠所有乘积。给 `reduce` 提供初始零，才能定义没有元素通过时的结果。",
+      "worked_example": "示例对 `[2, 5, 6]` 使用另一条件，并把通过者加倍后求和。它展示方法顺序，却不复用练习的偶数平方结果。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把map、filter 与 reduce的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决map、filter 与 reduce练习里的 TODO。",
-        "没有确认“filter 选择元素，map 转换元素，reduce 把序列折叠成最终答案。”这个要点，只去凑 judge 输出。"
+        "先变换后筛选，使谓词检查的已不是原始数值。",
+        "省略 `reduce` 初始值，全部元素被筛掉时抛出异常。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用map、filter 与 reduce，然后才到达 `example:` 输出？",
-        "map、filter 与 reduce练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "负二在哪一个阶段会变成正四？",
+        "筛选结果为空时，折叠器最初取得什么累计值？"
       ],
-      "exercise_prompt": "完成 TODO，把map、filter 与 reduce应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "修正奇偶筛选条件，同时保留平方映射和从零开始的折叠；混合符号及全奇数输入都必须给出定义良好的总和。",
+      "objective": "混合整数、负数和全奇数序列都能得到准确的偶数平方和。",
+      "language_delta": "这些方法属于标准 JavaScript 数组并逐阶段遍历；TypeScript 只推断回调类型，不会把流水线改成惰性执行。",
+      "prediction_prompt": "输入 `-2 -1 0` 时，写出筛选后和平方后的两个中间数组。",
+      "transfer_trap": "Rust 迭代适配器在消费前保持惰性，JavaScript 数组方法却会在每个阶段立即遍历或分配。"
+    },
+    "ts-objects": {
+      "title": "通过结构化对象计算面积",
+      "concept": "矩形类型要求宽与高两个成员，面积函数可接收任何结构兼容的对象。此计算不需要相同构造器名称，也不需要先声明类。",
+      "worked_example": "示例对象还含颜色属性，绑定到变量后仍能传给只读取宽和高的函数。多余字段继续存在于运行时，只是没有参与计算。",
+      "common_mistakes": [
+        "构造对象时漏掉一个已解析尺寸，悄悄用占位数替代真实输入。",
+        "认为两个值必须来自同名构造器，TypeScript 才会接受其形状。"
+      ],
+      "self_check": [
+        "面积函数实际读取彩色对象的哪些成员？",
+        "宽为零时为什么乘积必然为零？"
+      ],
+      "exercise_prompt": "用标准输入中的两个尺寸构造完整矩形对象，再交给带类型的面积函数；不得把高度固定成占位值，零宽案例也必须自然得到零。",
+      "objective": "普通矩形、零宽矩形和高度为一的矩形都通过结构数据得到正确乘积。",
+      "language_delta": "对象类型是执行前擦除的检查器描述；类方法才产生运行时行为，`readonly` 也只提供浅层类型访问限制。",
+      "prediction_prompt": "输入尺寸 `7 1` 时，先写出对象形状，再预测乘法结果。",
+      "transfer_trap": "Java 通常强调声明类身份，TypeScript 则通常接受独立创建但成员兼容的值。"
+    },
+    "ts-classes": {
+      "title": "通过类方法更新实例状态",
+      "concept": "每个计数器实例拥有可变字段，并通过递增方法暴露状态变化。方法必须先存回新值再返回，后续调用才能观察到更新。",
+      "worked_example": "示例实例从 8 开始，递增一次得到 9。`private` 帮助检查器限制源码访问，但发出的 JavaScript 字段仍是普通属性。",
+      "common_mistakes": [
+        "只返回 `this.value + 1` 而不保存，下一次调用仍从旧状态开始。",
+        "把 TypeScript 的 `private` 当成 JavaScript `#value` 字段的运行时隐私。"
+      ],
+      "self_check": [
+        "同一实例连续调用两次后，第二次应返回哪个状态？",
+        "哪一种类字段写法会在 JavaScript 运行时真正限制访问？"
+      ],
+      "exercise_prompt": "修改递增方法，使它先更新接收者自己的字段再返回结果；正数、负数和较大初值都只能增加一次，并让后续调用观察新状态。",
+      "objective": "任意给定起点都由同一实例方法准确前进一步，并保存该变化。",
+      "language_delta": "这里的 `private` 是会被擦除的检查信息；以井号开头的 ECMAScript 字段才具有运行时隐私语义。",
+      "prediction_prompt": "起点为 -1 时，分别记录调用前字段、存回的新字段和返回值。",
+      "transfer_trap": "Java 的私有访问由虚拟机执行，边界比 TypeScript 被擦除的修饰符更强。"
+    },
+    "ts-readonly": {
+      "title": "读取浅层只读配置",
+      "concept": "只读配置允许消费者查看姓名与分数序列，却禁止通过该类型修改。仅把属性标成只读只会阻止替换，因此嵌套数组也必须声明为只读；两者都不会冻结运行时对象。",
+      "worked_example": "示例把姓名属性和数字数组都声明为只读，只读取数组长度而不写入，所以严格检查与擦除后的 Node 执行都能成功。",
+      "common_mistakes": [
+        "对只读数字数组调用 `push`，期待严格 TypeScript 放行。",
+        "认为 `readonly` 会调用 `Object.freeze` 或递归锁住嵌套对象。"
+      ],
+      "self_check": [
+        "为何起始代码在任何测试输入到达 Node 前就会失败？",
+        "另一个指向同一底层数组的可变别名仍能添加元素吗？"
+      ],
+      "exercise_prompt": "删除对只读视图的非法写入，仅通过读取已有分数计算总和；空数组与有符号分数都不得依赖修改容器。",
+      "objective": "先通过严格类型检查，再为每个配置姓名输出原分数序列的准确总和。",
+      "language_delta": "`readonly` 默认浅层且只存在于类型系统；即使嵌套成员也标注只读，JavaScript 内存仍未被冻结。",
+      "prediction_prompt": "不要预测输出，先判断 `config.scores.push(0)` 会触发哪类编译诊断。",
+      "transfer_trap": "Rust 的不可变借用受所有权规则保护，并不等同于 TypeScript 中可被擦除的只读视图。"
+    },
+    "ts-control-flow": {
+      "title": "保持包含终点的循环边界",
+      "concept": "循环应访问从一到上界的所有整数，并用严格余数比较选择奇数。终点是否参与完全由循环条件中的关系运算符决定。",
+      "worked_example": "示例遍历到 5，却故意累计偶数，得到与练习无关的演示总和。其短分支仍展示严格相等和闭合上界。",
+      "common_mistakes": [
+        "使用 `< n`，漏掉本应参与的奇数终点。",
+        "使用宽松相等，让 JavaScript 强制转换造成无关值相等。"
+      ],
+      "self_check": [
+        "上界为三时，最后一个贡献总和的循环值是什么？",
+        "为何上界六可能掩盖缺陷，而上界三能暴露它？"
+      ],
+      "exercise_prompt": "只修复循环的闭区间边界，保留奇数判断和累加器；零上界不得进入循环，奇数上界不能被遗漏，偶数终点也不得额外加入。",
+      "objective": "正上界与零上界都能正确汇总一到终点之间的全部奇数。",
+      "language_delta": "JavaScript 条件使用运行时布尔与强制规则，TypeScript 的控制流分析则沿已证明分支另外收窄静态类型。",
+      "prediction_prompt": "分别列出上界三在 `<` 和 `<=` 条件下会访问的值。",
+      "transfer_trap": "Python 的 `range` 默认排除停止值，照搬熟悉边界会错误漏掉 TypeScript 循环的终点。"
+    },
+    "ts-functions": {
+      "title": "检查点：带类型的计算边界",
+      "concept": "函数签名同时承诺可接收的输入与返回结果。起始代码的乘法产生数字，却声明返回字符串，严格检查应在执行前拒绝这一矛盾。",
+      "worked_example": "示例定义接收两个数字并返回数字的周长函数，固定尺寸产生与面积案例不同的演示值。签名与实际返回表达式保持一致。",
+      "common_mistakes": [
+        "为迎合错误的返回注解而把正确乘法结果转换成字符串。",
+        "在计算函数内部打印，混淆返回数据与写入标准输出。"
+      ],
+      "self_check": [
+        "哪一处声明建立了面积函数的返回承诺？",
+        "两个输入片段在什么位置变成参与乘法的数字？"
+      ],
+      "exercise_prompt": "修正函数的返回类型契约，使严格检查接受现有数值计算；解析和外层输出边界保持不变，也不得改成字符串结果。",
+      "objective": "一个带注解函数既能通过检查，又能计算三组矩形面积。",
+      "language_delta": "TypeScript 在执行前验证参数和结果用法；函数内部的分支、循环与乘法仍是普通 JavaScript 行为。",
+      "prediction_prompt": "不看任何案例输出，先判断起始代码会归类为哪一种类型检查失败。",
+      "transfer_trap": "带运行时方法签名的语言可能在编译或执行期强制契约；TypeScript 检查后会擦除它。"
+    },
+    "ts-union-narrowing": {
+      "title": "格式化前收窄联合类型",
+      "concept": "`string | number` 只暴露两个成员都安全的操作。使用 `typeof` 检查真实运行时基本值后，检查器才允许调用各自专属的格式化方法。",
+      "worked_example": "示例把字符串转小写，把固定数字保留一位小数。它展示两条分支，却不复用练习要求的大写或整数格式。",
+      "common_mistakes": [
+        "直接在可能为数字的联合值上调用 `toUpperCase`。",
+        "把输入类别片段当成类型断言，而没有构造并检查实际运行值。"
+      ],
+      "self_check": [
+        "`Number(text)` 创建的成员由 `typeof` 报告为什么？",
+        "为什么 `toFixed(0)` 会把 -1.6 格式化为 -2？"
+      ],
+      "exercise_prompt": "增加一条真实的运行时收窄分支：字符串成员转大写，数字成员按零位小数格式化；联合值未经证明前不得调用专属方法。",
+      "objective": "字符串命令和正负数字命令都能通过严格检查并采用各自格式。",
+      "language_delta": "收窄把 JavaScript 运行时判断与检查器推理连接起来；任意标准输入仍须验证，强制断言不会提供证据。",
+      "prediction_prompt": "对 `n -1.6`，先选择收窄分支，再写出格式化文本。",
+      "transfer_trap": "Python 允许方法调用直到运行时失败，TypeScript 则会在检查阶段拒绝不安全的联合操作。"
+    },
+    "ts-literal-types": {
+      "title": "进入字面量联合前验证文本",
+      "concept": "方向类型只含 `left` 与 `right` 两个字符串字面量。标准输入最初仍是无限制字符串，必须用运行时比较证明成员资格，才能安全交给方向函数。",
+      "worked_example": "示例使用另一组 `north` 与 `south` 的联合，并直接传入已知字面量。它能产生演示箭头，却没有验证外部数据。",
+      "common_mistakes": [
+        "把任意文本强制断言成方向类型，误以为断言执行了运行时检查。",
+        "让二分方向函数把所有未知词都当成右转。"
+      ],
+      "self_check": [
+        "为什么 `raw as Direction` 会让 `up` 在运行时进入方向函数？",
+        "同时检查两个合法词后，真分支中的 `raw` 会收窄成什么类型？"
+      ],
+      "exercise_prompt": "对标准输入明确比较两个允许的方向字面量，通过时才调用映射函数，其他文本统一报告无效；不得用类型断言冒充验证。",
+      "objective": "左右方向映射为短标记，同时拒绝未识别的命令文本。",
+      "language_delta": "字面量联合约束被检查的源码，擦除后 JavaScript 仍接收普通字符串，因此成员判断必须真实执行。",
+      "prediction_prompt": "先预测缺陷版本对 `up` 会走哪条分支，再与正确拒绝路径比较。",
+      "transfer_trap": "其他语言的封闭枚举可能在构造时自动验证；TypeScript 字符串联合不会生成任何运行时容器。"
+    },
+    "ts-optional-nullish": {
+      "title": "仅为空值提供默认分数",
+      "concept": "解析后的分数是数字或 `null`。空值合并只对 `null` 与 `undefined` 使用备用值，因此有意义的数字零会被保留。",
+      "worked_example": "示例把可选计数设为零并应用 `?? 8`，输出仍为零。它证明精确的缺失规则，却不复用练习姓名或备用分数。",
+      "common_mistakes": [
+        "使用逻辑或，因为零是假值而错误替换合法分数。",
+        "不解析文本 `none`，让字符串缺失标记混入数值计算。"
+      ],
+      "self_check": [
+        "哪些运行时值会触发 `??` 的右操作数？",
+        "分数文本是 `none` 时，变量实际得到什么值？"
+      ],
+      "exercise_prompt": "改用空值合并，使明确的零保持为零，只有真正缺失才使用分数 10；姓名、正分数与输出形态均保持原样。",
+      "objective": "输出记录能清楚区分零、空值以及正常正分数。",
+      "language_delta": "开启严格空值检查后，TypeScript 在联合中显式表示 `null`；实际默认行为仍由 JavaScript 的 `??` 执行。",
+      "prediction_prompt": "对 `Ada 0`，先判断默认表达式左侧值，再说明右侧是否求值。",
+      "transfer_trap": "Python 的 `or` 与 JavaScript 的 `||` 都使用宽泛真假规则，不能代替只针对空值的合并运算。"
+    },
+    "ts-interfaces-aliases": {
+      "title": "组合结构化契约",
+      "concept": "姓名由接口命名，分数由类型别名描述，两者交叉后要求对象同时具有两个字段。兼容性来自成员结构，而不是构造器继承关系。",
+      "worked_example": "独立演示把标签结构与权重结构交叉，再建立一个兼容对象。读取两项成员展示组合，而不会重复练习模型。",
+      "common_mistakes": [
+        "构造交叉对象时擅自给已解析分数加一，破坏来源数据。",
+        "认为接口和等价对象别名会生成不同运行时种类。"
+      ],
+      "self_check": [
+        "值必须同时具备哪两个属性才能满足交叉类型？",
+        "类型别名能命名联合，而接口能否直接做到同一件事？"
+      ],
+      "exercise_prompt": "用未改动的姓名和转换后的数值分数构造交叉对象，再直接读取两个属性形成输出；零和负分也必须原样保留。",
+      "objective": "正分、零分与负分都能经过同一个结构化对象准确输出。",
+      "language_delta": "接口可进行声明合并，类型别名可表达联合；两者在运行时都消失，类与只读视图另有不同职责。",
+      "prediction_prompt": "输入 `Bo -2` 时，先写出交叉对象的两个属性，再考虑模板插值。",
+      "transfer_trap": "Java 接口参与名义声明与虚拟机元数据，不同于 TypeScript 被擦除的结构接口。"
+    },
+    "ts-generics": {
+      "title": "泛型保留首元素类型",
+      "concept": "`first<T>` 保持调用方元素类型，空序列则返回 `undefined`。返回联合已经表达缺失，因此实现无需 `any`、强制断言或非空断言。",
+      "worked_example": "示例定义相反方向的泛型末项函数，并传入三个字符串。推断结果是字符串或 `undefined`，运行时选择最后一项。",
+      "common_mistakes": [
+        "返回索引一，把第二项误认为首项。",
+        "用非空断言强取值，忽略空只读数组是合法输入。"
+      ],
+      "self_check": [
+        "传入字符串数组时，`T` 会推断成什么？",
+        "为何即使部分案例非空，返回类型仍包含 `undefined`？"
+      ],
+      "exercise_prompt": "让泛型辅助函数返回索引零，并保留调用方的显式空值备用文本；单项、多项和空片段数组都不得越界假设。",
+      "objective": "两个非空输入选择首片段，空输入稳定输出约定的 `none`。",
+      "language_delta": "泛型在检查阶段维持类型关系，Node 执行前被擦除；后续键提取、映射和条件类型在其上继续派生。",
+      "prediction_prompt": "推断单元素字符串数组调用后的静态返回类型与实际值。",
+      "transfer_trap": "Java 泛型采用不同擦除和变型规则，Rust 常对泛型实例化；相同尖括号不代表相同实现机制。"
+    },
+    "ts-keyof-typeof": {
+      "title": "为 `keyof` 验证运行时自有键",
+      "concept": "类型查询从限制对象取得静态形状，`keyof` 再派生允许属性名。由 `Object.hasOwn` 支撑的谓词只接受直接储存在该对象上的属性。",
+      "worked_example": "示例派生 tiny 与 huge 两个键，把 `huge` 当作外部文本，并在索引演示对象前通过自有键谓词收窄。",
+      "common_mistakes": [
+        "使用 `in`，连原型继承的 `toString` 等名称也接受。",
+        "混淆 JavaScript 值级 `typeof` 运算与 TypeScript 类型查询位置。"
+      ],
+      "self_check": [
+        "`keyof typeof limits` 会产生哪个字面量联合？",
+        "为何 `Object.hasOwn` 拒绝 `constructor`，而 `in` 能看到它？"
+      ],
+      "exercise_prompt": "建立基于 `Object.hasOwn` 的自有属性类型守卫，证明外部文本合法后才索引限制对象；缺失键和原型键统一判为无效。",
+      "objective": "两个声明尺寸都可解析，同时拒绝不存在及从原型继承的属性名。",
+      "language_delta": "`keyof` 在 Node 中没有运行表示；`Object.hasOwn` 才提供字符串对应直接属性的 JavaScript 证据。",
+      "prediction_prompt": "先比较 `Object.hasOwn(limits, \"toString\")` 与 `\"toString\" in limits`。",
+      "transfer_trap": "某些字典成员运算会遍历继承状态；要求自有键时必须显式排除原型链。"
+    },
+    "ts-indexed-access": {
+      "title": "复用数组元素类型",
+      "concept": "`User[\"scores\"][number]` 从既有模型提取元素类型，避免另写一份可能日后偏离的分数定义。它只在检查阶段求值。",
+      "worked_example": "演示模型从字符串数组派生标签元素，并赋值固定单词 `typed`。两次索引选择都不会生成运行时查找代码。",
+      "common_mistakes": [
+        "未经转换就把标准输入字符串赋给派生数字类型。",
+        "到处手写 `number`，切断字段与来源模型之间的联系。"
+      ],
+      "self_check": [
+        "先选择 `scores` 再以 `number` 索引后得到什么类型？",
+        "起始代码的字符串到数字不匹配会在哪个阶段报告？"
+      ],
+      "exercise_prompt": "跨越输入边界时先执行数值转换，再把结果赋给索引访问派生的分数类型；正数、零与负数均沿同一路径输出。",
+      "objective": "通过严格检查，并准确回显三种符号的数值输入。",
+      "language_delta": "索引访问只计算静态类型，不发出属性查找；真正把 JavaScript 字符串转成数字仍需 `Number`。",
+      "prediction_prompt": "在考虑任何标准输出前，把起始代码失败归类为类型检查问题。",
+      "transfer_trap": "其他生态从模型生成类型时可能附带运行时验证器，此 TypeScript 运算符只提供静态检查。"
+    },
+    "ts-mapped-types": {
+      "title": "把每个功能键映射为开关",
+      "concept": "映射类型遍历功能字面量联合，并要求每个成员都有一个布尔属性。完整性保证日后增加新功能名时，不会悄悄漏掉配置。",
+      "worked_example": "示例把 `dark` 与 `cache` 映射成两个布尔值，并报告启用的演示键。即使仅一个为真，两个必需属性仍同时存在。",
+      "common_mistakes": [
+        "省略 `share`，误以为映射属性默认可选。",
+        "输出笼统的成功词，而案例要求实际启用的功能名称。"
+      ],
+      "self_check": [
+        "不完整对象为何在 Node 读取输入前就失败？",
+        "原始命令为 `none` 时，两个布尔值各应是什么？"
+      ],
+      "exercise_prompt": "补上缺失的映射属性，让对象同时覆盖 `search` 与 `share`，再依据两个开关导出三种可能结果；不得绕过检查器。",
+      "objective": "检查器保证功能覆盖完整，运行时又能产生 `search`、`share` 或 `none`。",
+      "language_delta": "映射类型只为检查器生成对象要求，不会在 Node 执行时分配属性或迭代键。",
+      "prediction_prompt": "预测只有 `search` 属性的对象会收到哪项类型检查诊断。",
+      "transfer_trap": "运行时映射或字典是储存数据的结构，TypeScript 映射类型却是纯编译期变换。"
+    },
+    "ts-conditional-types": {
+      "title": "用条件类型提取元素",
+      "concept": "条件类型判断 `T` 是否为只读数组形态，并用 `infer` 命名其中成员；传入 `string[]` 时，检查器选择的结果就是字符串。",
+      "worked_example": "示例以 `number[]` 实例化同一模式并赋值 11。没有运行时条件检查该数值，因为类型选择早已被擦除。",
+      "common_mistakes": [
+        "条件类型已解析成字符串后，仍把 `Number(raw)` 的数字赋给它。",
+        "以为 `T extends ...` 会依据标准输入内容在运行时选择分支。"
+      ],
+      "self_check": [
+        "`T` 为只读字符串数组时，`Item` 代表什么？",
+        "Node 能观察检查器选中了哪条条件类型分支吗？"
+      ],
+      "exercise_prompt": "把原始输入文本直接赋给提取出的字符串元素类型，不执行数值转换；即使字符看起来像数字，也仍须保持文本语义。",
+      "objective": "三种文本输入均能通过类型检查并原样输出，包括外形像数字的字符。",
+      "language_delta": "条件类型只在 TypeScript 类型系统运行，JavaScript 条件表达式则是另一种会发出代码的运行语法。",
+      "prediction_prompt": "输入文本 `42` 是否会改变静态的字符串元素类型？执行前先说明原因。",
+      "transfer_trap": "其他语言的模板或特征机制可能生成可执行代码，此处的类型选择却会完全擦除。"
+    },
+    "ts-utility-types": {
+      "title": "用工具类型描述局部更新",
+      "concept": "`Pick` 从用户模型选出分数，`Partial` 再让该属性可选。空对象代表没有更新，并不会自动制造任何分数值。",
+      "worked_example": "示例为另一配置模型建立仅含可选 `active` 属性的更新对象，用布尔备用值读取，展示运行时属性可以存在也可以缺失。",
+      "common_mistakes": [
+        "分数片段缺失时自行插入一，而不是保持更新对象为空。",
+        "认为 `Partial` 会递归修改嵌套属性或填入默认值。"
+      ],
+      "self_check": [
+        "Lin 没有分数片段时，哪个对象最准确表示无更新？",
+        "分数更新类型通过 `Pick` 排除了原用户模型的哪个字段？"
+      ],
+      "exercise_prompt": "依据分数片段是否存在，建立空更新对象或含已转换数字的更新对象；只有真正缺失时，最终读取才使用零。",
+      "objective": "提供的正负分数保持原值，真正缺少属性时才稳定回退为零。",
+      "language_delta": "工具类型只重写静态对象形状且不发出代码；运行时究竟有哪些键，仍由普通 JavaScript 对象构造决定。",
+      "prediction_prompt": "在空值合并前，分别画出 `Ada 5` 与 `Lin` 对应的更新对象。",
+      "transfer_trap": "序列化数据里的可选字段仍需运行时解析与验证，TypeScript 的 `Partial` 不能承担这项工作。"
+    },
+    "ts-satisfies-as-const": {
+      "title": "校验路由并保留字面量",
+      "concept": "`as const` 保留精确路由字符串，`satisfies` 检查 `Record` 契约而不把这些字面量改成宽泛类型。外部文本仍须由 `Object.hasOwn` 证明是直接属性。",
+      "worked_example": "示例检查两个状态码，用自有键谓词收窄 `ready` 后读取保留的 `R` 字面量。擦除类型后，对象仍是普通 JavaScript 数据。",
+      "common_mistakes": [
+        "使用 `in`，意外把 `constructor` 等继承名称当成路由。",
+        "相信 `as const` 会冻结对象或递归阻止运行时修改。"
+      ],
+      "self_check": [
+        "这里的 `satisfies` 与强制断言为 `Record<string, string>` 有何差别？",
+        "为何 `Object.hasOwn` 比 `in` 提供更严格的路由条件？"
+      ],
+      "exercise_prompt": "先用自有属性守卫验证请求路由，再索引经 `satisfies` 检查的常量对象；未知键和原型继承键必须走无效分支。",
+      "objective": "返回两个保留的路径字面量，同时拒绝未知及原型链上的名称。",
+      "language_delta": "`satisfies` 检查兼容性而不执行强制转换；`as const` 保留字面量类型，并在编译期把该字面量表达式的属性标为只读，但不会冻结运行时对象。",
+      "prediction_prompt": "先求 `Object.hasOwn(routes, \"constructor\")`，再决定是否允许路由索引。",
+      "transfer_trap": "JavaScript 的 `in` 会沿原型链查找；配置仅接受声明的自有键时，它的范围过宽。"
+    },
+    "ts-discriminated-unions": {
+      "title": "检查点：穷尽带标签的形状联合",
+      "concept": "每种形状拥有字面量标签及对应尺寸。根据共享标签分支后，字段可被安全收窄；把理论上不可能的剩余值赋给 `never` 可检查穷尽性。",
+      "worked_example": "示例联合表示成功或失败，并在两条 `switch` 分支都返回。无关标签展示同样的收窄机制，却不计算矩形或圆。",
+      "common_mistakes": [
+        "尚未证明形状是圆就读取半径。",
+        "后来增加新标签，却保留宽泛默认分支悄悄隐藏遗漏。"
+      ],
+      "self_check": [
+        "矩形分支返回后，剩余值的精确类型是什么？",
+        "为何把圆赋给 `never` 会造成起始代码的类型检查失败？"
+      ],
+      "exercise_prompt": "补全圆形分支后继续保留 `never` 穷尽断言；矩形、圆形及零尺寸都必须通过各自标签访问合法字段。",
+      "objective": "通过严格穷尽检查，并在三组案例中计算两种带标签形状。",
+      "language_delta": "字面量判别字段存在于运行时并驱动 JavaScript 分支，TypeScript 的收窄推理与 `never` 证明随后会被擦除。",
+      "prediction_prompt": "执行前追踪 `circle 5` 从解析、标签收窄到数值返回的全过程。",
+      "transfer_trap": "Rust 通配匹配或其他语言默认分支也会掩盖新增变体，效果类似过宽的 TypeScript 备用分支。"
+    },
+    "ts-async-promise": {
+      "title": "等待带类型的 `Promise`",
+      "concept": "异步函数即使返回表达式是数字，也总会返回 `Promise`。`await` 在 `main` 中等待其完成并取得数字，最外层 `catch` 则观察拒绝结果。",
+      "worked_example": "示例异步地把 9 增加到 10，等待后输出演示记录。拒绝回调把值视为 `unknown`，没有假定所有抛出物都是 `Error`。",
+      "common_mistakes": [
+        "加倍函数仍返回原数字，忘记要求的数值变换。",
+        "调用 `main` 后不观察返回 `Promise` 的拒绝状态。"
+      ],
+      "self_check": [
+        "即使函数体里没有 `await`，加倍函数的静态返回类型是什么？",
+        "标准输出写入会在 `Promise` 完成前还是完成后发生？"
+      ],
+      "exercise_prompt": "让异步加倍函数以参数两倍完成，同时保留 `await` 与最外层拒绝处理；正数、零和负数都须经过异步调用边界。",
+      "objective": "三种符号输入都能通过异步控制流得到正确的两倍结果。",
+      "language_delta": "调度属于 JavaScript 运行时；TypeScript 只验证 `Promise<number>` 和捕获值类型，并不提供执行器。",
+      "prediction_prompt": "输入 -3 时，先预测加倍函数最终完成时携带的数值。",
+      "transfer_trap": "调用 Python 协程不会自动执行，而此 JavaScript 异步函数调用会立即返回已经开始执行的 `Promise` 链。"
+    },
+    "ts-modules": {
+      "title": "单文件运行器中的公开接口",
+      "concept": "此练习只用本地对象描述公开可调用接口，不声称建立真实导入图；评测器只提供一个 TypeScript 文件，无法诚实验证多文件解析。",
+      "worked_example": "示例通过独立接口暴露文本反转方法，把 `module` 反转。对象让边界可见，却不依赖 `ESM` 或 `CommonJS` 的文件解析。",
+      "common_mistakes": [
+        "以为写出导出声明就证明另一个文件能够解析并执行模块。",
+        "继续把文本转小写，违背本地接口承诺的大写行为。"
+      ],
+      "self_check": [
+        "本地标签接口要求实现怎样的方法签名？",
+        "真实多文件 `ESM` 练习还需要 Node 的哪些项目设置？"
+      ],
+      "exercise_prompt": "实现声明好的本地公开接口，把标准输入文本转换为大写；只验证单文件可调用边界，不添加虚假的导入或导出流程。",
+      "objective": "在不假装导入另一文件的前提下，对拉丁字母和重音文本练习带类型的公开接口。",
+      "language_delta": "Node 依据扩展名与包元数据选择 `ESM` 或 `CommonJS`；固定单文件运行器无法同时验证真实导出和导入。",
+      "prediction_prompt": "依据 JavaScript 的 Unicode 大写转换，预测方法接收 `é` 后的结果。",
+      "transfer_trap": "浏览器、打包器与 `CommonJS` 解析文件的方式不同，通过此定向练习不等于掌握多文件模块。"
+    },
+    "ts-error-handling": {
+      "title": "综合：严格验证并执行命令",
+      "concept": "命令解析器必须验证完整且有限的数字片段、拒绝除零，再构造带判别字段的命令。异步执行返回 `Promise`，最终捕获处把 `unknown` 收窄后再标记失败。",
+      "worked_example": "示例揭示两个陷阱：`parseInt` 会接受 `12px` 的数字前缀，解析 `bad` 则得到 `NaN` 而非抛错；捕获到的字符串也需先用 `typeof` 收窄。",
+      "common_mistakes": [
+        "把 `parseInt` 当作验证器，错误接受末尾带字母的数字片段。",
+        "假定 JavaScript 抛出的每个值都是 `Error` 实例。"
+      ],
+      "self_check": [
+        "为何 `Number` 拒绝 `12px`，而 `Number.parseInt` 会接受其中一部分？",
+        "零除检查应在异步执行前由哪一阶段完成？"
+      ],
+      "exercise_prompt": "建立严格解析器，确认命令、完整有限数字及非零除数，再穷尽执行命令联合；失败从 `unknown` 收窄后统一输出无效标记。",
+      "objective": "合法加法和除法输出数值；部分数字、非有限数字和除数为零的情况均输出 `invalid`。",
+      "language_delta": "严格捕获使用 `unknown`，因为 JavaScript 可抛出任意值；`parseInt` 对完全非法文本返回 `NaN`，本身不会进入捕获分支。",
+      "prediction_prompt": "追踪 `add 12px 1` 的转换过程，并指出哪一项完整片段验证会拒绝它。",
+      "transfer_trap": "其他语言的异常式数字解析不能直接迁移；JavaScript 数值转换经常以 `NaN` 报告失败，而不是抛出异常。"
     }
   }
 }

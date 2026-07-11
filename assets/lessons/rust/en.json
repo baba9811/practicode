@@ -159,10 +159,10 @@
         "Could main call grading::verdict directly without the use declaration?",
         "Which keyword changes whether code outside grading may call verdict?"
       ],
-      "exercise_prompt": "Expose a grading function, import its path, and use it to classify the parsed score.",
-      "objective": "Separate module organization, public visibility, and local path convenience.",
+      "exercise_prompt": "Keep the grading function public and imported, then correct its inclusive boundary so every score of 80 or more passes.",
+      "objective": "Resolve a public item through use and apply its inclusive 80-point classification boundary.",
       "language_delta": "Rust use is closer to a lexical alias than a runtime import that loads a package.",
-      "prediction_prompt": "Predict whether removing pub or removing use causes the same compiler diagnostic.",
+      "prediction_prompt": "Predict verdicts for 79, 80, and 91, then explain whether use changes the function's behavior or only its local path.",
       "transfer_trap": "Cargo packages and crates define larger build boundaries; this single-file lab demonstrates only language modules and paths."
     },
     "rust-generics": {
@@ -239,7 +239,7 @@
     },
     "rust-ownership": {
       "title": "Transfer and recover String ownership",
-      "concept": "main removes line endings from its original String buffer and moves that owner into describe. A String value is fixed-size pointer, length, and capacity metadata for one allocation.",
+      "concept": "main removes line endings from its original String and moves that owner into describe. String carries fixed-size pointer, length, and capacity metadata; nonempty input has a UTF-8 buffer, while empty input may remain allocation-free.",
       "worked_example": "wrap consumes its String metadata and takes ownership of the existing buffer; main cannot reuse the moved binding afterward.",
       "common_mistakes": [
         "Trying to read the caller binding after passing it by value triggers a moved-value error.",
@@ -250,7 +250,7 @@
         "Why can describe call len before moving text into the tuple?"
       ],
       "exercise_prompt": "Trim line endings in the original stdin String, move it into describe, and return that owner with its UTF-8 byte length.",
-      "objective": "Follow one allocation across a by-value function boundary without cloning or losing it.",
+      "objective": "Move and return the same String owner across a by-value function boundary without cloning; empty input may remain allocation-free.",
       "language_delta": "Moving a String transfers fixed-size pointer, length, and capacity metadata; it neither copies the heap buffer nor reduces the value to one pointer word.",
       "prediction_prompt": "Predict the byte count for é before comparing it with the later scalar-count lesson.",
       "transfer_trap": "Box and Arc make alternate ownership structures explicit, while RefCell moves borrowing checks to runtime; learn this ordinary move before either extension."
@@ -350,7 +350,7 @@
       "concept": "render accepts &dyn Draw, chooses the concrete implementation through a vtable, and returns a &str borrowed from the widget for no longer than that widget borrow.",
       "worked_example": "The Named example sends a Tag through a trait object and receives its inner text without cloning the owned String.",
       "common_mistakes": [
-        "Adding a generic method to Draw can make the trait incompatible with dyn dispatch.",
+        "Adding a generic method without a `where Self: Sized` restriction can make Draw incompatible with dyn dispatch.",
         "Returning a reference to a temporary String created inside draw would dangle and is rejected."
       ],
       "self_check": [

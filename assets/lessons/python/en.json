@@ -107,7 +107,7 @@
       ],
       "exercise_prompt": "Remove exactly the first and final code points with one half-open slice, then print the interior text.",
       "objective": "Produce the unwrapped interior for ASCII, bracketed, and emoji-delimited strings without mutating the input.",
-      "language_delta": "Path text should not be split manually when pathlib can expose structured components. Python code-point indexing also differs from Java and JavaScript UTF-16 units and Rust UTF-8 byte indices.",
+      "language_delta": "Python code-point indexing differs from Java and JavaScript UTF-16 code units and from Rust UTF-8 byte indices; none of those units automatically represents a displayed grapheme cluster.",
       "prediction_prompt": "Predict both len(\"🙂go🙂\") and the result of \"🙂go🙂\"[1:-1].",
       "transfer_trap": "Code-point-safe slicing is still not grapheme-aware; a displayed symbol built from combining marks may occupy multiple Python positions."
     },
@@ -149,7 +149,7 @@
     },
     "py-functions": {
       "title": "Checkpoint: return a computed area",
-      "concept": "The area function owns one calculation and returns its result. Parsing remains outside, and the caller alone prints, so the same function can be tested, imported, wrapped, or awaited by surrounding code without hidden output.",
+      "concept": "The area function owns one calculation and returns its result. Parsing remains outside, and the caller alone prints, so the same function can be tested, imported, wrapped, or called from synchronous or asynchronous surrounding code without hidden output.",
       "worked_example": "area(8, 2) multiplies its arguments and returns 16. The outer print consumes that returned integer; the function body never writes to stdout.",
       "common_mistakes": [
         "Printing inside area and then printing its None return value from the caller.",
@@ -405,7 +405,7 @@
       "worked_example": "Point(4, 5) stores two fields, its total method returns 9, and generated equality reports True for a second Point with the same field values.",
       "common_mistakes": [
         "Assuming generated equality or a frozen option recursively freezes mutable objects stored in fields.",
-        "Using one mutable class-level default list instead of a per-instance default_factory."
+        "Declaring `values: list[int] = []` is rejected as a mutable dataclass default; use `field(default_factory=list)` per instance or `ClassVar` for intentional sharing."
       ],
       "self_check": [
         "Which equality implementation is used when two Point instances are compared?",

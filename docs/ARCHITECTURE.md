@@ -8,10 +8,11 @@ Practicode is local-first: user data stays under `PRACTICODE_HOME` or `~/.practi
 - `src/core/model.rs` owns persisted/user-facing data shapes and core constants.
 - `src/core/bank.rs` owns local problem-bank loading, saving, starter data, and bank validation.
 - `src/core/state.rs` owns state loading, saving, and settings normalization.
+- `src/core/learning.rs` owns deterministic mastery transitions, due-review selection, completion, and legacy progress migration.
 - `src/core/language.rs` owns language/provider normalization, templates, and extension mapping.
 - `src/core/render.rs` owns plain/markdown problem rendering.
 - `src/core/judge.rs` owns submission file creation, runtime commands, compilation, and judging.
-- `src/core/syntax.rs` owns built-in syntax lesson ordering, starter exercises, localized lesson-copy loading, and syntax progress helpers.
+- `src/core/syntax.rs` validates and loads embedded executable course assets plus localized lesson copy.
 - `src/core/progress.rs` owns give-up/next/previous/pass history transitions.
 - `src/core/problem_files.rs` owns generated problem README/index file writes.
 - `src/core/profile.rs` owns user-profile defaults and normalization helpers.
@@ -21,6 +22,7 @@ Practicode is local-first: user data stays under `PRACTICODE_HOME` or `~/.practi
 - `src/tui/command_handlers.rs` owns slash-command routing.
 - `src/tui/command_input.rs` owns command palette input, completion, and Hangul composition.
 - `src/tui/events.rs` owns keyboard/mouse event routing.
+- `src/tui/learning.rs` owns the Review/Delta/Predict/Exercise/Reflect session queue and learning views.
 - `src/tui/tasks.rs` owns background AI/update/model tasks and output writing helpers.
 - `src/tui/view.rs` owns Ratatui drawing, pane styling, mouse-capture toggles, and cursor placement.
 - `src/tui/problem_list.rs` owns problem-list rendering and navigation.
@@ -33,7 +35,9 @@ Practicode is local-first: user data stays under `PRACTICODE_HOME` or `~/.practi
 - `src/update.rs` owns update checks.
 - `src/text.rs` owns terminal text editing and markdown/plain rendering helpers.
 - `assets/i18n/*.json` stores UI labels and command text.
-- `assets/lessons/<programming-language>/<ui-language>.json` stores required lesson study copy. See [../assets/lessons/README.md](../assets/lessons/README.md).
+- `assets/lessons/<programming-language>/course.json` stores ordered executable lessons, cases, and primary references.
+- `assets/lessons/<programming-language>/<ui-language>.json` stores required lesson study copy, while `review-manifest.json` records independently reviewed content hashes. See [../assets/lessons/README.md](../assets/lessons/README.md).
+- `bin/launcher.js` maps npm installs to versioned GitHub Release binaries, verifies checksums, and owns the per-user binary cache. `bin/practicode.js` is only its executable entry point.
 
 ## Extension Rules
 
@@ -41,6 +45,7 @@ Practicode is local-first: user data stays under `PRACTICODE_HOME` or `~/.practi
 - Add user-visible commands in `src/tui/commands.rs`, then route behavior in `PracticodeApp::handle_command`.
 - Add persisted user profile settings to `Settings`, normalize them in `normalize_settings`, and cover old-state compatibility with tests.
 - Add syntax lesson copy under `assets/lessons/<programming-language>/<ui-language>.json`; every supported UI language must define the required study fields.
+- Keep deterministic cases and executable behavior in `course.json`, never in localized prose. Refresh review evidence only after an independent agent verifies the final hash.
 - Keep provider-specific behavior in `src/ai.rs`; TUI should ask for status or start tasks, not know provider internals.
 - Keep foreground and background generation flows separate: `/next` may block when no local problem exists, while `/generate` must preserve the current problem and user profile state.
 - Keep output panes copy-friendly. Mouse capture should be enabled for the visible code editor, but disabled while output, hints, answers, lists, or settings panels are shown so terminal drag selection keeps working.
@@ -48,4 +53,4 @@ Practicode is local-first: user data stays under `PRACTICODE_HOME` or `~/.practi
 
 ## Release
 
-See [MAINTAINING.md](MAINTAINING.md) for tag-based releases.
+Tags build five native binaries before crates.io/npm publication. The npm native path never invokes Cargo; `--docker` remains an explicit source-image build. See [MAINTAINING.md](MAINTAINING.md).

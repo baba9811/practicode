@@ -574,10 +574,14 @@ fn learn_command_uses_korean_syntax_copy() {
 #[test]
 fn learn_command_uses_supported_ui_language_syntax_copy() {
     let cases = [
-        ("ko", "# 문법: print와 표준 출력", "표준 출력"),
-        ("ja", "# 文法: print と標準出力", "`print` は"),
-        ("zh", "# 语法: print 与标准输出", "`print` 是"),
-        ("es", "# Sintaxis: print y stdout", "`print` es"),
+        ("ko", "# 문법: `print`로 출력 형식 맞추기", "`print`는"),
+        ("ja", "# 文法: `print`で正確に出力する", "`print`は"),
+        ("zh", "# 语法: 用 `print` 精确输出", "Python 的 `print`"),
+        (
+            "es",
+            "# Sintaxis: Salida exacta con `print`",
+            "`print` convierte",
+        ),
     ];
 
     for (lang, title, body) in cases {
@@ -1099,6 +1103,7 @@ fn learning_function_keys_work_while_the_editor_has_focus() {
     let root = tmp_root("learning-function-keys");
     let mut app = PracticodeApp::new(root).unwrap();
     app.handle_command_for_test("learn python").unwrap();
+    app.handle_command_for_test("code").unwrap();
 
     let code_status = app.status_text_for_test();
     app.handle_key_for_test(KeyEvent::new(KeyCode::F(6), KeyModifiers::NONE))
@@ -1238,17 +1243,17 @@ fn learning_status_does_not_claim_view_focus_behind_overlays() {
     let root = tmp_root("learning-overlay-focus");
     let mut app = PracticodeApp::new(root).unwrap();
     app.handle_command_for_test("learn python").unwrap();
-    assert!(app.status_text_for_test().contains("ACTIVE: Code"));
+    assert!(app.status_text_for_test().contains("ACTIVE: Lesson"));
 
     app.focus_command_for_test();
     let status = app.status_text_for_test();
-    assert!(!status.contains("ACTIVE: Code"));
+    assert!(!status.contains("ACTIVE: Lesson"));
     assert_eq!(status.matches("Enter submit | Esc cancel").count(), 1);
     app.handle_key_for_test(KeyEvent::new(KeyCode::Esc, KeyModifiers::NONE))
         .unwrap();
-    assert!(!app.status_text_for_test().contains("ACTIVE: Code"));
+    assert!(!app.status_text_for_test().contains("ACTIVE: Lesson"));
     app.handle_command_for_test("help").unwrap();
-    assert!(!app.status_text_for_test().contains("ACTIVE: Code"));
+    assert!(!app.status_text_for_test().contains("ACTIVE: Lesson"));
 }
 
 #[test]

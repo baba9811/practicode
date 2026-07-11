@@ -4,424 +4,508 @@
   "ui_language": "zh",
   "lessons": {
     "java-output": {
-      "title": "标准输出",
-      "concept": "标准输出用于评测逐字符比较换行和文本。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示标准输出的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "精确的标准输出",
+      "concept": "`System.out.print` 写出参数，`println` 还会结束当前行。评测器把 `CRLF` 规范为 `LF`，除此以外的空格、缺失换行和额外空行都具有实际意义。",
+      "worked_example": "示例由一个 `String` 与一个 `int` 构造 `Mina:4`，并把一个显式换行放进传给 `print` 的文本。输出接口不会另加标签。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把标准输出的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决标准输出练习里的 TODO。",
-        "没有确认“标准输出用于评测逐字符比较换行和文本。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "用空格或连字符替代要求的冒号。",
+        "文本本身已有换行又调用 `println`，从而多出空白行。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用标准输出，然后才到达 `example:` 输出？",
-        "标准输出练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "`print` 接收以 `\\n` 结束的字符串时，数字之后写出什么？",
+        "把示例调用改成 `println` 后，输出还会完全相同吗？"
       ],
-      "exercise_prompt": "完成 TODO，把标准输出应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-variables-types": {
-      "title": "变量与类型",
-      "concept": "变量与类型用于使用基本值和对象引用前必须声明类型。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示变量与类型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把变量与类型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决变量与类型练习里的 TODO。",
-        "没有确认“变量与类型用于使用基本值和对象引用前必须声明类型。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用变量与类型，然后才到达 `example:` 输出？",
-        "变量与类型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把变量与类型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-numbers-operators": {
-      "title": "数字与运算符",
-      "concept": "数字与运算符用于许多 stdin 题目需要保持整数除法和取余。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示数字与运算符的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把数字与运算符的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决数字与运算符练习里的 TODO。",
-        "没有确认“数字与运算符用于许多 stdin 题目需要保持整数除法和取余。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用数字与运算符，然后才到达 `example:` 输出？",
-        "数字与运算符练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把数字与运算符应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-strings": {
-      "title": "字符串",
-      "concept": "字符串用于比较或输出前需要清理文本并提取子串。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示字符串的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把字符串的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决字符串练习里的 TODO。",
-        "没有确认“字符串用于比较或输出前需要清理文本并提取子串。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用字符串，然后才到达 `example:` 输出？",
-        "字符串练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把字符串应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-control-flow": {
-      "title": "控制流",
-      "concept": "控制流用于分支和循环决定哪些值进入累加器。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示控制流的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把控制流的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决控制流练习里的 TODO。",
-        "没有确认“控制流用于分支和循环决定哪些值进入累加器。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用控制流，然后才到达 `example:` 输出？",
-        "控制流练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把控制流应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-methods": {
-      "title": "方法",
-      "concept": "方法用于可复用计算需要命名边界。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示方法的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把方法的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决方法练习里的 TODO。",
-        "没有确认“方法用于可复用计算需要命名边界。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用方法，然后才到达 `example:` 输出？",
-        "方法练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把方法应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "解析学习者姓名与分数，组成一条冒号分隔记录，并有意选择输出方法，使末尾恰好只有一个换行且没有其他空白。",
+      "objective": "分隔符和行尾都由明确格式决定，三组记录均产生干净且稳定的标准输出。",
+      "language_delta": "Java 通过 `System.out` 流输出，并区分 `print` 与 `println`；这不同于直接提供全局打印函数的语言。",
+      "prediction_prompt": "运行前写出示例产生的完整字符序列，并把最后换行也标明。",
+      "transfer_trap": "终端上看起来相同的两行，仍可能因缺少或重复换行而不同；但此评测会统一两种常见行尾编码。"
     },
     "java-input": {
-      "title": "输入解析",
-      "concept": "输入解析用于stdin 字节必须变成带类型的 token。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示输入解析的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "以 `UTF-8` 解码标准输入",
+      "concept": "`System.in` 提供字节而不是现成文本。配合 `readAllBytes` 与 `StandardCharsets.UTF_8` 可明确解码；不在 `java.lang` 中的类需要导入或完整名称。",
+      "worked_example": "`ByteArrayInputStream` 代替标准输入，字节以 `UTF-8` 解码，两个片段转成整数后相加。演示输出带标签，不会泄露练习结果。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把输入解析的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决输入解析练习里的 TODO。",
-        "没有确认“输入解析用于stdin 字节必须变成带类型的 token。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "从字节构造字符串时依赖平台默认字符集。",
+        "把空输入拆成片段，再尝试解析空整数。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用输入解析，然后才到达 `example:` 输出？",
-        "输入解析练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "为何要导入 `StandardCharsets`，而 `String` 无需导入？",
+        "哪条分支阻止空输入到达 `Integer.parseInt`？"
       ],
-      "exercise_prompt": "完成 TODO，把输入解析应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "以 `UTF-8` 解码全部标准输入，把默认正则空白分隔的每个合法有符号整数相加；没有片段时累加器必须保持零。",
+      "objective": "单行、多行与零字节输入都能通过同一解码路径得到正确总和。",
+      "language_delta": "部分运行时默认把标准输入暴露为文本，Java 提供的是 `InputStream`，所以字符集选择属于程序契约。",
+      "prediction_prompt": "先预测数字分布在多行时的总和，再预测完全没有输入字节时的结果。",
+      "transfer_trap": "导入只缩短源码中的类型名称，既不会安装依赖，也不会动态加载所引用的 JDK 类。"
     },
-    "java-arrays-collections": {
-      "title": "数组与集合",
-      "concept": "数组与集合用于固定数组、可增长 List、键值 Map 和唯一 Set 负责不同容器任务。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示数组与集合的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "java-variables-types": {
+      "title": "带类型的值与 `final` 绑定",
+      "concept": "局部声明让每个值拥有编译期类型；基本类型直接保存值，引用指向对象，`final` 阻止重新绑定却不保证对象深层不可变。类级状态则由 `static` 拥有。",
+      "worked_example": "演示把姓名引用固定，比较可变整数分数与门槛，并先把结果存入布尔变量，再组成报告；引用不可重绑并未冻结任何对象。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把数组与集合的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决数组与集合练习里的 TODO。",
-        "没有确认“数组与集合用于固定数组、可增长 List、键值 Map 和唯一 Set 负责不同容器任务。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "规则是至少达到门槛，却把刚好相等判为失败。",
+        "以为 `final` 引用会递归冻结所有可达对象。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用数组与集合，然后才到达 `example:` 输出？",
-        "数组与集合练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "示例中哪个声明可再次赋值，哪个不能？",
+        "分数和门槛都为零时，比较结果是什么？"
       ],
-      "exercise_prompt": "完成 TODO，把数组与集合应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "把姓名、分数与门槛保存在适当声明类型中，使用包含相等边界的比较产生布尔报告；零分零门槛也必须判为通过。",
+      "objective": "在一条记录中连接 `String`、`int` 与 `boolean`，同时保留相等边界。",
+      "language_delta": "Java 局部类型和 `final` 是编译期约束；固定引用类似不可重绑名称，却不承诺引用对象不可修改。",
+      "prediction_prompt": "先计算高于门槛的比较，再单独计算恰好等于门槛的情况。",
+      "transfer_trap": "不要把 JavaScript 真假性带入 Java：整数不能直接放在要求布尔值的条件位置。"
     },
-    "java-classes-objects": {
-      "title": "类与对象",
-      "concept": "类与对象用于对象需要同时拥有实例状态和行为。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示类与对象的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "java-numbers-operators": {
+      "title": "朝零截断的整数运算",
+      "concept": "两个 `int` 使用 `/` 时，商朝零截断；`%` 给出配套余数，余数符号跟随被除数。商乘除数再加余数必须重建被除数。",
+      "worked_example": "19 除以 4 得到商 4、余数 3；两者满足除法恒等式，示例再用文字标签与练习要求的紧凑格式区分。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把类与对象的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决类与对象练习里的 TODO。",
-        "没有确认“类与对象用于对象需要同时拥有实例状态和行为。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "换成 `Math.floorDiv`，导致负数商改为向下取整。",
+        "以向下取模规则推导余数，而没有使用 Java 的 `%`。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用类与对象，然后才到达 `example:` 输出？",
-        "类与对象练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "被除数为负、除数为正时，商朝哪个方向取整？",
+        "如何用乘法与加法核验每组商余数？"
       ],
-      "exercise_prompt": "完成 TODO，把类与对象应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "解析两个整数并保证除数非零，使用 Java 原生整数 `/` 与 `%`，按冒号顺序输出商和余数；三个符号组合都需维持恒等式。",
+      "objective": "不引入其他语言的向下取整规则，也能正确完成有符号整数除法。",
+      "language_delta": "Python 的 `//` 朝负无穷取整，而 Java 的整数 `/` 朝零截断；负数案例最能暴露差异。",
+      "prediction_prompt": "执行前计算 `-17 / 5` 与 `-17 % 5` 两个字段。",
+      "transfer_trap": "任一操作数改成浮点数都会选择不同运算，不再展示整数截断语义。"
     },
-    "java-constructors": {
-      "title": "构造器",
-      "concept": "构造器用于新对象必须以有效字段值开始。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示构造器的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "java-strings": {
+      "title": "字符串清理与内容比较",
+      "concept": "`strip` 删除两侧由 `Character.isWhitespace` 识别的码点并返回新 `String`，不会修改来源。长度与索引按 `UTF-16` 编码单元计算；`.equals` 比内容，`==` 比引用。",
+      "worked_example": "示例先清理花括号文本，确认首尾是一对匹配分隔符，再用 `substring` 取得内部；原字符串保持不变。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把构造器的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决构造器练习里的 TODO。",
-        "没有确认“构造器用于新对象必须以有效字段值开始。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "用 `==` 判断两个独立构造字符串的文本内容。",
+        "未确认匹配括号，就机械删除首尾编码单元。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用构造器，然后才到达 `example:` 输出？",
-        "构造器练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "为何子串结束索引是 `length() - 1` 而不是 `length()`？",
+        "一个字符由代理对表示时，`length` 实际计算什么？"
       ],
-      "exercise_prompt": "完成 TODO，把构造器应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "先对输入调用 `strip`，确认外层是一对方括号或花括号后只移除这一对，并完整保留其中的 Unicode 文本。",
+      "objective": "不依赖引用相等，也不修改原字符串，即可规范三种包裹文本。",
+      "language_delta": "Java 和 JavaScript 都索引 `UTF-16` 单元；Python 字符串索引则以 Unicode 码点为单位。",
+      "prediction_prompt": "针对带方括号的韩文输入，逐步写出清理后长度和子串边界。",
+      "transfer_trap": "`UTF-16` 单元和 Unicode 码点都不等于用户感知的字素簇。"
     },
-    "java-encapsulation": {
-      "title": "封装",
-      "concept": "封装用于调用方应通过方法更新状态而不是直接访问字段。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示封装的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "java-control-flow": {
+      "title": "分支与有界循环",
+      "concept": "`for` 控制从一到上界的闭区间，`if` 只让奇数进入累加器。Java 条件必须是布尔值，不能把非零整数当作真。",
+      "worked_example": "计数器从 1 前进到 7，只有除以二后余数非零的值参与，因此累加 1、3、5、7，并以独立标签输出所得总和。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把封装的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决封装练习里的 TODO。",
-        "没有确认“封装用于调用方应通过方法更新状态而不是直接访问字段。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "使用 `< limit`，上界恰为奇数时悄悄遗漏它。",
+        "直接把整数写进 `if` 条件，误以为 Java 支持数字真假性。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用封装，然后才到达 `example:` 输出？",
-        "封装练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "上界为六时，哪些循环值会贡献总和？",
+        "上界为零时，循环体为什么一次也不运行？"
       ],
-      "exercise_prompt": "完成 TODO，把封装应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-static-members": {
-      "title": "static 成员",
-      "concept": "static 成员用于值属于类而不是某个实例。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示static 成员的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把static 成员的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决static 成员练习里的 TODO。",
-        "没有确认“static 成员用于值属于类而不是某个实例。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用static 成员，然后才到达 `example:` 输出？",
-        "static 成员练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把static 成员应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "遍历从一到输入上界的完整闭区间，只把奇数加入累加器；零边界、奇数终点与偶数终点均须正确输出。",
+      "objective": "协调循环边界、奇偶分支和累加器，覆盖零及正上界。",
+      "language_delta": "Java 要求条件具有 `boolean` 类型，不像某些语言会把零与非零数强制转换为真假。",
+      "prediction_prompt": "上界为三时，列出每个访问值并标记哪些会改变总和。",
+      "transfer_trap": "箭头式 `switch` 避免贯穿，但普通循环仍需正确选择初始化、条件和更新。"
     },
     "java-enum-switch": {
-      "title": "enum 与 switch",
-      "concept": "enum 与 switch用于固定状态集合需要映射为明确结果。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示enum 与 switch的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "穷尽的枚举 `switch` 表达式",
+      "concept": "枚举定义有限的单例常量集合。`switch` 表达式可用箭头规则把每个常量映射为值，不会意外贯穿到下一分支。",
+      "worked_example": "示例分别把 `STARTED` 与 `STOPPED` 映射成动作，再把表达式结果赋给字符串，仅在演示输出时增加前缀。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把enum 与 switch的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决enum 与 switch练习里的 TODO。",
-        "没有确认“enum 与 switch用于固定状态集合需要映射为明确结果。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "添加宽泛 `default`，枚举扩展后反而隐藏未处理常量。",
+        "误以为箭头分支会继续执行下一分支体。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用enum 与 switch，然后才到达 `example:` 输出？",
-        "enum 与 switch练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "缺少一个枚举分支且没有默认分支时，编译器会如何反馈？",
+        "单个状态会执行几个箭头规则？"
       ],
-      "exercise_prompt": "完成 TODO，把enum 与 switch应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "修正三个任务状态各自的文本映射，同时保持 `switch` 表达式穷尽且不增加掩盖遗漏的默认分支。",
+      "objective": "无需可变结果变量或贯穿行为，把封闭枚举状态转换成文本。",
+      "language_delta": "现代 Java `switch` 表达式直接产生值，早期仅语句形式常需赋值和 `break`。",
+      "prediction_prompt": "选择 `BLOCKED` 进入的确切分支，并判断之后是否还会执行其他分支。",
+      "transfer_trap": "枚举上的穷尽性不会让任意字符串自动安全；`valueOf` 仍会拒绝未知名称。"
     },
-    "java-exceptions": {
-      "title": "异常",
-      "concept": "异常用于坏输入需要恢复但不能隐藏无关失败。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示异常的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+    "java-methods": {
+      "title": "检查点：带类型的静态方法",
+      "concept": "方法签名固定参数与返回类型，每个实参值都会进入新的形参变量。此检查点只让面积计算位于一个带类型的静态方法中，避免在入口重复表达式。",
+      "worked_example": "面积计算位于 `area(int, int)`，入口方法提供独立演示尺寸；返回值先穿过方法边界，再参与输出格式化。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把异常的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决异常练习里的 TODO。",
-        "没有确认“异常用于坏输入需要恢复但不能隐藏无关失败。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "在入口方法重复乘法，而不完成具名面积方法。",
+        "认为被调用方法能替换调用方的引用变量，只因两者一度指向同一对象。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用异常，然后才到达 `example:` 输出？",
-        "异常练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "`area` 声明了什么返回类型和哪两个形参类型？",
+        "为什么入口应调用 `area`，而不是再次写出乘法表达式？"
       ],
-      "exercise_prompt": "完成 TODO，把异常应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-generics": {
-      "title": "泛型",
-      "concept": "泛型用于一个方法需要保留调用方的元素类型。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示泛型的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把泛型的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决泛型练习里的 TODO。",
-        "没有确认“泛型用于一个方法需要保留调用方的元素类型。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用泛型，然后才到达 `example:` 输出？",
-        "泛型练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把泛型应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-interfaces": {
-      "title": "接口",
-      "concept": "接口用于调用方应依赖行为契约而不是具体类。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示接口的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把接口的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决接口练习里的 TODO。",
-        "没有确认“接口用于调用方应依赖行为契约而不是具体类。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用接口，然后才到达 `example:` 输出？",
-        "接口练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把接口应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-inheritance-composition": {
-      "title": "继承与组合",
-      "concept": "继承与组合用于子类还需要辅助对象来完成行为。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示继承与组合的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把继承与组合的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决继承与组合练习里的 TODO。",
-        "没有确认“继承与组合用于子类还需要辅助对象来完成行为。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用继承与组合，然后才到达 `example:` 输出？",
-        "继承与组合练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把继承与组合应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-records": {
-      "title": "record",
-      "concept": "record用于不可变数据载体需要减少样板代码。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示record的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把record的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决record练习里的 TODO。",
-        "没有确认“record用于不可变数据载体需要减少样板代码。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用record，然后才到达 `example:` 输出？",
-        "record练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把record应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-optional": {
-      "title": "Optional",
-      "concept": "Optional用于缺失值必须显式处理。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Optional的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把Optional的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Optional练习里的 TODO。",
-        "没有确认“Optional用于缺失值必须显式处理。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用Optional，然后才到达 `example:` 输出？",
-        "Optional练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把Optional应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-streams-lambdas": {
-      "title": "Stream 与 lambda",
-      "concept": "Stream 与 lambda用于集合处理用流水线更清晰。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Stream 与 lambda的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把Stream 与 lambda的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Stream 与 lambda练习里的 TODO。",
-        "没有确认“Stream 与 lambda用于集合处理用流水线更清晰。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用Stream 与 lambda，然后才到达 `example:` 输出？",
-        "Stream 与 lambda练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把Stream 与 lambda应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-comparators-sorting": {
-      "title": "Comparator 与排序",
-      "concept": "Comparator 与排序用于对象需要与数据形状分离的排序规则。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示Comparator 与排序的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把Comparator 与排序的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决Comparator 与排序练习里的 TODO。",
-        "没有确认“Comparator 与排序用于对象需要与数据形状分离的排序规则。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用Comparator 与排序，然后才到达 `example:` 输出？",
-        "Comparator 与排序练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把Comparator 与排序应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-try-with-resources": {
-      "title": "try-with-resources",
-      "concept": "try-with-resources用于代码提前退出时资源也必须关闭。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示try-with-resources的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把try-with-resources的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决try-with-resources练习里的 TODO。",
-        "没有确认“try-with-resources用于代码提前退出时资源也必须关闭。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用try-with-resources，然后才到达 `example:` 输出？",
-        "try-with-resources练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把try-with-resources应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-packages-imports": {
-      "title": "package 与 import",
-      "concept": "package 与 import用于单文件练习仍需要 JDK 包中的类。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示package 与 import的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把package 与 import的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决package 与 import练习里的 TODO。",
-        "没有确认“package 与 import用于单文件练习仍需要 JDK 包中的类。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用package 与 import，然后才到达 `example:` 输出？",
-        "package 与 import练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把package 与 import应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-annotations": {
-      "title": "注解",
-      "concept": "注解用于元数据应附着在声明而不是运行逻辑中。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示注解的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把注解的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决注解练习里的 TODO。",
-        "没有确认“注解用于元数据应附着在声明而不是运行逻辑中。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用注解，然后才到达 `example:` 输出？",
-        "注解练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把注解应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-sealed-classes": {
-      "title": "sealed 类",
-      "concept": "sealed 类用于领域层次需要列出允许的实现。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示sealed 类的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把sealed 类的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决sealed 类练习里的 TODO。",
-        "没有确认“sealed 类用于领域层次需要列出允许的实现。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用sealed 类，然后才到达 `example:` 输出？",
-        "sealed 类练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把sealed 类应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-testing-assert": {
-      "title": "测试与 assert",
-      "concept": "测试与 assert用于小检查应在出错方法附近失败。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示测试与 assert的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把测试与 assert的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决测试与 assert练习里的 TODO。",
-        "没有确认“测试与 assert用于小检查应在出错方法附近失败。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用测试与 assert，然后才到达 `example:` 输出？",
-        "测试与 assert练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把测试与 assert应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
-    },
-    "java-equality-hashcode": {
-      "title": "equals 与 hashCode",
-      "concept": "equals 与 hashCode用于HashSet 必须识别相等的值对象。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示equals 与 hashCode的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
-      "common_mistakes": [
-        "只改最后的输出行，却没有把equals 与 hashCode的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决equals 与 hashCode练习里的 TODO。",
-        "没有确认“equals 与 hashCode用于HashSet 必须识别相等的值对象。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
-      ],
-      "self_check": [
-        "示例中哪个表达式先应用equals 与 hashCode，然后才到达 `example:` 输出？",
-        "equals 与 hashCode练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
-      ],
-      "exercise_prompt": "完成 TODO，把equals 与 hashCode应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "完成返回矩形乘积的静态面积方法，把标准输入解析和最终输出继续保留在入口方法；零尺寸也不得绕过调用。",
+      "objective": "用可复用的返回值边界表达计算，而不是把全部逻辑塞进入口。",
+      "language_delta": "Java 在编译期检查形参与返回类型，而且静态面积方法无需构造 `Solution` 对象即可调用。",
+      "prediction_prompt": "追踪两个已解析整数进入形参、经过返回语句、再回到 `println` 的路径。",
+      "transfer_trap": "若传入对象，Java 复制的是引用值；被调用方法仍不能据此替换调用方保存引用的变量。"
     },
     "java-overloading-varargs": {
-      "title": "重载与 varargs",
-      "concept": "重载与 varargs用于方法调用会选择签名并收集额外参数。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。",
-      "worked_example": "示例用带 `example:` 标签的演示输出展示重载与 varargs的流程。先看值在到达 stdout 前由哪一行改变，练习中再把同一思路用到另一组数据上。",
+      "title": "重载与可变参数数组",
+      "concept": "重载让同一方法名拥有多个签名，编译器选择适用者；`int...` 形参进入方法体后就是 `int[]`。",
+      "worked_example": "可变参数重载先汇总两项分数，再把计算出的整数委托给固定参数格式化重载；第二次调用因此选择非可变参数签名。",
       "common_mistakes": [
-        "只改最后的输出行，却没有把重载与 varargs的规则留在代码路径里。",
-        "直接复制带 `example:` 标签的演示输出，没有解决重载与 varargs练习里的 TODO。",
-        "没有确认“重载与 varargs用于方法调用会选择签名并收集额外参数。本课保持单个 Solution.java，让你看到值的准备、Java API 调用以及精确 stdout 输出如何连接。”这个要点，只去凑 judge 输出。"
+        "题目要求数值总和，却返回可变参数元素个数。",
+        "以为重载分派要等到运行时检查数组内容。"
       ],
       "self_check": [
-        "示例中哪个表达式先应用重载与 varargs，然后才到达 `example:` 输出？",
-        "重载与 varargs练习里的 TODO 行必须根据自己的数据生成什么值，而不是复制演示？"
+        "为何 `label(name, total)` 选择双参数重载？",
+        "姓名后只有一个零时，可变参数方法收到什么数组？"
       ],
-      "exercise_prompt": "完成 TODO，把重载与 varargs应用到练习数据上。stdout 要保持为 judge 可比较的干净输出；`example:` 标签只属于示例。"
+      "exercise_prompt": "汇总解析后的完整分数数组，再把该总和委托给固定参数格式化重载；单项零与多项负数都须选择正确签名。",
+      "objective": "同时观察编译期重载解析和可变参数在方法体内的数组性质。",
+      "language_delta": "Java 可变参数参与静态适用性与重载排名，不同于 JavaScript 的剩余参数分派。",
+      "prediction_prompt": "计算输出前，依次指出示例两次调用分别选中的重载。",
+      "transfer_trap": "新增一个过宽重载可能令调用产生歧义，即使每个实现单独看都合法。"
+    },
+    "java-packages-imports": {
+      "title": "导入与完整限定名称",
+      "concept": "导入让源码使用简单类型名，同一编译单元也可用包限定名称引用其他类型，例如把导入的 `ArrayList` 赋给 `java.util.List`。",
+      "worked_example": "变量以 `List` 接口声明，构造器通过导入使用 `ArrayList`。连接其中单词证明集合确实参与运行。",
+      "common_mistakes": [
+        "认为导入会下载库或执行初始化代码。",
+        "导入两个同名类型后，期待 Java 自动猜出目标。"
+      ],
+      "self_check": [
+        "移除 `ArrayList` 导入后，哪种完整写法仍能工作？",
+        "为什么 `String` 不需要导入或写成 `java.lang.String`？"
+      ],
+      "exercise_prompt": "把所有输入片段加入以完整接口名声明、由导入实现创建的列表，再无分隔符连接；空输入仍须输出一行。",
+      "objective": "在实际使用集合时，区分命名便利与类型可用性。",
+      "language_delta": "Java 导入只改变编译单元的名称解析，不会像 Python 模块执行或 JavaScript 模块加载那样运行代码。",
+      "prediction_prompt": "运行前把示例里的每个简单名和限定名解析到所属包。",
+      "transfer_trap": "通配导入不包含子包，也不能解决两个简单名称本就含糊的情况。"
+    },
+    "java-arrays-collections": {
+      "title": "观察数组与三种集合",
+      "concept": "数组长度固定，泛型 `List`、`Map`、`Set` 则分别表达顺序、键值频率与唯一性。流可从映射条目推导聚合，但终止操作才真正执行遍历。",
+      "worked_example": "每个数组值都进入列表、频率映射和唯一集合；总和从键乘出现次数重建，因此三个输出字段都确实观察所标容器。",
+      "common_mistakes": [
+        "契约要求从映射条目求和，却直接输出数组长度。",
+        "存在重复值时混淆列表大小、集合大小与映射键数。"
+      ],
+      "self_check": [
+        "输入 `2 2 3` 后，三个集合各保存什么？",
+        "计算映射总和的流以哪个终止操作结束？"
+      ],
+      "exercise_prompt": "填充列表、频率映射和唯一集合，并从频率条目计算报告第一字段；重复输入和空输入都不得回头读取数组长度冒充总和。",
+      "objective": "用一条对重复敏感的报告解释三种可观察集合语义。",
+      "language_delta": "Java 数组是保留运行时元素类型的定长对象，泛型集合元素类型主要在静态检查后被擦除。",
+      "prediction_prompt": "先画出重复输入时 `List`、`Map`、`Set` 的状态，再计算三个字段。",
+      "transfer_trap": "流直到终止操作才执行，而且一次消费后不能重复使用同一个流对象。"
+    },
+    "java-generics": {
+      "title": "泛型元素类型保持",
+      "concept": "类型参数把输入与输出连接起来：`<T> T last(List<T>)` 返回列表相同的元素类型。原始类型会丢弃这种有用检查。",
+      "worked_example": "颜色列表使类型推断选择 `String`，辅助方法取得最后位置并直接返回字符串，无需强制转换。",
+      "common_mistakes": [
+        "使用原始 `List`，把本可预防的类型错误推迟到运行时。",
+        "固定读取索引零，多项输入时错误返回首元素。"
+      ],
+      "self_check": [
+        "传入 `List<Integer>` 时，同一辅助方法的 `T` 是什么？",
+        "从 `size()` 减一前需要满足哪项前置条件？"
+      ],
+      "exercise_prompt": "完成泛型列表最后元素的选择，保持调用方元素类型且不使用原始集合或强制转换；单项与多项列表都要读取最远端。",
+      "objective": "用一个类型变量表达调用方无需转换即可依赖的输入输出关系。",
+      "language_delta": "Java 泛型通常擦除，数组却保留运行时元素类型；即便如此，编译期关系仍能阻止许多无效调用。",
+      "prediction_prompt": "对每组词列表，先推断方法的 `T`，再计算选中的索引。",
+      "transfer_trap": "擦除不代表原始集合安全，只表示大量泛型表示不会保留到运行时。"
+    },
+    "java-streams-lambdas": {
+      "title": "惰性流与 Lambda",
+      "concept": "流先描述元素处理，直到终止操作请求结果。这里 `IntStream` 以 Lambda 筛选偶数，再用 `map` 平方，最后 `sum` 只遍历一次。",
+      "worked_example": "`IntStream.of` 建立两个演示值，谓词保留两个偶数，映射平方后由终止求和产生带标签结果。",
+      "common_mistakes": [
+        "只建立筛选和映射，却从未调用终止操作。",
+        "`sum` 已消费遍历后，再次使用同一个流。"
+      ],
+      "self_check": [
+        "示例的谓词与映射在什么时刻真正求值？",
+        "零为何通过偶数筛选，却不增加平方总和？"
+      ],
+      "exercise_prompt": "从解析序列中保留偶数、将其平方，并用一个终止 `sum` 得到结果；混合负数和没有偶数的案例都须自然处理。",
+      "objective": "把惰性中间操作连接到一个可观察的数值结果。",
+      "language_delta": "Java 流是单次遍历流水线，不是可重用集合容器，也不是 JavaScript 数组。",
+      "prediction_prompt": "针对含负数案例，分别写出筛选后和映射后的序列。",
+      "transfer_trap": "流的遇见顺序与惰性不代表自动并行，并行执行需要另行选择。"
+    },
+    "java-comparators-sorting": {
+      "title": "组合 `Comparator` 排序规则",
+      "concept": "`comparingInt`、`reversed` 与 `thenComparing` 逐项表达排序规则，避免用减法比较极端整数时溢出。",
+      "worked_example": "Kai 与 Bea 分数相同，第二阶段按姓名升序让 Bea 先出现；示例排序后读取第一条记录。",
+      "common_mistakes": [
+        "反转整条已组合比较器，连姓名平局规则也被颠倒。",
+        "返回左右分数之差，整数溢出后破坏比较契约。"
+      ],
+      "self_check": [
+        "分数相等时由哪个比较阶段决定顺序？",
+        "只有一个负分用户时，为什么它仍是列表第一项？"
+      ],
+      "exercise_prompt": "组合分数降序与姓名升序两个方向，排序后输出第一位用户；同分案例必须由第二规则决定，而不是依赖输入先后。",
+      "objective": "把稳定业务顺序编码为清晰且可复用的比较器组合。",
+      "language_delta": "Java `Comparator` 对象可为任意记录显式定义顺序，普通 `<` 运算符不能直接排序对象。",
+      "prediction_prompt": "手工排序三用户案例，每次只应用一个比较阶段并记录变化。",
+      "transfer_trap": "`reversed()` 只反转此前已经构建的比较器，调用位置不同会改变平局行为。"
+    },
+    "java-classes-objects": {
+      "title": "每个实例独立拥有状态",
+      "concept": "每个对象拥有自己的实例字段，方法为该状态提供行为。参数只是局部值，只有明确写入接收者字段，实例才会发生变化。",
+      "worked_example": "计数器从 10 开始，通过 `add` 接收增量 2；方法修改当前实例的字段，入口随后观察到 12。",
+      "common_mistakes": [
+        "只改变参数变量，误以为对象字段会随之更新。",
+        "把全部状态声明为 `static`，让本应独立的实例共享一个值。"
+      ],
+      "self_check": [
+        "`add` 中哪一个储存位置必须改变，哪个局部变量只携带实参？",
+        "两个计数器实例为何应能保有不同数值？"
+      ],
+      "exercise_prompt": "把解析后的增量传给计数器方法，并让该方法更新接收者自己的字段；不得只改形参，正负初值都须由实例保存结果。",
+      "objective": "通过最小类实例观察对象身份与受方法封装的修改。",
+      "language_delta": "Java 类使用名义声明类型与显式构造器，不同于只按结构兼容的对象形状。",
+      "prediction_prompt": "方法调用前后分别追踪计数器字段与 `delta` 参数，切勿把两者混为一处。",
+      "transfer_trap": "私有访问可阻止外部直接写入，却只有方法逻辑才能真正保护领域不变量。"
+    },
+    "java-constructors": {
+      "title": "由构造器建立不变量",
+      "concept": "构造器名称与类相同且没有返回类型；正常结束前必须给每个空白 `final` 实例字段赋值，常用 `this.field` 区分同名形参。",
+      "worked_example": "矩形构造器把两个实参分别写入固定尺寸；对象正常创建后，面积方法便可假定宽高两个字段都已经建立。",
+      "common_mistakes": [
+        "写成 `void Rectangle(...)`，实际声明普通方法而非构造器。",
+        "把形参赋给自身，留下同名字段未初始化。"
+      ],
+      "self_check": [
+        "`this.width = width` 左侧与右侧分别指什么？",
+        "为何漏赋一个 `final` 字段的构造路径会被编译器拒绝？"
+      ],
+      "exercise_prompt": "在构造器中用两个同名实参分别初始化宽和高，使面积方法始终读取有效固定字段；禁止以一作为占位高度。",
+      "objective": "对象创建时一次性建立完整状态，而不留下占位尺寸。",
+      "language_delta": "Java 构造器是特殊声明，不是返回初始化值的普通函数。",
+      "prediction_prompt": "计算面积前，先解析两条赋值中字段与同名形参的对应关系。",
+      "transfer_trap": "固定字段防止构造后重新赋值，却不会递归冻结它可能引用的对象。"
+    },
+    "java-encapsulation": {
+      "title": "私有状态与显式规则",
+      "concept": "私有字段向无关代码隐藏表示，但公开操作仍须验证请求变化；可见性与领域不变量解决的是两类问题。",
+      "worked_example": "账户依次接收正二、负七、正四，方法接受两次正存款并忽略负请求；读取方法最终只暴露计算后的余额六。",
+      "common_mistakes": [
+        "认为 `private` 会自动拒绝经方法传入的非法值。",
+        "直接返回可变内部集合，绕过原本打算维护的边界。"
+      ],
+      "self_check": [
+        "示例中哪一次调用不会改变余额？",
+        "账户类内部代码仍能给私有字段写入非法值吗？"
+      ],
+      "exercise_prompt": "把只接受正增量的规则放进存款方法，并只通过读取方法报告余额；负数和空输入不得修改初始零状态。",
+      "objective": "在真正拥有状态转移的方法处执行一个清晰不变量。",
+      "language_delta": "Java 访问修饰符在编译期和运行时限制成员访问，却不会自动执行领域验证。",
+      "prediction_prompt": "依次应用每个解析增量，并记录守卫接受或拒绝哪一项。",
+      "transfer_trap": "读取方法若返回可变内部对象，仍会泄漏封装；应根据需要返回安全视图或副本。"
+    },
+    "java-static-members": {
+      "title": "类拥有的 `static` 常量",
+      "concept": "静态字段属于类，由所有调用与实例共享。`static final` 固定字段绑定，但若绑定的是对象，该对象内部仍可能可变。",
+      "worked_example": "缩放方法在类上下文读取 `FACTOR` 并乘演示数值，访问两个静态成员都不需要创建实例。",
+      "common_mistakes": [
+        "只为调用静态工具而创建对象，掩盖类级所有权。",
+        "把 `final` 误读成任意字段类型的深层不可变承诺。"
+      ],
+      "self_check": [
+        "创建十个类实例后，`FACTOR` 有几个储存位置？",
+        "静态方法没有实例时能直接读取实例字段吗？"
+      ],
+      "exercise_prompt": "修正全类共享的缩放因子，让静态方法对正数、零和负数都执行同一乘法；不要创建无意义实例，也不要把因子移入每对象字段。",
+      "objective": "有意使用类级状态，并把它与每对象字段清楚区分。",
+      "language_delta": "Java 的 `static` 把成员附着到声明类，不同于没有容器类型的模块级绑定。",
+      "prediction_prompt": "把类因子代入三个有符号输入的乘法，逐项预测结果。",
+      "transfer_trap": "可变静态字段会让所有实例共享状态，多线程访问时往往还需要同步。"
+    },
+    "java-interfaces": {
+      "title": "通过接口调用共同行为",
+      "concept": "接口为公开行为命名契约。接收 `Named` 的代码可调用 `name()`，无需知道实现来自记录、普通类还是其他声明类型。",
+      "worked_example": "用户记录通过访问器实现 `Named`，渲染器只依赖接口，并以 `Locale.ROOT` 执行稳定的大写转换。",
+      "common_mistakes": [
+        "缩小实现方法可见性，尽管接口方法本来就是公开的。",
+        "让渲染器直接依赖用户记录，平白耦合单一实现。"
+      ],
+      "self_check": [
+        "声明为 `Named` 的变量可调用哪个方法？",
+        "另一个类不继承用户记录，也能参与该契约吗？"
+      ],
+      "exercise_prompt": "通过面向接口的辅助方法完成稳定大写转换；拉丁与重音文本都只依赖 `Named` 契约，不读取具体记录表示。",
+      "objective": "针对行为契约调用共同功能，而不是绑定具体实现。",
+      "language_delta": "Java 接口是名义式的，实现类必须明确声明；这不同于 TypeScript 的结构兼容。",
+      "prediction_prompt": "先沿 `Named` 引用调用记录访问器，再应用 `Locale.ROOT` 大小写转换。",
+      "transfer_trap": "接口默认方法可以提供行为，却不会让接口字段变成每个实例独有的状态。"
+    },
+    "java-inheritance-composition": {
+      "title": "继承配合组合",
+      "concept": "继承表达可替代的“是一个”关系，组合表达“拥有一个”关系。玩家复用基类分数状态，同时持有独立的奖励记录。",
+      "worked_example": "构造时把基础值 10 交给 `super`，另行创建值为 2 的奖励对象；总分方法读取继承与组合两处来源得到 12。",
+      "common_mistakes": [
+        "忽略组合字段，只返回继承得到的基础值。",
+        "仅为复用代码使用继承，尽管子类无法满足基类预期。"
+      ],
+      "self_check": [
+        "哪个构造器初始化受保护的基础字段？",
+        "奖励为何适合作为字段，而不是玩家的超类？"
+      ],
+      "exercise_prompt": "在总分方法中把继承的基础值与组合奖励相加；两个构造参数必须进入各自对象，零和负基础值也不得遗漏奖励。",
+      "objective": "依据语义关系区分并同时观察两种复用机制。",
+      "language_delta": "Java 只允许一个类超类，却可实现多个接口，因此独立组成部分尤其适合组合。",
+      "prediction_prompt": "相加前追踪两个构造参数分别进入基类字段和奖励记录的路径。",
+      "transfer_trap": "受保护可见性只授权特定访问，不会把任意拥有关系自动变成健全子类型。"
+    },
+    "java-exceptions": {
+      "title": "窄范围异常恢复",
+      "concept": "`Integer.parseInt` 以未检查的 `NumberFormatException` 报告畸形整数。只捕获这一失败，才能使用备用值而不吞掉无关程序缺陷。",
+      "worked_example": "解析 `oops` 进入精确捕获并返回调用方提供的备用值；其他意外运行错误不会被辅助方法隐藏。",
+      "common_mistakes": [
+        "捕获整个 `Exception`，掩盖无关编程错误。",
+        "以为 `parseInt` 对畸形文本返回 `Optional` 或哨兵值。"
+      ],
+      "self_check": [
+        "合法负整数会进入捕获块吗？",
+        "哪个表达式才是此处希望恢复的异常来源？"
+      ],
+      "exercise_prompt": "成功解析时返回原数值，仅在数字语法非法并抛出 `NumberFormatException` 时采用调用方备用值；其他失败不得被捕获。",
+      "objective": "只在最小相关异常边界恢复输入，并保证任何其他故障不会被掩盖。",
+      "language_delta": "Java 区分必须处理或声明的已检查异常，以及 `NumberFormatException` 这类未检查运行时异常。",
+      "prediction_prompt": "对每个候选片段，在计算备用值前先选择正常返回或捕获返回路径。",
+      "transfer_trap": "数据缺失、格式畸形和输入输出故障意义不同，一个全捕获路径会抹平这些区别。"
+    },
+    "java-optional": {
+      "title": "用 `Optional` 筛选并回退",
+      "concept": "`Optional` 表示可能缺失的返回值；`filter` 只在现有值满足谓词时保留它，`orElse` 无需危险的 `get()` 即可提供备用文本。",
+      "worked_example": "现有单词 `cat` 满足不超过三个字符的长度谓词，所以不会选择备用值；演示标签只用于区分示例行，不参与容器判断。",
+      "common_mistakes": [
+        "未证明存在就调用 `get()`，冒险触发 `NoSuchElementException`。",
+        "在字段和参数中到处使用 `Optional`，而不是主要用于表达可能缺失的返回。"
+      ],
+      "self_check": [
+        "容器本来为空时，`filter` 会调用谓词吗？",
+        "短横线占位值 `-` 通过哪条路径得到 `missing`？"
+      ],
+      "exercise_prompt": "先把短横线占位值 `-` 转换为缺失、其他文本转换为存在，再只保留长度不超过三个字符的片段，并用 `orElse` 声明式选择备用值。",
+      "objective": "无需不安全提取，即可区分缺失输入、过长文本与不超过三个字符的现有文本。",
+      "language_delta": "`Optional` 是显式容器，但仍允许错误调用 `get()`；它提供处理路径，不会自动强制每个调用方安全。",
+      "prediction_prompt": "对四组案例分别标记构造后和筛选后的容器状态。",
+      "transfer_trap": "需要诊断信息的失败应使用合适异常或结果模型，`Optional` 不能取代它们。"
+    },
+    "java-try-with-resources": {
+      "title": "可观察的资源自动关闭",
+      "concept": "资源式 `try` 无论正常结束，还是因返回、跳转或异常提前退出，都会关闭声明的 `AutoCloseable` 值。真正从该资源读取，才能让生存期管理参与数据路径而非仅作装饰。",
+      "worked_example": "受管 `ByteArrayInputStream` 保存 `demo` 字节，区块内以 `UTF-8` 解码、去空白并大写，随后自动关闭。",
+      "common_mistakes": [
+        "声明一个资源，却继续从另一个未受管流读取。",
+        "忘记区块已抛错时，关闭失败可能作为受抑制异常附加。"
+      ],
+      "self_check": [
+        "示例区块结束后，哪个对象保证收到 `close()`？",
+        "空字节序列在输出前应转换成什么文本？"
+      ],
+      "exercise_prompt": "只处理从受管流实际读出的字节，按 `UTF-8` 解码、去空白并大写；空内容使用约定名称，离开区块后不再访问资源。",
+      "objective": "把确定性资源生存期连接到最终到达标准输出的数据。",
+      "language_delta": "Java 以控制流语句编码类似资源获取即初始化的清理，尽管普通对象生存期由垃圾回收管理。",
+      "prediction_prompt": "追踪输入字节经过资源构造、读取、解码、去空白和大小写转换的每一步。",
+      "transfer_trap": "垃圾回收不能及时替代文件、套接字及其他外部资源的关闭。"
+    },
+    "java-equality-hashcode": {
+      "title": "相等与散列一致性",
+      "concept": "逻辑相等必须自反、对称、传递、稳定且能处理空值。两个对象若相等，其散列码也必须相同，散列集合才能遵守值语义。",
+      "worked_example": "记录自动提供基于组件值的 `equals` 与 `hashCode`，所以两个坐标相同的点在 `HashSet` 中合并为一项。",
+      "common_mistakes": [
+        "只比较一个坐标，把不同点判成相等。",
+        "重写 `equals` 后保留可能让相等对象散列不同的实现。"
+      ],
+      "self_check": [
+        "为何不相等对象可以碰巧共享散列码，而相等对象不能散列不同？",
+        "模式 `instanceof Point other` 如何同时完成类型判断和绑定？"
+      ],
+      "exercise_prompt": "让两个坐标都参与 `equals`，并同步维持相等对象散列相同的规则，再通过 `HashSet` 大小观察两个点是否合并。",
+      "objective": "实现一个在散列集合中仍正确工作的值契约。",
+      "language_delta": "Java `Object` 默认相等按身份判断，记录则自动采用组件值语义。",
+      "prediction_prompt": "先把每对点归类为相等或不等，再判断集合是否增加第二项。",
+      "transfer_trap": "良好散列分布只改善性能；相等必有相同散列才是正确性要求。"
+    },
+    "java-records": {
+      "title": "检查点：防御性记录快照",
+      "concept": "记录只让组件引用不可重新赋值，并自动生成值成员，因此仅具浅层不可变性。紧凑构造器中的 `List.copyOf` 可切断可变来源别名，并拒绝空元素。",
+      "worked_example": "紧凑构造器复制 `[4, 5]` 后，向原列表添加新值无法改变记录内列表，其总和仍为 9。",
+      "common_mistakes": [
+        "直接储存调用方可变 `List`，却声称记录深层不可变。",
+        "向值语义加入无关可变状态，破坏相等与散列一致性。"
+      ],
+      "self_check": [
+        "紧凑构造器内哪个引用被重新绑定到副本？",
+        "若记录保留同一可变列表，删除来源末项为何会影响组件值？"
+      ],
+      "exercise_prompt": "在来源列表删除末项之前，以紧凑构造器防御性复制记录组件，再对保留快照求和；单元素与负数列表也不得失去内容。",
+      "objective": "证明记录仅浅层不可变，并用不可变副本修复别名边界。",
+      "language_delta": "Java 记录是简洁的名义数据，不是递归冻结对象图，也不是 TypeScript 的结构类型。",
+      "prediction_prompt": "画出 `List.copyOf` 前后的来源与组件引用，再模拟删除来源最后一项。",
+      "transfer_trap": "固定记录组件只禁止重新赋值；未经防御复制时，其中的可变对象仍可改变。"
+    },
+    "java-annotations": {
+      "title": "运行时注解元数据",
+      "concept": "`@Target(METHOD)` 限制放置位置，`@Retention(RUNTIME)` 保留元数据供反射读取；没有运行时保留策略，`getAnnotation` 看不到声明前缀。",
+      "worked_example": "反射找到规范化方法并读取 `trace` 标签，普通方法调用把 `demo` 文本大写，反射元数据提供输出前缀。",
+      "common_mistakes": [
+        "需要运行时反射，却依赖默认的 `CLASS` 保留策略。",
+        "搜索不同方法签名，得不到预期反射方法。"
+      ],
+      "self_check": [
+        "哪一种保留策略会让虚拟机向反射暴露注解？",
+        "哪个目标限制可阻止标签放在字段上？"
+      ],
+      "exercise_prompt": "修改注解声明，使方法元数据保留到运行程序中，反射查询能取得 audit 前缀；不得在普通逻辑中硬编码该前缀。",
+      "objective": "通过反射观察注解值，而不是把元数据当成无用装饰。",
+      "language_delta": "Java 注解若要在运行时使用必须明确选择保留策略，很多类型系统注解只需编译期可见。",
+      "prediction_prompt": "分别预测加入运行时保留策略前后，`getAnnotation` 返回对象还是空值。",
+      "transfer_trap": "保留策略只控制可见性，不会自动产生行为；程序仍须主动读取并应用注解。"
+    },
+    "java-sealed-classes": {
+      "title": "密封形状与模式 `switch`",
+      "concept": "密封接口把直接实现者限制在 `permits` 列表。Java 21 模式 `switch` 可解构每个记录子类型并产生值，无需宽泛默认分支。",
+      "worked_example": "矩形模式直接绑定宽和高并把两者相乘，穷尽表达式产生度量；圆与点仍作为清楚可见且分别处理的其他选择。",
+      "common_mistakes": [
+        "只使用虚方法，却没有展示层次对其他直接子类型关闭。",
+        "添加默认分支，使新许可形状逃过编译器的穷尽反馈。"
+      ],
+      "self_check": [
+        "哪个获准的记录类型中的组件会在分支中相乘？",
+        "为什么 Java 21 的该表达式没有默认分支也能编译？"
+      ],
+      "exercise_prompt": "修正圆记录模式分支的度量，同时保留密封层次的穷尽 `switch`；矩形、圆和点都要由各自解构分支处理。",
+      "objective": "在一个可观察表达式中结合封闭子类型知识与记录解构。",
+      "language_delta": "密封类型提供名义层次关闭，不同于无限制基类或结构推断的联合。",
+      "prediction_prompt": "对每个形状词选择运行时模式，先绑定组成变量再计算度量。",
+      "transfer_trap": "密封只按许可规则控制直接扩展，不会自动让实例不可变。"
+    },
+    "java-testing-assert": {
+      "title": "综合：始终执行的检查",
+      "concept": "综合程序连接 `UTF-8` 解析、方法、记录、泛型集合、流、比较器与空值回退。Java `assert` 默认关闭，必须始终运行的检查应调用普通方法并抛出 `AssertionError`。",
+      "worked_example": "两个同分记录按姓名排序，辅助方法以 `check` 验证空列表回退，再输出带标签优胜者；该检查不依赖虚拟机 `-ea`。",
+      "common_mistakes": [
+        "用 Java `assert` 做强制验证，却忘记评测器未开启断言。",
+        "只按分数排序，让同分优胜者依赖遇见顺序。"
+      ],
+      "self_check": [
+        "虚拟机没有 `-ea` 时，哪种综合检查仍会执行？",
+        "同分记录要经过哪两个比较阶段才能得到确定优胜者？"
+      ],
+      "exercise_prompt": "为最佳用户选择补上姓名升序的同分规则，并保留始终执行的空结果检查；普通、同分和空输入都要产生确定记录。",
+      "objective": "把核心路径整合为可测试的记录与集合程序，同时让必要验证不受断言开关影响。",
+      "language_delta": "Python 优化模式会移除断言，Java 断言默认禁用；普通方法调用在正常执行中始终求值。",
+      "prediction_prompt": "先按两个比较阶段排列同分用户，再单独追踪空列表经过回退和 `check` 的路径。",
+      "transfer_trap": "断言适合内部假设，不适合验证不可信输入；强制条件需要普通控制流和清晰失败。"
     }
   }
 }

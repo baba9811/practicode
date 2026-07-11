@@ -4,424 +4,508 @@
   "ui_language": "es",
   "lessons": {
     "ts-output": {
-      "title": "Consola y stdout",
-      "concept": "La salida de consola es el contrato que compara el juez, por eso se distingue el salto de console.log de la escritura exacta con process.stdout.write. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Consola y stdout. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Escribir una salida estándar exacta",
+      "concept": "`process.stdout.write` emite únicamente la cadena recibida; por tanto, el separador y el salto final pertenecen al contrato. TypeScript comprueba el código antes de que Node ejecute el JavaScript resultante.",
+      "worked_example": "La muestra conserva un nombre y unos puntos tipados, pero escribe el registro distinto `demo Mina=4`. La anotación desaparece antes de ejecutar; los caracteres de la plantilla sí llegan a la salida.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Consola y stdout en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Consola y stdout.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: La salida de consola es el contrato que compara el juez, por eso se distingue el salto de console.log de la escritura exacta con process.stdout.write."
+        "Usar `console.log` cuando se necesita controlar con precisión el salto de línea final.",
+        "Juntar nombre y puntuación sin separador y crear una salida ambigua como `Ada7`."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Consola y stdout antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Consola y stdout debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué carácter sigue al nombre en el registro de demostración?",
+        "¿Qué parte de la llamada aporta la terminación de línea?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Consola y stdout a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-let-const": {
-      "title": "let y const",
-      "concept": "const marca enlaces que no se reasignan, mientras let deja visible el acumulador que cambia en la solución. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de let y const. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de let y const en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de let y const.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: const marca enlaces que no se reasignan, mientras let deja visible el acumulador que cambia en la solución."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica let y const antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de let y const debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando let y const a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-primitives": {
-      "title": "Tipos primitivos",
-      "concept": "Las anotaciones string, number y boolean describen los escalares que esperan el parseo y las ramas. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos primitivos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos primitivos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos primitivos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las anotaciones string, number y boolean describen los escalares que esperan el parseo y las ramas."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos primitivos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos primitivos debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos primitivos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-strings-templates": {
-      "title": "Cadenas y plantillas",
-      "concept": "Las plantillas literales formatean junto al valor, y métodos como trim devuelven una cadena nueva. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Cadenas y plantillas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Cadenas y plantillas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Cadenas y plantillas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las plantillas literales formatean junto al valor, y métodos como trim devuelven una cadena nueva."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Cadenas y plantillas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Cadenas y plantillas debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Cadenas y plantillas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-arrays-tuples": {
-      "title": "Arreglos y tuplas",
-      "concept": "Los arreglos guardan valores ordenados de un tipo; las tuplas fijan posición y tipo en registros pequeños. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Arreglos y tuplas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Arreglos y tuplas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Arreglos y tuplas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los arreglos guardan valores ordenados de un tipo; las tuplas fijan posición y tipo en registros pequeños."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Arreglos y tuplas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Arreglos y tuplas debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Arreglos y tuplas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-objects": {
-      "title": "Tipos de objeto",
-      "concept": "Los tipos de objeto nombran campos requeridos para no omitir width, height u otra propiedad en el cálculo. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos de objeto. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos de objeto en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos de objeto.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los tipos de objeto nombran campos requeridos para no omitir width, height u otra propiedad en el cálculo."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos de objeto antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos de objeto debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos de objeto a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-functions": {
-      "title": "Funciones",
-      "concept": "Las anotaciones de parámetros y retorno hacen explícito el límite entre entrada parseada, cálculo y salida. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Funciones. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Funciones en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Funciones.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las anotaciones de parámetros y retorno hacen explícito el límite entre entrada parseada, cálculo y salida."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Funciones antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Funciones debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Funciones a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Lee los dos campos de la entrada estándar y forma con `process.stdout.write` una línea separada por dos puntos.",
+      "objective": "Producir `nombre:puntuación` seguido de exactamente un salto de línea para cada registro.",
+      "language_delta": "A diferencia de `console.log`, `process.stdout.write` no añade espacios ni nueva línea; las anotaciones tampoco modifican esos bytes al ejecutarse Node.",
+      "prediction_prompt": "Detalla los caracteres emitidos para un nombre Unicode y una puntuación de dos cifras.",
+      "transfer_trap": "Una consola de navegador presenta valores para inspección; un evaluador compara el texto real de la salida estándar."
     },
     "ts-input": {
-      "title": "Parseo de stdin en Node",
-      "concept": "Las soluciones en Node suelen leer una vez el descriptor 0, separar por espacios y convertir tokens antes de calcular. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Parseo de stdin en Node. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Dividir la entrada estándar de Node en tokens",
+      "concept": "Node expone la entrada redirigida como descriptor de archivo 0. Leerla una vez, eliminar sus bordes y tratar aparte la cadena vacía crea una secuencia numérica fiable.",
+      "worked_example": "La muestra usa la cadena fija `4 6`, ajena a los casos evaluados. La separación, la conversión con `Number` y un `reduce` iniciado en cero producen `10`.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Parseo de stdin en Node en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Parseo de stdin en Node.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las soluciones en Node suelen leer una vez el descriptor 0, separar por espacios y convertir tokens antes de calcular."
+        "Dividir una cadena vacía ya recortada y convertir su único token vacío en cero por accidente.",
+        "Leer solo la primera línea aunque los valores puedan distribuirse entre varias."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Parseo de stdin en Node antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Parseo de stdin en Node debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Por qué la lista de tokens debe quedar vacía si no hay caracteres?",
+        "¿Cómo determina el valor inicial de `reduce` el total sin entrada?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Parseo de stdin en Node a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Sustituye el atajo del primer token por una suma de todos los números separados por cualquier espacio en blanco.",
+      "objective": "Calcular el total para entradas de una línea, varias líneas y contenido vacío.",
+      "language_delta": "`readFileSync(0, \"utf8\")` pertenece a Node; TypeScript comprueba la declaración disponible, pero no realiza la lectura por sí mismo.",
+      "prediction_prompt": "Predice la lista de tokens y el total para `-1`, un salto de línea y `5 2`.",
+      "transfer_trap": "Las lecturas interactivas repetidas de otros lenguajes no representan el flujo completo que recibe este ejecutor de Node."
     },
-    "ts-control-flow": {
-      "title": "Flujo de control",
-      "concept": "if y los bucles deciden qué valores se acumulan, así que la condición debe coincidir con la regla de datos. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Flujo de control. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "ts-primitives": {
+      "title": "Convertir texto en valores primitivos",
+      "concept": "Una anotación `string` describe un valor al verificador, mientras `Number` realiza la conversión en ejecución. La decisión debe comparar puntuación y umbral numéricos, no sus grafías textuales.",
+      "worked_example": "El ejemplo declara una cadena, un número y un booleano, y luego imprime un registro distinto. Cada valor ya tiene en ejecución la forma primitiva indicada.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Flujo de control en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Flujo de control.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: if y los bucles deciden qué valores se acumulan, así que la condición debe coincidir con la regla de datos."
+        "Anotar `scoreText` como número sin convertir realmente la cadena recibida.",
+        "Depender de coerciones relacionales y ocultar dónde entra un texto numérico inválido."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Flujo de control antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Flujo de control debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué expresión cambia un token de semántica textual a numérica?",
+        "¿Por qué una puntuación igual a un umbral cero cuenta como aprobada?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Flujo de control a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Convierte los dos campos numéricos, compáralos de forma inclusiva y conserva el nombre como texto.",
+      "objective": "Emitir la puntuación analizada y la clasificación correcta en tres casos de frontera.",
+      "language_delta": "TypeScript 5.9 detecta usos primitivos incompatibles, pero borra las anotaciones; estas nunca convierten por sí solas la entrada de Node.",
+      "prediction_prompt": "Decide el estado de `Bo 0 0` antes de evaluar el operador de comparación.",
+      "transfer_trap": "Una declaración numérica puede imponer reglas en otros lenguajes; en TypeScript no sustituye a la conversión de JavaScript."
     },
-    "ts-union-narrowing": {
-      "title": "Uniones y estrechamiento",
-      "concept": "Los valores union necesitan una comprobación en runtime antes de usar operaciones solo de string o solo de number. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Uniones y estrechamiento. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "ts-let-const": {
+      "title": "Reasignar un acumulador y conservar su etiqueta",
+      "concept": "Usa `const` para el enlace estable de la etiqueta y `let` para un total que cambia. Estas palabras controlan la reasignación del enlace, no la congelación de un objeto referenciado.",
+      "worked_example": "La demostración fija `demo`, inicia un total mutable en cinco y añade menos dos. El total termina en tres sin cambiar el enlace de la etiqueta.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Uniones y estrechamiento en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Uniones y estrechamiento.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los valores union necesitan una comprobación en runtime antes de usar operaciones solo de string o solo de number."
+        "Declarar el acumulador con `const` e intentar asignarle después otro número.",
+        "Suponer que las propiedades escribibles de un objeto enlazado con `const` quedan inmóviles."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Uniones y estrechamiento antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Uniones y estrechamiento debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Cuál de los dos enlaces de la muestra recibe una segunda asignación?",
+        "¿Impide `const` ejecutar `settings.enabled = false` sobre un objeto mutable?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Uniones y estrechamiento a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Acumula ambos números analizados en un total reasignable y mantén fija la etiqueta que encabeza la respuesta.",
+      "objective": "Conservar etiqueta y suma correctas con valores positivos, negativos y nulos.",
+      "language_delta": "JavaScript aplica `const` en ejecución; las anotaciones `number` son información separada que TypeScript elimina.",
+      "prediction_prompt": "Sigue el valor de `total` tras cada asignación para la entrada `net -2 5`.",
+      "transfer_trap": "Los enlaces inmutables de Rust y las referencias `final` de Java tienen consecuencias diferentes sobre propiedad y mutación."
     },
-    "ts-literal-types": {
-      "title": "Tipos literales",
-      "concept": "Las uniones literales limitan comandos y modos a valores exactos como 'left' o 'right'. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos literales. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "ts-strings-templates": {
+      "title": "Recortar el nombre y conservar la puntuación",
+      "concept": "La barra vertical separa campos con reglas distintas. Elimina solo una terminación CRLF o LF, recorta el nombre y conserva cada carácter de la puntuación, incluidos sus espacios finales.",
+      "worked_example": "El registro fijo de `Mira` termina con dos espacios tras la puntuación y luego una nueva línea. La expresión regular quita únicamente ese terminador de línea, por lo que ambos espacios sobreviven.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos literales en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos literales.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las uniones literales limitan comandos y modos a valores exactos como 'left' o 'right'."
+        "Aplicar `trimEnd()` al registro completo y borrar el espaciado significativo de la puntuación.",
+        "Interpretar `string.length` como grafemas visibles, aunque cuenta unidades UTF-16."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos literales antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos literales debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "Tras quitar la nueva línea de `  Mira |9  `, ¿qué espacios quedan en cada campo?",
+        "¿Por qué recortar `rawName` no afecta a los dos espacios de `score`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos literales a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Quita una sola terminación CRLF o LF, recorta únicamente el lado del nombre e interpola la puntuación intacta tras dos puntos.",
+      "objective": "Formatear tres registros sin perder los espacios significativos situados al final de la puntuación.",
+      "language_delta": "`trimEnd` elimina todo espacio final; el reemplazo anclado solo retira el terminador de línea, y los índices siguen contando unidades UTF-16.",
+      "prediction_prompt": "Marca los espacios que permanecen después de aplicar `/\\r?\\n$/` a ` Ada |7  ` seguido de LF.",
+      "transfer_trap": "Una operación general de recorte puede destruir datos cuando el contrato solo autoriza eliminar el salto de línea del registro."
     },
-    "ts-optional-nullish": {
-      "title": "Opcional y nullish",
-      "concept": "Los campos opcionales pueden ser undefined, y ?? conserva datos falsy válidos como la puntuación 0. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Opcional y nullish. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+    "ts-arrays-tuples": {
+      "title": "Devolver un total nombrado como tupla",
+      "concept": "El primer token nombra el registro y los restantes forman un array numérico. La tupla `[string, number]` fija el significado de sus dos posiciones para el verificador.",
+      "worked_example": "La muestra suma el array separado `[1, 4]` y guarda `Neo` junto al total en una pareja tipada. Las posiciones cero y uno siguen perteneciendo a un `Array` en ejecución.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Opcional y nullish en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Opcional y nullish.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los campos opcionales pueden ser undefined, y ??"
+        "Tratar todos los tokens como números y perder el nombre inicial antes de reducir.",
+        "Esperar que la anotación de tupla cree un contenedor distinto de `Array` en JavaScript."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Opcional y nullish antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Opcional y nullish debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué tipo admite la segunda posición de la pareja?",
+        "¿Qué total corresponde cuando la entrada solo contiene `Bo`?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Opcional y nullish a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-interfaces-aliases": {
-      "title": "Interfaces y alias de tipo",
-      "concept": "Las interfaces nombran contratos de objeto; los alias también nombran uniones, tuplas y expresiones compuestas. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Interfaces y alias de tipo. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Interfaces y alias de tipo en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Interfaces y alias de tipo.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las interfaces nombran contratos de objeto; los alias también nombran uniones, tuplas y expresiones compuestas."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Interfaces y alias de tipo antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Interfaces y alias de tipo debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Interfaces y alias de tipo a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-generics": {
-      "title": "Genéricos",
-      "concept": "Los genéricos conservan el tipo de elemento del llamador cuando el código reusable lee arreglos o devuelve valores. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Genéricos. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Genéricos en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Genéricos.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los genéricos conservan el tipo de elemento del llamador cuando el código reusable lee arreglos o devuelve valores."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Genéricos antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Genéricos debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Genéricos a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-keyof-typeof": {
-      "title": "keyof y typeof",
-      "concept": "typeof captura la forma estática de un valor, y keyof la convierte en la unión de claves permitidas. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de keyof y typeof. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de keyof y typeof en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de keyof y typeof.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: typeof captura la forma estática de un valor, y keyof la convierte en la unión de claves permitidas."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica keyof y typeof antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de keyof y typeof debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando keyof y typeof a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-indexed-access": {
-      "title": "Tipos de acceso indexado",
-      "concept": "Los tipos de acceso indexado reutilizan tipos de propiedad y elemento de un modelo existente sin repetirlos. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos de acceso indexado. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos de acceso indexado en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos de acceso indexado.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los tipos de acceso indexado reutilizan tipos de propiedad y elemento de un modelo existente sin repetirlos."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos de acceso indexado antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos de acceso indexado debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos de acceso indexado a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-mapped-types": {
-      "title": "Tipos mapeados",
-      "concept": "Los tipos mapeados transforman cada clave de un objeto y mantienen las formas derivadas alineadas. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos mapeados. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos mapeados en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos mapeados.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los tipos mapeados transforman cada clave de un objeto y mantienen las formas derivadas alineadas."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos mapeados antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos mapeados debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos mapeados a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-conditional-types": {
-      "title": "Tipos condicionales",
-      "concept": "Los tipos condicionales eligen una rama según la relación de tipos, e infer extrae la parte coincidente. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos condicionales. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos condicionales en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos condicionales.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Los tipos condicionales eligen una rama según la relación de tipos, e infer extrae la parte coincidente."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos condicionales antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos condicionales debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos condicionales a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-utility-types": {
-      "title": "Tipos utilitarios",
-      "concept": "Tipos como Pick y Partial expresan transformaciones comunes de objetos sin crear otro tipo auxiliar. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Tipos utilitarios. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Tipos utilitarios en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Tipos utilitarios.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Tipos como Pick y Partial expresan transformaciones comunes de objetos sin crear otro tipo auxiliar."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Tipos utilitarios antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Tipos utilitarios debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Tipos utilitarios a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-discriminated-unions": {
-      "title": "Uniones discriminadas",
-      "concept": "Una etiqueta literal compartida permite que switch estreche cada variante y use campos de rectángulo solo allí. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Uniones discriminadas. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Uniones discriminadas en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Uniones discriminadas.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Una etiqueta literal compartida permite que switch estreche cada variante y use campos de rectángulo solo allí."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Uniones discriminadas antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Uniones discriminadas debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Uniones discriminadas a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-async-promise": {
-      "title": "async y Promise",
-      "concept": "Las funciones async devuelven Promise, y await es donde el número resuelto vuelve al flujo normal. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de async y Promise. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de async y Promise en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de async y Promise.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las funciones async devuelven Promise, y await es donde el número resuelto vuelve al flujo normal."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica async y Promise antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de async y Promise debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando async y Promise a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-error-handling": {
-      "title": "Manejo de errores",
-      "concept": "catch recibe un fallo unknown, así que conviene estrecharlo antes de elegir un valor de recuperación. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Manejo de errores. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Manejo de errores en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Manejo de errores.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: catch recibe un fallo unknown, así que conviene estrecharlo antes de elegir un valor de recuperación."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Manejo de errores antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Manejo de errores debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Manejo de errores a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-modules": {
-      "title": "Módulos y exports",
-      "concept": "export marca los valores que un archivo ofrece a otros; Node sigue decidiendo el sistema de módulos. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Módulos y exports. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Módulos y exports en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Módulos y exports.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: export marca los valores que un archivo ofrece a otros; Node sigue decidiendo el sistema de módulos."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Módulos y exports antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Módulos y exports debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Módulos y exports a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-classes": {
-      "title": "Clases y modificadores",
-      "concept": "Las clases unen métodos al estado, y private documenta qué estado debe quedar detrás del límite del método. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Clases y modificadores. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Clases y modificadores en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Clases y modificadores.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: Las clases unen métodos al estado, y private documenta qué estado debe quedar detrás del límite del método."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica Clases y modificadores antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Clases y modificadores debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando Clases y modificadores a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-readonly": {
-      "title": "readonly",
-      "concept": "readonly permite leer datos de configuración y evita reemplazarlos o mutarlos a través de ese tipo. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de readonly. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de readonly en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de readonly.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: readonly permite leer datos de configuración y evita reemplazarlos o mutarlos a través de ese tipo."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica readonly antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de readonly debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando readonly a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
-    },
-    "ts-satisfies-as-const": {
-      "title": "satisfies y as const",
-      "concept": "as const conserva literales de rutas, mientras satisfies comprueba el contrato Record sin ampliarlos. Usa la sintaxis para que el valor en runtime y la forma esperada por TypeScript avancen juntos.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de satisfies y as const. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
-      "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de satisfies y as const en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de satisfies y as const.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: as const conserva literales de rutas, mientras satisfies comprueba el contrato Record sin ampliarlos."
-      ],
-      "self_check": [
-        "¿Qué expresión del ejemplo aplica satisfies y as const antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de satisfies y as const debe derivar el valor desde sus propios datos y no desde la demostración?"
-      ],
-      "exercise_prompt": "Completa el TODO aplicando satisfies y as const a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Reduce toda la cola numérica y guarda el nombre y el total en la tupla declarada antes de imprimir sus posiciones.",
+      "objective": "Resolver varios valores, números negativos y una cola vacía mediante una única forma de pareja.",
+      "language_delta": "Las comprobaciones posicionales desaparecen al ejecutar Node; la tupla continúa siendo un array JavaScript mutable.",
+      "prediction_prompt": "Para `Lin -1 4 2`, enumera el array numérico antes de calcular la segunda posición.",
+      "transfer_trap": "Esta tupla no se convierte en un pequeño registro inmutable, a diferencia de ciertos valores nominales de otros lenguajes."
     },
     "ts-iterables": {
-      "title": "Iterables",
-      "concept": "for...of consume cualquier iterable, así que arreglos, cadenas y sets comparten la misma forma de bucle. En soluciones de stdin/stdout evita el atajo de imprimir algo que ya no coincide con los datos tipados.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de Iterables. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Consumir un `Iterable` con `for...of`",
+      "concept": "`Iterable<string>` promete un protocolo secuencial, no índices de array. `for...of` solicita valores mediante ese protocolo y funciona con arrays, conjuntos, cadenas e iterables propios.",
+      "worked_example": "La demostración pasa un `Set` con `T` y `S` a un recolector. La iteración obtiene ambos valores en orden de inserción sin usar un método exclusivo de arrays.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de Iterables en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de Iterables.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: for...of consume cualquier iterable, así que arreglos, cadenas y sets comparten la misma forma de bucle."
+        "Indexar un `Iterable` aunque su interfaz no garantiza propiedades numéricas.",
+        "Reutilizar el mismo iterador después de haberlo consumido hasta el final."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica Iterables antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de Iterables debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿Qué capacidad exige `for...of` a su entrada?",
+        "¿Por qué una lista vacía todavía produce un salto de línea?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando Iterables a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Recorre todos los tokens de la entrada mediante iteración y concaténalos respetando el orden en que aparecen.",
+      "objective": "Unir dos, tres o ningún token sin depender de índices de array.",
+      "language_delta": "El tipo `Iterable` describe el protocolo JavaScript y no añade almacenamiento, reinicio ni otra colección durante la ejecución.",
+      "prediction_prompt": "Sigue los estados del iterador para `a b c` y anota el acumulador después de cada paso.",
+      "transfer_trap": "Iteradores Python y flujos Java también se consumen, pero sus reglas de repetición y propiedad no son intercambiables."
     },
     "ts-array-methods": {
-      "title": "map, filter y reduce",
-      "concept": "filter selecciona elementos, map los transforma y reduce pliega la secuencia hasta la respuesta final. La anotación de tipo no es adorno: describe qué valores pueden cruzar este límite.",
-      "worked_example": "El ejemplo usa una salida de demostración con la etiqueta `example:` para mostrar el flujo de map, filter y reduce. Sigue qué línea cambia el valor antes de stdout; el ejercicio aplica la misma idea a sus propios datos.",
+      "title": "Filtrar, elevar al cuadrado y reducir",
+      "concept": "Una secuencia legible selecciona primero números pares, después los eleva al cuadrado y finalmente pliega los productos. Iniciar `reduce` en cero define el resultado de una selección vacía.",
+      "worked_example": "La muestra filtra `[2, 5, 6]` con otra condición, duplica los supervivientes y los suma. Ese recorrido distinto muestra el orden de métodos sin revelar la respuesta evaluada.",
       "common_mistakes": [
-        "Cambiar solo la línea final de salida sin dejar la regla de map, filter y reduce en la ruta del código.",
-        "Copiar la salida de demostración con `example:` en vez de resolver el TODO del ejercicio de map, filter y reduce.",
-        "Ajustar solo la salida del juez sin comprobar esta idea: filter selecciona elementos, map los transforma y reduce pliega la secuencia hasta la respuesta final."
+        "Transformar antes de filtrar cuando el predicado debe observar los valores originales.",
+        "Omitir el valor inicial de `reduce` y provocar una excepción si no sobrevive ningún par."
       ],
       "self_check": [
-        "¿Qué expresión del ejemplo aplica map, filter y reduce antes de llegar a la salida `example:`?",
-        "¿Qué línea TODO del ejercicio de map, filter y reduce debe derivar el valor desde sus propios datos y no desde la demostración?"
+        "¿En qué etapa menos dos se convierte en cuatro positivo?",
+        "¿Qué valor recibe primero `reduce` cuando el array filtrado está vacío?"
       ],
-      "exercise_prompt": "Completa el TODO aplicando map, filter y reduce a los datos del ejercicio. Mantén stdout limpio para el juez; la etiqueta `example:` pertenece solo al ejemplo."
+      "exercise_prompt": "Corrige el predicado de paridad y conserva tanto el cuadrado posterior como el pliegue iniciado explícitamente en cero.",
+      "objective": "Calcular la suma de cuadrados pares con signos mezclados y conjuntos exclusivamente impares.",
+      "language_delta": "TypeScript infiere los tipos de las funciones pasadas a esos métodos, pero no vuelve perezosa la canalización.",
+      "prediction_prompt": "Escribe los arrays intermedios producidos desde `-2 -1 0` antes de sumarlos.",
+      "transfer_trap": "Los adaptadores de iterador Rust son perezosos hasta su consumo; los métodos de arrays JavaScript recorren cada etapa de inmediato."
+    },
+    "ts-objects": {
+      "title": "Calcular mediante un objeto estructural",
+      "concept": "El tipo `Rectangle` exige `width` y `height`; `area` acepta cualquier objeto compatible. No hace falta una clase ni compartir una identidad nominal para efectuar el cálculo.",
+      "worked_example": "El objeto mostrado también tiene `color`, pero una vista con dos miembros entra en `demoArea`. La propiedad adicional sigue presente en ejecución y simplemente no se consulta.",
+      "common_mistakes": [
+        "Omitir una dimensión analizada y sustituirla silenciosamente por un valor provisional.",
+        "Suponer que dos objetos necesitan el mismo constructor para ser compatibles estructuralmente."
+      ],
+      "self_check": [
+        "¿Qué miembros de `painted` lee realmente `demoArea`?",
+        "¿Por qué un ancho cero fuerza correctamente un área cero?"
+      ],
+      "exercise_prompt": "Construye un `Rectangle` con las dos dimensiones de la entrada y pásalo a la función tipada que multiplica sus campos.",
+      "objective": "Calcular productos para rectángulos normales, de ancho cero y de altura uno usando datos estructurales.",
+      "language_delta": "Los tipos de objeto se borran antes de Node; las clases sí crean comportamiento y `readonly` solo restringe de forma superficial el acceso tipado.",
+      "prediction_prompt": "Predice el objeto construido y el producto para las dimensiones `7 1`.",
+      "transfer_trap": "Java suele exigir identidad de clase declarada; TypeScript acepta valores creados por separado si sus miembros son compatibles."
+    },
+    "ts-classes": {
+      "title": "Actualizar estado detrás de un método de clase",
+      "concept": "Una instancia de `Counter` posee estado mutable y expone `increment`. El método debe guardar el nuevo valor antes de devolverlo para que llamadas posteriores observen el cambio.",
+      "worked_example": "La clase de muestra comienza en ocho y se incrementa hasta nueve. `private` limita el acceso durante la comprobación, pero el campo emitido sigue siendo una propiedad ordinaria.",
+      "common_mistakes": [
+        "Devolver `this.value + 1` sin almacenar el resultado para la siguiente llamada.",
+        "Confundir `private` de TypeScript con un campo JavaScript `#value`, cuya privacidad sí existe en ejecución."
+      ],
+      "self_check": [
+        "Tras dos llamadas sobre la misma instancia, ¿qué valor debe devolver el método?",
+        "¿Qué forma de privacidad de clase sobrevive como restricción en JavaScript?"
+      ],
+      "exercise_prompt": "Modifica `increment` para actualizar el campo de instancia y devolver el valor resultante del contador.",
+      "objective": "Avanzar exactamente una unidad desde valores iniciales positivos, negativos y mayores.",
+      "language_delta": "Aquí `private` es información borrada del verificador; los campos con prefijo `#` de ECMAScript conservan privacidad en ejecución.",
+      "prediction_prompt": "Sigue el campo almacenado antes y después de una llamada que comienza en menos uno.",
+      "transfer_trap": "La JVM impone el acceso `private` de Java, por lo que su frontera en ejecución es más fuerte."
+    },
+    "ts-readonly": {
+      "title": "Leer una vista superficial de solo lectura",
+      "concept": "Una configuración `readonly` permite consultar nombre y puntuaciones sin mutar a través de ese tipo. El array interior también debe declararse `readonly`, pues la propiedad sola solo impide reemplazarlo.",
+      "worked_example": "La muestra declara una propiedad y un array numérico de solo lectura, y consulta su longitud. No intenta escribir, así que supera la comprobación estricta y después se ejecuta.",
+      "common_mistakes": [
+        "Llamar a `push` sobre `readonly number[]` y esperar que TypeScript estricto lo acepte.",
+        "Creer que `readonly` invoca `Object.freeze` o congela recursivamente la memoria de JavaScript."
+      ],
+      "self_check": [
+        "¿Por qué el código inicial falla antes de que Node reciba un caso?",
+        "¿Podría otra referencia mutable al mismo array añadir elementos?"
+      ],
+      "exercise_prompt": "Elimina la mutación prohibida y calcula la suma de puntuaciones leyendo únicamente la vista superficial de solo lectura.",
+      "objective": "Superar la comprobación estricta e informar del nombre junto con el total configurado.",
+      "language_delta": "`readonly` es superficial y solo tipado salvo que los miembros internos también lo sean; ninguna anotación congela objetos en ejecución.",
+      "prediction_prompt": "Predice el diagnóstico del compilador en `config.scores.push(0)`, no una salida de Node.",
+      "transfer_trap": "Un préstamo inmutable de Rust participa en reglas de propiedad; no equivale a una vista TypeScript que se borra."
+    },
+    "ts-control-flow": {
+      "title": "Conservar un extremo inclusivo en el bucle",
+      "concept": "El bucle visita los enteros desde uno hasta `n` y una comparación estricta del módulo selecciona los impares. El operador relacional de la condición decide si participa el extremo.",
+      "worked_example": "La muestra recorre hasta cinco pero acumula pares y obtiene un total distinto. Aun así muestra una rama estricta y un límite superior cerrado.",
+      "common_mistakes": [
+        "Usar `< n` y omitir un extremo impar que pertenece al intervalo solicitado.",
+        "Usar igualdad flexible y permitir que la coerción compare valores de tipos distintos."
+      ],
+      "self_check": [
+        "¿Qué valor del bucle contribuye en último lugar si `n` vale tres?",
+        "¿Qué caso revela el error de límite aunque el caso seis pueda pasar?"
+      ],
+      "exercise_prompt": "Repara el extremo del bucle y conserva tanto la rama de números impares como el acumulador numérico.",
+      "objective": "Sumar todos los enteros impares del intervalo inclusivo para límites positivos y cero.",
+      "language_delta": "JavaScript evalúa booleanos en ejecución; TypeScript, aparte, estrecha tipos a lo largo de las ramas demostradas.",
+      "prediction_prompt": "Enumera las visitas con `n = 3` usando primero `<` y después `<=`.",
+      "transfer_trap": "`range` de Python excluye su parada; trasladar literalmente ese patrón puede omitir el extremo TypeScript."
+    },
+    "ts-functions": {
+      "title": "Punto de control: frontera de cálculo tipada",
+      "concept": "La firma promete qué entrada acepta una función y qué resultado devuelve. La comprobación estricta rechaza el código inicial porque una multiplicación numérica no satisface un retorno declarado `string`.",
+      "worked_example": "La demostración define un perímetro que devuelve `number` a partir de dos parámetros. Sus dimensiones fijas generan un valor ajeno a cualquier caso de área.",
+      "common_mistakes": [
+        "Convertir la multiplicación en texto solo para satisfacer una anotación de retorno equivocada.",
+        "Imprimir dentro de la función de cálculo y perder la separación entre devolver datos y escribir salida."
+      ],
+      "self_check": [
+        "¿Qué parte de la firma establece el tipo de retorno prometido por `area`?",
+        "¿Cuándo se convierten los tokens analizados en argumentos numéricos?"
+      ],
+      "exercise_prompt": "Corrige el contrato de retorno para que la comprobación estricta acepte el cálculo numérico sin convertirlo en texto.",
+      "objective": "Superar el verificador y calcular tres áreas mediante una función anotada.",
+      "language_delta": "TypeScript valida parámetros y resultados antes de ejecutar; dentro de la función, ramas y bucles siguen siendo JavaScript ordinario.",
+      "prediction_prompt": "Clasifica primero el fallo como `TypeCheck`, antes de considerar las salidas de los casos.",
+      "transfer_trap": "Otros lenguajes pueden imponer firmas durante compilación o ejecución; TypeScript las elimina después de comprobarlas."
+    },
+    "ts-union-narrowing": {
+      "title": "Estrechar una unión antes de formatearla",
+      "concept": "Un valor `string | number` solo ofrece operaciones seguras para ambos miembros. Una rama `typeof` demuestra qué primitivo existe en ejecución y habilita su formateador específico.",
+      "worked_example": "La muestra pone cadenas en minúsculas y formatea un número fijo con un decimal. Así recorre ambas ramas sin coincidir con las transformaciones evaluadas.",
+      "common_mistakes": [
+        "Llamar directamente a `toUpperCase` sobre una unión que también puede contener un número.",
+        "Usar el token de categoría como aserción en vez de construir y comprobar el valor real."
+      ],
+      "self_check": [
+        "¿Qué devuelve `typeof` para el miembro creado mediante `Number(text)`?",
+        "¿Por qué `toFixed(0)` convierte menos 1,6 en menos dos?"
+      ],
+      "exercise_prompt": "Añade una rama de estrechamiento en ejecución y aplica a cada miembro de la unión su formateador adecuado.",
+      "objective": "Convertir comandos de texto a mayúsculas y redondear los numéricos con comprobación estricta.",
+      "language_delta": "El estrechamiento combina una prueba JavaScript real con razonamiento del verificador; una aserción arbitraria no aporta evidencia.",
+      "prediction_prompt": "Selecciona la rama y el texto formateado para `n -1.6` antes de ejecutar.",
+      "transfer_trap": "Python permite la llamada hasta que falle en ejecución; TypeScript rechaza antes una operación insegura sobre la unión."
+    },
+    "ts-literal-types": {
+      "title": "Validar texto antes de una unión literal",
+      "concept": "`Direction` contiene exactamente dos literales de cadena. Como la entrada comienza siendo texto sin restricciones, una comparación en ejecución debe probar la pertenencia antes de llamar a `turn`.",
+      "worked_example": "La demostración usa otra unión, norte o sur, y pasa directamente un literal conocido. La rama genera una flecha etiquetada sin fingir que validó entrada externa.",
+      "common_mistakes": [
+        "Convertir texto arbitrario con `as Direction` y creer que la aserción realizó una validación real.",
+        "Dejar que una función binaria trate cualquier dirección desconocida como si fuera `right`."
+      ],
+      "self_check": [
+        "¿Por qué `raw as Direction` deja que `up` llegue a `turn`?",
+        "¿Qué tipo estrechado tiene `raw` después de comprobar los dos literales permitidos?"
+      ],
+      "exercise_prompt": "Comprueba la cadena recibida frente a ambos miembros de `Direction` y comunica por separado cualquier texto inválido.",
+      "objective": "Transformar `left` y `right` en sus abreviaturas y rechazar un comando desconocido.",
+      "language_delta": "La unión limita el código comprobado, pero desaparece; JavaScript sigue recibiendo cadenas normales y necesita una prueba de pertenencia.",
+      "prediction_prompt": "Predice qué rama defectuosa toma `up` y compárala con la ruta de rechazo requerida.",
+      "transfer_trap": "Un enum cerrado de otro lenguaje puede validar su construcción; una unión literal TypeScript no crea ningún contenedor en ejecución."
+    },
+    "ts-optional-nullish": {
+      "title": "Aplicar un valor solo cuando falta la puntuación",
+      "concept": "La puntuación analizada es `number | null`. `??` aporta diez únicamente para `null` o `undefined` y conserva cero como resultado numérico intencionado.",
+      "worked_example": "La muestra asigna cero a un conteo opcional y aplica `?? 8`. Que se imprima cero demuestra la regla de ausencia sin reutilizar los nombres ni el valor alternativo del ejercicio.",
+      "common_mistakes": [
+        "Usar `||` y sustituir un cero legítimo porque JavaScript lo considera falso.",
+        "Dejar `none` como cadena y mezclar el marcador textual con cálculos numéricos."
+      ],
+      "self_check": [
+        "¿Qué valores activan el operando derecho de `??`?",
+        "¿Qué valor de ejecución se crea cuando `scoreText` contiene `none`?"
+      ],
+      "exercise_prompt": "Usa coalescencia nula para conservar una puntuación cero y aplicar diez únicamente cuando el dato esté ausente.",
+      "objective": "Distinguir cero, nulo y una puntuación positiva en los registros emitidos.",
+      "language_delta": "Con `strictNullChecks`, el nulo forma parte explícita de la unión; el operador JavaScript `??` aporta la semántica real.",
+      "prediction_prompt": "Evalúa la expresión predeterminada para `Ada 0` antes de ejecutar Node.",
+      "transfer_trap": "`or` de Python y `||` de JavaScript comparten un concepto amplio de falsedad; ninguno sustituye a `??`."
+    },
+    "ts-interfaces-aliases": {
+      "title": "Componer contratos estructurales",
+      "concept": "`Named` es una interfaz, `Scored` un alias y su intersección exige ambos campos. `Entry` se acepta por sus miembros, no por una cadena de constructores.",
+      "worked_example": "La muestra intersecta `Tagged` con `Weighted`, construye un objeto compatible y lee su etiqueta y peso. La composición es visible sin duplicar el modelo evaluado.",
+      "common_mistakes": [
+        "Alterar la puntuación al construir la intersección en vez de conservar el dato analizado.",
+        "Suponer que una interfaz y un alias de objeto equivalente crean clases distintas en ejecución."
+      ],
+      "self_check": [
+        "¿Qué dos propiedades necesita un valor para satisfacer `Entry`?",
+        "¿Puede un alias nombrar una unión aunque una interfaz no lo haga directamente?"
+      ],
+      "exercise_prompt": "Construye la intersección con el nombre sin cambios y la puntuación ya convertida, y escribe directamente esos dos campos.",
+      "objective": "Conservar puntuaciones positivas, cero y negativas al construir e imprimir un objeto estructural.",
+      "language_delta": "Las interfaces pueden fusionar declaraciones y los alias expresan uniones; ambos se borran y no crean clases JavaScript.",
+      "prediction_prompt": "Escribe el objeto `Entry` creado desde `Bo -2` antes de interpolar sus campos.",
+      "transfer_trap": "Una interfaz Java participa en declaraciones nominales y metadatos de JVM; la interfaz TypeScript es estructural y se elimina."
+    },
+    "ts-generics": {
+      "title": "Conservar el tipo de elemento con `first`",
+      "concept": "`first<T>` conserva el tipo de elemento de quien llama y devuelve `undefined` si no existe ninguno. La unión de retorno modela el vacío sin `any` ni aserciones de no nulidad.",
+      "worked_example": "La muestra define la función genérica opuesta, `last`, y la llama con tres cadenas. El resultado infiere `string | undefined` mientras selecciona deliberadamente el otro extremo.",
+      "common_mistakes": [
+        "Devolver el índice uno y confundir el segundo elemento con el primero.",
+        "Forzar un valor con `!` aunque un array vacío de solo lectura sea una entrada válida."
+      ],
+      "self_check": [
+        "¿Qué representa `T` cuando `first` recibe un array de cadenas?",
+        "¿Por qué `undefined` pertenece al retorno aunque algunos casos no estén vacíos?"
+      ],
+      "exercise_prompt": "Devuelve la posición cero desde el auxiliar genérico y conserva en quien llama la alternativa explícita para el vacío.",
+      "objective": "Seleccionar el primer token de dos entradas no vacías y `none` cuando no haya ninguno.",
+      "language_delta": "Los genéricos preservan relaciones durante la comprobación y desaparecen en Node; no crean versiones de contenedor en ejecución.",
+      "prediction_prompt": "Infiere el tipo de retorno y el valor real para un array de un solo token.",
+      "transfer_trap": "Java borra genéricos con otras reglas de varianza y Rust suele monomorfizarlos; los mismos corchetes angulares no implican igual mecanismo."
+    },
+    "ts-keyof-typeof": {
+      "title": "Validar una clave de ejecución para `keyof`",
+      "concept": "`typeof` deriva la forma estática de `limits` y `keyof` obtiene sus claves permitidas. Un predicado con `Object.hasOwn` acepta únicamente propiedades directas del objeto.",
+      "worked_example": "La muestra deriva `tiny | huge`, trata `huge` como texto externo y lo estrecha mediante una comprobación de clave propia antes de indexar.",
+      "common_mistakes": [
+        "Usar `value in limits`, que también acepta nombres heredados como `toString`.",
+        "Confundir el operador JavaScript `typeof` con su posición de consulta dentro del sistema de tipos."
+      ],
+      "self_check": [
+        "¿Qué unión produce `keyof typeof limits`?",
+        "¿Por qué `Object.hasOwn` rechaza `constructor` aunque el operador `in` lo encuentre?"
+      ],
+      "exercise_prompt": "Añade una guarda de tipos basada en propiedades propias antes de indexar `limits` y devuelve `invalid` fuera de la rama estrechada.",
+      "objective": "Resolver los dos tamaños declarados y rechazar claves ausentes o heredadas del prototipo.",
+      "language_delta": "`keyof` no existe en Node; `Object.hasOwn` aporta la evidencia JavaScript de que la cadena nombra una propiedad propia.",
+      "prediction_prompt": "Compara `Object.hasOwn(limits, \"toString\")` con `\"toString\" in limits`.",
+      "transfer_trap": "Algunas operaciones de pertenencia recorren estado heredado; un contrato de claves propias debe excluir expresamente el prototipo."
+    },
+    "ts-indexed-access": {
+      "title": "Reutilizar el tipo de elemento de una secuencia",
+      "concept": "`User[\"scores\"][number]` extrae el tipo de elemento ya declarado por el modelo. Reutilizarlo evita escribir otra definición de puntuación que pueda divergir.",
+      "worked_example": "El modelo de muestra deriva el elemento de un array de etiquetas y asigna la palabra fija `typed`. Ambas selecciones solo existen durante la comprobación.",
+      "common_mistakes": [
+        "Asignar texto crudo de la entrada a un tipo numérico derivado sin conversión en ejecución.",
+        "Repetir `number` manualmente y perder el vínculo con el modelo de origen."
+      ],
+      "self_check": [
+        "¿Qué tipo resulta de seleccionar primero `scores` e indexarlo después con `number`?",
+        "¿En qué fase se informa la incompatibilidad entre cadena y número?"
+      ],
+      "exercise_prompt": "Convierte la entrada antes de asignarla al tipo de puntuación obtenido mediante acceso indexado.",
+      "objective": "Superar la comprobación estricta y repetir valores positivos, cero y negativos como números.",
+      "language_delta": "El acceso indexado calcula un tipo y no emite una consulta; `Number` sigue siendo necesario en la frontera de entrada JavaScript.",
+      "prediction_prompt": "Clasifica el fallo inicial como `TypeCheck` antes de considerar cualquier salida.",
+      "transfer_trap": "Un esquema de otro ecosistema puede generar validadores; este operador TypeScript solo proporciona comprobación estática."
+    },
+    "ts-mapped-types": {
+      "title": "Asignar una bandera a cada funcionalidad",
+      "concept": "`Flags` recorre la unión `Feature` y exige una propiedad booleana para cada miembro. Esa totalidad evita que una funcionalidad nueva quede sin configuración.",
+      "worked_example": "La demostración transforma `dark | cache` en dos booleanos e informa de la clave activa. Las dos propiedades existen aunque solo una sea verdadera.",
+      "common_mistakes": [
+        "Omitir `share` y esperar que el tipo mapeado la considere opcional.",
+        "Imprimir una palabra genérica aunque los casos requieren el nombre de la funcionalidad activada."
+      ],
+      "self_check": [
+        "¿Por qué el objeto incompleto falla antes de que Node lea la entrada?",
+        "¿Qué valores tienen ambas banderas cuando el comando es `none`?"
+      ],
+      "exercise_prompt": "Añade la propiedad mapeada ausente y deriva `search`, `share` o `none` a partir de las dos banderas.",
+      "objective": "Exigir cobertura completa durante la comprobación y producir los tres resultados posibles.",
+      "language_delta": "Los tipos mapeados generan requisitos para el verificador; no asignan propiedades ni recorren claves al ejecutar Node.",
+      "prediction_prompt": "Predice el diagnóstico para un objeto que solo contiene la bandera `search`.",
+      "transfer_trap": "Un `Map` de ejecución almacena datos; un tipo mapeado de TypeScript es únicamente una transformación estática."
+    },
+    "ts-conditional-types": {
+      "title": "Extraer un elemento con un tipo condicional",
+      "concept": "`ElementType` comprueba si `T` tiene forma de array y usa `infer` para nombrar su miembro. Con `string[]`, la rama elegida por el verificador es `string`.",
+      "worked_example": "La demostración aplica el mismo patrón a `number[]` y asigna once. Ninguna condición de ejecución inspecciona ese valor porque la selección ya fue eliminada.",
+      "common_mistakes": [
+        "Asignar `Number(raw)` aunque el tipo condicional se haya resuelto como cadena.",
+        "Esperar que `T extends ...` elija una rama a partir del contenido recibido por stdin."
+      ],
+      "self_check": [
+        "¿Qué tipo representa `Item` si `T` es `readonly string[]`?",
+        "¿Puede Node observar qué rama del tipo condicional eligió el verificador?"
+      ],
+      "exercise_prompt": "Asigna el texto recibido al tipo de elemento `string` extraído, sin introducir una conversión numérica.",
+      "objective": "Comprobar y repetir tres textos distintos, incluidos caracteres con aspecto numérico.",
+      "language_delta": "Los tipos condicionales actúan solo dentro del sistema TypeScript; una expresión condicional JavaScript es sintaxis de ejecución diferente.",
+      "prediction_prompt": "Decide si el texto `42` cambia el tipo estático `TextElement` antes de ejecutar.",
+      "transfer_trap": "Plantillas de compilación de otros lenguajes pueden generar código; esta selección se borra por completo."
+    },
+    "ts-utility-types": {
+      "title": "Actualizar campos elegidos con tipos de utilidad",
+      "concept": "`Pick` selecciona `score` de `User` y `Partial` vuelve opcional esa propiedad. Un objeto vacío representa que no hay actualización; no fabrica una puntuación.",
+      "worked_example": "La muestra crea una actualización opcional de `active` para otro perfil. La lectura con alternativa booleana muestra que la propiedad puede estar o no presente.",
+      "common_mistakes": [
+        "Insertar puntuación uno cuando falta el token en lugar de dejar vacío el objeto de actualización.",
+        "Suponer que `Partial` modifica recursivamente miembros anidados o les asigna valores predeterminados."
+      ],
+      "self_check": [
+        "¿Qué objeto debe representar la entrada `Lin` sin puntuación?",
+        "¿Qué campo original de `User` excluye la parte `Pick` de `ScorePatch`?"
+      ],
+      "exercise_prompt": "Crea una actualización vacía o una puntuación numérica convertida según exista o no el segundo token.",
+      "objective": "Informar puntuaciones positivas y negativas y usar cero solo para una propiedad realmente ausente.",
+      "language_delta": "Los tipos utilitarios reescriben formas estáticas sin emitir código; la construcción JavaScript determina qué claves existen.",
+      "prediction_prompt": "Dibuja los objetos de actualización para `Ada 5` y `Lin` antes de aplicar `??` a `score`.",
+      "transfer_trap": "Los campos opcionales de datos serializados todavía requieren análisis y validación aunque `Partial` describa su forma."
+    },
+    "ts-satisfies-as-const": {
+      "title": "Comprobar rutas y conservar sus literales",
+      "concept": "`as const` conserva las cadenas literales y `satisfies` verifica el contrato `Record` sin sustituir sus tipos. `Object.hasOwn` prueba aparte que el texto externo sea una propiedad directa.",
+      "worked_example": "La muestra comprueba dos códigos, estrecha `ready` mediante una clave propia y lee el literal `R`. Tras eliminar los tipos, el objeto sigue siendo datos JavaScript normales.",
+      "common_mistakes": [
+        "Usar `in` y aceptar por accidente nombres heredados como `constructor`.",
+        "Creer que `as const` ejecuta `Object.freeze` o impide recursivamente la mutación en memoria."
+      ],
+      "self_check": [
+        "¿En qué difiere `satisfies` de afirmar `as Record<string, string>`?",
+        "¿Por qué `Object.hasOwn` demuestra una condición más fuerte que `in`?"
+      ],
+      "exercise_prompt": "Valida la ruta solicitada como propiedad directa antes de indexar el objeto constante comprobado con `satisfies`.",
+      "objective": "Devolver las dos rutas y rechazar nombres desconocidos o heredados del prototipo.",
+      "language_delta": "`satisfies` comprueba la compatibilidad sin convertir el tipo; `as const` conserva los tipos literales y marca como de solo lectura, durante la compilación, las propiedades de esa expresión literal, sin congelar el objeto en ejecución; `Object.hasOwn` aporta la prueba real de pertenencia.",
+      "prediction_prompt": "Evalúa `Object.hasOwn(routes, \"constructor\")` antes de decidir si se permite indexar.",
+      "transfer_trap": "El operador `in` recorre la cadena de prototipos y resulta demasiado amplio para una configuración de claves declaradas."
+    },
+    "ts-discriminated-unions": {
+      "title": "Punto de control: agotar una unión etiquetada",
+      "concept": "Cada variante de `Shape` posee un `kind` literal y sus medidas. Ramificar sobre esa etiqueta estrecha los campos de forma segura; asignar el resto imposible a `never` comprueba la exhaustividad.",
+      "worked_example": "La muestra modela éxito o error y devuelve en los dos casos del `switch`. Sus etiquetas ajenas muestran el mismo estrechamiento sin calcular rectángulos ni círculos.",
+      "common_mistakes": [
+        "Leer `radius` antes de demostrar que el valor corresponde a la variante circular.",
+        "Añadir otra etiqueta y mantener una rama general que oculte silenciosamente el caso faltante."
+      ],
+      "self_check": [
+        "¿Qué tipo exacto queda después de que la rama rectangular haya retornado?",
+        "¿Por qué asignar un círculo a `never` provoca el fallo inicial?"
+      ],
+      "exercise_prompt": "Implementa la variante circular y conserva la aserción `never` para proteger futuras ampliaciones de la unión.",
+      "objective": "Superar la exhaustividad estricta y medir dos formas etiquetadas en tres casos.",
+      "language_delta": "La etiqueta existe y dirige JavaScript; el estrechamiento y la prueba `never` son razonamiento eliminado del verificador.",
+      "prediction_prompt": "Sigue `circle 5` desde el análisis y el estrechamiento hasta su retorno numérico.",
+      "transfer_trap": "Un comodín de Rust o un `default` amplio también puede esconder variantes nuevas y anular la comprobación exhaustiva."
+    },
+    "ts-async-promise": {
+      "title": "Esperar una promesa tipada",
+      "concept": "Una función `async` devuelve siempre una `Promise`, aunque retorne un número. `await` obtiene el número cumplido dentro de `main`, y el `catch` final observa un posible rechazo.",
+      "worked_example": "La demostración incrementa nueve de forma asíncrona, espera diez y después llama directamente a `process.stdout.write`. Esa escritura no es un callback de la promesa; ocurre tras el `await`.",
+      "common_mistakes": [
+        "Devolver el número original desde `double` y olvidar la transformación solicitada.",
+        "Invocar `main` sin observar el rechazo de la promesa en la frontera superior."
+      ],
+      "self_check": [
+        "¿Cuál es el retorno estático de `double` aunque su cuerpo no contenga todavía otro `await`?",
+        "¿Cuándo se ejecuta la escritura respecto al cumplimiento de la promesa de `double`?"
+      ],
+      "exercise_prompt": "Haz que `double` resuelva el doble de su argumento y conserva tanto el `await` como el manejo del rechazo en el nivel superior.",
+      "objective": "Producir dobles positivos, cero y negativos mediante control asíncrono real.",
+      "language_delta": "La planificación de promesas pertenece a JavaScript; TypeScript comprueba `Promise<number>` y errores `unknown`, pero no proporciona un ejecutor.",
+      "prediction_prompt": "Predice el valor cumplido que transporta `double` para menos tres.",
+      "transfer_trap": "Llamar a una corrutina Python no la ejecuta; invocar esta función JavaScript devuelve de inmediato una cadena de promesas ya iniciada."
+    },
+    "ts-modules": {
+      "title": "Orientar una API pública en un ejecutor de un solo archivo",
+      "concept": "Este laboratorio describe una superficie invocable mediante un objeto API local. No afirma probar un grafo de importaciones porque el evaluador solo proporciona un archivo `.ts`.",
+      "worked_example": "La muestra expone `transform` mediante `DemoApi` e invierte `module`. El objeto hace visible la frontera sin depender de la resolución de `ESM` o `CommonJS`.",
+      "common_mistakes": [
+        "Suponer que una declaración `export` demuestra por sí sola que otro archivo puede resolver y ejecutar el módulo.",
+        "Convertir a minúsculas aunque el comportamiento público prometido exige mayúsculas."
+      ],
+      "self_check": [
+        "¿Qué firma debe cumplir la implementación local de `LabelApi`?",
+        "¿Qué configuración necesitaría Node para comprobar honestamente un ejercicio `ESM` con varios archivos?"
+      ],
+      "exercise_prompt": "Implementa el comportamiento de la API local declarada y transforma a mayúsculas el texto recibido por la entrada estándar.",
+      "objective": "Practicar una superficie pública tipada con texto ASCII y acentuado sin fingir una importación entre archivos.",
+      "language_delta": "Node decide entre `ESM` y `CommonJS` mediante extensiones y metadatos; un ejecutor fijo de un solo archivo no puede probar ambas partes de un módulo.",
+      "prediction_prompt": "Predice el resultado del método para `é` usando la conversión Unicode a mayúsculas.",
+      "transfer_trap": "Navegadores, empaquetadores y `CommonJS` resuelven archivos de manera distinta; superar este laboratorio no equivale a dominar módulos múltiples."
+    },
+    "ts-error-handling": {
+      "title": "Proyecto final: validar y ejecutar comandos",
+      "concept": "El analizador debe validar tokens numéricos completos y finitos, rechazar división por cero y construir un comando discriminado. La ejecución devuelve una promesa y el `catch` estrecha `unknown`.",
+      "worked_example": "La muestra prueba que `parseInt` acepta el prefijo de `12px` y que `bad` produce `NaN`, no una excepción. También estrecha una cadena lanzada antes de usarla.",
+      "common_mistakes": [
+        "Usar `parseInt` como validación y aceptar por accidente letras posteriores al número.",
+        "Escribir el `catch` como si cualquier valor lanzado fuera siempre una instancia de `Error`."
+      ],
+      "self_check": [
+        "¿Por qué `Number` rechaza `12px` mientras `Number.parseInt` aprovecha una parte?",
+        "¿Qué rama comprueba el divisor cero antes de la ejecución asíncrona?"
+      ],
+      "exercise_prompt": "Construye un analizador estricto, ejecuta exhaustivamente la unión de comandos y estrecha desde `unknown` cualquier fallo capturado.",
+      "objective": "Calcular comandos válidos de suma y división, y escribir `invalid` para tokens numéricos parciales o no finitos y para la división por cero.",
+      "language_delta": "Un `catch` estricto recibe `unknown` porque JavaScript puede lanzar cualquier cosa; `parseInt` devuelve `NaN` para texto totalmente inválido y no lanza.",
+      "prediction_prompt": "Sigue `add 12px 1` durante la conversión e identifica la validación exacta que lo rechaza.",
+      "transfer_trap": "Los patrones basados solo en excepciones no se trasladan: muchas conversiones JavaScript comunican el fallo con `NaN`."
     }
   }
 }

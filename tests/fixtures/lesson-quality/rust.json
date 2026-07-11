@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "lessons": {
+    "rust-output": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let name = fields.next().unwrap();\n    let score = fields.next().unwrap();\n    println!(\"{name}:{score}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "drops-required-colon",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "println!(\"{name}:{score}\");",
+              "to": "println!(\"{name} {score}\");"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-variables": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let label = fields.next().unwrap();\n    let mut total = 0_i64;\n    for field in fields {\n        total += field.parse::<i64>().unwrap();\n    }\n    println!(\"{label}:{total}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtracts-instead-of-accumulating",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "total += field.parse::<i64>().unwrap();",
+              "to": "total -= field.parse::<i64>().unwrap();"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-numbers-tuples": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let numbers = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let pair = (numbers[0] / numbers[1], numbers[0] % numbers[1]);\n    println!(\"{}:{}\", pair.0, pair.1);\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-input": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let total = input\n        .split_whitespace()\n        .map(|part| part.parse::<i64>().unwrap())\n        .sum::<i64>();\n    println!(\"{total}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "multiplies-token-stream",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": ".sum::<i64>()",
+              "to": ".product::<i64>()"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-vec-hashmap": {
+      "reference_solution": "use std::collections::HashMap;\nuse std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut tokens = input.split_whitespace();\n    let query = tokens.next().unwrap();\n    let values = tokens.collect::<Vec<_>>();\n    let mut counts = HashMap::new();\n    for value in &values {\n        *counts.entry(*value).or_insert(0_usize) += 1;\n    }\n    println!(\"{} {}\", values.len(), counts.get(query).copied().unwrap_or(0));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-control-flow": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let n = input.trim().parse::<i64>().unwrap();\n    let kind = if n % 2 == 0 { \"even\" } else { \"odd\" };\n    let total: i64 = (1..=n).sum();\n    println!(\"{kind}:{total}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "excludes-upper-bound",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "(1..=n).sum()",
+              "to": "(1..n).sum()"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-iterators": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let total = input\n        .split_whitespace()\n        .map(|part| part.parse::<i64>().unwrap())\n        .filter(|number| number % 2 == 0)\n        .map(|number| number * number)\n        .sum::<i64>();\n    println!(\"{total}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-functions": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn area(width: i64, height: i64) -> i64 {\n    width * height\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let dimensions = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{}\", area(dimensions[0], dimensions[1]));\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "adds-dimensions",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "width * height",
+              "to": "width + height"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-modules-use": {
+      "reference_solution": "use std::io::{self, Read};\n\nmod grading {\n    pub fn verdict(score: i64) -> &'static str {\n        if score >= 80 { \"pass\" } else { \"retry\" }\n    }\n}\n\nuse grading::verdict;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let score = input.trim().parse::<i64>().unwrap();\n    println!(\"{}\", verdict(score));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-generics": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn last_copy<T: Copy>(values: &[T]) -> Option<T> {\n    values.last().copied()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{}\", last_copy(&values).unwrap());\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-traits": {
+      "reference_solution": "use std::io::{self, Read};\n\ntrait Summary {\n    fn summary(&self) -> String;\n}\n\nstruct ScoreCard {\n    name: String,\n    score: i64,\n}\n\nimpl Summary for ScoreCard {\n    fn summary(&self) -> String {\n        format!(\"{}: {}\", self.name, self.score)\n    }\n}\n\nfn render<T: Summary>(value: &T) -> String {\n    value.summary()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let card = ScoreCard {\n        name: fields.next().unwrap().to_owned(),\n        score: fields.next().unwrap().parse().unwrap(),\n    };\n    println!(\"{}\", render(&card));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-macros": {
+      "reference_solution": "use std::io::{self, Read};\n\npub fn helper(name: &str) -> String {\n    format!(\"hi {name}\")\n}\n\n#[macro_export]\nmacro_rules! greet {\n    ($name:expr) => {\n        $crate::helper($name)\n    };\n}\n\nmod caller {\n    pub fn greet_from(name: &str) -> String {\n        crate::greet!(name)\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", caller::greet_from(input.trim()));\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "uses-caller-relative-helper",
+          "expected_failure": "compile",
+          "replacements": [
+            {
+              "from": "$crate::helper($name)",
+              "to": "helper($name)"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-cargo-workspaces": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let command = match input.trim() {\n        \"check\" => \"cargo check --workspace\",\n        \"test\" => \"cargo test --workspace\",\n        \"fmt\" => \"cargo fmt --all -- --check\",\n        _ => unreachable!(),\n    };\n    println!(\"{command}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-ownership": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn trim_line_ending(text: &mut String) {\n    while text.ends_with('\\n') || text.ends_with('\\r') { text.pop(); }\n}\n\nfn describe(text: String) -> (String, usize) {\n    let bytes = text.len();\n    (text, bytes)\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    trim_line_ending(&mut input);\n    let (text, bytes) = describe(input);\n    println!(\"{text}:{bytes}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "counts-scalars-not-owned-bytes",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "let bytes = text.len();",
+              "to": "let bytes = text.chars().count();"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-smart-pointers": {
+      "reference_solution": "use std::io::{self, Read};\n\nenum List {\n    Cons(i64, Box<List>),\n    Nil,\n}\n\nimpl List {\n    fn sum(&self) -> i64 {\n        match self {\n            List::Cons(value, next) => value + next.sum(),\n            List::Nil => 0,\n        }\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let list = values.into_iter().rev().fold(List::Nil, |tail, value| List::Cons(value, Box::new(tail)));\n    println!(\"{}\", list.sum());\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-interior-mutability": {
+      "reference_solution": "use std::cell::RefCell;\nuse std::io::{self, Read};\n\nstruct EventLog {\n    events: RefCell<Vec<String>>,\n}\n\nimpl EventLog {\n    fn record(&self, event: &str) {\n        self.events.borrow_mut().push(event.to_owned());\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let log = EventLog { events: RefCell::new(Vec::new()) };\n    for event in input.split_whitespace() {\n        log.record(event);\n    }\n    let count = log.events.borrow().len();\n    println!(\"{count}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-strings": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let text = input.trim_end();\n    let bytes = text.len();\n    let scalars = text.chars().count();\n    let first = text.chars().next().unwrap();\n    println!(\"{bytes}:{scalars}:{first}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "uses-scalar-count-for-byte-field",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "let bytes = text.len();",
+              "to": "let bytes = text.chars().count();"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-borrowing-slices": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn first_word(line: &str) -> &str {\n    line.split_whitespace().next().unwrap_or(\"\")\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", first_word(&input));\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "selects-last-word",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": ".next()",
+              "to": ".last()"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-lifetimes": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn longer<'a>(left: &'a str, right: &'a str) -> &'a str {\n    if left.chars().count() >= right.chars().count() { left } else { right }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let (left, right) = input.trim_end().split_once('|').unwrap();\n    println!(\"{}\", longer(left, right));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-traits-lifetimes": {
+      "reference_solution": "use std::io::{self, Read};\n\ntrait Draw {\n    fn draw(&self) -> &str;\n}\n\nstruct Button { text: String }\nstruct Label { text: String }\n\nimpl Draw for Button { fn draw(&self) -> &str { &self.text } }\nimpl Draw for Label { fn draw(&self) -> &str { &self.text } }\n\nfn render(widget: &dyn Draw) -> &str {\n    widget.draw()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let command = input.trim_end();\n    if let Some(text) = command.strip_prefix(\"label:\") {\n        let label = Label { text: text.to_owned() };\n        println!(\"{}\", render(&label));\n    } else {\n        let button = Button { text: command.to_owned() };\n        println!(\"{}\", render(&button));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-unsafe": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn read_copy(value: &i64) -> i64 {\n    let pointer = value as *const i64;\n    // SAFETY: pointer came from a live, aligned shared reference and i64 is Copy.\n    unsafe { pointer.read() }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let value = input.trim().parse::<i64>().unwrap();\n    println!(\"{}\", read_copy(&value));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-structs-impl": {
+      "reference_solution": "use std::io::{self, Read};\n\nstruct Rectangle {\n    width: i64,\n    height: i64,\n}\n\nimpl Rectangle {\n    fn area(&self) -> i64 {\n        self.width * self.height\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let dimensions = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let rectangle = Rectangle { width: dimensions[0], height: dimensions[1] };\n    println!(\"{}\", rectangle.area());\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "adds-rectangle-sides",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "self.width * self.height",
+              "to": "self.width + self.height"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-enum-match": {
+      "reference_solution": "use std::io::{self, Read};\n\nenum Command {\n    Add(i64, i64),\n    Mul(i64, i64),\n    Quit,\n}\n\nfn evaluate(command: Command) -> i64 {\n    match command {\n        Command::Add(left, right) => left + right,\n        Command::Mul(left, right) => left * right,\n        Command::Quit => 0,\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let command = match fields.next().unwrap() {\n        \"add\" => Command::Add(fields.next().unwrap().parse().unwrap(), fields.next().unwrap().parse().unwrap()),\n        \"mul\" => Command::Mul(fields.next().unwrap().parse().unwrap(), fields.next().unwrap().parse().unwrap()),\n        \"quit\" => Command::Quit,\n        _ => unreachable!(),\n    };\n    println!(\"{}\", evaluate(command));\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "multiplies-as-addition",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "Command::Mul(left, right) => left * right,",
+              "to": "Command::Mul(left, right) => left + right,"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-option": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    match input.trim_end().chars().next() {\n        Some(first) => println!(\"{first}\"),\n        None => println!(\"empty\"),\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-result": {
+      "reference_solution": "use std::io::{self, Read};\nuse std::num::ParseIntError;\n\nfn sum_tokens(input: &str) -> Result<i64, ParseIntError> {\n    input.split_whitespace().try_fold(0_i64, |sum, token| {\n        Ok(sum + token.parse::<i64>()?)\n    })\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    match sum_tokens(&input) {\n        Ok(total) => println!(\"{total}\"),\n        Err(_) => println!(\"error\"),\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtracts-valid-tokens",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "Ok(sum + token.parse::<i64>()?)",
+              "to": "Ok(sum - token.parse::<i64>()?)"
+            }
+          ]
+        }
+      ]
+    },
+    "rust-testing": {
+      "reference_solution": "use std::io::{self, Read};\n\nfn add_two(value: i64) -> i64 {\n    value + 2\n}\n\nfn main() {\n    assert_eq!(add_two(-2), 0);\n    assert_eq!(add_two(3), 5);\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", add_two(input.trim().parse::<i64>().unwrap()));\n}\n",
+      "starter_failure": "compile",
+      "mutants": []
+    },
+    "rust-async-await": {
+      "reference_solution": "use std::future::{ready, Future};\nuse std::io::{self, Read};\nuse std::sync::Arc;\nuse std::task::{Context, Poll, Wake, Waker};\n\nstruct Noop;\nimpl Wake for Noop { fn wake(self: Arc<Self>) {} }\n\nfn block_on_ready<F: Future>(future: F) -> F::Output {\n    let waker = Waker::from(Arc::new(Noop));\n    let mut context = Context::from_waker(&waker);\n    let mut future = Box::pin(future);\n    match future.as_mut().poll(&mut context) {\n        Poll::Ready(value) => value,\n        Poll::Pending => panic!(\"executor accepts only ready futures\"),\n    }\n}\n\nasync fn double(value: i64) -> i64 {\n    ready(value * 2).await\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let value = input.trim().parse::<i64>().unwrap();\n    println!(\"{}\", block_on_ready(double(value)));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-concurrency": {
+      "reference_solution": "use std::io::{self, Read};\nuse std::thread;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let value = input.trim().parse::<i64>().unwrap();\n    let handle = thread::spawn(move || value * 2);\n    println!(\"{}\", handle.join().expect(\"worker panicked\"));\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "rust-shared-state": {
+      "reference_solution": "use std::io::{self, Read};\nuse std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let total = Arc::new(Mutex::new(0_i64));\n    let mut handles = Vec::new();\n    for value in values {\n        let total = Arc::clone(&total);\n        handles.push(thread::spawn(move || {\n            let square = value * value;\n            let mut guard = total.lock().expect(\"worker mutex poisoned\");\n            *guard += square;\n        }));\n    }\n    for handle in handles {\n        handle.join().expect(\"worker panicked\");\n    }\n    let answer = *total.lock().expect(\"main mutex poisoned\");\n    println!(\"{answer}\");\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "adds-values-without-squaring",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "let square = value * value;",
+              "to": "let square = value;"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

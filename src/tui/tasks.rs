@@ -601,10 +601,7 @@ mod tests {
         assert!(!app.learning_session.assisted());
         app.handle_command("next").unwrap();
 
-        assert_eq!(
-            app.learning_session.current_lesson_id(),
-            Some("py-variables")
-        );
+        assert_eq!(app.learning_session.current_lesson_id(), Some("py-input"));
         assert!(!app.learning_session.assisted());
     }
 

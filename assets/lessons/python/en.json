@@ -4,379 +4,454 @@
   "ui_language": "en",
   "lessons": {
     "py-output": {
-      "title": "print and stdout",
-      "concept": "`print` is the boundary between a Python calculation and judge-visible output. It converts each argument to text, inserts spaces between arguments, and ends with a newline by default, so exact stdout matters.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying print and stdout to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Exact output with print",
+      "concept": "Python's print function converts its arguments to text, places sep between them, and appends end. Those defaults are convenient for people but remain part of the exact stdout contract checked by a judge.",
+      "worked_example": "The sample joins Mina and 9 with an equals sign, then replaces the usual newline ending with an exclamation mark followed by a newline. Both punctuation choices come from print arguments rather than manual concatenation.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the print and stdout rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the print and stdout exercise.",
-        "Matching the judge output without checking this lesson idea: `print` is the boundary between a Python calculation and judge-visible output."
+        "Leaving the default separating space in place when punctuation must touch both values.",
+        "Sending debug labels to stdout, where the judge treats them as additional answer bytes."
       ],
       "self_check": [
-        "Which expression in the example applies print and stdout before the `example:` output?",
-        "Which TODO line in the print and stdout exercise must derive the value from its own data instead of copying the demo?"
+        "What characters are written by print(\"A\", \"B\", sep=\":\", end=\"!\")?",
+        "Which keyword controls the text emitted after the final argument?"
       ],
-      "exercise_prompt": "Complete the TODO by applying print and stdout to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-variables": {
-      "title": "Variables",
-      "concept": "A variable name is bound to an object by assignment. Rebinding the same name changes what future reads see, while any previous object keeps existing until no references need it.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Variables to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Variables rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Variables exercise.",
-        "Matching the judge output without checking this lesson idea: A variable name is bound to an object by assignment."
-      ],
-      "self_check": [
-        "Which expression in the example applies Variables before the `example:` output?",
-        "Which TODO line in the Variables exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Variables to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-numbers": {
-      "title": "Numbers",
-      "concept": "Python integers have arbitrary precision, and numeric operators choose different meanings: `/` returns a float, `//` floors, `%` gives the remainder, and `**` powers. Problems often need the integer operators, not decimal division.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Numbers to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Numbers rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Numbers exercise.",
-        "Matching the judge output without checking this lesson idea: Python integers have arbitrary precision, and numeric operators choose different meanings: `/` returns a float, `//` floors, `%` gives the remainder, and `**` powers."
-      ],
-      "self_check": [
-        "Which expression in the example applies Numbers before the `example:` output?",
-        "Which TODO line in the Numbers exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Numbers to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-strings": {
-      "title": "Strings",
-      "concept": "A string is an immutable sequence of Unicode characters. Indexing reads one character, slicing reads a half-open range, and operations such as concatenation create a new string instead of editing the old one.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Strings to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Strings rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Strings exercise.",
-        "Matching the judge output without checking this lesson idea: A string is an immutable sequence of Unicode characters."
-      ],
-      "self_check": [
-        "Which expression in the example applies Strings before the `example:` output?",
-        "Which TODO line in the Strings exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Strings to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-control-flow": {
-      "title": "Control flow",
-      "concept": "`if` selects a block, `for` consumes an iterable, and `while` repeats until a condition changes. Python uses indentation as syntax, so moving one line changes which branch or loop owns it.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Control flow to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Control flow rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Control flow exercise.",
-        "Matching the judge output without checking this lesson idea: `if` selects a block, `for` consumes an iterable, and `while` repeats until a condition changes."
-      ],
-      "self_check": [
-        "Which expression in the example applies Control flow before the `example:` output?",
-        "Which TODO line in the Control flow exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Control flow to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-functions": {
-      "title": "Functions",
-      "concept": "`def` creates a callable object with parameters and a body. `return` sends a value to the caller; printing inside the function is separate from returning the calculation for later use.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Functions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Functions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Functions exercise.",
-        "Matching the judge output without checking this lesson idea: `def` creates a callable object with parameters and a body."
-      ],
-      "self_check": [
-        "Which expression in the example applies Functions before the `example:` output?",
-        "Which TODO line in the Functions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Functions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Read the name and score, then configure print so they form one colon-delimited record terminated by exactly one newline.",
+      "objective": "Given any of the three input records, produce byte-for-byte matching stdout with no debug prefix or surplus whitespace.",
+      "language_delta": "Unlike a raw stream write, print supplies both a separator and a line ending. Establishing this boundary early makes every later Python exercise's output contract explicit.",
+      "prediction_prompt": "Before running it, write the exact bytes produced by print(\"x\", 0, sep=\"=\", end=\"?\").",
+      "transfer_trap": "Do not assume another language's println or console logger shares Python's configurable sep behavior; verify its spacing and newline rules."
     },
     "py-input": {
-      "title": "Input parsing",
-      "concept": "Coding-test input arrives as text on stdin. A common pattern is to read once, split whitespace into tokens, convert the tokens, and keep the solving logic separate from parsing.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Input parsing to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Read stdin once",
+      "concept": "sys.stdin.read gathers the complete stream as one string. Calling split with no separator recognizes arbitrary whitespace, and mapping int across an empty token list leaves sum with its valid identity value of zero.",
+      "worked_example": "The demonstration stores a two-line string containing 10 and 4, splits it without caring where the newline occurs, converts both tokens, and prints 14. No interactive prompt is involved.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Input parsing rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Input parsing exercise.",
-        "Matching the judge output without checking this lesson idea: Coding-test input arrives as text on stdin."
+        "Using split(\" \"), which leaves newline boundaries inside tokens and treats repeated spaces awkwardly.",
+        "Calling input repeatedly for a token stream, then failing when data is wrapped onto different lines."
       ],
       "self_check": [
-        "Which expression in the example applies Input parsing before the `example:` output?",
-        "Which TODO line in the Input parsing exercise must derive the value from its own data instead of copying the demo?"
+        "What list does an empty string produce after calling split with no argument?",
+        "Why does one call to sys.stdin.read handle both the single-line and multiline cases?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Input parsing to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Convert every whitespace-delimited token from the already-read stream and print their total, including the empty-input case.",
+      "objective": "Accept tokens separated by spaces or newlines and compute the correct integer sum without special-casing a particular layout.",
+      "language_delta": "Python exposes stdin as a text stream here; conversion remains explicit because split returns strings. Later parsers can reuse the same read-once boundary before adding structure.",
+      "prediction_prompt": "Predict the value of sum(int(token) for token in \"  -2\\n5  \".split()).",
+      "transfer_trap": "Scanner APIs in other ecosystems may skip whitespace automatically, but Python's raw stream text does not become numbers until int is called."
     },
-    "py-lists-dicts": {
-      "title": "Lists and dicts",
-      "concept": "Lists store ordered values and are read by index or iteration. Dicts map keys to values, which makes lookup, grouping, and counting clearer than searching a list by hand.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Lists and dicts to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "py-variables": {
+      "title": "Names and rebinding",
+      "concept": "A Python variable is a name bound to an object, not a typed storage box. Updating an integer accumulator computes another integer and rebinds the name; an enclosing function instead exposes a cell whose current binding is read when a closure executes.",
+      "worked_example": "The sample first binds total to 10 and then augmented assignment rebinds total to 15. Nothing mutates the integer object 10, because integer values are immutable.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Lists and dicts rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Lists and dicts exercise.",
-        "Matching the judge output without checking this lesson idea: Lists store ordered values and are read by index or iteration."
+        "Describing integer augmented assignment as changing the original integer object in place.",
+        "Assuming lambdas created in one loop freeze each iteration value instead of sharing the late-read cell."
       ],
       "self_check": [
-        "Which expression in the example applies Lists and dicts before the `example:` output?",
-        "Which TODO line in the Lists and dicts exercise must derive the value from its own data instead of copying the demo?"
+        "After total = left and total += right, which name is rebound?",
+        "What value do three lambda functions closing over the same completed loop variable observe?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Lists and dicts to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Start the accumulator from the first parsed integer, then rebind it using the second integer before printing.",
+      "objective": "Demonstrate rebinding by producing the arithmetic total for positive, negative, and zero-valued inputs.",
+      "language_delta": "Python assignment changes name-to-object bindings without declaring mutability on the name. Closures preserve access to binding cells, so call time—not creation time—can determine the observed value.",
+      "prediction_prompt": "For readers = [lambda: n for n in range(3)], predict [reader() for reader in readers].",
+      "transfer_trap": "JavaScript let creates a fresh loop binding in common loops, so copying a closure pattern from there can hide Python's late-binding behavior."
+    },
+    "py-numbers": {
+      "title": "Floor quotient and remainder",
+      "concept": "Integer floor division chooses the greatest integer no larger than the mathematical quotient. The modulo result is paired so dividend equals divisor times quotient plus remainder, and a nonzero remainder carries the divisor's sign.",
+      "worked_example": "With -11 divided by 4, Python produces a floor quotient of -3 and a remainder of 1. Multiplying -3 by 4 and adding 1 reconstructs -11.",
+      "common_mistakes": [
+        "Replacing floor division with int(dividend / divisor), which truncates negative results toward zero.",
+        "Assuming modulo is always nonnegative even when the divisor itself is negative."
+      ],
+      "self_check": [
+        "Which identity connects dividend, divisor, quotient, and remainder?",
+        "Why is -7 // 2 one less than int(-7 / 2)?"
+      ],
+      "exercise_prompt": "Parse two nonzero-divisor integers and print their Python floor quotient beside the corresponding remainder.",
+      "objective": "Correctly handle both positive and negative divisor signs while preserving Python's division identity.",
+      "language_delta": "Python // floors signed quotients, while JavaScript and TypeScript number division stays fractional (7 / 2 === 3.5); Java and Rust signed integer division truncate toward zero. The paired values can be returned as a tuple, whereas a set would discard position and duplicates.",
+      "prediction_prompt": "Compute both values in the pairs (-7 // 2, -7 % 2) and (7 // -2, 7 % -2).",
+      "transfer_trap": "Do not translate / mechanically: JavaScript and TypeScript number operands keep 7 / 2 === 3.5, Java and Rust integer operands truncate, and Python // floors. Signed quotient/remainder cases expose the difference."
     },
     "py-tuples-sets": {
-      "title": "Tuples and sets",
-      "concept": "A tuple is a fixed-position sequence, useful for small records such as coordinates or pairs. A set stores unique hashable values and is the usual tool for deduplication and membership tests.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Tuples and sets to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Ordered pairs and unique members",
+      "concept": "A tuple keeps position and duplicates, making it suitable for the two-item input record. A set removes duplicate hashable members and supports membership semantics, but its iteration order should not define answer formatting.",
+      "worked_example": "The tuple (\"r\", \"s\", \"r\") joins back to rsr, while converting it to a set leaves two distinct letters. The two outputs intentionally observe different properties of the same source.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Tuples and sets rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Tuples and sets exercise.",
-        "Matching the judge output without checking this lesson idea: A tuple is a fixed-position sequence, useful for small records such as coordinates or pairs."
+        "Writing empty braces for an empty set and accidentally constructing a dictionary.",
+        "Joining the set rather than the tuple, thereby discarding duplicates and dependable position."
       ],
       "self_check": [
-        "Which expression in the example applies Tuples and sets before the `example:` output?",
-        "Which TODO line in the Tuples and sets exercise must derive the value from its own data instead of copying the demo?"
+        "Why does the pair (\"a\", \"a\") still contain two positions?",
+        "Which constructor creates an empty set without ambiguity?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Tuples and sets to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Keep the parsed values in tuple order for joining and derive a separate set solely for the uniqueness count.",
+      "objective": "Print the ordered concatenation and the number of distinct members for duplicate and Unicode inputs.",
+      "language_delta": "Tuple unpacking and set construction are separate runtime operations; annotations are not required for either container to enforce its behavior.",
+      "prediction_prompt": "Predict both observations for pair = (\"é\", \"e\", \"é\"): the joined tuple and len(set(pair)).",
+      "transfer_trap": "A TypeScript tuple is primarily a checker constraint, whereas this Python tuple is a distinct immutable runtime sequence."
     },
-    "py-comprehensions": {
-      "title": "Comprehensions",
-      "concept": "A comprehension builds a collection from an expression, a loop, and optional filters. It is best for a simple map or filter that can be read in one pass.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Comprehensions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "py-strings": {
+      "title": "Unicode-aware string slicing",
+      "concept": "Python str indexing and slicing operate on Unicode code points, not UTF-8 bytes. Slices use a half-open interval and create a new string, leaving the immutable source untouched.",
+      "worked_example": "The star characters occupy the first and last positions around 서울. Selecting positions 1 through the position before -1 produces 서울 without needing byte offsets.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Comprehensions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Comprehensions exercise.",
-        "Matching the judge output without checking this lesson idea: A comprehension builds a collection from an expression, a loop, and optional filters."
+        "Using strip to remove delimiters even though strip removes any matching boundary characters, not one exact marker.",
+        "Calling a code point a user-perceived character when combining marks or emoji sequences may span several code points."
       ],
       "self_check": [
-        "Which expression in the example applies Comprehensions before the `example:` output?",
-        "Which TODO line in the Comprehensions exercise must derive the value from its own data instead of copying the demo?"
+        "Which source indices are excluded by text[1:-1]?",
+        "Why can the same slice remove a one-code-point emoji boundary safely?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Comprehensions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-errors": {
-      "title": "Exceptions",
-      "concept": "Exceptions separate normal flow from recoverable failure. Keep the `try` block small, catch a specific exception such as `ValueError`, and recover only when you know the replacement behavior.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Exceptions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Exceptions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Exceptions exercise.",
-        "Matching the judge output without checking this lesson idea: Exceptions separate normal flow from recoverable failure."
-      ],
-      "self_check": [
-        "Which expression in the example applies Exceptions before the `example:` output?",
-        "Which TODO line in the Exceptions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Exceptions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-files-context": {
-      "title": "Files and context managers",
-      "concept": "`with` enters a context manager, runs the block, and guarantees cleanup afterward. File objects and contextlib utilities use this to close resources even if the block exits early.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Files and context managers to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Files and context managers rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Files and context managers exercise.",
-        "Matching the judge output without checking this lesson idea: `with` enters a context manager, runs the block, and guarantees cleanup afterward."
-      ],
-      "self_check": [
-        "Which expression in the example applies Files and context managers before the `example:` output?",
-        "Which TODO line in the Files and context managers exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Files and context managers to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-modules-imports": {
-      "title": "Modules and imports",
-      "concept": "A module groups reusable code behind a namespace. `import math` binds the module name, while style guides put imports at the top so dependencies are visible before the program logic starts.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Modules and imports to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Modules and imports rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Modules and imports exercise.",
-        "Matching the judge output without checking this lesson idea: A module groups reusable code behind a namespace."
-      ],
-      "self_check": [
-        "Which expression in the example applies Modules and imports before the `example:` output?",
-        "Which TODO line in the Modules and imports exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Modules and imports to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-dataclasses": {
-      "title": "Dataclasses",
-      "concept": "`@dataclass` generates routine methods for classes that mainly hold data. It keeps field names, type hints, construction, and representation close together without hand-written boilerplate.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Dataclasses to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Dataclasses rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Dataclasses exercise.",
-        "Matching the judge output without checking this lesson idea: `@dataclass` generates routine methods for classes that mainly hold data."
-      ],
-      "self_check": [
-        "Which expression in the example applies Dataclasses before the `example:` output?",
-        "Which TODO line in the Dataclasses exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Dataclasses to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-typing": {
-      "title": "Type hints",
-      "concept": "Type hints describe expected shapes for readers, editors, and type checkers. They do not automatically prevent a wrong runtime value, so the function body still has to implement the contract.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Type hints to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Type hints rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Type hints exercise.",
-        "Matching the judge output without checking this lesson idea: Type hints describe expected shapes for readers, editors, and type checkers."
-      ],
-      "self_check": [
-        "Which expression in the example applies Type hints before the `example:` output?",
-        "Which TODO line in the Type hints exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Type hints to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-generators": {
-      "title": "Iterators and generators",
-      "concept": "An iterator produces values one at a time. A generator function uses `yield`, which returns a generator object first and runs the body only when the caller asks for the next value.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Iterators and generators to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Iterators and generators rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Iterators and generators exercise.",
-        "Matching the judge output without checking this lesson idea: An iterator produces values one at a time."
-      ],
-      "self_check": [
-        "Which expression in the example applies Iterators and generators before the `example:` output?",
-        "Which TODO line in the Iterators and generators exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Iterators and generators to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-lambdas-closures": {
-      "title": "Lambdas and closures",
-      "concept": "`lambda` creates a small expression function. When that function uses a name from an outer function, it forms a closure and remembers that outer value after the outer call returns.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Lambdas and closures to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Lambdas and closures rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Lambdas and closures exercise.",
-        "Matching the judge output without checking this lesson idea: `lambda` creates a small expression function."
-      ],
-      "self_check": [
-        "Which expression in the example applies Lambdas and closures before the `example:` output?",
-        "Which TODO line in the Lambdas and closures exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Lambdas and closures to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-decorators": {
-      "title": "Decorators",
-      "concept": "A decorator is called when a function is defined. It receives the original function object and returns the object that the function name should refer to afterward.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Decorators to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Decorators rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Decorators exercise.",
-        "Matching the judge output without checking this lesson idea: A decorator is called when a function is defined."
-      ],
-      "self_check": [
-        "Which expression in the example applies Decorators before the `example:` output?",
-        "Which TODO line in the Decorators exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Decorators to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-sorting-keys": {
-      "title": "Sorting and key functions",
-      "concept": "`sorted` returns a new list and leaves the original iterable alone. A `key` function computes the comparison value for each item, which is how records are sorted by one field.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Sorting and key functions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Sorting and key functions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Sorting and key functions exercise.",
-        "Matching the judge output without checking this lesson idea: `sorted` returns a new list and leaves the original iterable alone."
-      ],
-      "self_check": [
-        "Which expression in the example applies Sorting and key functions before the `example:` output?",
-        "Which TODO line in the Sorting and key functions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Sorting and key functions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-counter-defaultdict": {
-      "title": "Counter and defaultdict",
-      "concept": "`Counter` is a dict subclass for counts, and `defaultdict(list)` creates a new list for missing groups. They remove the noisy `if key not in dict` code from common counting and grouping tasks.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Counter and defaultdict to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Counter and defaultdict rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Counter and defaultdict exercise.",
-        "Matching the judge output without checking this lesson idea: `Counter` is a dict subclass for counts, and `defaultdict(list)` creates a new list for missing groups."
-      ],
-      "self_check": [
-        "Which expression in the example applies Counter and defaultdict before the `example:` output?",
-        "Which TODO line in the Counter and defaultdict exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Counter and defaultdict to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-deque": {
-      "title": "deque",
-      "concept": "`deque` is a double-ended queue with efficient append and pop operations on both ends. It is the standard-library choice for BFS queues and sliding-window front removal.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying deque to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the deque rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the deque exercise.",
-        "Matching the judge output without checking this lesson idea: `deque` is a double-ended queue with efficient append and pop operations on both ends."
-      ],
-      "self_check": [
-        "Which expression in the example applies deque before the `example:` output?",
-        "Which TODO line in the deque exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying deque to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "py-itertools": {
-      "title": "itertools",
-      "concept": "`itertools` contains lazy iterator building blocks such as `chain`, `islice`, `product`, and `pairwise`. They describe iteration pipelines without building intermediate lists unless you ask for them.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying itertools to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the itertools rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the itertools exercise.",
-        "Matching the judge output without checking this lesson idea: `itertools` contains lazy iterator building blocks such as `chain`, `islice`, `product`, and `pairwise`."
-      ],
-      "self_check": [
-        "Which expression in the example applies itertools before the `example:` output?",
-        "Which TODO line in the itertools exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying itertools to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Remove exactly the first and final code points with one half-open slice, then print the interior text.",
+      "objective": "Produce the unwrapped interior for ASCII, bracketed, and emoji-delimited strings without mutating the input.",
+      "language_delta": "Path text should not be split manually when pathlib can expose structured components. Python code-point indexing also differs from Java and JavaScript UTF-16 units and Rust UTF-8 byte indices.",
+      "prediction_prompt": "Predict both len(\"🙂go🙂\") and the result of \"🙂go🙂\"[1:-1].",
+      "transfer_trap": "Code-point-safe slicing is still not grapheme-aware; a displayed symbol built from combining marks may occupy multiple Python positions."
     },
     "py-pathlib": {
-      "title": "pathlib",
-      "concept": "`pathlib` models paths as objects instead of raw strings. Properties such as `name`, `stem`, `suffix`, and `parent` make file-path code clearer and less dependent on manual separators.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying pathlib to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Path components with pathlib",
+      "concept": "PurePosixPath models path syntax without requiring the path to exist. Its stem property removes the final suffix, and suffix reports only that last extension rather than every dotted segment.",
+      "worked_example": "For /srv/report.csv, the final component is report.csv, the stem is report, and the suffix is .csv. The demonstration combines the two queried properties after parsing the path once.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the pathlib rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the pathlib exercise.",
-        "Matching the judge output without checking this lesson idea: `pathlib` models paths as objects instead of raw strings."
+        "Splitting on periods by hand, which mishandles directories, multiple suffixes, and leading-dot names.",
+        "Expecting archive.tar.gz to have stem archive when only the final .gz suffix is removed."
       ],
       "self_check": [
-        "Which expression in the example applies pathlib before the `example:` output?",
-        "Which TODO line in the pathlib exercise must derive the value from its own data instead of copying the demo?"
+        "What stem and suffix does PurePosixPath(\".env\") expose?",
+        "Why is PurePosixPath appropriate when the exercise must not touch the host filesystem?"
       ],
-      "exercise_prompt": "Complete the TODO by applying pathlib to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Parse the POSIX path object and report its final stem followed by its final suffix.",
+      "objective": "Handle ordinary files, multi-extension archives, and a dotfile through pathlib properties rather than string heuristics.",
+      "language_delta": "Pure path classes perform lexical path operations; concrete Path additionally offers filesystem access and follows the host platform's path flavor.",
+      "prediction_prompt": "Before executing code, determine PurePosixPath(\"a/bundle.min.js\").stem and .suffix.",
+      "transfer_trap": "Windows separators passed to PurePosixPath remain ordinary characters, so choose the path flavor that matches the data contract."
     },
-    "py-testing-assert": {
-      "title": "Testing and assert",
-      "concept": "`assert` is a compact check for an invariant in examples and small tests. Real projects usually put those checks in repeatable test functions, but the core idea is still expected versus actual behavior.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Testing and assert to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "py-control-flow": {
+      "title": "Branches, loops, and range bounds",
+      "concept": "Python indentation owns the loop and conditional bodies. range stops before its second argument, so an inclusive upper bound requires adjustment before the odd-number branch filters values.",
+      "worked_example": "The sample iterates from 1 through 7 by using stop 8. Only 1, 3, 5, and 7 enter the accumulator, producing 16.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Testing and assert rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Testing and assert exercise.",
-        "Matching the judge output without checking this lesson idea: `assert` is a compact check for an invariant in examples and small tests."
+        "Passing limit directly as range's stop and silently omitting an odd upper boundary.",
+        "Misindenting the accumulation so every value is added regardless of the condition."
       ],
       "self_check": [
-        "Which expression in the example applies Testing and assert before the `example:` output?",
-        "Which TODO line in the Testing and assert exercise must derive the value from its own data instead of copying the demo?"
+        "Which integers are generated by range(1, 4)?",
+        "Where must total += value be indented to remain conditional?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Testing and assert to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Loop across the inclusive interval from one to the parsed bound and add only odd integers.",
+      "objective": "Return the correct odd sum at a zero boundary, an odd endpoint, and an even endpoint.",
+      "language_delta": "Python match/case can express closed structural branches, while ordinary if remains enough for parity. A deque-consuming loop uses the same explicit branch and stopping discipline when processing a queue.",
+      "prediction_prompt": "List the values added when limit is 6, then predict the final accumulator.",
+      "transfer_trap": "Brace-based languages do not use indentation as syntax, and some range APIs are inclusive; copying loop bounds mechanically creates off-by-one errors."
+    },
+    "py-functions": {
+      "title": "Checkpoint: return a computed area",
+      "concept": "The area function owns one calculation and returns its result. Parsing remains outside, and the caller alone prints, so the same function can be tested, imported, wrapped, or awaited by surrounding code without hidden output.",
+      "worked_example": "area(8, 2) multiplies its arguments and returns 16. The outer print consumes that returned integer; the function body never writes to stdout.",
+      "common_mistakes": [
+        "Printing inside area and then printing its None return value from the caller.",
+        "Computing a perimeter because width plus height looks plausible on the first example."
+      ],
+      "self_check": [
+        "What value is returned when either rectangle dimension is zero?",
+        "Which line is the sole stdout boundary in the sample program?"
+      ],
+      "exercise_prompt": "Implement the returning calculation, then leave parsing and the final print at the call site.",
+      "objective": "Use a reusable function to compute all three rectangle areas, including a zero dimension.",
+      "language_delta": "Imports bind function objects, closures retain cells used by functions, and decorators replace a function binding with a wrapper. Calling an async function is different again: it creates a coroutine that still needs awaiting or scheduling.",
+      "prediction_prompt": "Predict both area(7, 1) and the value a function would return if its body only called print.",
+      "transfer_trap": "Languages with expression-bodied functions may return implicitly; a normal Python def returns None unless execution reaches an explicit return value."
+    },
+    "py-modules-imports": {
+      "title": "Visible dependencies through modules",
+      "concept": "An import statement executes module loading as needed and binds a name in the current namespace. Keeping the math qualifier at the call site makes ceil's source clear and avoids wildcard collisions.",
+      "worked_example": "math.ceil(-3.8) returns -3, the least integer greater than or equal to the input. Negative upward rounding moves toward zero in this case, unlike floor.",
+      "common_mistakes": [
+        "Choosing math.floor for negative values because both operations are casually described as rounding.",
+        "Using a star import and losing the visible connection between ceil and the math module."
+      ],
+      "self_check": [
+        "Why does math.ceil(-2.1) equal -2 rather than -3?",
+        "Which namespace binding is created by import math?"
+      ],
+      "exercise_prompt": "Parse the floating-point value and invoke the upward-rounding function through its module namespace.",
+      "objective": "Produce correct ceilings for positive, negative, and already-integral inputs using the standard library.",
+      "language_delta": "Python caches imported modules in sys.modules during a process, while each import statement still performs name binding in its own scope.",
+      "prediction_prompt": "Without running Python, compare math.ceil(-0.2) with math.floor(-0.2).",
+      "transfer_trap": "Java package imports and JavaScript module loading have different runtime models; the shared keyword does not imply Python's execution and cache semantics."
+    },
+    "py-lambdas-closures": {
+      "title": "Closures capture cells, not snapshots",
+      "concept": "A closure keeps access to names from an enclosing function even after that call ends. Free names are resolved when the inner function executes, so loop-created lambdas usually share one cell instead of storing separate historical values.",
+      "worked_example": "All three readers are created while index changes, but they run after the loop has finished. Each call therefore reads the final cell value 2, producing [2, 2, 2].",
+      "common_mistakes": [
+        "Expecting each lambda in a loop to remember the iteration value visible at its creation line.",
+        "Adding a default argument without understanding that defaults freeze values because they are evaluated at definition time."
+      ],
+      "self_check": [
+        "When is the free name index looked up in the demonstrated lambdas?",
+        "How would lambda index=index: index change the three results?"
+      ],
+      "exercise_prompt": "Return an adder closure whose call reads the delta binding created by the factory invocation.",
+      "objective": "Create callable adders that retain distinct positive, negative, and zero deltas after their factory calls return.",
+      "language_delta": "lambda is only expression syntax for a function; it follows the same lexical name-resolution and closure-cell model as a nested def.",
+      "prediction_prompt": "Predict the list from [reader() for reader in [lambda n=n: n for n in range(3)]].",
+      "transfer_trap": "JavaScript's block-scoped loop bindings often produce one captured value per iteration, which is not Python's default loop-cell behavior."
+    },
+    "py-decorators": {
+      "title": "Definition-time decorators",
+      "concept": "Applying @bracket evaluates the decorator after the function body is created and rebinds the function name to the returned wrapper. functools.wraps preserves metadata while the wrapper transforms each later call.",
+      "worked_example": "The tag decorator creates one metadata-preserving wrapper around label. Calling label(\"Mina\") uppercases the original result at call time and surrounds it with angle brackets.",
+      "common_mistakes": [
+        "Calling the wrapped function while defining the decorator instead of returning a callable wrapper.",
+        "Omitting functools.wraps and surprising introspection, help output, or tools that rely on the original metadata."
+      ],
+      "self_check": [
+        "Which event happens once at definition time, and which behavior repeats for every call?",
+        "Why must wrapper accept the value that callers pass to the decorated function?"
+      ],
+      "exercise_prompt": "Complete the wrapper so it uppercases the original return value, adds square brackets, and retains function metadata.",
+      "objective": "Transform ASCII and Unicode call results through a parameterized wrapper without changing the decorated function's body.",
+      "language_delta": "Python decorators are ordinary callable application tied to def syntax; wraps copies selected attributes but does not alter the wrapper's execution semantics.",
+      "prediction_prompt": "If a decorator prints \"decorate\" and its wrapper prints \"call\", which word appears when def executes and which appears on invocation?",
+      "transfer_trap": "A Java annotation is metadata rather than an automatic callable wrapper, so the same @ shape does not promise the same runtime behavior."
     },
     "py-async": {
-      "title": "Async concepts",
-      "concept": "`async def` creates a coroutine function. Calling it creates a coroutine object, `await` waits for its result inside another coroutine, and `asyncio.run` drives the top-level coroutine in this single-file exercise.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Async concepts to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Drive real coroutines with asyncio",
+      "concept": "An async def call creates a coroutine object without running it to completion. asyncio.run supplies an event loop, gather schedules the provided awaitables, and await asyncio.sleep(0) yields control before each result is returned.",
+      "worked_example": "Two upper coroutines both reach a real suspension point. gather waits for them and returns results in argument order, so the final print emits GO NOW regardless of completion interleaving.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Async concepts rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Async concepts exercise.",
-        "Matching the judge output without checking this lesson idea: `async def` creates a coroutine function."
+        "Calling a coroutine and treating the resulting coroutine object as if it were the computed value.",
+        "Using time.sleep inside async code, which blocks the event-loop thread instead of yielding."
       ],
       "self_check": [
-        "Which expression in the example applies Async concepts before the `example:` output?",
-        "Which TODO line in the Async concepts exercise must derive the value from its own data instead of copying the demo?"
+        "What component actually drives main after main() creates a coroutine?",
+        "Does asyncio.gather order its returned values by completion time or argument position?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Async concepts to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Create one double coroutine per parsed integer, gather and await them, then print the ordered results.",
+      "objective": "Run real suspended coroutines for multiple, signed, and empty inputs without unawaited-coroutine warnings.",
+      "language_delta": "Asyncio is cooperative: execution switches at awaits rather than making ordinary Python statements parallel. Calling a coroutine alone neither schedules nor executes it.",
+      "prediction_prompt": "What list results from await asyncio.gather(double(3), double(-1)) when double awaits sleep(0)?",
+      "transfer_trap": "A JavaScript Promise-producing function begins under different scheduling rules, so do not import its eager-execution intuition into Python coroutine calls."
+    },
+    "py-lists-dicts": {
+      "title": "Group list values by dictionary key",
+      "concept": "Each dictionary key identifies one independent list of scores. setdefault creates a bucket only when needed, and get(query, []) turns an absent requested name into an empty sequence whose sum is zero.",
+      "worked_example": "Mina maps to [8, 1], so looking up that list and summing it yields 9. Kai's separate list demonstrates that each key owns a different grouping bucket.",
+      "common_mistakes": [
+        "Indexing scores[query] even though the requested name may never occur in the input pairs.",
+        "Reusing one list for every key, causing scores added for one person to appear under all names."
+      ],
+      "self_check": [
+        "Which token is the query, and at what index do the name-score pairs begin?",
+        "Why is sum(scores.get(missing, [])) a valid zero rather than an exception?"
+      ],
+      "exercise_prompt": "Walk the remaining tokens two at a time, append each numeric score to its name's list, and total the queried group.",
+      "objective": "Return the grouped total for repeated names, signed scores, and a missing query.",
+      "language_delta": "Sorting labs add explicit primary and tie keys; Counter and defaultdict specialize frequency/group creation; deque is the right sequence when both ends matter. Plain dict plus list remains clearest for this keyed accumulation.",
+      "prediction_prompt": "For query Bo with only Ada and Lin pairs, predict both scores.get(query, []) and its sum.",
+      "transfer_trap": "JavaScript object property keys are string-oriented and inherit prototype concerns; Python dict accepts hashable keys and get does not insert a missing entry."
+    },
+    "py-sorting-keys": {
+      "title": "Multi-field sorting keys",
+      "concept": "Python compares tuple keys from left to right. Negating the numeric score makes larger scores sort first, while the unmodified name supplies ascending alphabetical order only when scores tie.",
+      "worked_example": "Bo has score 9, so the primary key selects Bo ahead of Mina and Ana. Their tied score 7 would place Ana before Mina through the secondary field.",
+      "common_mistakes": [
+        "Setting reverse=True on a score-name tuple and accidentally reversing the alphabetical tie-break too.",
+        "Depending on stable input order even though the requirement explicitly names a secondary ordering rule."
+      ],
+      "self_check": [
+        "What key tuples are produced for Zed:5 and Amy:5?",
+        "Why does sorting by name alone fail when a later record has a higher score?"
+      ],
+      "exercise_prompt": "Parse each name-score record and select the first result under descending score and ascending name.",
+      "objective": "Choose the correct winner for distinct scores, tied scores, and a single negative-score record.",
+      "language_delta": "sorted returns a new list and guarantees stability. A key function computes comparison data once per element rather than acting as a two-argument comparator.",
+      "prediction_prompt": "Which item wins between (\"Zed\", 5) and (\"Amy\", 5) under key (-score, name)?",
+      "transfer_trap": "Comparator subtraction used in other languages can overflow and still does not encode a separate name tie-break; tuple keys avoid both issues here."
+    },
+    "py-counter-defaultdict": {
+      "title": "Count and group with collections",
+      "concept": "Counter answers frequency queries directly, including zero for missing elements. defaultdict(list) creates independent buckets during indexing, while get can inspect a missing initial without creating a new mapping entry.",
+      "worked_example": "The word owl appears twice among five data words. Every word begins with o, so the grouped initial bucket has length 5 and the sample prints two different statistics.",
+      "common_mistakes": [
+        "Including the leading query token among the data words and inflating its frequency.",
+        "Reading groups[missing_initial] only to inspect it, thereby mutating the defaultdict as a side effect."
+      ],
+      "self_check": [
+        "Why does Counter(words)[\"absent\"] return zero without a prior membership check?",
+        "Which operation creates a defaultdict bucket: indexing or get?"
+      ],
+      "exercise_prompt": "Count the data words, group them by first character, and report the query frequency plus its initial-group size.",
+      "objective": "Produce both statistics for present, repeated, and entirely missing queries.",
+      "language_delta": "These collections refine dict behavior rather than replacing it: Counter supplies numeric defaults, and defaultdict delegates missing-value construction to its factory.",
+      "prediction_prompt": "Given query x and data a b, determine whether groups.get(\"x\", []) inserts an x key.",
+      "transfer_trap": "A normal dict still raises KeyError on missing indexing; Counter's zero and defaultdict's factory are type-specific behaviors, not universal mapping rules."
+    },
+    "py-deque": {
+      "title": "Constant-time operations at both ends",
+      "concept": "A deque stores a sequence optimized for additions and removals on either end. appendleft and popleft target the left boundary, while append and pop target the right boundary.",
+      "worked_example": "Starting with center, the sample places first on the left and last on the right. Removing one value from each end prints first last and leaves center untouched.",
+      "common_mistakes": [
+        "Using append for both incoming endpoints, which leaves the original middle value at the left.",
+        "Treating list.pop(0) as equally suitable for a growing queue despite its element-shifting cost."
+      ],
+      "self_check": [
+        "After appendleft(left), which value will popleft return?",
+        "Which deque operation removes the rightmost item?"
+      ],
+      "exercise_prompt": "Place the second token at the left and the third at the right, then remove and print those endpoints.",
+      "objective": "Preserve the middle element while reporting correctly ordered ASCII and Unicode endpoints.",
+      "language_delta": "Deque operations pair naturally with control-flow loops that repeatedly consume a frontier. Random indexing remains a list strength, not deque's purpose.",
+      "prediction_prompt": "Trace deque([\"m\"]) after appendleft(\"l\"), append(\"r\"), popleft(), and pop().",
+      "transfer_trap": "Queue classes in other standard libraries may expose offer and poll instead; match semantic ends rather than translating method names literally."
+    },
+    "py-comprehensions": {
+      "title": "Checkpoint: filter, transform, then total",
+      "concept": "The comprehension evaluates its filter for each source number and only then computes the squared output expression for accepted values. The resulting list exists eagerly before sum consumes it.",
+      "worked_example": "Among 5, 6, 7, and 8, only 6 and 8 pass the even test. Their squares 36 and 64 form a list whose total is 100.",
+      "common_mistakes": [
+        "Reversing the parity predicate and quietly summing odd squares instead.",
+        "Packing nested conditions and side effects into a comprehension until its evaluation order becomes opaque."
+      ],
+      "self_check": [
+        "Does the output expression run for an element rejected by the trailing if clause?",
+        "What list is built from [-2, -1, 0] under the even-square rule?"
+      ],
+      "exercise_prompt": "Build the even squares with one readable list comprehension, then print their sum.",
+      "objective": "Handle mixed signs and an empty selection while demonstrating filter-before-transform behavior.",
+      "language_delta": "A generator expression would yield squares lazily, and itertools can compose single-pass streams without materializing them. This checkpoint deliberately builds a list so that eager collection construction is observable.",
+      "prediction_prompt": "Write the exact intermediate list produced from [1, 2, 3, 4] before sum runs.",
+      "transfer_trap": "JavaScript array callbacks and Java streams arrange similar stages with different eagerness; do not assume Python's bracketed comprehension is lazy."
+    },
+    "py-generators": {
+      "title": "Lazy countdown generators",
+      "concept": "A function containing yield returns a generator iterator when called. Its body starts on the first advance, pauses with local state saved at each yield, and eventually raises StopIteration when no path yields again.",
+      "worked_example": "reverse_letters(\"abc\") initially creates an iterator without traversing text. Expanding it into print advances three times and emits c, b, and a separated by spaces.",
+      "common_mistakes": [
+        "Expecting statements before the first yield to run when the generator function is merely called.",
+        "Trying to iterate the same exhausted generator again and expecting its previous values to reappear."
+      ],
+      "self_check": [
+        "At what operation does countdown's while body begin executing?",
+        "Why does print(*countdown(0)) still produce a newline?"
+      ],
+      "exercise_prompt": "Yield the current positive number, decrease the suspended local state, and repeat until reaching zero.",
+      "objective": "Generate complete, one-item, and empty countdown sequences without building an intermediate list.",
+      "language_delta": "Generator functions are iterator factories; each call creates fresh suspended state. A normal return ends iteration rather than emitting another sequence element.",
+      "prediction_prompt": "After next is called once on countdown(3), what value is yielded and what local number resumes afterward?",
+      "transfer_trap": "A JavaScript generator uses related syntax but different iterator result objects; Python next returns the yielded value directly or raises StopIteration."
+    },
+    "py-itertools": {
+      "title": "Flatten iterables lazily",
+      "concept": "chain.from_iterable accepts one outer iterable and advances through each inner iterable in turn. It exposes a lazy stream, avoiding a temporary flattened list and retaining only the iterator state needed for the current group.",
+      "worked_example": "The outer tuple contains py and thon. Chaining iterates the characters of the first string, then the second, and join consumes that stream to form python.",
+      "common_mistakes": [
+        "Using chain(groups) and receiving each whole inner string instead of its characters.",
+        "Partially consuming the chain for inspection and then expecting join to restart from the beginning."
+      ],
+      "self_check": [
+        "How many outer arguments does chain.from_iterable receive in this exercise?",
+        "What remains after next has consumed the first character from the flattened iterator?"
+      ],
+      "exercise_prompt": "Pass every parsed character group through chain.from_iterable and join the resulting single-pass stream.",
+      "objective": "Flatten groups of unequal lengths into the correct concatenated text without nested list construction.",
+      "language_delta": "itertools operations return iterators and defer work until a consumer advances them. join is the terminal consumer that materializes the final string here.",
+      "prediction_prompt": "Predict list(chain.from_iterable([\"ab\", \"c\"])) before considering the final join.",
+      "transfer_trap": "Reusing a stream abstraction from another language may raise, cache, or rebuild; Python iterators generally retain mutable consumption state."
+    },
+    "py-errors": {
+      "title": "Recover narrowly from ValueError",
+      "concept": "int raises ValueError when text does not describe an integer. Keeping only that conversion in a small try block and catching that precise exception makes the fallback policy visible without masking unrelated defects.",
+      "worked_example": "Converting oops raises ValueError, so control enters the handler and converts the supplied fallback -8. The valid fallback then becomes the printed result.",
+      "common_mistakes": [
+        "Catching Exception around the whole program and turning unrelated bugs into apparently valid fallback output.",
+        "Treating a signed string such as -3 as invalid even though int parses it normally."
+      ],
+      "self_check": [
+        "Does a valid first token execute the except block?",
+        "Which statement alone can raise the ValueError that this handler intends to recover from?"
+      ],
+      "exercise_prompt": "Attempt conversion of the first token and use the second token only when that specific conversion raises ValueError.",
+      "objective": "Distinguish valid negative input from malformed text and apply the provided fallback exactly when needed.",
+      "language_delta": "A context manager complements narrow exception handling by guaranteeing exit cleanup even when a block raises. try chooses recovery behavior; with owns resource lifetime.",
+      "prediction_prompt": "Trace the two branches for candidate \"-3\" and candidate \"bad\" when both share fallback \"9\".",
+      "transfer_trap": "JavaScript parseInt(\"bad\") returns NaN instead of throwing, so a copied try/catch strategy would never select the fallback there."
+    },
+    "py-files-context": {
+      "title": "Guaranteed context-manager exit",
+      "concept": "The with protocol obtains a managed value through __enter__ and calls __exit__ whenever the block leaves, including exceptional exits. StringIO gives the same read-and-close shape without depending on a real file.",
+      "worked_example": "The in-memory handle contains padded Seoul text. Reading inside the managed block, stripping whitespace, and uppercasing after exit produces SEOUL while the handle itself is already closed.",
+      "common_mistakes": [
+        "Attempting to read the handle after the with block, when the StringIO resource has been closed.",
+        "Assuming __exit__ runs only on success and manually duplicating cleanup in exception branches."
+      ],
+      "self_check": [
+        "Which operation must happen before indentation leaves the managed block?",
+        "What normalized value remains when the resource contains only whitespace?"
+      ],
+      "exercise_prompt": "Read through the context-managed handle, normalize its content, and print EMPTY only when no text remains.",
+      "objective": "Observe guaranteed resource exit while correctly handling padded, ordinary, and empty in-memory input.",
+      "language_delta": "with delegates entry and exit behavior to the object's protocol rather than hard-coding files. The value read into text remains usable after the resource closes.",
+      "prediction_prompt": "If handle.read() returns \"  \", predict text after strip and the expression text.upper() or \"EMPTY\".",
+      "transfer_trap": "A JavaScript using declaration or Java try-with-resources has its own protocol; Python specifically dispatches __enter__ and __exit__."
+    },
+    "py-dataclasses": {
+      "title": "Classes and generated data-model methods",
+      "concept": "A class supplies instance behavior through methods, and @dataclass derives init, repr, and equality from declared fields. The decorator does not make nested values immutable, and field annotations do not become runtime validators.",
+      "worked_example": "Point(4, 5) stores two fields, its total method returns 9, and generated equality reports True for a second Point with the same field values.",
+      "common_mistakes": [
+        "Assuming generated equality or a frozen option recursively freezes mutable objects stored in fields.",
+        "Using one mutable class-level default list instead of a per-instance default_factory."
+      ],
+      "self_check": [
+        "Which equality implementation is used when two Point instances are compared?",
+        "Does declaring x: int prevent Point(\"wrong\", 5) from being constructed at runtime?"
+      ],
+      "exercise_prompt": "Implement Point.total with both instance fields, then observe the method result and dataclass-generated equality.",
+      "objective": "Construct equal points and compute signed coordinate totals through explicit class behavior.",
+      "language_delta": "The typing lab can inspect the same annotations, but ordinary Python execution does not enforce them. A dataclass reduces data-model boilerplate without replacing domain methods or validation.",
+      "prediction_prompt": "Predict Point(2, 3) == Point(2, 3), then consider how changing one field affects the result.",
+      "transfer_trap": "Java records are shallowly immutable in their components, while a normal Python dataclass remains mutable unless configured otherwise."
+    },
+    "py-typing": {
+      "title": "Inspect annotations without runtime enforcement",
+      "concept": "Function annotations are metadata consumed by readers, editors, and optional static type checkers. get_type_hints resolves the recorded objects at runtime, but it neither converts arguments nor blocks calls whose values disagree.",
+      "worked_example": "The head function records Iterable[str] and str annotations. Introspection identifies the return type as str, while the function itself independently returns elm from the supplied list.",
+      "common_mistakes": [
+        "Believing an int annotation automatically rejects a string before the function body executes.",
+        "Confusing introspection of a promised type with verification that every return path actually honors it."
+      ],
+      "self_check": [
+        "What object does get_type_hints(total)[\"return\"] expose?",
+        "Which part of total performs addition: the annotation or the return expression?"
+      ],
+      "exercise_prompt": "Keep the Iterable[int] and int contract, implement its total, and use resolved hints to label the observable result.",
+      "objective": "Verify annotation metadata and compute totals for multiple, single, and empty iterables.",
+      "language_delta": "Python can execute annotated code without running a type checker. TypeScript also erases types at runtime, but its normal toolchain performs checker validation before execution.",
+      "prediction_prompt": "If total is called with [\"2\"], will the annotation reject the call, and what operation eventually determines the outcome?",
+      "transfer_trap": "Annotations document expected values; they do not parse input strings, coerce types, or supply runtime overload dispatch."
+    },
+    "py-testing-assert": {
+      "title": "Capstone: deterministic word ranking",
+      "concept": "The final program materializes an iterable, counts words, validates development invariants, and sorts frequency entries by descending count plus ascending word. Empty input has an explicit result instead of relying on an exception.",
+      "worked_example": "Pear and plum each occur twice, so count alone cannot decide. The alphabetical secondary key selects pear, and the sample prints pear:2 after its Counter invariants hold.",
+      "common_mistakes": [
+        "Using Counter.most_common(1) without an explicit alphabetical rule, which leaves equal counts dependent on encounter order.",
+        "Using assert for input or security validation even though optimized Python removes assertion bytecode."
+      ],
+      "self_check": [
+        "Which two fields form the sort key, and why is the count negated?",
+        "What happens to assert statements when the interpreter starts with -O?"
+      ],
+      "exercise_prompt": "Replace encounter-order tie behavior with deterministic count-and-word ranking while retaining the typed function, Counter, and internal invariants.",
+      "objective": "Select the most frequent word with an alphabetical tie-break and return the documented empty result when no words exist.",
+      "language_delta": "The capstone reuses exact output, parsing, rebinding, collections, functions, eager sorting, and typed class-era data reasoning. Assertions are optional development checks; under -O they vanish and therefore cannot carry required program behavior.",
+      "prediction_prompt": "For input b a b a, list Counter's entries and predict the winner under key (-count, word).",
+      "transfer_trap": "Java assertions may also be disabled, but its flag and runtime model differ; in either language use normal validation for conditions that must always execute."
     }
   }
 }

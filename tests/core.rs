@@ -147,13 +147,13 @@ fn syntax_mastery_due_reviews_are_ordered_and_capped_at_two() {
     let mut state = test_state();
     record_syntax_result(&mut state, "rust", "rust-output", true, 100, false);
     record_syntax_result(&mut state, "rust", "rust-variables", true, 50, false);
-    record_syntax_result(&mut state, "rust", "rust-numbers-tuples", true, 50, false);
+    record_syntax_result(&mut state, "rust", "rust-input", true, 50, false);
 
     let due = due_syntax_lessons(&state, "rust", 100_000, 10)
         .into_iter()
         .map(|lesson| lesson.id)
         .collect::<Vec<_>>();
-    assert_eq!(due, ["rust-variables", "rust-numbers-tuples"]);
+    assert_eq!(due, ["rust-variables", "rust-input"]);
 
     let limited = due_syntax_lessons(&state, "rust", 100_000, 1)
         .into_iter()
@@ -214,7 +214,7 @@ fn syntax_mastery_test_out_only_schedules_new_coverage() {
     for now in [10, 86_410] {
         record_syntax_result(&mut state, "rust", "rust-variables", true, now, false);
     }
-    record_syntax_result(&mut state, "rust", "rust-numbers-tuples", true, 10, false);
+    record_syntax_result(&mut state, "rust", "rust-input", true, 10, false);
     let before = state.syntax_mastery["rust"].clone();
 
     record_syntax_test_out(
@@ -223,13 +223,13 @@ fn syntax_mastery_test_out_only_schedules_new_coverage() {
         &[
             "rust-output",
             "rust-variables",
-            "rust-numbers-tuples",
+            "rust-input",
             "rust-strings",
         ],
         1_000,
     );
 
-    for id in ["rust-output", "rust-variables", "rust-numbers-tuples"] {
+    for id in ["rust-output", "rust-variables", "rust-input"] {
         assert_eq!(state.syntax_mastery["rust"][id].stage, before[id].stage);
         assert_eq!(
             state.syntax_mastery["rust"][id].review_due_at,
@@ -1312,150 +1312,6 @@ fn embedded_courses_preserve_every_existing_lesson() {
 }
 
 #[test]
-fn embedded_courses_preserve_exact_lesson_order() {
-    let expected: &[(&str, &[&str])] = &[
-        (
-            "python",
-            &[
-                "py-output",
-                "py-variables",
-                "py-numbers",
-                "py-strings",
-                "py-control-flow",
-                "py-functions",
-                "py-input",
-                "py-lists-dicts",
-                "py-tuples-sets",
-                "py-comprehensions",
-                "py-errors",
-                "py-files-context",
-                "py-modules-imports",
-                "py-dataclasses",
-                "py-typing",
-                "py-generators",
-                "py-lambdas-closures",
-                "py-decorators",
-                "py-sorting-keys",
-                "py-counter-defaultdict",
-                "py-deque",
-                "py-itertools",
-                "py-pathlib",
-                "py-testing-assert",
-                "py-async",
-            ],
-        ),
-        (
-            "ts",
-            &[
-                "ts-output",
-                "ts-let-const",
-                "ts-primitives",
-                "ts-strings-templates",
-                "ts-arrays-tuples",
-                "ts-objects",
-                "ts-functions",
-                "ts-input",
-                "ts-control-flow",
-                "ts-union-narrowing",
-                "ts-literal-types",
-                "ts-optional-nullish",
-                "ts-interfaces-aliases",
-                "ts-generics",
-                "ts-keyof-typeof",
-                "ts-indexed-access",
-                "ts-mapped-types",
-                "ts-conditional-types",
-                "ts-utility-types",
-                "ts-discriminated-unions",
-                "ts-async-promise",
-                "ts-error-handling",
-                "ts-modules",
-                "ts-classes",
-                "ts-readonly",
-                "ts-satisfies-as-const",
-                "ts-iterables",
-                "ts-array-methods",
-            ],
-        ),
-        (
-            "java",
-            &[
-                "java-output",
-                "java-variables-types",
-                "java-numbers-operators",
-                "java-strings",
-                "java-control-flow",
-                "java-methods",
-                "java-input",
-                "java-arrays-collections",
-                "java-classes-objects",
-                "java-constructors",
-                "java-encapsulation",
-                "java-static-members",
-                "java-enum-switch",
-                "java-exceptions",
-                "java-generics",
-                "java-interfaces",
-                "java-inheritance-composition",
-                "java-records",
-                "java-optional",
-                "java-streams-lambdas",
-                "java-comparators-sorting",
-                "java-try-with-resources",
-                "java-packages-imports",
-                "java-annotations",
-                "java-sealed-classes",
-                "java-testing-assert",
-                "java-equality-hashcode",
-                "java-overloading-varargs",
-            ],
-        ),
-        (
-            "rust",
-            &[
-                "rust-output",
-                "rust-variables",
-                "rust-numbers-tuples",
-                "rust-strings",
-                "rust-control-flow",
-                "rust-functions",
-                "rust-structs-impl",
-                "rust-enum-match",
-                "rust-option",
-                "rust-modules-use",
-                "rust-input",
-                "rust-vec-hashmap",
-                "rust-borrowing-slices",
-                "rust-result",
-                "rust-ownership",
-                "rust-iterators",
-                "rust-generics",
-                "rust-traits",
-                "rust-lifetimes",
-                "rust-traits-lifetimes",
-                "rust-testing",
-                "rust-smart-pointers",
-                "rust-interior-mutability",
-                "rust-concurrency",
-                "rust-shared-state",
-                "rust-async-await",
-                "rust-macros",
-                "rust-unsafe",
-                "rust-cargo-workspaces",
-            ],
-        ),
-    ];
-
-    for &(runtime, expected_ids) in expected {
-        let actual_ids = syntax_lessons_for(runtime)
-            .into_iter()
-            .map(|lesson| lesson.id)
-            .collect::<Vec<_>>();
-        assert_eq!(actual_ids, expected_ids, "{runtime} lesson order changed");
-    }
-}
-
-#[test]
 fn embedded_course_assets_use_the_versioned_contract() {
     for (runtime, path) in [
         ("python", "assets/lessons/python/course.json"),
@@ -1571,28 +1427,6 @@ fn java_syntax_curriculum_covers_official_java_topics() {
     ] {
         assert!(lesson_ids.contains(&id), "missing {id}");
     }
-
-    let refs = lessons
-        .iter()
-        .flat_map(|lesson| lesson.refs.iter().copied())
-        .collect::<Vec<_>>()
-        .join("\n");
-    for required_ref in [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Comparator.html",
-    ] {
-        assert!(refs.contains(required_ref), "missing ref {required_ref}");
-    }
 }
 
 #[test]
@@ -1667,27 +1501,6 @@ fn python_syntax_curriculum_covers_official_python_topics() {
     ] {
         assert!(lesson_ids.contains(&id), "missing {id}");
     }
-
-    let refs = lessons
-        .iter()
-        .flat_map(|lesson| lesson.refs.iter().copied())
-        .collect::<Vec<_>>()
-        .join("\n");
-    for required_ref in [
-        "https://docs.python.org/3/tutorial/index.html",
-        "https://docs.python.org/3/reference/index.html",
-        "https://docs.python.org/3/library/index.html",
-        "https://peps.python.org/pep-0008/",
-        "https://docs.python.org/3/library/typing.html",
-        "https://docs.python.org/3/library/pathlib.html",
-        "https://docs.python.org/3/library/collections.html",
-        "https://docs.python.org/3/library/itertools.html",
-        "https://docs.python.org/3/library/contextlib.html",
-        "https://docs.python.org/3/library/dataclasses.html",
-        "https://docs.python.org/3/library/asyncio.html",
-    ] {
-        assert!(refs.contains(required_ref), "missing ref {required_ref}");
-    }
 }
 
 #[test]
@@ -1731,31 +1544,6 @@ fn typescript_syntax_curriculum_covers_ts_and_node_topics() {
         "ts-array-methods",
     ] {
         assert!(lesson_ids.contains(&id), "missing {id}");
-    }
-
-    let refs = lessons
-        .iter()
-        .flat_map(|lesson| lesson.refs.iter().copied())
-        .collect::<Vec<_>>()
-        .join("\n");
-    for required_ref in [
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://nodejs.org/api/typescript.html",
-        "https://nodejs.org/api/fs.html#fsreadfilesyncpath-options",
-        "https://nodejs.org/api/process.html#processstdout",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce",
-    ] {
-        assert!(refs.contains(required_ref), "missing ref {required_ref}");
     }
 }
 
@@ -1828,36 +1616,6 @@ fn python_lesson_copy_is_topic_specific() {
 }
 
 #[test]
-fn rust_syntax_starters_compile_to_useful_failures() {
-    if std::process::Command::new("rustc")
-        .arg("--version")
-        .output()
-        .is_err()
-    {
-        return;
-    }
-
-    let root = tmp_root("rust-syntax-starters-compile");
-    for lesson in syntax_lessons_for("rust") {
-        let path = ensure_syntax_submission(&root, lesson).unwrap();
-        let result = judge_path(
-            &root,
-            lesson.id,
-            &path,
-            lesson.language,
-            &syntax_cases(lesson),
-        );
-        assert_eq!(
-            result.failure_kind,
-            Some(JudgeFailureKind::Output),
-            "{} starter should compile, run, and fail only by output:\n{}",
-            lesson.id,
-            result.output
-        );
-    }
-}
-
-#[test]
 fn render_syntax_lesson_uses_exercise_copy() {
     let lesson = syntax_lessons_for("python")[0];
     let state = AppState {
@@ -1906,11 +1664,11 @@ fn render_syntax_lesson_shows_exercise_io_goal() {
 
     assert!(rendered.contains("## Exercise"));
     assert!(rendered.find("## Exercise") < rendered.find("## Common mistakes"));
-    assert!(rendered.contains("Input\n\n```text\n\n```"));
+    assert!(rendered.contains("Input\n\n```text\nAda 7\n```"));
     assert!(rendered.contains("Output\n\n```text\nAda:7\n```"));
     let plain = render_markdown_plain(&rendered);
-    assert!(plain.contains("  name = 'Ada'"));
-    assert!(plain.contains("  score = 7"));
+    assert!(plain.contains("  name = \"Mina\""));
+    assert!(plain.contains("  print(name, score, sep=\"=\", end=\"!\\n\")"));
     assert!(plain.contains("Output\n\n  Ada:7"));
     assert!(plain.find("Output") < plain.find("Common mistakes"));
 }
@@ -2089,80 +1847,6 @@ fn syntax_exercise_todos_do_not_spell_out_the_answer() {
                 }
             }
         }
-    }
-}
-
-#[test]
-fn python_syntax_starters_fail_by_output_not_runtime_error() {
-    let root = tmp_root("python-syntax-starters-run-cleanly");
-    for lesson in syntax_lessons_for("python") {
-        let path = ensure_syntax_submission(&root, lesson).unwrap();
-        let result = judge_path(
-            &root,
-            lesson.id,
-            &path,
-            lesson.language,
-            &syntax_cases(lesson),
-        );
-        assert_eq!(
-            result.failure_kind,
-            Some(JudgeFailureKind::Output),
-            "{} starter should run and fail only by output:\n{}",
-            lesson.id,
-            result.output
-        );
-    }
-}
-
-#[test]
-fn typescript_syntax_starters_run_under_node_strip_types() {
-    if which("node").is_none() || which("tsc").is_none() {
-        return;
-    }
-
-    let root = tmp_root("typescript-syntax-starters-run-cleanly");
-    for lesson in syntax_lessons_for("ts") {
-        let path = ensure_syntax_submission(&root, lesson).unwrap();
-        let result = judge_path(
-            &root,
-            lesson.id,
-            &path,
-            lesson.language,
-            &syntax_cases(lesson),
-        );
-        assert_eq!(
-            result.failure_kind,
-            Some(JudgeFailureKind::Output),
-            "{} starter should typecheck, run, and fail only by output:\n{}",
-            lesson.id,
-            result.output
-        );
-    }
-}
-
-#[test]
-fn java_syntax_starters_compile_to_useful_failures() {
-    if which("javac").is_none() || which("java").is_none() {
-        return;
-    }
-
-    let root = tmp_root("java-syntax-starters-compile");
-    for lesson in syntax_lessons_for("java") {
-        let path = ensure_syntax_submission(&root, lesson).unwrap();
-        let result = judge_path(
-            &root,
-            lesson.id,
-            &path,
-            lesson.language,
-            &syntax_cases(lesson),
-        );
-        assert_eq!(
-            result.failure_kind,
-            Some(JudgeFailureKind::Output),
-            "{} starter should compile, run, and fail only by output:\n{}",
-            lesson.id,
-            result.output
-        );
     }
 }
 

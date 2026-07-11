@@ -318,10 +318,10 @@ impl PracticodeApp {
     }
 
     pub(super) fn wants_mouse_capture(&self) -> bool {
-        !self.show_output
-            && !(self.mode == AppMode::Learn
+        !(self.show_output
+            || (self.mode == AppMode::Learn
                 && self.learning_session.view() == LearningView::Result
-                && self.focus != Focus::Command)
+                && self.focus != Focus::Command))
     }
 
     pub(super) fn sync_mouse_capture(&mut self) {

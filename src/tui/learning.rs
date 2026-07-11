@@ -587,7 +587,7 @@ mod tests {
 
         assert_eq!(
             session.queue_ids(),
-            ["py-variables", "py-numbers", "py-strings"]
+            ["py-variables", "py-numbers", "py-input"]
         );
         assert_eq!(session.step(), LearningStep::Review);
     }

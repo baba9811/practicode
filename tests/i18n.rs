@@ -311,6 +311,10 @@ fn lesson_catalogs_have_complete_study_copy_for_every_language() {
                             "common_mistakes",
                             "self_check",
                             "exercise_prompt",
+                            "objective",
+                            "language_delta",
+                            "prediction_prompt",
+                            "transfer_trap",
                         ]
                         .contains(&key.as_str()),
                         "{ui_language}:{} unexpected lesson-copy key {key}",

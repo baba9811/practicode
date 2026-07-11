@@ -4,424 +4,508 @@
   "ui_language": "en",
   "lessons": {
     "ts-output": {
-      "title": "Console and stdout",
-      "concept": "Console output is the judge-facing contract, so the lesson separates console.log's newline from byte-exact process.stdout.write output. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Console and stdout to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Write exact stdout bytes",
+      "concept": "process.stdout.write emits only the string you supply, making separators and the trailing newline part of the program's contract. This first core task also marks the boundary between TypeScript checking and Node execution.",
+      "worked_example": "The demonstration keeps a typed name and point value, then writes a deliberately different `demo Mina=4` record. Its annotation disappears before Node runs, but its template characters remain observable bytes.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Console and stdout rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Console and stdout exercise.",
-        "Matching the judge output without checking this lesson idea: Console output is the judge-facing contract, so the lesson separates console.log's newline from byte-exact process.stdout.write output."
+        "Using console.log when the judge expects control over the final newline.",
+        "Joining name and score without a separator, which creates ambiguous output such as `Ada7`."
       ],
       "self_check": [
-        "Which expression in the example applies Console and stdout before the `example:` output?",
-        "Which TODO line in the Console and stdout exercise must derive the value from its own data instead of copying the demo?"
+        "What exact character follows the learner name in the demonstration?",
+        "Which part of the write call is responsible for the line ending?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Console and stdout to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-let-const": {
-      "title": "let and const",
-      "concept": "const marks bindings that should not be reassigned, while let makes the changing accumulator in a solution visible. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying let and const to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the let and const rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the let and const exercise.",
-        "Matching the judge output without checking this lesson idea: const marks bindings that should not be reassigned, while let makes the changing accumulator in a solution visible."
-      ],
-      "self_check": [
-        "Which expression in the example applies let and const before the `example:` output?",
-        "Which TODO line in the let and const exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying let and const to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-primitives": {
-      "title": "Primitive types",
-      "concept": "string, number, and boolean annotations describe the scalar values that parsing and branching code expects. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Primitive types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Primitive types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Primitive types exercise.",
-        "Matching the judge output without checking this lesson idea: string, number, and boolean annotations describe the scalar values that parsing and branching code expects."
-      ],
-      "self_check": [
-        "Which expression in the example applies Primitive types before the `example:` output?",
-        "Which TODO line in the Primitive types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Primitive types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-strings-templates": {
-      "title": "Strings and templates",
-      "concept": "Template literals keep formatting next to the values, and string methods such as trim return a new string. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Strings and templates to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Strings and templates rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Strings and templates exercise.",
-        "Matching the judge output without checking this lesson idea: Template literals keep formatting next to the values, and string methods such as trim return a new string."
-      ],
-      "self_check": [
-        "Which expression in the example applies Strings and templates before the `example:` output?",
-        "Which TODO line in the Strings and templates exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Strings and templates to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-arrays-tuples": {
-      "title": "Arrays and tuples",
-      "concept": "Arrays are ordered groups of one element type; tuples fix position and type when a tiny record matters. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Arrays and tuples to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Arrays and tuples rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Arrays and tuples exercise.",
-        "Matching the judge output without checking this lesson idea: Arrays are ordered groups of one element type; tuples fix position and type when a tiny record matters."
-      ],
-      "self_check": [
-        "Which expression in the example applies Arrays and tuples before the `example:` output?",
-        "Which TODO line in the Arrays and tuples exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Arrays and tuples to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-objects": {
-      "title": "Object types",
-      "concept": "Object types name the required fields so a calculation cannot accidentally ignore width, height, or another property. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Object types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Object types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Object types exercise.",
-        "Matching the judge output without checking this lesson idea: Object types name the required fields so a calculation cannot accidentally ignore width, height, or another property."
-      ],
-      "self_check": [
-        "Which expression in the example applies Object types before the `example:` output?",
-        "Which TODO line in the Object types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Object types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-functions": {
-      "title": "Functions",
-      "concept": "Function parameter and return annotations make the boundary between parsed input, calculation, and output explicit. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Functions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Functions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Functions exercise.",
-        "Matching the judge output without checking this lesson idea: Function parameter and return annotations make the boundary between parsed input, calculation, and output explicit."
-      ],
-      "self_check": [
-        "Which expression in the example applies Functions before the `example:` output?",
-        "Which TODO line in the Functions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Functions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Read the two stdin fields and format one colon-delimited line through process.stdout.write.",
+      "objective": "Produce `name:score` followed by exactly one newline for every supplied record.",
+      "language_delta": "Unlike console.log, stdout.write adds no spacing or newline; Node runs the stripped JavaScript and resolves module behavior independently of annotations.",
+      "prediction_prompt": "Before execution, spell out the bytes emitted for a Unicode name and a two-digit score.",
+      "transfer_trap": "A browser console displays values for inspection, whereas an online judge compares the program's stdout text."
     },
     "ts-input": {
-      "title": "Node stdin parsing",
-      "concept": "Node solutions usually read file descriptor 0 once, split whitespace, and convert tokens before numeric work. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Node stdin parsing to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Tokenize Node standard input",
+      "concept": "Node exposes redirected stdin as file descriptor zero. Reading it once, trimming it, and guarding the empty string creates a reliable number-token pipeline for later lessons.",
+      "worked_example": "The sample works from a fixed `4 6` string so it cannot solve the exercise cases. Splitting, Number conversion, and a zero-initialized reduce turn those two demo tokens into ten.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Node stdin parsing rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Node stdin parsing exercise.",
-        "Matching the judge output without checking this lesson idea: Node solutions usually read file descriptor 0 once, split whitespace, and convert tokens before numeric work."
+        "Calling split on an empty trimmed string and accidentally converting its sole empty token to zero.",
+        "Reading only the first line even though judge input may place values across several lines."
       ],
       "self_check": [
-        "Which expression in the example applies Node stdin parsing before the `example:` output?",
-        "Which TODO line in the Node stdin parsing exercise must derive the value from its own data instead of copying the demo?"
+        "Why does the token array become empty when trimmed stdin has no characters?",
+        "How does the reduce initializer determine the total for blank input?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Node stdin parsing to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Replace the first-token shortcut with a sum over every whitespace-separated number.",
+      "objective": "Return the arithmetic total for same-line, multiline, and empty stdin.",
+      "language_delta": "readFileSync(0, \"utf8\") is a Node runtime API; TypeScript checks the declared shim but does not perform the read itself.",
+      "prediction_prompt": "Predict the token array and total for `-1` followed by a newline and `5 2`.",
+      "transfer_trap": "Repeated prompt-style reads from other languages do not match Node's simple whole-stream judge harness."
     },
-    "ts-control-flow": {
-      "title": "Control flow",
-      "concept": "if and loops decide which values are accumulated, so branch conditions must match the intended data rule. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Control flow to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "ts-primitives": {
+      "title": "Convert text into primitive values",
+      "concept": "A string annotation describes a value to the checker, while Number performs the runtime conversion. The pass decision must compare numeric score and threshold rather than their textual spellings.",
+      "worked_example": "The worked program declares one string, one number, and one boolean, then prints a demo record. Each runtime value already has the primitive shape claimed by its annotation.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Control flow rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Control flow exercise.",
-        "Matching the judge output without checking this lesson idea: if and loops decide which values are accumulated, so branch conditions must match the intended data rule."
+        "Annotating scoreText as number without actually converting the incoming string.",
+        "Relying on relational coercion, which hides where invalid numeric text enters the calculation."
       ],
       "self_check": [
-        "Which expression in the example applies Control flow before the `example:` output?",
-        "Which TODO line in the Control flow exercise must derive the value from its own data instead of copying the demo?"
+        "Which expression in the exercise changes a token from string semantics to number semantics?",
+        "Why must equality at a zero threshold count as a passing score?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Control flow to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Parse both numeric fields, compare them inclusively, and keep the name as text.",
+      "objective": "Emit the parsed score and the correct pass-or-retry classification for three boundary cases.",
+      "language_delta": "TypeScript 5.9 can reject inconsistent primitive uses, but annotations are erasable and cannot coerce stdin; const and template details live in optional labs.",
+      "prediction_prompt": "Decide the status of `Bo 0 0` before evaluating the comparison operator.",
+      "transfer_trap": "In languages with runtime type declarations, a declared numeric variable may trigger conversion rules; TypeScript declarations alone never do."
     },
-    "ts-union-narrowing": {
-      "title": "Union and narrowing",
-      "concept": "Union values need a runtime check before string-only or number-only operations become safe. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Union and narrowing to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "ts-let-const": {
+      "title": "Rebind an accumulator, keep its label",
+      "concept": "Use const for the stable label binding and let for a total that changes. Choosing either keyword says whether the binding may be reassigned, not whether an object behind it is frozen.",
+      "worked_example": "The demonstration fixes `demo` as a label, starts a let total at five, and adds negative two. Its final value proves reassignment occurred without changing the label binding.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Union and narrowing rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Union and narrowing exercise.",
-        "Matching the judge output without checking this lesson idea: Union values need a runtime check before string-only or number-only operations become safe."
+        "Declaring an accumulator with const and then trying to assign a new numeric value.",
+        "Assuming a const object cannot have one of its writable properties changed."
       ],
       "self_check": [
-        "Which expression in the example applies Union and narrowing before the `example:` output?",
-        "Which TODO line in the Union and narrowing exercise must derive the value from its own data instead of copying the demo?"
+        "Which of the two demo bindings receives a second assignment?",
+        "Would const prevent `settings.enabled = false` when settings refers to a mutable object?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Union and narrowing to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Accumulate both parsed numbers through a reassignable total while leaving the label fixed.",
+      "objective": "Show that positive, negative, and zero additions preserve the requested label and arithmetic result.",
+      "language_delta": "JavaScript enforces const binding rules at runtime; the number annotations are separately erased checker information.",
+      "prediction_prompt": "Trace the total after each assignment for the `net -2 5` input.",
+      "transfer_trap": "Rust immutable bindings and Java final references have related names but different ownership and object-mutation consequences."
     },
-    "ts-literal-types": {
-      "title": "Literal types",
-      "concept": "Literal unions restrict commands and modes to exact values such as 'left' or 'right'. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Literal types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "ts-strings-templates": {
+      "title": "Trim the name, preserve the score",
+      "concept": "The pipe separates two fields with different whitespace rules. Remove one terminal line ending, trim the name, and preserve every score character—including trailing spaces—before interpolation.",
+      "worked_example": "A fixed `Mira` record ends with two score spaces plus a newline. The regular expression removes only that newline, so the demonstration keeps both spaces beside the interpolated score.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Literal types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Literal types exercise.",
-        "Matching the judge output without checking this lesson idea: Literal unions restrict commands and modes to exact values such as 'left' or 'right'."
+        "Calling trimEnd on the whole record and silently deleting meaningful score padding.",
+        "Using string.length as a count of user-perceived characters when surrogate pairs may occupy two UTF-16 units."
       ],
       "self_check": [
-        "Which expression in the example applies Literal types before the `example:` output?",
-        "Which TODO line in the Literal types exercise must derive the value from its own data instead of copying the demo?"
+        "After stripping the terminal newline from `  Mira |9  `, which spaces remain in each field?",
+        "Why does trimming rawName leave the score's two trailing spaces untouched?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Literal types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Strip one terminal CRLF or LF, trim only the name side, and interpolate the unchanged score after a colon.",
+      "objective": "Format all three records while retaining significant spaces at the end of the score field.",
+      "language_delta": "JavaScript trimEnd removes all trailing whitespace, whereas the anchored replacement here removes one record terminator; string indexes still count UTF-16 code units.",
+      "prediction_prompt": "Mark the exact spaces remaining after `/\\r?\\n$/` processes ` Ada |7  ` followed by LF.",
+      "transfer_trap": "A general strip or trim operation from another language can erase payload whitespace when only the transport newline should disappear."
     },
-    "ts-optional-nullish": {
-      "title": "Optional and nullish",
-      "concept": "Optional fields can be undefined, and ?? preserves valid falsey data such as score 0. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Optional and nullish to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "ts-arrays-tuples": {
+      "title": "Return a named total as a tuple",
+      "concept": "The first token names the record and the remaining tokens form a number array. A `[string, number]` tuple then records the stable meaning of its two positions.",
+      "worked_example": "The example totals a separate `[1, 4]` array and stores `Neo` plus that sum in a typed pair. Accessing positions zero and one shows that the tuple is still an Array at runtime.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Optional and nullish rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Optional and nullish exercise.",
-        "Matching the judge output without checking this lesson idea: Optional fields can be undefined, and ??"
+        "Treating every token as numeric and losing the leading name before reduction.",
+        "Expecting tuple annotations to create a different runtime container from Array."
       ],
       "self_check": [
-        "Which expression in the example applies Optional and nullish before the `example:` output?",
-        "Which TODO line in the Optional and nullish exercise must derive the value from its own data instead of copying the demo?"
+        "What type does the second position of the demo pair accept?",
+        "How should the numeric tail behave when the input contains only `Bo`?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Optional and nullish to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-interfaces-aliases": {
-      "title": "Interfaces and type aliases",
-      "concept": "Interfaces name object contracts, while type aliases also name unions, tuples, and composed type expressions. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Interfaces and type aliases to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Interfaces and type aliases rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Interfaces and type aliases exercise.",
-        "Matching the judge output without checking this lesson idea: Interfaces name object contracts, while type aliases also name unions, tuples, and composed type expressions."
-      ],
-      "self_check": [
-        "Which expression in the example applies Interfaces and type aliases before the `example:` output?",
-        "Which TODO line in the Interfaces and type aliases exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Interfaces and type aliases to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-generics": {
-      "title": "Generics",
-      "concept": "Generics keep the caller's element type when reusable code reads from an array or returns a value. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Generics to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Generics rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Generics exercise.",
-        "Matching the judge output without checking this lesson idea: Generics keep the caller's element type when reusable code reads from an array or returns a value."
-      ],
-      "self_check": [
-        "Which expression in the example applies Generics before the `example:` output?",
-        "Which TODO line in the Generics exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Generics to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-keyof-typeof": {
-      "title": "keyof and typeof",
-      "concept": "typeof captures a value's static shape, and keyof turns that shape into the allowed key union. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying keyof and typeof to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the keyof and typeof rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the keyof and typeof exercise.",
-        "Matching the judge output without checking this lesson idea: typeof captures a value's static shape, and keyof turns that shape into the allowed key union."
-      ],
-      "self_check": [
-        "Which expression in the example applies keyof and typeof before the `example:` output?",
-        "Which TODO line in the keyof and typeof exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying keyof and typeof to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-indexed-access": {
-      "title": "Indexed access types",
-      "concept": "Indexed access types reuse property and element types from an existing model instead of repeating them by hand. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Indexed access types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Indexed access types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Indexed access types exercise.",
-        "Matching the judge output without checking this lesson idea: Indexed access types reuse property and element types from an existing model instead of repeating them by hand."
-      ],
-      "self_check": [
-        "Which expression in the example applies Indexed access types before the `example:` output?",
-        "Which TODO line in the Indexed access types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Indexed access types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-mapped-types": {
-      "title": "Mapped types",
-      "concept": "Mapped types transform every key in an object type, which keeps derived shapes aligned with the source. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Mapped types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Mapped types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Mapped types exercise.",
-        "Matching the judge output without checking this lesson idea: Mapped types transform every key in an object type, which keeps derived shapes aligned with the source."
-      ],
-      "self_check": [
-        "Which expression in the example applies Mapped types before the `example:` output?",
-        "Which TODO line in the Mapped types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Mapped types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-conditional-types": {
-      "title": "Conditional types",
-      "concept": "Conditional types choose a branch from a type relationship, and infer extracts the part that matched. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Conditional types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Conditional types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Conditional types exercise.",
-        "Matching the judge output without checking this lesson idea: Conditional types choose a branch from a type relationship, and infer extracts the part that matched."
-      ],
-      "self_check": [
-        "Which expression in the example applies Conditional types before the `example:` output?",
-        "Which TODO line in the Conditional types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Conditional types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-utility-types": {
-      "title": "Utility types",
-      "concept": "Utility types such as Pick and Partial express common object transformations without inventing a new helper type. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Utility types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Utility types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Utility types exercise.",
-        "Matching the judge output without checking this lesson idea: Utility types such as Pick and Partial express common object transformations without inventing a new helper type."
-      ],
-      "self_check": [
-        "Which expression in the example applies Utility types before the `example:` output?",
-        "Which TODO line in the Utility types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Utility types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-discriminated-unions": {
-      "title": "Discriminated unions",
-      "concept": "A shared literal tag lets switch narrow each variant so rectangle fields are used only on rectangles. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Discriminated unions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Discriminated unions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Discriminated unions exercise.",
-        "Matching the judge output without checking this lesson idea: A shared literal tag lets switch narrow each variant so rectangle fields are used only on rectangles."
-      ],
-      "self_check": [
-        "Which expression in the example applies Discriminated unions before the `example:` output?",
-        "Which TODO line in the Discriminated unions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Discriminated unions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-async-promise": {
-      "title": "Async and Promise",
-      "concept": "async functions return Promise values, and await is the point where the fulfilled number re-enters normal flow. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Async and Promise to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Async and Promise rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Async and Promise exercise.",
-        "Matching the judge output without checking this lesson idea: async functions return Promise values, and await is the point where the fulfilled number re-enters normal flow."
-      ],
-      "self_check": [
-        "Which expression in the example applies Async and Promise before the `example:` output?",
-        "Which TODO line in the Async and Promise exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Async and Promise to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-error-handling": {
-      "title": "Error handling",
-      "concept": "catch receives an unknown failure, so code should narrow it before choosing a recovery value. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Error handling to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Error handling rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Error handling exercise.",
-        "Matching the judge output without checking this lesson idea: catch receives an unknown failure, so code should narrow it before choosing a recovery value."
-      ],
-      "self_check": [
-        "Which expression in the example applies Error handling before the `example:` output?",
-        "Which TODO line in the Error handling exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Error handling to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-modules": {
-      "title": "Modules and exports",
-      "concept": "export marks the values a file offers to other files; Node still decides the module system by its own rules. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Modules and exports to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Modules and exports rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Modules and exports exercise.",
-        "Matching the judge output without checking this lesson idea: export marks the values a file offers to other files; Node still decides the module system by its own rules."
-      ],
-      "self_check": [
-        "Which expression in the example applies Modules and exports before the `example:` output?",
-        "Which TODO line in the Modules and exports exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Modules and exports to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-classes": {
-      "title": "Classes and access modifiers",
-      "concept": "Classes attach methods to state, and private documents which state should stay behind the method boundary. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Classes and access modifiers to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Classes and access modifiers rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Classes and access modifiers exercise.",
-        "Matching the judge output without checking this lesson idea: Classes attach methods to state, and private documents which state should stay behind the method boundary."
-      ],
-      "self_check": [
-        "Which expression in the example applies Classes and access modifiers before the `example:` output?",
-        "Which TODO line in the Classes and access modifiers exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Classes and access modifiers to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-readonly": {
-      "title": "readonly",
-      "concept": "readonly lets callers read configuration-like data while preventing replacement or mutation through that type. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying readonly to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the readonly rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the readonly exercise.",
-        "Matching the judge output without checking this lesson idea: readonly lets callers read configuration-like data while preventing replacement or mutation through that type."
-      ],
-      "self_check": [
-        "Which expression in the example applies readonly before the `example:` output?",
-        "Which TODO line in the readonly exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying readonly to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "ts-satisfies-as-const": {
-      "title": "satisfies and as const",
-      "concept": "as const preserves route literals, while satisfies checks the wider Record contract without widening those literals. Use the syntax to keep the runtime value and the intended TypeScript shape moving together.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying satisfies and as const to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the satisfies and as const rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the satisfies and as const exercise.",
-        "Matching the judge output without checking this lesson idea: as const preserves route literals, while satisfies checks the wider Record contract without widening those literals."
-      ],
-      "self_check": [
-        "Which expression in the example applies satisfies and as const before the `example:` output?",
-        "Which TODO line in the satisfies and as const exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying satisfies and as const to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Reduce the complete numeric tail and store the name and total in the declared tuple.",
+      "objective": "Handle multiple values, negative values, and an empty numeric tail through one pair shape.",
+      "language_delta": "Tuple position checks disappear during Node execution; iterable and array-method labs explore alternative ways to consume the same sequence.",
+      "prediction_prompt": "For `Lin -1 4 2`, list the array contents before calculating the tuple's second slot.",
+      "transfer_trap": "A tuple is not a small immutable record at runtime, unlike value-oriented constructs some other languages provide."
     },
     "ts-iterables": {
-      "title": "Iterables",
-      "concept": "for...of consumes any iterable, so arrays, strings, and sets can share one collection loop shape. In a stdin/stdout solution, this prevents the common shortcut where the printed value no longer matches the typed data.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Iterables to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Consume an Iterable with for-of",
+      "concept": "Iterable<string> promises a sequence protocol, not array indexes. for...of asks that protocol for values and therefore works for arrays, sets, strings, and custom iterables.",
+      "worked_example": "The demonstration passes a Set containing `T` and `S` to a collector. Iteration produces the two insertion-ordered values without calling an array-only method.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Iterables rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Iterables exercise.",
-        "Matching the judge output without checking this lesson idea: for...of consumes any iterable, so arrays, strings, and sets can share one collection loop shape."
+        "Indexing an Iterable even though the interface does not guarantee numeric properties.",
+        "Reusing the same iterator after it has already advanced to completion."
       ],
       "self_check": [
-        "Which expression in the example applies Iterables before the `example:` output?",
-        "Which TODO line in the Iterables exercise must derive the value from its own data instead of copying the demo?"
+        "Which capability does for...of require from its input?",
+        "Why does an empty token list still produce a newline rather than no stdout at all?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Iterables to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Traverse all stdin tokens through iteration and concatenate them in encounter order.",
+      "objective": "Join two, three, or zero tokens without depending on array indexing.",
+      "language_delta": "TypeScript's Iterable type describes the JavaScript iteration protocol; it adds no collection or replay behavior at runtime.",
+      "prediction_prompt": "Walk the iterator states for `a b c` and predict the accumulator after each step.",
+      "transfer_trap": "Python iterators and Java streams are also consumable, but their exact replay and ownership conventions are not interchangeable."
     },
     "ts-array-methods": {
-      "title": "map, filter, and reduce",
-      "concept": "filter selects items, map transforms them, and reduce folds the sequence into the final answer. The type annotation is not decoration here; it describes which values may cross this lesson's boundary.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying map, filter, and reduce to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Filter, square, and reduce safely",
+      "concept": "A readable sequence pipeline first selects even numbers, then squares them, then folds the products. Giving reduce an initial zero defines the empty-selection result.",
+      "worked_example": "The demo filters `[2, 5, 6]` by a different condition and doubles its survivors before summing. That distinct pipeline illustrates method order without revealing the exercise result.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the map, filter, and reduce rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the map, filter, and reduce exercise.",
-        "Matching the judge output without checking this lesson idea: filter selects items, map transforms them, and reduce folds the sequence into the final answer."
+        "Mapping before filtering when the predicate is supposed to inspect original values.",
+        "Omitting reduce's initializer and causing an exception when no even item survives."
       ],
       "self_check": [
-        "Which expression in the example applies map, filter, and reduce before the `example:` output?",
-        "Which TODO line in the map, filter, and reduce exercise must derive the value from its own data instead of copying the demo?"
+        "At what stage does negative two become positive four?",
+        "What value enters reduce first when the filtered array is empty?"
       ],
-      "exercise_prompt": "Complete the TODO by applying map, filter, and reduce to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Correct the parity predicate while retaining the square and zero-initialized fold.",
+      "objective": "Compute the even-square total for mixed, negative, and all-odd token sets.",
+      "language_delta": "These methods are standard JavaScript Array operations; TypeScript infers callback types but does not make the pipeline lazy.",
+      "prediction_prompt": "Write the intermediate arrays produced from `-2 -1 0` before adding them.",
+      "transfer_trap": "Rust iterator adapters are lazy until consumed, unlike JavaScript array methods that allocate or traverse immediately at each stage."
+    },
+    "ts-objects": {
+      "title": "Calculate through a structural object",
+      "concept": "A Rectangle type requires width and height members, and the area function accepts any compatible object. No class declaration or shared nominal identity is needed for this calculation.",
+      "worked_example": "The worked object also has a color property, yet a separately bound value can enter the two-member `DemoSize` function. The extra field remains present at runtime and is simply unused.",
+      "common_mistakes": [
+        "Leaving one parsed dimension out of the object and silently substituting a placeholder.",
+        "Assuming two values need the same constructor name before TypeScript considers their shapes compatible."
+      ],
+      "self_check": [
+        "Which members of `painted` does demoArea actually read?",
+        "Why does a zero width correctly force the computed area to zero?"
+      ],
+      "exercise_prompt": "Construct a Rectangle from both stdin dimensions and pass it through the typed area function.",
+      "objective": "Calculate products for ordinary, zero-width, and one-height rectangles using structural data.",
+      "language_delta": "Object types are checker descriptions erased before Node runs; class methods create runtime behavior and readonly only restricts typed access shallowly.",
+      "prediction_prompt": "Predict the object value and multiplication result for dimensions `7 1`.",
+      "transfer_trap": "Java commonly emphasizes declared class identity, while TypeScript usually accepts independently created values with compatible members."
+    },
+    "ts-classes": {
+      "title": "Update state behind a class method",
+      "concept": "A Counter instance owns mutable state and exposes an increment operation. The method must change that stored value before returning it, so later calls observe the update.",
+      "worked_example": "The sample class begins at eight and increments once to nine. Its private modifier helps the checker police source access while the emitted runtime field remains an ordinary property.",
+      "common_mistakes": [
+        "Returning `this.value + 1` without storing the new state for subsequent calls.",
+        "Treating TypeScript private as the same runtime mechanism as a JavaScript `#value` field."
+      ],
+      "self_check": [
+        "After two calls on one DemoCounter instance, what value should its method return?",
+        "Which class privacy form survives into JavaScript as an enforced access restriction?"
+      ],
+      "exercise_prompt": "Modify increment so it updates the instance field and returns the resulting counter value.",
+      "objective": "Advance positive, negative, and larger starting values by exactly one.",
+      "language_delta": "The `private` keyword here is erased checker metadata; ECMAScript hash-prefixed fields have runtime privacy semantics.",
+      "prediction_prompt": "Trace the stored field before and after a call starting from negative one.",
+      "transfer_trap": "Java private access is enforced by the JVM, so its runtime boundary is stronger than TypeScript's erased modifier."
+    },
+    "ts-readonly": {
+      "title": "Read a shallow readonly configuration",
+      "concept": "A readonly Config lets consumers inspect the name and score sequence without mutating through that type. Marking the nested array readonly is necessary because property readonly alone only blocks replacement.",
+      "worked_example": "The demo declares a readonly property and a readonly number array, then reads the array length. It never attempts a write, so strict checking and stripped Node execution both succeed.",
+      "common_mistakes": [
+        "Calling push on a readonly number array and expecting strict TypeScript to permit it.",
+        "Believing readonly invokes Object.freeze or recursively locks nested runtime objects."
+      ],
+      "self_check": [
+        "Why does the starter fail before any test input reaches Node?",
+        "Would another mutable alias to the same underlying array still be able to push?"
+      ],
+      "exercise_prompt": "Remove the forbidden mutation and calculate the score total from the readonly view.",
+      "objective": "Type-check the solution strictly, then report each configured name with its summed scores.",
+      "language_delta": "readonly is shallow and type-only unless nested members also receive readonly types; neither annotation freezes JavaScript memory.",
+      "prediction_prompt": "Predict the compiler diagnostic at `config.scores.push(0)` rather than predicting stdout.",
+      "transfer_trap": "A Rust immutable borrow prevents mutation through that borrow under ownership rules, which is not equivalent to an erasable TypeScript view."
+    },
+    "ts-control-flow": {
+      "title": "Keep an inclusive loop boundary",
+      "concept": "The loop visits integers from one through n and a strict modulo comparison selects odd values. Whether the endpoint participates is encoded by the relational operator in the loop condition.",
+      "worked_example": "The sample walks through five but accumulates even values, yielding a deliberately unrelated demo total. Its concise branch still uses strict equality and a closed upper bound.",
+      "common_mistakes": [
+        "Using `< n` and dropping an odd endpoint that belongs to the requested range.",
+        "Writing loose equality where JavaScript coercion could make unrelated values compare equal."
+      ],
+      "self_check": [
+        "Which loop value contributes last when n equals three?",
+        "Why does the six case pass even in the flawed starter, and which case exposes the bound bug?"
+      ],
+      "exercise_prompt": "Repair the loop boundary while preserving the odd-number branch and accumulator.",
+      "objective": "Sum every odd integer in the inclusive range for positive and zero limits.",
+      "language_delta": "JavaScript conditions use runtime booleans and coercion rules; TypeScript control-flow analysis separately narrows values along proven branches.",
+      "prediction_prompt": "Enumerate visited values for n equal to three under `<` and under `<=`.",
+      "transfer_trap": "Python range excludes its stop by default, so translating that familiar loop literally can omit the TypeScript endpoint."
+    },
+    "ts-functions": {
+      "title": "Checkpoint: typed calculation boundary",
+      "concept": "A function signature promises both accepted input and returned output. Strict checking should reject the starter because a numeric multiplication cannot fulfill its declared string result.",
+      "worked_example": "The demonstration defines a number-returning perimeter function over two numeric parameters. Its fixed dimensions produce a demo value unrelated to any judged area case.",
+      "common_mistakes": [
+        "Changing the multiplication to a string merely to satisfy an incorrect return annotation.",
+        "Printing inside the calculation function and losing the distinction between returning data and writing stdout."
+      ],
+      "self_check": [
+        "Which line establishes the promised return type of area?",
+        "At what point do the two parsed tokens become numeric arguments to multiplication?"
+      ],
+      "exercise_prompt": "Correct the function's return contract so strict checking accepts the numeric calculation.",
+      "objective": "Pass the checker and compute three rectangle areas through one annotated function.",
+      "language_delta": "TypeScript validates parameter and result uses before execution; loop and branch behavior inside the function is still ordinary JavaScript control flow.",
+      "prediction_prompt": "Predict the TypeCheck failure category before considering any of the case outputs.",
+      "transfer_trap": "Languages with runtime method signatures may enforce a return contract during execution or compilation; TypeScript erases it after checking."
+    },
+    "ts-union-narrowing": {
+      "title": "Narrow a union before formatting",
+      "concept": "A value of type string | number exposes only operations safe for both members. A typeof branch proves which runtime primitive is present and unlocks its specific formatting method.",
+      "worked_example": "The demo lowercases strings but formats a fixed number to one decimal place. It demonstrates both possible branches without matching the exercise's uppercase or integer formatting.",
+      "common_mistakes": [
+        "Calling toUpperCase directly on a union that may contain a number.",
+        "Using the input's kind token as a cast instead of constructing and narrowing the actual runtime value."
+      ],
+      "self_check": [
+        "What does typeof report for the numeric member created by Number(text)?",
+        "Why does toFixed(0) turn negative 1.6 into negative two?"
+      ],
+      "exercise_prompt": "Introduce a runtime narrowing branch and apply the appropriate formatter to each union member.",
+      "objective": "Uppercase string commands and round numeric commands while satisfying strict type checking.",
+      "language_delta": "Narrowing combines checker reasoning with a JavaScript runtime test; arbitrary stdin still needs validation before entering a literal union.",
+      "prediction_prompt": "Choose the branch and formatted text for `n -1.6` before running the file.",
+      "transfer_trap": "Python permits method calls until runtime failure, while TypeScript rejects an unsafe union operation during the checker phase."
+    },
+    "ts-literal-types": {
+      "title": "Validate text before a literal union",
+      "concept": "Direction contains exactly two string literals. Since stdin begins as an unrestricted string, a runtime comparison must establish membership before the value can safely enter turn.",
+      "worked_example": "The demonstration uses a different north-or-south union and passes a known literal directly. Its branch produces a labeled demo arrow without validating external data.",
+      "common_mistakes": [
+        "Casting arbitrary text to Direction and assuming the assertion performed a runtime check.",
+        "Letting the binary turn function treat every unknown direction as the right-hand case."
+      ],
+      "self_check": [
+        "Why does `raw as Direction` allow `up` to reach turn at runtime?",
+        "After checking both accepted strings, what narrowed type does raw have inside the true branch?"
+      ],
+      "exercise_prompt": "Guard the stdin string against both Direction members and report invalid text separately.",
+      "objective": "Map left and right to their short forms while rejecting an unrecognized command.",
+      "language_delta": "Literal unions constrain checked source, but JavaScript receives ordinary strings after erasure and therefore needs an explicit membership test.",
+      "prediction_prompt": "Predict the flawed starter's branch for `up`, then compare it with the required rejection path.",
+      "transfer_trap": "A closed enum in another language may validate construction automatically; a TypeScript string union creates no runtime container."
+    },
+    "ts-optional-nullish": {
+      "title": "Default only nullish scores",
+      "concept": "The parsed score is either a number or null. Nullish coalescing supplies ten only for null or undefined, preserving zero as an intentional numeric result.",
+      "worked_example": "The demo gives an optional count the value zero and applies `?? 8`. Printing zero demonstrates the precise absence rule without sharing exercise names or fallback values.",
+      "common_mistakes": [
+        "Using logical OR and replacing a legitimate zero because zero is falsy.",
+        "Leaving the text `none` unparsed and mixing string absence markers with numeric calculations."
+      ],
+      "self_check": [
+        "Which values trigger the right operand of `??`?",
+        "What runtime value is assigned when scoreText contains the word none?"
+      ],
+      "exercise_prompt": "Switch to nullish defaulting so an explicit zero survives and only absence receives ten.",
+      "objective": "Distinguish zero, null, and a positive score in the emitted name-score records.",
+      "language_delta": "With strictNullChecks, TypeScript makes null explicit in the union; JavaScript's `??` operator supplies the actual runtime semantics.",
+      "prediction_prompt": "Evaluate both sides of the default expression for `Ada 0` before execution.",
+      "transfer_trap": "Python's `or` and JavaScript's `||` share broad falsy behavior, so neither is a direct substitute for nullish coalescing."
+    },
+    "ts-interfaces-aliases": {
+      "title": "Compose structural contracts",
+      "concept": "Named is an interface, Scored is a type alias, and their intersection requires both fields. The resulting Entry is accepted because of its members, not a constructor lineage.",
+      "worked_example": "A separate demo intersects Tagged with Weighted and builds one compatible object. Reading its tag and weight illustrates composition without duplicating the judged model.",
+      "common_mistakes": [
+        "Adding one to the parsed score while constructing the intersection and corrupting source data.",
+        "Assuming an interface and an equivalent object alias create different runtime kinds."
+      ],
+      "self_check": [
+        "Which two properties are required before a value satisfies Entry?",
+        "Can a type alias name a union even though an interface cannot directly do so?"
+      ],
+      "exercise_prompt": "Construct the intersection from the unchanged parsed name and numeric score.",
+      "objective": "Preserve positive, zero, and negative scores across one structural formatting function.",
+      "language_delta": "Interfaces can declaration-merge while aliases can express unions; both disappear at runtime, and related labs add class behavior, readonly views, or satisfies checks.",
+      "prediction_prompt": "Write the Entry object created from `Bo -2` before interpolating its fields.",
+      "transfer_trap": "Java interfaces participate in nominal declarations and JVM metadata, unlike TypeScript's erased structural interface."
+    },
+    "ts-generics": {
+      "title": "Preserve an element type through first",
+      "concept": "first<T> keeps the caller's element type and returns undefined when no element exists. The implementation needs neither any nor a non-null assertion because its return union models emptiness.",
+      "worked_example": "The sample defines a generic last function and calls it with three strings. Its result demonstrates inference of string | undefined while deliberately selecting the opposite end.",
+      "common_mistakes": [
+        "Returning index one and confusing the second element with the leading element.",
+        "Forcing a value with `!` even though an empty readonly array is a legitimate input."
+      ],
+      "self_check": [
+        "What does T become when first receives a string array?",
+        "Why is undefined part of the declared result even when some cases are nonempty?"
+      ],
+      "exercise_prompt": "Return index zero from the generic helper and retain the explicit empty fallback at the caller.",
+      "objective": "Select the first token for two nonempty inputs and `none` for an empty stream.",
+      "language_delta": "Generics preserve relationships during checking and are erased for Node; keyof, indexed access, mapped, conditional, and utility types build further derivations from source types.",
+      "prediction_prompt": "Infer the return type and runtime value for a one-element token array.",
+      "transfer_trap": "Java generics use erasure with different variance rules, while Rust monomorphizes many generic uses; identical angle brackets do not imply identical machinery."
+    },
+    "ts-keyof-typeof": {
+      "title": "Guard a runtime key for keyof",
+      "concept": "typeof derives the static shape of limits and keyof derives its allowed property names. A predicate backed by Object.hasOwn accepts only properties stored directly on that object.",
+      "worked_example": "The example derives `tiny | huge`, treats `huge` as external text, and narrows it through an own-key predicate before indexing the demo limits.",
+      "common_mistakes": [
+        "Using `value in limits`, which also accepts inherited prototype names such as toString.",
+        "Confusing JavaScript's value-level typeof operator with TypeScript's type-query position."
+      ],
+      "self_check": [
+        "What union is produced by `keyof typeof limits`?",
+        "Why does Object.hasOwn reject constructor even though the in operator sees it?"
+      ],
+      "exercise_prompt": "Add an own-property type guard before indexing limits and choose the invalid result outside that branch.",
+      "objective": "Resolve both declared sizes while rejecting absent and prototype-inherited property names.",
+      "language_delta": "keyof has no Node runtime representation; Object.hasOwn supplies JavaScript evidence that the string denotes a direct property rather than a prototype member.",
+      "prediction_prompt": "Compare `Object.hasOwn(limits, \"toString\")` with `\"toString\" in limits` before choosing the branch.",
+      "transfer_trap": "Some dictionary membership operators traverse inherited state; an own-key requirement must exclude the prototype chain explicitly."
+    },
+    "ts-indexed-access": {
+      "title": "Reuse an array element type",
+      "concept": "User[\"scores\"][number] extracts the element type already declared by the model. Reusing it avoids a second handwritten score type that could drift later.",
+      "worked_example": "The worked model derives a tag element from a string array and assigns the fixed word `typed`. Both indexed selections exist only during checking.",
+      "common_mistakes": [
+        "Assigning raw stdin text to a derived number type without runtime conversion.",
+        "Repeating `number` manually everywhere and losing the connection to the source model."
+      ],
+      "self_check": [
+        "What type results after first selecting scores and then indexing it with number?",
+        "Which phase reports the starter's string-to-number mismatch?"
+      ],
+      "exercise_prompt": "Convert stdin before assigning it to the indexed-access score type.",
+      "objective": "Pass strict checking and echo positive, zero, and negative numeric values.",
+      "language_delta": "Indexed access computes a static type and emits no lookup code; Number is still required to cross the JavaScript input boundary.",
+      "prediction_prompt": "Classify the starter failure as TypeCheck before considering any stdout case.",
+      "transfer_trap": "Schema-derived types in other ecosystems may generate runtime validators too, but this TypeScript operator supplies checking only."
+    },
+    "ts-mapped-types": {
+      "title": "Map every feature key to a flag",
+      "concept": "Flags iterates over the Feature union and requires one boolean property for each member. That completeness prevents a new feature name from silently lacking configuration.",
+      "worked_example": "The demo maps `dark | cache` to two booleans and reports the enabled demo key. Both required keys appear even though only one is true.",
+      "common_mistakes": [
+        "Omitting share and expecting the mapped type to treat it as optional.",
+        "Printing a generic success word when the cases require the actual enabled feature name."
+      ],
+      "self_check": [
+        "Why does the incomplete starter fail before Node reads stdin?",
+        "What should both booleans be when the raw command is `none`?"
+      ],
+      "exercise_prompt": "Supply the missing mapped property and derive search, share, or none from both flags.",
+      "objective": "Make the checker enforce complete feature coverage while producing all three feasible runtime results.",
+      "language_delta": "Mapped types generate object requirements for the checker; they do not allocate properties or iterate keys during Node execution.",
+      "prediction_prompt": "Predict the TypeCheck diagnostic for the object containing only search.",
+      "transfer_trap": "A runtime map or dictionary is a data structure, whereas a TypeScript mapped type is a compile-time transformation."
+    },
+    "ts-conditional-types": {
+      "title": "Extract an element with a conditional type",
+      "concept": "ElementType tests whether T is an array-like type and uses infer to name its member. For string[] the selected checker branch is string.",
+      "worked_example": "The demonstration instantiates the same pattern with number[] and assigns eleven. No runtime condition inspects that value; the type selection is already erased.",
+      "common_mistakes": [
+        "Assigning Number(raw) after the conditional type has resolved to string.",
+        "Expecting `T extends ...` to choose a branch based on the contents of stdin."
+      ],
+      "self_check": [
+        "What type does Item represent when T is readonly string[]?",
+        "Can Node observe which conditional-type branch the checker selected?"
+      ],
+      "exercise_prompt": "Assign the incoming text to the extracted string element type without numeric conversion.",
+      "objective": "Type-check and reproduce three different text inputs, including characters that look numeric.",
+      "language_delta": "Conditional types run in TypeScript's type system only; JavaScript conditional expressions are separate emitted runtime syntax.",
+      "prediction_prompt": "Decide whether the text `42` changes the static TextElement type before running it.",
+      "transfer_trap": "Compile-time template or trait mechanisms in other languages may generate executable code, unlike this fully erased selection."
+    },
+    "ts-utility-types": {
+      "title": "Patch selected fields with utility types",
+      "concept": "Pick selects score from User and Partial makes that selected property optional. An empty patch represents no update; it does not manufacture a score value.",
+      "worked_example": "The demonstration builds an optional active-only patch for another profile model. Reading with a boolean fallback shows how the runtime object may or may not contain the property.",
+      "common_mistakes": [
+        "Inserting score one when the token is absent instead of leaving the patch empty.",
+        "Assuming Partial recursively changes nested properties or fills them with defaults."
+      ],
+      "self_check": [
+        "What object should represent the Lin input when no score token exists?",
+        "Which original User field is excluded by the Pick portion of ScorePatch?"
+      ],
+      "exercise_prompt": "Create either an empty score patch or a converted numeric score based on token presence.",
+      "objective": "Report supplied positive and negative scores while defaulting the genuinely missing property to zero.",
+      "language_delta": "Utility types rewrite static object shapes and emit nothing; ordinary JavaScript object construction determines which keys exist at runtime.",
+      "prediction_prompt": "Sketch the patch object for each of `Ada 5` and `Lin` before coalescing its score.",
+      "transfer_trap": "Optional fields in serialized data still need runtime parsing and validation even when a TypeScript Partial describes their source shape."
+    },
+    "ts-satisfies-as-const": {
+      "title": "Check routes while preserving literals",
+      "concept": "as const retains exact route strings and satisfies verifies the Record contract without replacing those literals. Object.hasOwn separately proves that external text names a direct route property.",
+      "worked_example": "The sample checks two status codes, narrows the text `ready` with an own-key predicate, and then reads the preserved `R` literal. The object remains normal JavaScript data after stripping.",
+      "common_mistakes": [
+        "Using the in operator and accidentally accepting inherited names such as constructor as routes.",
+        "Believing as const freezes the route object or recursively prevents runtime mutation."
+      ],
+      "self_check": [
+        "How does satisfies differ from an `as Record<string, string>` assertion here?",
+        "Why does Object.hasOwn establish a stronger route condition than the in operator?"
+      ],
+      "exercise_prompt": "Guard the requested route as an own property before indexing the satisfies-checked constant object.",
+      "objective": "Return both preserved paths while rejecting unknown and prototype-inherited names.",
+      "language_delta": "satisfies checks compatibility without casting, as const preserves literal types and marks literal-expression properties readonly at compile time without freezing runtime objects, and Object.hasOwn supplies the runtime membership proof.",
+      "prediction_prompt": "Evaluate `Object.hasOwn(routes, \"constructor\")` before deciding whether route indexing is allowed.",
+      "transfer_trap": "The in operator walks JavaScript's prototype chain; it is too broad when a configuration must accept only its declared own keys."
+    },
+    "ts-discriminated-unions": {
+      "title": "Checkpoint: exhaust a tagged shape union",
+      "concept": "Each Shape variant owns a literal kind and its corresponding measurements. Switching on that shared tag narrows fields safely, while assigning the impossible remainder to never checks exhaustiveness.",
+      "worked_example": "The worked union models success or error and returns from both switch cases. Its unrelated tags demonstrate the same narrowing mechanism without calculating rectangle or circle measurements.",
+      "common_mistakes": [
+        "Reading radius before proving that the value is the circle variant.",
+        "Adding a new kind later while leaving a default branch that silently hides the missing case."
+      ],
+      "self_check": [
+        "What exact type remains after the rectangle branch has returned?",
+        "Why does assigning a circle to never produce the starter's TypeCheck failure?"
+      ],
+      "exercise_prompt": "Handle the circle variant, then leave the never assertion to guard future additions.",
+      "objective": "Pass strict exhaustiveness checking and measure two tagged shapes across three cases.",
+      "language_delta": "The literal discriminant exists at runtime and drives JavaScript branching; TypeScript's narrowing and never proof are erased checker reasoning.",
+      "prediction_prompt": "Follow `circle 5` through parsing, tag narrowing, and the numeric return before execution.",
+      "transfer_trap": "A wildcard match in Rust or default switch elsewhere can conceal new variants just as an overly broad TypeScript fallback can."
+    },
+    "ts-async-promise": {
+      "title": "Await a typed promise",
+      "concept": "An async function always returns a Promise, even when it returns a number expression. await unwraps the fulfilled number inside main, and a final catch observes rejected completion.",
+      "worked_example": "The demonstration asynchronously increments nine, awaits ten, and emits a demo record. Its rejection callback accepts unknown rather than assuming every thrown value is Error.",
+      "common_mistakes": [
+        "Returning the original number from double and forgetting the requested transformation.",
+        "Calling main without observing its rejected Promise at the top-level boundary."
+      ],
+      "self_check": [
+        "What is the static return type of double even before it contains an await expression?",
+        "When does the process.stdout.write callback run relative to Promise fulfillment?"
+      ],
+      "exercise_prompt": "Resolve double with twice its argument while retaining await and the top-level rejection path.",
+      "objective": "Produce doubled results for positive, zero, and negative inputs through asynchronous control flow.",
+      "language_delta": "Promise scheduling is JavaScript runtime behavior; TypeScript verifies Promise<number> and catch values but does not provide an executor.",
+      "prediction_prompt": "Predict the fulfilled value carried by double for negative three.",
+      "transfer_trap": "Calling a Python coroutine does not execute it until scheduled, while invoking this async JavaScript function immediately returns an already-running Promise chain."
+    },
+    "ts-modules": {
+      "title": "Orient a public API in a single-file runner",
+      "concept": "This lab practices describing a public callable surface with a local API object. It deliberately stops short of claiming a real import graph because the judge supplies only one .ts file.",
+      "worked_example": "The sample exposes a transform function through DemoApi and reverses `module`. The object makes the boundary visible without depending on ESM or CommonJS resolution.",
+      "common_mistakes": [
+        "Assuming an export declaration alone proves that another file can resolve and execute the module.",
+        "Lowercasing the value even though the promised label behavior requires normalization to uppercase."
+      ],
+      "self_check": [
+        "What method signature must the local LabelApi implementation satisfy?",
+        "Which project settings would Node need before a genuine multi-file ESM exercise could be trusted?"
+      ],
+      "exercise_prompt": "Implement the declared local API behavior and transform stdin text to uppercase.",
+      "objective": "Exercise a typed public surface for ASCII and accented text without pretending to import another file.",
+      "language_delta": "Node chooses ESM or CommonJS from extensions and package metadata; a fixed single-file runner cannot honestly test both exporting and importing modules.",
+      "prediction_prompt": "Predict the method result for `é` using JavaScript's Unicode-aware uppercase conversion.",
+      "transfer_trap": "Module systems in browsers, bundlers, and CommonJS resolve files differently, so passing this orientation lab is not multi-file mastery."
+    },
+    "ts-error-handling": {
+      "title": "Capstone: validate and execute commands",
+      "concept": "The command parser must validate whole numeric tokens, reject division by zero, and construct a discriminated command. Async execution returns a Promise, while the final catch narrows unknown before labeling failure.",
+      "worked_example": "The example proves two subtle facts: parseInt accepts the numeric prefix of `12px`, and parsing `bad` yields NaN rather than throwing. A caught string is also narrowed with typeof before use.",
+      "common_mistakes": [
+        "Using parseInt for validation and accidentally accepting a token with trailing letters.",
+        "Writing `catch (error)` as though every JavaScript throw produces an Error instance."
+      ],
+      "self_check": [
+        "Why does Number reject `12px` while Number.parseInt accepts part of it?",
+        "Which command branch performs the zero-divisor check before asynchronous execution?"
+      ],
+      "exercise_prompt": "Build a strict parser, execute the exhaustive command union, and narrow failures from unknown.",
+      "objective": "Calculate valid add and divide commands while returning invalid for partial numbers and zero division.",
+      "language_delta": "TypeScript strict catch treats failures as unknown because JavaScript may throw any value; parseInt returns NaN on wholly invalid text and never enters catch by itself.",
+      "prediction_prompt": "Trace `add 12px 1` through conversion and identify the exact validation that rejects it.",
+      "transfer_trap": "Exception-only parsing patterns from other languages do not transfer: JavaScript numeric conversion often reports failure with NaN instead of throwing."
     }
   }
 }

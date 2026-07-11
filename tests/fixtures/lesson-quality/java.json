@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "lessons": {
+    "java-output": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        String name = parts[0];\n        int score = Integer.parseInt(parts[1]);\n        System.out.println(name + \":\" + score);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "wrong field separator",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "name + \":\" + score", "to": "name + \"-\" + score" }
+          ]
+        }
+      ]
+    },
+    "java-input": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        int sum = 0;\n        if (!text.isEmpty()) {\n            for (String token : text.split(\"\\\\s+\")) sum += Integer.parseInt(token);\n        }\n        System.out.println(sum);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtracts decoded tokens",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "sum += Integer.parseInt(token);", "to": "sum -= Integer.parseInt(token);" }
+          ]
+        }
+      ]
+    },
+    "java-variables-types": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        final String name = parts[0];\n        int score = Integer.parseInt(parts[1]);\n        int threshold = Integer.parseInt(parts[2]);\n        boolean passed = score >= threshold;\n        System.out.println(name + \":\" + score + \":\" + passed);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "excludes equal threshold",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "boolean passed = score >= threshold;", "to": "boolean passed = score > threshold;" }
+          ]
+        }
+      ]
+    },
+    "java-numbers-operators": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        int dividend = Integer.parseInt(parts[0]);\n        int divisor = Integer.parseInt(parts[1]);\n        int quotient = dividend / divisor;\n        int remainder = dividend % divisor;\n        System.out.println(quotient + \":\" + remainder);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "floors negative quotient",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "int quotient = dividend / divisor;", "to": "int quotient = Math.floorDiv(dividend, divisor);" }
+          ]
+        }
+      ]
+    },
+    "java-strings": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        boolean wrapped = text.length() >= 2 && ((text.startsWith(\"[\") && text.endsWith(\"]\")) || (text.startsWith(\"{\") && text.endsWith(\"}\")));\n        if (wrapped) text = text.substring(1, text.length() - 1);\n        System.out.println(text);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "ignores curly wrappers",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "((text.startsWith(\"[\") && text.endsWith(\"]\")) || (text.startsWith(\"{\") && text.endsWith(\"}\")))", "to": "(text.startsWith(\"[\") && text.endsWith(\"]\"))" }
+          ]
+        }
+      ]
+    },
+    "java-control-flow": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        int limit = Integer.parseInt(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip());\n        int total = 0;\n        for (int value = 1; value <= limit; value++) {\n            if (value % 2 != 0) total += value;\n        }\n        System.out.println(total);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "accumulates even values",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "value % 2 != 0", "to": "value % 2 == 0" }
+          ]
+        }
+      ]
+    },
+    "java-enum-switch": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    enum State { TODO, DONE, BLOCKED }\n\n    public static void main(String[] args) throws Exception {\n        State state = State.valueOf(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip());\n        String result = switch (state) {\n            case TODO -> \"work\";\n            case DONE -> \"ok\";\n            case BLOCKED -> \"blocked\";\n        };\n        System.out.println(result);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-methods": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static int area(int width, int height) {\n        return width * height;\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        int width = Integer.parseInt(parts[0]);\n        int height = Integer.parseInt(parts[1]);\n        System.out.println(area(width, height));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "adds dimensions",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "return width * height;", "to": "return width + height;" }
+          ]
+        }
+      ]
+    },
+    "java-overloading-varargs": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.Arrays;\n\nclass Solution {\n    static String label(String name, int total) {\n        return name + \":\" + total;\n    }\n\n    static String label(String name, int... values) {\n        int total = 0;\n        for (int value : values) total += value;\n        return label(name, total);\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        int[] values = Arrays.stream(parts, 1, parts.length).mapToInt(Integer::parseInt).toArray();\n        System.out.println(label(parts[0], values));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-packages-imports": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.ArrayList;\nimport java.util.Arrays;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        java.util.List<String> words = new ArrayList<>();\n        if (!text.isEmpty()) words.addAll(Arrays.asList(text.split(\"\\\\s+\")));\n        System.out.println(String.join(\"\", words));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-arrays-collections": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        int[] values = text.isEmpty() ? new int[0] : Arrays.stream(text.split(\"\\\\s+\")).mapToInt(Integer::parseInt).toArray();\n        List<Integer> list = new ArrayList<>();\n        Map<Integer, Integer> counts = new HashMap<>();\n        Set<Integer> unique = new HashSet<>();\n        for (int value : values) {\n            list.add(value);\n            counts.merge(value, 1, Integer::sum);\n            unique.add(value);\n        }\n        int sum = counts.entrySet().stream().mapToInt(entry -> entry.getKey() * entry.getValue()).sum();\n        System.out.println(sum + \":\" + list.size() + \":\" + unique.size());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "adds key and frequency",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "entry.getKey() * entry.getValue()", "to": "entry.getKey() + entry.getValue()" }
+          ]
+        }
+      ]
+    },
+    "java-generics": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.Arrays;\nimport java.util.List;\n\nclass Solution {\n    static <T> T last(List<T> values) {\n        return values.get(values.size() - 1);\n    }\n\n    public static void main(String[] args) throws Exception {\n        List<String> words = Arrays.asList(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\"));\n        System.out.println(last(words));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-streams-lambdas": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.Arrays;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        int[] values = text.isEmpty() ? new int[0] : Arrays.stream(text.split(\"\\\\s+\")).mapToInt(Integer::parseInt).toArray();\n        int total = Arrays.stream(values).filter(value -> value % 2 == 0).map(value -> value * value).sum();\n        System.out.println(total);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-comparators-sorting": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    record User(String name, int score) {}\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        List<User> users = new ArrayList<>();\n        for (int i = 0; i < parts.length; i += 2) users.add(new User(parts[i], Integer.parseInt(parts[i + 1])));\n        users.sort(Comparator.comparingInt(User::score).reversed().thenComparing(User::name));\n        User best = users.get(0);\n        System.out.println(best.name() + \":\" + best.score());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-classes-objects": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class Counter {\n        int value;\n        Counter(int value) { this.value = value; }\n        void add(int delta) { value += delta; }\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        Counter counter = new Counter(Integer.parseInt(parts[0]));\n        counter.add(Integer.parseInt(parts[1]));\n        System.out.println(counter.value);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtracts object delta",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "value += delta;", "to": "value -= delta;" }
+          ]
+        }
+      ]
+    },
+    "java-constructors": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class Rectangle {\n        final int width;\n        final int height;\n        Rectangle(int width, int height) {\n            this.width = width;\n            this.height = height;\n        }\n        int area() { return width * height; }\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        Rectangle rectangle = new Rectangle(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));\n        System.out.println(rectangle.area());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-encapsulation": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class Account {\n        private int balance;\n        void deposit(int amount) { if (amount > 0) balance += amount; }\n        int balance() { return balance; }\n    }\n\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Account account = new Account();\n        if (!text.isEmpty()) {\n            for (String token : text.split(\"\\\\s+\")) account.deposit(Integer.parseInt(token));\n        }\n        System.out.println(account.balance());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-static-members": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static final int FACTOR = 3;\n    static int scale(int value) { return value * FACTOR; }\n\n    public static void main(String[] args) throws Exception {\n        int value = Integer.parseInt(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip());\n        System.out.println(scale(value));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-interfaces": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.Locale;\n\nclass Solution {\n    interface Named { String name(); }\n    record User(String name) implements Named {}\n    static String render(Named value) { return value.name().toUpperCase(Locale.ROOT); }\n\n    public static void main(String[] args) throws Exception {\n        String name = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        System.out.println(render(new User(name)));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-inheritance-composition": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class BaseScore {\n        protected final int base;\n        BaseScore(int base) { this.base = base; }\n    }\n    record Bonus(int value) {}\n    static class Player extends BaseScore {\n        private final Bonus bonus;\n        Player(int base, int bonus) { super(base); this.bonus = new Bonus(bonus); }\n        int total() { return base + bonus.value(); }\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        Player player = new Player(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));\n        System.out.println(player.total());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-exceptions": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static int parseOr(String text, int fallback) {\n        try {\n            return Integer.parseInt(text);\n        } catch (NumberFormatException error) {\n            return fallback;\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        System.out.println(parseOr(parts[0], Integer.parseInt(parts[1])));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "discards provided fallback",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "return fallback;", "to": "return 0;" }
+          ]
+        }
+      ]
+    },
+    "java-optional": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String token = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Optional<String> value = token.equals(\"-\") ? Optional.empty() : Optional.of(token);\n        System.out.println(value.filter(text -> text.length() <= 3).orElse(\"missing\"));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-try-with-resources": {
+      "reference_solution": "import java.io.ByteArrayInputStream;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Locale;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        byte[] input = System.in.readAllBytes();\n        try (var resource = new ByteArrayInputStream(input)) {\n            String text = new String(resource.readAllBytes(), StandardCharsets.UTF_8).strip().toUpperCase(Locale.ROOT);\n            System.out.println(text.isEmpty() ? \"EMPTY\" : text);\n        }\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-equality-hashcode": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    static final class Point {\n        final int x;\n        final int y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override public boolean equals(Object value) {\n            return value instanceof Point other && x == other.x && y == other.y;\n        }\n        @Override public int hashCode() { return Objects.hash(x, y); }\n    }\n\n    public static void main(String[] args) throws Exception {\n        int[] values = Arrays.stream(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\")).mapToInt(Integer::parseInt).toArray();\n        Set<Point> points = new HashSet<>();\n        points.add(new Point(values[0], values[1]));\n        points.add(new Point(values[2], values[3]));\n        System.out.println(points.size());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-records": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    record Snapshot(List<Integer> values) {\n        Snapshot {\n            values = List.copyOf(values);\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        List<Integer> source = new ArrayList<>();\n        if (!text.isEmpty()) for (String token : text.split(\"\\\\s+\")) source.add(Integer.parseInt(token));\n        Snapshot snapshot = new Snapshot(source);\n        source.clear();\n        int total = snapshot.values().stream().mapToInt(Integer::intValue).sum();\n        System.out.println(total);\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "retains mutable list alias",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": "            values = List.copyOf(values);\n", "to": "" }
+          ]
+        }
+      ]
+    },
+    "java-annotations": {
+      "reference_solution": "import java.lang.annotation.*;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Locale;\n\nclass Solution {\n    @Retention(RetentionPolicy.RUNTIME)\n    @Target(ElementType.METHOD)\n    @interface Label { String value(); }\n\n    @Label(\"audit\")\n    static String normalize(String text) { return text.toUpperCase(Locale.ROOT); }\n\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Label label = Solution.class.getDeclaredMethod(\"normalize\", String.class).getAnnotation(Label.class);\n        System.out.println(label.value() + \":\" + normalize(text));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-sealed-classes": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    sealed interface Shape permits Rect, Circle, Dot {}\n    record Rect(int width, int height) implements Shape {}\n    record Circle(int radius) implements Shape {}\n    record Dot() implements Shape {}\n\n    static int metric(Shape shape) {\n        return switch (shape) {\n            case Rect(int width, int height) -> width * height;\n            case Circle(int radius) -> radius * 2;\n            case Dot() -> 0;\n        };\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        Shape shape = switch (parts[0]) {\n            case \"rect\" -> new Rect(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));\n            case \"circle\" -> new Circle(Integer.parseInt(parts[1]));\n            default -> new Dot();\n        };\n        System.out.println(metric(shape));\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "java-testing-assert": {
+      "reference_solution": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    record User(String name, int score) {}\n\n    static User choose(List<User> users) {\n        Comparator<User> order = Comparator.comparingInt(User::score).reversed().thenComparing(User::name);\n        return users.stream().sorted(order).findFirst().orElse(new User(\"none\", 0));\n    }\n\n    static void check(boolean condition, String message) {\n        if (!condition) throw new AssertionError(message);\n    }\n\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        List<User> users = new ArrayList<>();\n        if (!text.isEmpty()) {\n            String[] parts = text.split(\"\\\\s+\");\n            for (int i = 0; i < parts.length; i += 2) users.add(new User(parts[i], Integer.parseInt(parts[i + 1])));\n        }\n        check(choose(List.of()).equals(new User(\"none\", 0)), \"empty fallback\");\n        User winner = choose(users);\n        System.out.println(winner.name() + \":\" + winner.score());\n    }\n}\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "reverses equal-score names",
+          "expected_failure": "output",
+          "replacements": [
+            { "from": ".thenComparing(User::name)", "to": ".thenComparing(User::name, Comparator.reverseOrder())" }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "lessons": {
+    "ts-output": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", score = \"\"] = raw.split(/\\s+/);\nprocess.stdout.write(`${name}:${score}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "reverse record fields",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "`${name}:${score}\\n`",
+              "to": "`${score}:${name}\\n`"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-input": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst values: number[] = raw ? raw.split(/\\s+/).map(Number) : [];\nconst total = values.reduce((sum, value) => sum + value, 0);\nprocess.stdout.write(`${total}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtract later tokens",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "sum + value",
+              "to": "sum - value"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-primitives": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText = \"0\", thresholdText = \"0\"] = raw.split(/\\s+/);\nconst score: number = Number(scoreText);\nconst threshold: number = Number(thresholdText);\nconst status: string = score >= threshold ? \"pass\" : \"retry\";\nprocess.stdout.write(`${name}:${score}:${status}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "reject an equal threshold",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "score >= threshold",
+              "to": "score > threshold"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-let-const": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [label = \"\", firstText = \"0\", secondText = \"0\"] = raw.split(/\\s+/);\nconst first: number = Number(firstText);\nconst second: number = Number(secondText);\nlet total: number = first;\ntotal += second;\nprocess.stdout.write(`${label}:${total}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-strings-templates": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").replace(/\\r?\\n$/, \"\");\nconst [rawName = \"\", score = \"\"] = raw.split(\"|\");\nconst name: string = rawName.trim();\nprocess.stdout.write(`${name}:${score}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "erase score padding",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "replace(/\\r?\\n$/, \"\")",
+              "to": "trimEnd()"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-arrays-tuples": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", ...numberTexts] = raw ? raw.split(/\\s+/) : [\"\"];\nconst values: number[] = numberTexts.map(Number);\nconst result: [string, number] = [name, values.reduce((sum, value) => sum + value, 0)];\nprocess.stdout.write(`${result[0]}:${result[1]}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtract tuple values",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "sum + value",
+              "to": "sum - value"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-iterables": {
+      "reference_solution": "function join(values: Iterable<string>): string {\n  let result = \"\";\n  for (const value of values) result += value;\n  return result;\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst tokens: string[] = raw ? raw.split(/\\s+/) : [];\nprocess.stdout.write(`${join(tokens)}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-array-methods": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst values: number[] = raw ? raw.split(/\\s+/).map(Number) : [];\nconst total = values.filter((value) => value % 2 === 0).map((value) => value * value).reduce((sum, value) => sum + value, 0);\nprocess.stdout.write(`${total}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-objects": {
+      "reference_solution": "type Rectangle = { width: number; height: number };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [widthText = \"0\", heightText = \"0\"] = raw.split(/\\s+/);\nconst rectangle: Rectangle = { width: Number(widthText), height: Number(heightText) };\nfunction area(rect: Rectangle): number { return rect.width * rect.height; }\nprocess.stdout.write(`${area(rectangle)}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "add rectangle sides",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "rect.width * rect.height",
+              "to": "rect.width + rect.height"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-classes": {
+      "reference_solution": "class Counter {\n  private value: number;\n  constructor(value: number) { this.value = value; }\n  increment(): number { this.value += 1; return this.value; }\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nprocess.stdout.write(`${new Counter(Number(raw)).increment()}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-readonly": {
+      "reference_solution": "type Config = { readonly name: string; readonly scores: readonly number[] };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", ...scoreTexts] = raw ? raw.split(/\\s+/) : [\"\"];\nconst config: Config = { name, scores: scoreTexts.map(Number) };\nconst total = config.scores.reduce((sum, score) => sum + score, 0);\nprocess.stdout.write(`${config.name}:${total}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "mutate a readonly array",
+          "expected_failure": "type_check",
+          "replacements": [
+            {
+              "from": "const total = config.scores.reduce((sum, score) => sum + score, 0);",
+              "to": "const total = config.scores.push(0);"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-control-flow": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst n: number = Number(raw);\nlet total = 0;\nfor (let value = 1; value <= n; value += 1) if (value % 2 === 1) total += value;\nprocess.stdout.write(`${total}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-functions": {
+      "reference_solution": "function area(input: string): number {\n  const [width, height] = input.split(/\\s+/).map(Number);\n  return width * height;\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nprocess.stdout.write(`${area(raw)}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "lie about the return contract",
+          "expected_failure": "type_check",
+          "replacements": [
+            {
+              "from": "function area(input: string): number {",
+              "to": "function area(input: string): string {"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-union-narrowing": {
+      "reference_solution": "function format(value: string | number): string {\n  return typeof value === \"string\" ? value.toUpperCase() : value.toFixed(0);\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [kind = \"\", text = \"\"] = raw.split(/\\s+/);\nconst value: string | number = kind === \"n\" ? Number(text) : text;\nprocess.stdout.write(`${format(value)}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "keep a decimal place",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "value.toFixed(0)",
+              "to": "value.toFixed(1)"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-literal-types": {
+      "reference_solution": "type Direction = \"left\" | \"right\";\nconst turn = (direction: Direction): string => direction === \"left\" ? \"L\" : \"R\";\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst result = raw === \"left\" || raw === \"right\" ? turn(raw) : \"invalid\";\nprocess.stdout.write(`${result}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-optional-nullish": {
+      "reference_solution": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText = \"none\"] = raw.split(/\\s+/);\nconst score: number | null = scoreText === \"none\" ? null : Number(scoreText);\nconst shown: number = score ?? 10;\nprocess.stdout.write(`${name}:${shown}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "default a valid zero",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "score ?? 10",
+              "to": "score || 10"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-interfaces-aliases": {
+      "reference_solution": "interface Named { name: string }\ntype Scored = { score: number };\ntype Entry = Named & Scored;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText = \"0\"] = raw.split(/\\s+/);\nconst entry: Entry = { name, score: Number(scoreText) };\nprocess.stdout.write(`${entry.name}:${entry.score}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "reverse the structural fields",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "`${entry.name}:${entry.score}\\n`",
+              "to": "`${entry.score}:${entry.name}\\n`"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-generics": {
+      "reference_solution": "function first<T>(items: readonly T[]): T | undefined { return items[0]; }\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst tokens: string[] = raw ? raw.split(/\\s+/) : [];\nprocess.stdout.write(`${first(tokens) ?? \"none\"}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "select the last element",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "return items[0];",
+              "to": "return items[items.length - 1];"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-keyof-typeof": {
+      "reference_solution": "const limits = { small: 2, large: 5 } as const;\ntype LimitKey = keyof typeof limits;\nfunction isLimitKey(value: string): value is LimitKey { return Object.hasOwn(limits, value); }\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst result = isLimitKey(raw) ? String(limits[raw]) : \"invalid\";\nprocess.stdout.write(`${result}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-indexed-access": {
+      "reference_solution": "type User = { scores: number[] };\ntype Score = User[\"scores\"][number];\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst score: Score = Number(raw);\nprocess.stdout.write(`${score}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "skip numeric conversion",
+          "expected_failure": "type_check",
+          "replacements": [
+            {
+              "from": "const score: Score = Number(raw);",
+              "to": "const score: Score = raw;"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-mapped-types": {
+      "reference_solution": "type Feature = \"search\" | \"share\";\ntype Flags = { [Key in Feature]: boolean };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst flags: Flags = { search: raw === \"search\", share: raw === \"share\" };\nconst enabled: Feature | \"none\" = flags.search ? \"search\" : flags.share ? \"share\" : \"none\";\nprocess.stdout.write(`${enabled}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "omit a mapped key",
+          "expected_failure": "type_check",
+          "replacements": [
+            {
+              "from": "const flags: Flags = { search: raw === \"search\", share: raw === \"share\" };",
+              "to": "const flags: Flags = { search: raw === \"search\" };"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-conditional-types": {
+      "reference_solution": "type ElementType<T> = T extends readonly (infer Item)[] ? Item : T;\ntype TextElement = ElementType<string[]>;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst value: TextElement = raw;\nprocess.stdout.write(`${value}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "assign a number branch",
+          "expected_failure": "type_check",
+          "replacements": [
+            {
+              "from": "const value: TextElement = raw;",
+              "to": "const value: TextElement = Number(raw);"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-utility-types": {
+      "reference_solution": "type User = { name: string; score: number };\ntype ScorePatch = Partial<Pick<User, \"score\">>;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText] = raw.split(/\\s+/);\nconst patch: ScorePatch = scoreText === undefined ? {} : { score: Number(scoreText) };\nprocess.stdout.write(`${name}:${patch.score ?? 0}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-satisfies-as-const": {
+      "reference_solution": "const routes = { home: \"/\", user: \"/users\" } as const satisfies Record<string, string>;\ntype RouteKey = keyof typeof routes;\nfunction isRouteKey(value: string): value is RouteKey { return Object.hasOwn(routes, value); }\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst result = isRouteKey(raw) ? routes[raw] : \"invalid\";\nprocess.stdout.write(`${result}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-discriminated-unions": {
+      "reference_solution": "type Shape = { kind: \"rect\"; width: number; height: number } | { kind: \"circle\"; radius: number };\nfunction measure(shape: Shape): number {\n  switch (shape.kind) {\n    case \"rect\": return shape.width * shape.height;\n    case \"circle\": return shape.radius * 2;\n    default: { const exhaustive: never = shape; return exhaustive; }\n  }\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [kind, first = \"0\", second = \"0\"] = raw.split(/\\s+/);\nconst shape: Shape = kind === \"rect\" ? { kind, width: Number(first), height: Number(second) } : { kind: \"circle\", radius: Number(first) };\nprocess.stdout.write(`${measure(shape)}\\n`);\n",
+      "starter_failure": "type_check",
+      "mutants": [
+        {
+          "name": "add instead of doubling",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "shape.radius * 2",
+              "to": "shape.radius + 2"
+            }
+          ]
+        }
+      ]
+    },
+    "ts-async-promise": {
+      "reference_solution": "async function double(value: number): Promise<number> { return value * 2; }\nasync function main(): Promise<void> {\n  const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n  process.stdout.write(`${await double(Number(raw))}\\n`);\n}\nmain().catch((error: unknown) => process.stdout.write(`error:${String(error)}\\n`));\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-modules": {
+      "reference_solution": "type LabelApi = { label(value: string): string };\nconst api: LabelApi = { label: (value) => value.toUpperCase() };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nprocess.stdout.write(`${api.label(raw)}\\n`);\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "ts-error-handling": {
+      "reference_solution": "type Command = { kind: \"add\"; left: number; right: number } | { kind: \"divide\"; left: number; right: number };\nfunction parseNumber(token: string | undefined): number {\n  if (token === undefined || token.trim() === \"\") throw new Error(\"missing number\");\n  const value = Number(token);\n  if (!Number.isFinite(value)) throw new Error(\"invalid number\");\n  return value;\n}\nfunction parse(input: string): Command {\n  const [kind, leftText, rightText] = input.split(/\\s+/);\n  if (kind !== \"add\" && kind !== \"divide\") throw new Error(\"invalid command\");\n  const left = parseNumber(leftText);\n  const right = parseNumber(rightText);\n  if (kind === \"divide\") {\n    if (right === 0) throw new Error(\"division by zero\");\n    return { kind, left, right };\n  }\n  return { kind: \"add\", left, right };\n}\nasync function execute(command: Command): Promise<number> {\n  switch (command.kind) {\n    case \"add\": return command.left + command.right;\n    case \"divide\": return command.left / command.right;\n    default: { const exhaustive: never = command; return exhaustive; }\n  }\n}\nfunction failureLabel(error: unknown): string { return error instanceof Error ? \"invalid\" : \"unknown\"; }\nasync function main(): Promise<void> {\n  const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n  process.stdout.write(`${await execute(parse(raw))}\\n`);\n}\nmain().catch((error: unknown) => process.stdout.write(`${failureLabel(error)}\\n`));\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "accept a numeric prefix",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "const value = Number(token);",
+              "to": "const value = Number.parseInt(token, 10);"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

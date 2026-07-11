@@ -1,587 +1,841 @@
 {
+  "schema_version": 1,
+  "runtime": "rust",
   "lessons": [
     {
-      "aliases": [],
-      "body": "println! formats values and writes exactly one line to stdout.",
-      "cases": [
-        {
-          "input": "",
-          "output": "score=7\n"
-        }
-      ],
-      "example": "fn main() {\n    let score = 7;\n    println!(\"example:score={score}\");\n}",
       "id": "rust-output",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/std/macro.println.html"
+      "title": "Format exact output with println!",
+      "body": "Rust checks formatting placeholders at compile time. println! writes the formatted values and then one newline, so punctuation belongs in the format string.",
+      "example": "fn main() {\n    let tool = \"rustc\";\n    let edition = 2024;\n    println!(\"{tool}-{edition}\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn render(name: &str, score: &str) -> String {\n    // TODO: use the exact field separator required by stdout.\n    format!(\"{name} {score}\")\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let name = fields.next().unwrap();\n    let score = fields.next().unwrap();\n    println!(\"{}\", render(name, score));\n}\n",
+      "cases": [
+        {
+          "input": "Ada 7",
+          "output": "Ada:7\n"
+        },
+        {
+          "input": "Lin 0",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": "José 12",
+          "output": "José:12\n"
+        }
       ],
-      "starter": "fn main() {\n    let score = 7;\n    // TODO: format the value above for stdout\n    println!(\"TODO\");\n}\n",
-      "title": "Output",
-      "track": "core"
+      "refs": [
+        "https://doc.rust-lang.org/std/macro.println.html",
+        "https://doc.rust-lang.org/edition-guide/rust-2024/index.html"
+      ]
     },
     {
-      "aliases": [],
-      "body": "let creates immutable bindings by default; mut makes rebinding through the same name explicit.",
-      "cases": [
-        {
-          "input": "",
-          "output": "sum:3\n"
-        }
-      ],
-      "example": "fn main() {\n    let label = \"sum\";\n    let mut total = 1;\n    total += 2;\n    println!(\"example:{label}:{total}\");\n}",
       "id": "rust-variables",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
+      "title": "Choose mutation or shadowing deliberately",
+      "body": "Bindings are immutable unless declared mut. Reassignment changes a mutable place, while shadowing with let creates a fresh binding that may even have a different type.",
+      "example": "fn main() {\n    let label = \"count\";\n    let mut value = 2;\n    value += 3;\n    let value = value * 2;\n    println!(\"{label}:{value}\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn accumulate(values: &[i64]) -> i64 {\n    let mut total = 1_i64;\n    // TODO: choose the operation and identity for an additive accumulator.\n    for &value in values { total *= value; }\n    total\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let label = fields.next().unwrap();\n    let values = fields.map(|field| field.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{label}:{}\", accumulate(&values));\n}\n",
+      "cases": [
+        {
+          "input": "sum 1 2",
+          "output": "sum:3\n"
+        },
+        {
+          "input": "net -2 5",
+          "output": "net:3\n"
+        },
+        {
+          "input": "zero 0 0",
+          "output": "zero:0\n"
+        }
+      ],
       "refs": [
         "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
-      ],
-      "starter": "fn main() {\n    let label = \"TODO\";\n    let mut total = 1;\n    // TODO: change total with mutation before formatting\n    total += 0;\n    println!(\"{label}:{total}\");\n}\n",
-      "title": "Bindings and mutability",
-      "track": "core"
+      ]
     },
     {
-      "aliases": [],
-      "body": "Numeric types are explicit when inference is not enough; tuples group a fixed number of different values.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "fn main() {\n    let pair: (i32, i32) = (2, 3);\n    let sum = pair.0 + pair.1;\n    println!(\"example:{sum}\");\n}",
       "id": "rust-numbers-tuples",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch03-02-data-types.html"
-      ],
-      "starter": "fn main() {\n    let pair: (i32, i32) = (2, 3);\n    // TODO: use both tuple fields in the calculation\n    let sum = pair.0;\n    println!(\"{sum}\");\n}\n",
-      "title": "Numbers and tuples",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "String owns growable UTF-8 text; &str is a borrowed string slice into existing UTF-8 text.",
+      "title": "Pair integer quotient and remainder",
+      "body": "Signed integer division truncates toward zero, and the remainder keeps the dividend sign. Inputs exclude a zero divisor and the overflowing i64::MIN divided by -1 pair.",
+      "example": "fn main() {\n    let result = (23_i64 / 4, 23_i64 % 4);\n    println!(\"{}:{}\", result.0, result.1);\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn quotient_remainder(left: i64, right: i64) -> (i64, i64) {\n    // TODO: put quotient and remainder in the requested tuple positions.\n    (left % right, left / right)\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let pair = quotient_remainder(values[0], values[1]);\n    println!(\"{}:{}\", pair.0, pair.1);\n}\n",
       "cases": [
         {
-          "input": "",
-          "output": "rust:7\n"
+          "input": "17 5",
+          "output": "3:2\n"
+        },
+        {
+          "input": "-17 5",
+          "output": "-3:-2\n"
+        },
+        {
+          "input": "17 -5",
+          "output": "-3:2\n"
         }
       ],
-      "example": "fn main() {\n    let mut name = String::from(\"rust\");\n    name.push_str(\"ace\");\n    let prefix: &str = &name[..4];\n    println!(\"example:{prefix}:{}\", name.len());\n}",
-      "id": "rust-strings",
-      "kind": "lesson",
-      "level": "basic",
       "refs": [
-        "https://doc.rust-lang.org/book/ch04-03-slices.html"
-      ],
-      "starter": "fn main() {\n    let mut name = String::from(\"rust\");\n    // TODO: extend the owned String before slicing and formatting\n    name.push_str(\"\");\n    let prefix: &str = &name[..4];\n    println!(\"{prefix}:{}\", name.len());\n}\n",
-      "title": "Strings",
-      "track": "core"
+        "https://doc.rust-lang.org/reference/expressions/operator-expr.html#arithmetic-and-logical-binary-operators"
+      ]
     },
     {
-      "aliases": [],
-      "body": "if can produce a value, and loop forms such as for let you turn ranges or collections into accumulated results.",
-      "cases": [
-        {
-          "input": "",
-          "output": "odd:6\n"
-        }
-      ],
-      "example": "fn main() {\n    let n = 3;\n    let parity = if n % 2 == 0 { \"even\" } else { \"odd\" };\n    let mut total = 0;\n    for value in 1..=n {\n        total += value;\n    }\n    println!(\"example:{parity}:{total}\");\n}",
-      "id": "rust-control-flow",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
-      ],
-      "starter": "fn main() {\n    let n = 3;\n    let parity = if n % 2 == 0 { \"even\" } else { \"TODO\" };\n    let mut total = 0;\n    // TODO: include 1, 2, and 3 in the sum\n    for value in 1..n {\n        total += value;\n    }\n    println!(\"{parity}:{total}\");\n}\n",
-      "title": "Control flow",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Function signatures name parameter types and return types; the last expression can be the returned value.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "fn area(width: u32, height: u32) -> u32 {\n    width * height\n}\n\nfn main() {\n    println!(\"example:{}\", area(3, 4));\n}",
-      "id": "rust-functions",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
-      ],
-      "starter": "fn area(width: u32, height: u32) -> u32 {\n    // TODO: return rectangle area, not perimeter\n    width + height\n}\n\nfn main() {\n    println!(\"{}\", area(3, 4));\n}\n",
-      "title": "Functions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A struct names related fields, and an impl block attaches methods and associated functions to that type.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "struct Rectangle {\n    width: u32,\n    height: u32,\n}\n\nimpl Rectangle {\n    fn area(&self) -> u32 {\n        self.width * self.height\n    }\n}\n\nfn main() {\n    let rect = Rectangle { width: 3, height: 4 };\n    println!(\"example:{}\", rect.area());\n}",
-      "id": "rust-structs-impl",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch05-00-structs.html"
-      ],
-      "starter": "struct Rectangle {\n    width: u32,\n    height: u32,\n}\n\nimpl Rectangle {\n    fn area(&self) -> u32 {\n        // TODO: calculate from both fields\n        self.width + self.height\n    }\n}\n\nfn main() {\n    let rect = Rectangle { width: 3, height: 4 };\n    println!(\"{}\", rect.area());\n}\n",
-      "title": "Structs and impl",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Enums model a closed set of variants, and match forces each variant to be handled deliberately.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "enum Command {\n    Add(i32, i32),\n    Quit,\n}\n\nfn run(command: Command) -> i32 {\n    match command {\n        Command::Add(a, b) => a + b,\n        Command::Quit => 0,\n    }\n}\n\nfn main() {\n    println!(\"example:{}\", run(Command::Add(2, 3)));\n}",
-      "id": "rust-enum-match",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch06-00-enums.html"
-      ],
-      "starter": "enum Command {\n    Add(i32, i32),\n    Quit,\n}\n\nfn run(command: Command) -> i32 {\n    match command {\n        // TODO: return the sum carried by Add\n        Command::Add(_a, _b) => 0,\n        Command::Quit => 0,\n    }\n}\n\nfn main() {\n    println!(\"{}\", run(Command::Add(2, 3)));\n}\n",
-      "title": "Enums and match",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Option<T> makes absence explicit, so code must handle Some(value) and None instead of assuming a value exists.",
-      "cases": [
-        {
-          "input": "",
-          "output": "r\n"
-        }
-      ],
-      "example": "fn first_char(text: &str) -> Option<char> {\n    text.chars().next()\n}\n\nfn main() {\n    if let Some(ch) = first_char(\"rust\") {\n        println!(\"example:{ch}\");\n    } else {\n        println!(\"example:empty\");\n    }\n}",
-      "id": "rust-option",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/std/option/enum.Option.html"
-      ],
-      "starter": "fn first_char(text: &str) -> Option<char> {\n    text.chars().next()\n}\n\nfn main() {\n    // TODO: choose input that makes Some('r') flow through if let\n    if let Some(ch) = first_char(\"\") {\n        println!(\"{ch}\");\n    } else {\n        println!(\"empty\");\n    }\n}\n",
-      "title": "Option and if let",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "mod creates a namespace, pub exposes selected items, and use brings a path into local scope without changing ownership.",
-      "cases": [
-        {
-          "input": "",
-          "output": "pass\n"
-        }
-      ],
-      "example": "mod scoring {\n    pub fn label(score: u32) -> &'static str {\n        if score >= 80 { \"pass\" } else { \"retry\" }\n    }\n}\n\nuse scoring::label;\n\nfn main() {\n    println!(\"example:{}\", label(91));\n}",
-      "id": "rust-modules-use",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"
-      ],
-      "starter": "mod scoring {\n    pub fn label(score: u32) -> &'static str {\n        if score >= 80 { \"pass\" } else { \"retry\" }\n    }\n}\n\nuse scoring::label;\n\nfn main() {\n    // TODO: pass a score that selects pass\n    println!(\"{}\", label(10));\n}\n",
-      "title": "Modules and use",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Coding-test Rust usually reads stdin as text, splits it, parses tokens once, and solves with typed values.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let sum: i32 = input.split_whitespace()\n        .map(|token| token.parse::<i32>().unwrap())\n        .sum();\n    println!(\"example:{sum}\");\n}",
       "id": "rust-input",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/std/io/trait.Read.html"
-      ],
-      "starter": "use std::io::{self, Read};\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    // TODO: parse all integers from stdin and print their sum\n    let sum = 0;\n    println!(\"{sum}\");\n}\n",
-      "title": "Input parsing",
-      "track": "core"
-    },
-    {
       "aliases": [],
-      "body": "Vec<T> stores ordered values, while HashMap<K, V> stores lookups by key; entry is the usual counting API.",
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Read and tokenize all standard input",
+      "body": "Read::read_to_string consumes stdin into owned UTF-8 text. split_whitespace handles spaces and line breaks, while parsing each token remains a fallible Result operation.",
+      "example": "use std::io::Read;\n\nfn main() {\n    let mut source = &b\"8 5\"[..];\n    let mut text = String::new();\n    source.read_to_string(&mut text).unwrap();\n    let total: i32 = text.split_whitespace().map(|part| part.parse::<i32>().unwrap()).sum();\n    println!(\"{total}\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn combine(input: &str) -> i64 {\n    // TODO: combine the parsed stream with the additive operation and identity.\n    input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).product()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", combine(&input));\n}\n",
       "cases": [
         {
+          "input": "2 3",
+          "output": "5\n"
+        },
+        {
+          "input": "-1\n5 2",
+          "output": "6\n"
+        },
+        {
           "input": "",
-          "output": "6 2\n"
+          "output": "0\n"
         }
       ],
-      "example": "use std::collections::HashMap;\n\nfn main() {\n    let nums = vec![1, 2, 3];\n    let mut counts = HashMap::new();\n    for word in [\"red\", \"blue\", \"red\"] {\n        *counts.entry(word).or_insert(0) += 1;\n    }\n    println!(\"example:{} {}\", nums.iter().sum::<i32>(), counts[\"red\"]);\n}",
+      "refs": [
+        "https://doc.rust-lang.org/std/io/trait.Read.html#method.read_to_string"
+      ]
+    },
+    {
       "id": "rust-vec-hashmap",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/std/vec/struct.Vec.html",
-        "https://doc.rust-lang.org/std/collections/struct.HashMap.html"
-      ],
-      "starter": "use std::collections::HashMap;\n\nfn main() {\n    let nums = vec![1, 2, 3];\n    let mut counts = HashMap::new();\n    for word in [\"red\", \"blue\", \"red\"] {\n        // TODO: count each word with entry(...).or_insert(...)\n        counts.insert(word, 1);\n    }\n    println!(\"{} {}\", nums.len(), counts[\"red\"]);\n}\n",
-      "title": "Vec and HashMap",
-      "track": "core"
-    },
-    {
       "aliases": [],
-      "body": "Borrowed slices let functions read part of owned data without taking ownership of the whole value.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Keep order in Vec and counts in HashMap",
+      "body": "Vec preserves insertion order; HashMap provides keyed lookup but no stable iteration order. The entry API updates a count without a separate contains check.",
+      "example": "use std::collections::HashMap;\n\nfn main() {\n    let tags = vec![\"red\", \"blue\", \"red\"];\n    let mut counts = HashMap::new();\n    for tag in tags { *counts.entry(tag).or_insert(0) += 1; }\n    println!(\"{}\", counts.len());\n}\n",
+      "starter": "use std::collections::HashMap;\nuse std::io::{self, Read};\n\nfn summarize(query: &str, values: &[&str]) -> (usize, usize) {\n    let counts = HashMap::<&str, usize>::new();\n    // TODO: populate counts from values through the entry API.\n    (values.len(), counts.get(query).copied().unwrap_or(0))\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let query = fields.next().unwrap();\n    let values = fields.collect::<Vec<_>>();\n    let (length, count) = summarize(query, &values);\n    println!(\"{length} {count}\");\n}\n",
       "cases": [
         {
-          "input": "",
-          "output": "rust\n"
+          "input": "red red blue red",
+          "output": "3 2\n"
+        },
+        {
+          "input": "x a b",
+          "output": "2 0\n"
+        },
+        {
+          "input": "a a a a",
+          "output": "3 3\n"
         }
       ],
-      "example": "fn first_word(text: &str) -> &str {\n    text.split_whitespace().next().unwrap_or(\"\")\n}\n\nfn main() {\n    let line = String::from(\"rust rules\");\n    println!(\"example:{}\", first_word(&line));\n}\n",
-      "id": "rust-borrowing-slices",
-      "kind": "lesson",
-      "level": "intermediate",
       "refs": [
-        "https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html"
-      ],
-      "starter": "fn first_word(text: &str) -> &str {\n    text.split_whitespace().next().unwrap_or(\"\")\n}\n\nfn main() {\n    let line = String::from(\"rust rules\");\n    // TODO: borrow the String so first_word can read it\n    println!(\"{}\", first_word(\"\"));\n}\n",
-      "title": "Borrowing and slices",
-      "track": "core"
+        "https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.entry",
+        "https://doc.rust-lang.org/std/vec/struct.Vec.html"
+      ]
     },
     {
+      "id": "rust-control-flow",
       "aliases": [],
-      "body": "Result<T, E> represents recoverable failure; the ? operator unwraps Ok or returns the Err to the caller.",
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Use expression branches and inclusive ranges",
+      "body": "if selects a value only when every branch has a compatible type. The range 1..=n includes n, whereas 1..n stops before it.",
+      "example": "fn main() {\n    let state = if 7 > 5 { \"ready\" } else { \"wait\" };\n    let triangular: i32 = (1..=3).sum();\n    println!(\"{state}:{triangular}\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn summarize(n: i64) -> (&'static str, i64) {\n    let kind = if n % 2 == 0 { \"even\" } else { \"odd\" };\n    // TODO: make the range include its upper boundary.\n    let total = (1..n).sum();\n    (kind, total)\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let (kind, total) = summarize(input.trim().parse().unwrap());\n    println!(\"{kind}:{total}\");\n}\n",
       "cases": [
         {
-          "input": "2 3\n",
-          "output": "5\n"
+          "input": "3",
+          "output": "odd:6\n"
+        },
+        {
+          "input": "4",
+          "output": "even:10\n"
+        },
+        {
+          "input": "0",
+          "output": "even:0\n"
         }
       ],
-      "example": "fn parse_count(text: &str) -> Result<i32, std::num::ParseIntError> {\n    text.parse::<i32>()\n}\n\nfn main() -> Result<(), std::num::ParseIntError> {\n    let count = parse_count(\"3\")?;\n    println!(\"example:{}\", count + 2);\n    Ok(())\n}",
-      "id": "rust-result",
-      "kind": "lesson",
-      "level": "intermediate",
       "refs": [
-        "https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html"
-      ],
-      "starter": "fn parse_count(text: &str) -> Result<i32, std::num::ParseIntError> {\n    text.parse::<i32>()\n}\n\nfn main() -> Result<(), std::num::ParseIntError> {\n    // TODO: parse 3 and use ? instead of unwrap\n    let count = parse_count(\"0\")?;\n    println!(\"{}\", count + 2);\n    Ok(())\n}\n",
-      "title": "Result and ?",
-      "track": "core"
+        "https://doc.rust-lang.org/book/ch03-05-control-flow.html",
+        "https://doc.rust-lang.org/std/ops/struct.RangeInclusive.html"
+      ]
     },
     {
-      "aliases": [],
-      "body": "Each owned value has one owner; moving transfers ownership, while borrowing lets code inspect data without taking it.",
-      "cases": [
-        {
-          "input": "",
-          "output": "rust:4\n"
-        }
-      ],
-      "example": "fn describe(name: String) -> (String, usize) {\n    let len = name.len();\n    (name, len)\n}\n\nfn main() {\n    let name = String::from(\"rust\");\n    let (name, len) = describe(name);\n    println!(\"example:{name}:{len}\");\n}",
-      "id": "rust-ownership",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html"
-      ],
-      "starter": "fn describe(name: String) -> (String, usize) {\n    let len = name.len();\n    (name, len)\n}\n\nfn main() {\n    let name = String::from(\"\");\n    // TODO: move the owned String into describe and use the returned owner\n    let (name, len) = describe(name);\n    println!(\"{name}:{len}\");\n}\n",
-      "title": "Ownership and borrowing",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Iterators are lazy until consumed; closures let map, filter, and fold express local transformations.",
-      "cases": [
-        {
-          "input": "",
-          "output": "20\n"
-        }
-      ],
-      "example": "fn main() {\n    let nums = [1, 2, 3, 4];\n    let total: i32 = nums.iter()\n        .filter(|n| **n % 2 == 0)\n        .map(|n| n * n)\n        .sum();\n    println!(\"example:{total}\");\n}",
       "id": "rust-iterators",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch13-02-iterators.html"
-      ],
-      "starter": "fn main() {\n    let nums = [1, 2, 3, 4];\n    // TODO: square only the even numbers before summing\n    let total: i32 = nums.iter().map(|n| n).sum();\n    println!(\"{total}\");\n}\n",
-      "title": "Iterators and closures",
-      "track": "core"
-    },
-    {
       "aliases": [],
-      "body": "Generics let one function or type work with many concrete types while preserving compile-time type checking.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Consume a lazy iterator pipeline",
+      "body": "Iterator adapters describe work without running it. A terminal consumer such as sum drives filter and map while preserving the item ownership chosen upstream.",
+      "example": "fn main() {\n    let preview = (1..).filter(|n| n % 3 == 0).take(3).collect::<Vec<_>>();\n    println!(\"{preview:?}\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn even_square_total(values: &[i64]) -> i64 {\n    // TODO: transform each retained even value before the terminal sum.\n    values.iter().copied().filter(|number| number % 2 == 0).sum()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{}\", even_square_total(&values));\n}\n",
       "cases": [
         {
-          "input": "",
-          "output": "3\n"
-        }
-      ],
-      "example": "fn last_copy<T: Copy>(items: &[T]) -> Option<T> {\n    items.last().copied()\n}\n\nfn main() {\n    println!(\"example:{}\", last_copy(&[1, 2, 3]).unwrap());\n}",
-      "id": "rust-generics",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch10-01-syntax.html"
-      ],
-      "starter": "fn last_copy<T: Copy>(items: &[T]) -> Option<T> {\n    // TODO: return the last copied item\n    let _ = items;\n    None\n}\n\nfn main() {\n    println!(\"{}\", last_copy(&[1, 2, 3]).unwrap_or(0));\n}\n",
-      "title": "Generics",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Traits describe shared behavior, and bounds say which behavior a generic function is allowed to rely on.",
-      "cases": [
+          "input": "1 2 3 4",
+          "output": "20\n"
+        },
         {
-          "input": "",
-          "output": "Ada: 3\n"
-        }
-      ],
-      "example": "trait Summary {\n    fn summarize(&self) -> String;\n}\n\nstruct User {\n    name: String,\n    tasks: usize,\n}\n\nimpl Summary for User {\n    fn summarize(&self) -> String {\n        format!(\"{}: {}\", self.name, self.tasks)\n    }\n}\n\nfn print_summary<T: Summary>(item: &T) {\n    println!(\"example:{}\", item.summarize());\n}\n\nfn main() {\n    let user = User { name: String::from(\"Ada\"), tasks: 3 };\n    print_summary(&user);\n}",
-      "id": "rust-traits",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch10-02-traits.html"
-      ],
-      "starter": "trait Summary {\n    fn summarize(&self) -> String;\n}\n\nstruct User {\n    name: String,\n    tasks: usize,\n}\n\nimpl Summary for User {\n    fn summarize(&self) -> String {\n        // TODO: include both fields in the summary\n        self.name.clone()\n    }\n}\n\nfn print_summary<T: Summary>(item: &T) {\n    println!(\"{}\", item.summarize());\n}\n\nfn main() {\n    let user = User { name: String::from(\"Ada\"), tasks: 3 };\n    print_summary(&user);\n}\n",
-      "title": "Traits and bounds",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Lifetime annotations describe relationships between borrowed values; they do not make any value live longer.",
-      "cases": [
-        {
-          "input": "",
-          "output": "borrow\n"
-        }
-      ],
-      "example": "fn longer<'a>(left: &'a str, right: &'a str) -> &'a str {\n    if left.len() >= right.len() { left } else { right }\n}\n\nfn main() {\n    println!(\"example:{}\", longer(\"borrow\", \"rs\"));\n}",
-      "id": "rust-lifetimes",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html"
-      ],
-      "starter": "fn longer<'a>(left: &'a str, right: &'a str) -> &'a str {\n    // TODO: return the longer borrowed string\n    let _ = left;\n    right\n}\n\nfn main() {\n    println!(\"{}\", longer(\"borrow\", \"rs\"));\n}\n",
-      "title": "Lifetimes",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Trait objects such as &dyn Trait allow values of different concrete types to be used through shared behavior.",
-      "cases": [
-        {
-          "input": "",
-          "output": "button\n"
-        }
-      ],
-      "example": "trait Draw {\n    fn draw(&self) -> &'static str;\n}\n\nstruct Button;\n\nimpl Draw for Button {\n    fn draw(&self) -> &'static str {\n        \"button\"\n    }\n}\n\nfn render(item: &dyn Draw) -> &'static str {\n    item.draw()\n}\n\nfn main() {\n    let button = Button;\n    println!(\"example:{}\", render(&button));\n}",
-      "id": "rust-traits-lifetimes",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch18-02-trait-objects.html"
-      ],
-      "starter": "trait Draw {\n    fn draw(&self) -> &'static str;\n}\n\nstruct Button;\n\nimpl Draw for Button {\n    fn draw(&self) -> &'static str {\n        // TODO: return the label used by render\n        \"TODO\"\n    }\n}\n\nfn render(item: &dyn Draw) -> &'static str {\n    item.draw()\n}\n\nfn main() {\n    let button = Button;\n    println!(\"{}\", render(&button));\n}\n",
-      "title": "Trait objects and dyn dispatch",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Rust test functions use #[test] and assertion macros; normal code still needs small pure functions that tests can call.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "fn add_two(n: i32) -> i32 {\n    n + 2\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn adds_two() {\n        assert_eq!(add_two(3), 5);\n    }\n}\n\nfn main() {\n    println!(\"example:{}\", add_two(3));\n}",
-      "id": "rust-testing",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch11-00-testing.html"
-      ],
-      "starter": "fn add_two(n: i32) -> i32 {\n    // TODO: make the function satisfy the test expectation\n    n\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn adds_two() {\n        assert_eq!(add_two(3), 5);\n    }\n}\n\nfn main() {\n    println!(\"{}\", add_two(3));\n}\n",
-      "title": "Tests and assertions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Smart pointers such as Box<T> own data with pointer-like behavior and can place values on the heap.",
-      "cases": [
-        {
-          "input": "",
+          "input": "-2 -1 0",
           "output": "4\n"
+        },
+        {
+          "input": "1 3",
+          "output": "0\n"
         }
       ],
-      "example": "fn main() {\n    let boxed = Box::new(String::from(\"heap\"));\n    println!(\"example:{}\", boxed.len());\n}",
-      "id": "rust-smart-pointers",
-      "kind": "lesson",
-      "level": "advanced",
       "refs": [
-        "https://doc.rust-lang.org/book/ch15-00-smart-pointers.html"
-      ],
-      "starter": "fn main() {\n    // TODO: put heap text inside Box<String> and read through it\n    let boxed = Box::new(String::from(\"\"));\n    println!(\"{}\", boxed.len());\n}\n",
-      "title": "Smart pointers",
-      "track": "core"
+        "https://doc.rust-lang.org/std/iter/trait.Iterator.html"
+      ]
     },
     {
+      "id": "rust-functions",
       "aliases": [],
-      "body": "RefCell<T> checks borrow rules at runtime, allowing mutation through an immutable owner when the design requires it.",
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "basic",
+      "title": "Return a typed expression from a function",
+      "body": "Function parameters and return types are explicit. A final expression has no semicolon; adding one turns the block result into unit and causes a type mismatch.",
+      "example": "fn greeting(name: &str) -> String {\n    format!(\"hello, {name}\")\n}\n\nfn main() {\n    println!(\"{}\", greeting(\"Ferris\"));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn area(width: i64, height: i64) -> i64 {\n    // TODO: return the geometric operation as the trailing expression.\n    width + height\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let dimensions = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{}\", area(dimensions[0], dimensions[1]));\n}\n",
       "cases": [
         {
-          "input": "",
-          "output": "1\n"
-        }
-      ],
-      "example": "use std::cell::RefCell;\n\nfn main() {\n    let log = RefCell::new(Vec::new());\n    log.borrow_mut().push(\"event\");\n    println!(\"example:{}\", log.borrow().len());\n}",
-      "id": "rust-interior-mutability",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch15-05-interior-mutability.html"
-      ],
-      "starter": "use std::cell::RefCell;\n\nfn main() {\n    let log: RefCell<Vec<&str>> = RefCell::new(Vec::new());\n    // TODO: borrow mutably and push one event\n    println!(\"{}\", log.borrow().len());\n}\n",
-      "title": "Interior mutability",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "thread::spawn moves work to another OS thread, and join waits for that thread's result.",
-      "cases": [
+          "input": "3 4",
+          "output": "12\n"
+        },
         {
-          "input": "",
-          "output": "worker\n"
-        }
-      ],
-      "example": "use std::thread;\n\nfn main() {\n    let handle = thread::spawn(|| \"worker\");\n    println!(\"example:{}\", handle.join().unwrap());\n}",
-      "id": "rust-concurrency",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch16-01-threads.html"
-      ],
-      "starter": "use std::thread;\n\nfn main() {\n    let handle = thread::spawn(|| \"worker\");\n    // TODO: use the joined worker result instead of a placeholder\n    let _ = handle;\n    println!(\"main\");\n}\n",
-      "title": "Threads and join",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Arc<T> shares ownership across threads, and Mutex<T> protects mutation so only one thread edits at a time.",
-      "cases": [
+          "input": "0 5",
+          "output": "0\n"
+        },
         {
-          "input": "",
-          "output": "2\n"
-        }
-      ],
-      "example": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let count = Arc::new(Mutex::new(1));\n    let worker_count = Arc::clone(&count);\n    let handle = thread::spawn(move || {\n        *worker_count.lock().unwrap() += 1;\n    });\n    handle.join().unwrap();\n    println!(\"example:{}\", *count.lock().unwrap());\n}",
-      "id": "rust-shared-state",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch16-03-shared-state.html"
-      ],
-      "starter": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let count = Arc::new(Mutex::new(1));\n    let worker_count = Arc::clone(&count);\n    let handle = thread::spawn(move || {\n        // TODO: lock and increment the shared count\n        let _ = worker_count;\n    });\n    handle.join().unwrap();\n    println!(\"{}\", *count.lock().unwrap());\n}\n",
-      "title": "Shared state with Arc and Mutex",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "async creates a Future that can pause at await points; executing futures needs a runtime or executor.",
-      "cases": [
-        {
-          "input": "",
-          "output": "future-created\n"
-        }
-      ],
-      "example": "async fn label() -> &'static str {\n    \"ready\"\n}\n\nfn main() {\n    let future = label();\n    drop(future);\n    println!(\"example:future-created\");\n}",
-      "id": "rust-async-await",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch17-00-async-await.html"
-      ],
-      "starter": "async fn label() -> &'static str {\n    \"ready\"\n}\n\nfn main() {\n    let future = label();\n    drop(future);\n    // TODO: this single-file exercise creates a Future but does not run an async runtime\n    println!(\"pending\");\n}\n",
-      "title": "Async and await",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "macro_rules! matches token patterns at compile time and expands them into Rust code before type checking.",
-      "cases": [
-        {
-          "input": "",
-          "output": "hi Rust\n"
-        }
-      ],
-      "example": "macro_rules! greet {\n    ($name:expr) => {\n        format!(\"hi {}\", $name)\n    };\n}\n\nfn main() {\n    println!(\"example:{}\", greet!(\"Rust\"));\n}",
-      "id": "rust-macros",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/book/ch20-05-macros.html"
-      ],
-      "starter": "macro_rules! greet {\n    ($name:expr) => {\n        // TODO: expand to hi <name>\n        format!(\"TODO {}\", $name)\n    };\n}\n\nfn main() {\n    println!(\"{}\", greet!(\"Rust\"));\n}\n",
-      "title": "macro_rules!",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "unsafe enables operations the compiler cannot fully verify, but the programmer must still uphold Rust's safety rules.",
-      "cases": [
-        {
-          "input": "",
+          "input": "7 1",
           "output": "7\n"
         }
       ],
-      "example": "fn main() {\n    let value = 7;\n    let pointer = &value as *const i32;\n    let read = unsafe { *pointer };\n    println!(\"example:{read}\");\n}",
-      "id": "rust-unsafe",
-      "kind": "lesson",
-      "level": "advanced",
       "refs": [
-        "https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html"
-      ],
-      "starter": "fn main() {\n    let value = 7;\n    let pointer = &value as *const i32;\n    // TODO: read the raw pointer inside an unsafe block\n    let read = 0;\n    let _ = pointer;\n    println!(\"{read}\");\n}\n",
-      "title": "Unsafe Rust",
-      "track": "core"
+        "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+      ]
     },
     {
+      "id": "rust-modules-use",
       "aliases": [],
-      "body": "Cargo manages packages, dependencies, tests, and workspaces; workspace commands let related crates build together.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Resolve a public item through use",
+      "body": "A module controls an item path and pub controls visibility. A use declaration brings that path into scope; it does not make a private item public.",
+      "example": "mod units {\n    pub fn twice(value: i32) -> i32 { value * 2 }\n}\n\nuse units::twice;\n\nfn main() {\n    println!(\"{}\", twice(21));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nmod grading {\n    pub fn verdict(score: i64) -> &'static str {\n        // TODO: include the documented boundary in the passing branch.\n        if score > 90 { \"pass\" } else { \"retry\" }\n    }\n}\n\nuse grading::verdict;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", verdict(input.trim().parse().unwrap()));\n}\n",
       "cases": [
         {
-          "input": "",
-          "output": "cargo check --workspace\n"
+          "input": "91",
+          "output": "pass\n"
+        },
+        {
+          "input": "80",
+          "output": "pass\n"
+        },
+        {
+          "input": "79",
+          "output": "retry\n"
         }
       ],
-      "example": "const CHECK_ALL: &str = \"cargo check --workspace\";\n\nfn main() {\n    println!(\"example:{CHECK_ALL}\");\n}",
+      "refs": [
+        "https://doc.rust-lang.org/book/ch07-04-bringing-paths-into-scope-with-the-use-keyword.html",
+        "https://doc.rust-lang.org/reference/visibility-and-privacy.html"
+      ]
+    },
+    {
+      "id": "rust-generics",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Constrain a reusable function with Copy",
+      "body": "A type parameter makes one function work for many element types. The Copy bound permits returning an element value from a shared slice without moving out of it.",
+      "example": "fn first_copy<T: Copy>(values: &[T]) -> Option<T> {\n    values.first().copied()\n}\n\nfn main() {\n    println!(\"{:?}\", first_copy(&[8_u8, 9]));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn last_copy<T: Copy>(values: &[T]) -> Option<T> {\n    // TODO: select the requested edge of the slice without moving from it.\n    values.first().copied()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{}\", last_copy(&values).unwrap());\n}\n",
+      "cases": [
+        {
+          "input": "1 2 3",
+          "output": "3\n"
+        },
+        {
+          "input": "-1",
+          "output": "-1\n"
+        },
+        {
+          "input": "0 5",
+          "output": "5\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch10-01-syntax.html",
+        "https://doc.rust-lang.org/std/marker/trait.Copy.html"
+      ]
+    },
+    {
+      "id": "rust-traits",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Format through a trait bound",
+      "body": "A trait names shared behavior, and a generic bound requires that behavior at the call site. Methods can borrow fields instead of cloning owned data.",
+      "example": "trait Size {\n    fn size(&self) -> usize;\n}\n\nimpl<T> Size for Vec<T> {\n    fn size(&self) -> usize { self.len() }\n}\n\nfn main() {\n    println!(\"items={}\", vec![2, 4, 6].size());\n}\n",
+      "starter": "use std::io::{self, Read};\n\ntrait Summary { fn summary(&self) -> String; }\nstruct ScoreCard { name: String, score: i64 }\nimpl Summary for ScoreCard {\n    // TODO: include both borrowed fields in the formatted summary.\n    fn summary(&self) -> String { format!(\"{}\", self.name) }\n}\nfn render<T: Summary>(value: &T) -> String { value.summary() }\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let mut fields = input.split_whitespace();\n    let card = ScoreCard { name: fields.next().unwrap().to_owned(), score: fields.next().unwrap().parse().unwrap() };\n    println!(\"{}\", render(&card));\n}\n",
+      "cases": [
+        {
+          "input": "Ada 3",
+          "output": "Ada: 3\n"
+        },
+        {
+          "input": "Lin 0",
+          "output": "Lin: 0\n"
+        },
+        {
+          "input": "Bo 12",
+          "output": "Bo: 12\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch10-02-traits.html"
+      ]
+    },
+    {
+      "id": "rust-macros",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Expand a small expression macro",
+      "body": "An exported macro can call a defining-crate helper through $crate, so expansion is independent of the caller path. The expanded helper call is then typechecked normally.",
+      "example": "pub fn helper(value: i32) -> i32 { value + 1 }\n\n#[macro_export]\nmacro_rules! increment {\n    ($value:expr) => {\n        $crate::helper($value)\n    };\n}\n\nmod caller {\n    pub fn run(value: i32) -> i32 {\n        crate::increment!(value)\n    }\n}\n\nfn main() {\n    println!(\"{}\", caller::run(6));\n}\n",
+      "starter": "use std::io::{self, Read};\n\npub fn helper(name: &str) -> String {\n    // TODO: make the defining-crate helper produce the required greeting.\n    format!(\"greeting {name}\")\n}\n\n#[macro_export]\nmacro_rules! greet {\n    ($name:expr) => {\n        $crate::helper($name)\n    };\n}\n\nmod caller {\n    pub fn greet_from(name: &str) -> String {\n        crate::greet!(name)\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", caller::greet_from(input.trim()));\n}\n",
+      "cases": [
+        {
+          "input": "Rust",
+          "output": "hi Rust\n"
+        },
+        {
+          "input": "Ada",
+          "output": "hi Ada\n"
+        },
+        {
+          "input": "é",
+          "output": "hi é\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/reference/macros-by-example.html",
+        "https://doc.rust-lang.org/reference/paths.html#path-qualifiers"
+      ]
+    },
+    {
       "id": "rust-cargo-workspaces",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Recognize workspace-wide Cargo commands",
+      "body": "This single-file runner cannot create or validate a Cargo workspace. The lab is limited to mapping a maintenance intent to its workspace-wide command; it does not claim workspace mastery.",
+      "example": "fn main() {\n    let orientation = \"cargo metadata --no-deps\";\n    println!(\"{orientation}\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn workspace_command(intent: &str) -> String {\n    // TODO: add the workspace-wide flags required for each supported intent.\n    format!(\"cargo {intent}\")\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", workspace_command(input.trim()));\n}\n",
+      "cases": [
+        {
+          "input": "check",
+          "output": "cargo check --workspace\n"
+        },
+        {
+          "input": "test",
+          "output": "cargo test --workspace\n"
+        },
+        {
+          "input": "fmt",
+          "output": "cargo fmt --all -- --check\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/cargo/reference/workspaces.html",
+        "https://doc.rust-lang.org/cargo/commands/index.html"
+      ]
+    },
+    {
+      "id": "rust-ownership",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Move a String and return its owner",
+      "body": "Passing String by value transfers its fixed-size pointer, length, and capacity metadata while retaining one UTF-8 allocation. main trims line endings in that original buffer before moving it into describe.",
+      "example": "fn wrap(text: String) -> String {\n    format!(\"[{text}]\")\n}\n\nfn main() {\n    let owned = String::from(\"owned\");\n    println!(\"{}\", wrap(owned));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn trim_line_ending(text: &mut String) {\n    while text.ends_with('\\n') || text.ends_with('\\r') { text.pop(); }\n}\n\nfn describe(text: String) -> (String, usize) {\n    // TODO: measure the UTF-8 buffer before returning the same owner.\n    let bytes = text.chars().count();\n    (text, bytes)\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    trim_line_ending(&mut input);\n    let (text, bytes) = describe(input);\n    println!(\"{text}:{bytes}\");\n}\n",
+      "cases": [
+        {
+          "input": "rust",
+          "output": "rust:4\n"
+        },
+        {
+          "input": "é",
+          "output": "é:2\n"
+        },
+        {
+          "input": "",
+          "output": ":0\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"
+      ]
+    },
+    {
+      "id": "rust-smart-pointers",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Give a recursive list a known size with Box",
+      "body": "A recursive enum cannot contain itself directly because its size would be infinite. Box<List> inserts a known-size owning pointer at each recursive link.",
+      "example": "enum Node {\n    More(i32, Box<Node>),\n    End,\n}\n\nfn total(node: &Node) -> i32 {\n    match node { Node::More(value, next) => value + total(next), Node::End => 0 }\n}\n\nfn main() {\n    let nodes = Node::More(4, Box::new(Node::More(5, Box::new(Node::End))));\n    println!(\"{}\", total(&nodes));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nenum List { Cons(i64, Box<List>), Nil }\nimpl List {\n    fn sum(&self) -> i64 { match self { List::Cons(value, next) => value + next.sum(), List::Nil => 0 } }\n}\nfn build(values: &[i64]) -> List {\n    // TODO: fold every value, not only the first, into boxed recursive Cons nodes.\n    match values.first() {\n        Some(value) => List::Cons(*value, Box::new(List::Nil)),\n        None => List::Nil,\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    println!(\"{}\", build(&values).sum());\n}\n",
+      "cases": [
+        {
+          "input": "1 2 3",
+          "output": "6\n"
+        },
+        {
+          "input": "-1 1",
+          "output": "0\n"
+        },
+        {
+          "input": "",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch15-01-box.html",
+        "https://doc.rust-lang.org/std/boxed/struct.Box.html"
+      ]
+    },
+    {
+      "id": "rust-interior-mutability",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Mutate single-threaded state through RefCell",
+      "body": "RefCell moves borrow checking to runtime. An owned RefCell<T> can be Send when T is Send, but RefCell is not Sync and cannot provide concurrently shared mutation; use Mutex for that role.",
+      "example": "use std::cell::Cell;\n\nfn main() {\n    let visits = Cell::new(4);\n    visits.set(visits.get() + 1);\n    println!(\"{}\", visits.get());\n}\n",
+      "starter": "use std::cell::RefCell;\nuse std::io::{self, Read};\n\nstruct EventLog { events: RefCell<Vec<String>> }\nimpl EventLog {\n    fn record(&self, event: &str) {\n        let mut events = self.events.borrow_mut();\n        // TODO: retain earlier events instead of resetting the log on every call.\n        events.clear();\n        events.push(event.to_owned());\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let log = EventLog { events: RefCell::new(Vec::new()) };\n    for event in input.split_whitespace() { log.record(event); }\n    println!(\"{}\", log.events.borrow().len());\n}\n",
+      "cases": [
+        {
+          "input": "a b",
+          "output": "2\n"
+        },
+        {
+          "input": "one",
+          "output": "1\n"
+        },
+        {
+          "input": "",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch15-05-interior-mutability.html",
+        "https://doc.rust-lang.org/std/cell/struct.RefCell.html"
+      ]
+    },
+    {
+      "id": "rust-strings",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Separate UTF-8 bytes from Unicode scalars",
+      "body": "str::len returns bytes, chars iterates Unicode scalar values, and neither operation counts user-perceived grapheme clusters. Integer indexing is unavailable; byte-range slicing must land on UTF-8 boundaries.",
+      "example": "fn main() {\n    let text = \"🦀ace\";\n    let first = &text[..4];\n    println!(\"{}:{}:{first}\", text.len(), text.chars().count());\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn describe(text: &str) -> String {\n    // TODO: keep UTF-8 byte length distinct from the scalar count.\n    let bytes = text.chars().count();\n    let scalars = text.chars().count();\n    let first = text.chars().next().unwrap();\n    format!(\"{bytes}:{scalars}:{first}\")\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", describe(input.trim_end()));\n}\n",
+      "cases": [
+        {
+          "input": "rust",
+          "output": "4:4:r\n"
+        },
+        {
+          "input": "é",
+          "output": "2:1:é\n"
+        },
+        {
+          "input": "🦀a",
+          "output": "5:2:🦀\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/std/primitive.str.html",
+        "https://doc.rust-lang.org/std/str/struct.Chars.html"
+      ]
+    },
+    {
+      "id": "rust-borrowing-slices",
+      "aliases": [],
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "intermediate",
+      "title": "Return a word slice borrowed from its line",
+      "body": "A &str slice refers into existing text without allocation. Its validity is tied to the owner, and modern borrow checking follows the last use rather than keeping every borrow until a lexical block ends.",
+      "example": "fn key(pair: &str) -> &str {\n    pair.split_once(':').map_or(pair, |(head, _)| head)\n}\n\nfn main() {\n    let record = String::from(\"color:blue\");\n    println!(\"{}\", key(&record));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn first_word(line: &str) -> &str {\n    // TODO: select the first borrowed word rather than the opposite edge.\n    line.split_whitespace().last().unwrap_or(\"\")\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", first_word(&input));\n}\n",
+      "cases": [
+        {
+          "input": "rust rules",
+          "output": "rust\n"
+        },
+        {
+          "input": " single ",
+          "output": "single\n"
+        },
+        {
+          "input": "",
+          "output": "\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch04-03-slices.html",
+        "https://doc.rust-lang.org/reference/types/pointer.html#shared-references-"
+      ]
+    },
+    {
+      "id": "rust-lifetimes",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Relate two input borrows with one lifetime",
+      "body": "Lifetime annotations describe how references are related; they do not keep data alive. The selected side is based on Unicode scalar count, with the left side winning a tie.",
+      "example": "fn shorter<'a>(left: &'a str, right: &'a str) -> &'a str {\n    if left.len() <= right.len() { left } else { right }\n}\n\nfn main() {\n    println!(\"{}\", shorter(\"short\", \"longer\"));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn longer<'a>(left: &'a str, _right: &'a str) -> &'a str {\n    // TODO: compare Unicode scalar counts and keep the documented tie rule.\n    left\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let (left, right) = input.trim_end().split_once('|').unwrap();\n    println!(\"{}\", longer(left, right));\n}\n",
+      "cases": [
+        {
+          "input": "borrow|rs",
+          "output": "borrow\n"
+        },
+        {
+          "input": "é|aa",
+          "output": "aa\n"
+        },
+        {
+          "input": "ab|cd",
+          "output": "ab\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html",
+        "https://doc.rust-lang.org/reference/trait-bounds.html#lifetime-bounds"
+      ]
+    },
+    {
+      "id": "rust-traits-lifetimes",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "advanced",
-      "refs": [
-        "https://doc.rust-lang.org/cargo/reference/workspaces.html"
+      "title": "Return borrowed text through dyn Trait",
+      "body": "A trait object enables runtime dispatch when concrete widget types differ. The object-safe draw method borrows self and returns text tied to that borrow.",
+      "example": "trait Named {\n    fn name(&self) -> &str;\n}\n\nstruct Tag(String);\nimpl Named for Tag { fn name(&self) -> &str { &self.0 } }\n\nfn show(value: &dyn Named) -> &str { value.name() }\n\nfn main() {\n    println!(\"{}\", show(&Tag(String::from(\"dynamic\"))));\n}\n",
+      "starter": "use std::io::{self, Read};\n\ntrait Draw { fn draw(&self) -> &str; }\nstruct Button { text: String }\nstruct Label { text: String }\nimpl Draw for Button { fn draw(&self) -> &str { &self.text } }\nimpl Draw for Label { fn draw(&self) -> &str { &self.text } }\nfn render(widget: &dyn Draw) -> &str {\n    let text = widget.draw();\n    // TODO: return the complete borrowed text instead of dropping one scalar.\n    let start = text.char_indices().nth(1).map_or(text.len(), |(index, _)| index);\n    &text[start..]\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let command = input.trim_end();\n    if let Some(text) = command.strip_prefix(\"label:\") {\n        let label = Label { text: text.to_owned() };\n        println!(\"{}\", render(&label));\n    } else {\n        let button = Button { text: command.to_owned() };\n        println!(\"{}\", render(&button));\n    }\n}\n",
+      "cases": [
+        {
+          "input": "button",
+          "output": "button\n"
+        },
+        {
+          "input": "label:ok",
+          "output": "ok\n"
+        },
+        {
+          "input": "label:Rust",
+          "output": "Rust\n"
+        }
       ],
-      "starter": "const CHECK_ALL: &str = \"cargo check\";\n\nfn main() {\n    // TODO: format the workspace-wide check command constant\n    println!(\"{CHECK_ALL}\");\n}\n",
-      "title": "Cargo packages and workspaces",
-      "track": "core"
+      "refs": [
+        "https://doc.rust-lang.org/book/ch18-02-trait-objects.html",
+        "https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility"
+      ]
+    },
+    {
+      "id": "rust-unsafe",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Encapsulate one justified raw-pointer read",
+      "body": "Unsafe Rust permits specific operations but does not disable ownership or lifetime rules. In Rust 2024, unsafe_op_in_unsafe_fn warns by default; an explicit unsafe block keeps each operation and invariant auditable.",
+      "example": "fn first(values: &[i32]) -> i32 {\n    assert!(!values.is_empty());\n    // SAFETY: index zero is in bounds because the slice was checked as nonempty.\n    unsafe { *values.get_unchecked(0) }\n}\n\nfn main() {\n    println!(\"{}\", first(&[9, 8]));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn read_copy(value: &i64) -> i64 {\n    // TODO: derive a valid raw pointer, state its invariant, and read it in an explicit unsafe block.\n    value.saturating_add(1)\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let value = input.trim().parse::<i64>().unwrap();\n    println!(\"{}\", read_copy(&value));\n}\n",
+      "cases": [
+        {
+          "input": "7",
+          "output": "7\n"
+        },
+        {
+          "input": "0",
+          "output": "0\n"
+        },
+        {
+          "input": "-3",
+          "output": "-3\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html",
+        "https://doc.rust-lang.org/reference/unsafe-blocks.html"
+      ]
+    },
+    {
+      "id": "rust-structs-impl",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Borrow self in a struct method",
+      "body": "An impl block attaches behavior to a type. Methods take self, &self, or &mut self explicitly; associated functions omit self and are called with Type::name.",
+      "example": "struct Counter { value: i32 }\n\nimpl Counter {\n    fn doubled(&self) -> i32 { self.value * 2 }\n}\n\nfn main() {\n    let counter = Counter { value: 11 };\n    println!(\"{}\", counter.doubled());\n}\n",
+      "starter": "use std::io::{self, Read};\n\nstruct Rectangle { width: i64, height: i64 }\nimpl Rectangle {\n    fn area(&self) -> i64 {\n        // TODO: calculate from both borrowed fields with the geometric operation.\n        self.width + self.height\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let rectangle = Rectangle { width: values[0], height: values[1] };\n    println!(\"{}\", rectangle.area());\n}\n",
+      "cases": [
+        {
+          "input": "3 4",
+          "output": "12\n"
+        },
+        {
+          "input": "0 5",
+          "output": "0\n"
+        },
+        {
+          "input": "7 1",
+          "output": "7\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch05-03-method-syntax.html"
+      ]
+    },
+    {
+      "id": "rust-enum-match",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Evaluate every command enum variant",
+      "body": "Enum variants can carry different payloads while remaining one type. match must cover every possible variant; a wildcard compiles but can conceal behavior required by a future variant.",
+      "example": "enum Light { Red, Amber, Green }\n\nfn seconds(light: Light) -> u8 {\n    match light { Light::Red => 30, Light::Amber => 3, Light::Green => 20 }\n}\n\nfn main() {\n    println!(\"{}\", seconds(Light::Amber));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nenum Command { Add(i64, i64), Mul(i64, i64), Quit }\nfn parse(input: &str) -> Command {\n    let mut fields = input.split_whitespace();\n    match fields.next().unwrap() {\n        \"add\" => Command::Add(fields.next().unwrap().parse().unwrap(), fields.next().unwrap().parse().unwrap()),\n        \"mul\" => Command::Mul(fields.next().unwrap().parse().unwrap(), fields.next().unwrap().parse().unwrap()),\n        \"quit\" => Command::Quit,\n        _ => unreachable!(),\n    }\n}\nfn evaluate(command: Command) -> i64 {\n    // TODO: replace the catch-all with correct Mul and Quit arms.\n    match command {\n        Command::Add(left, right) => left + right,\n        _ => i64::MIN,\n    }\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", evaluate(parse(&input)));\n}\n",
+      "cases": [
+        {
+          "input": "add 2 3",
+          "output": "5\n"
+        },
+        {
+          "input": "mul 2 3",
+          "output": "6\n"
+        },
+        {
+          "input": "quit",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch06-00-enums.html",
+        "https://doc.rust-lang.org/reference/expressions/match-expr.html"
+      ]
+    },
+    {
+      "id": "rust-option",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Handle an absent first scalar with Option",
+      "body": "chars().next returns Option<char> because the string may be empty. Matching Some and None makes absence explicit without a null value or an avoidable panic.",
+      "example": "fn checked_half(value: i32) -> Option<i32> {\n    (value % 2 == 0).then_some(value / 2)\n}\n\nfn main() {\n    println!(\"{:?}\", checked_half(14));\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn show_first(text: &str) -> String {\n    // TODO: choose the first scalar and handle absence with the documented word.\n    text.chars().last().map_or_else(|| String::from(\"TODO\"), |value| value.to_string())\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", show_first(input.trim_end()));\n}\n",
+      "cases": [
+        {
+          "input": "rust",
+          "output": "r\n"
+        },
+        {
+          "input": "서울",
+          "output": "서\n"
+        },
+        {
+          "input": "",
+          "output": "empty\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/std/option/enum.Option.html",
+        "https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html"
+      ]
+    },
+    {
+      "id": "rust-result",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Propagate token parse failure with question mark",
+      "body": "Result carries either a value or an error. The ? operator returns early from the current Result-returning function; it propagates rather than catches the parse failure.",
+      "example": "fn positive(text: &str) -> Result<i32, &'static str> {\n    let value = text.parse::<i32>().map_err(|_| \"not an integer\")?;\n    if value > 0 { Ok(value) } else { Err(\"not positive\") }\n}\n\nfn main() {\n    println!(\"{:?}\", positive(\"8\"));\n}\n",
+      "starter": "use std::io::{self, Read};\nuse std::num::ParseIntError;\n\nfn sum_tokens(input: &str) -> Result<i64, ParseIntError> {\n    // TODO: fold every token and propagate the first failed conversion.\n    input.split_whitespace().next().unwrap_or(\"invalid\").parse::<i64>()\n}\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    match sum_tokens(&input) {\n        Ok(total) => println!(\"{total}\"),\n        Err(_) => println!(\"error\"),\n    }\n}\n",
+      "cases": [
+        {
+          "input": "2 3",
+          "output": "5\n"
+        },
+        {
+          "input": "-1 1",
+          "output": "0\n"
+        },
+        {
+          "input": "2 bad",
+          "output": "error\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/std/result/enum.Result.html",
+        "https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator"
+      ]
+    },
+    {
+      "id": "rust-testing",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Run assertions in the ordinary executable",
+      "body": "Inline assert_eq! calls in main execute under this plain rustc runner. Functions marked #[test] require a test harness started by cargo test or rustc --test and are not run by an ordinary binary build.",
+      "example": "fn triple(value: i64) -> i64 { value * 3 }\n\nfn main() {\n    let result = triple(4);\n    assert_eq!(result, 12);\n    println!(\"checks passed\");\n}\n",
+      "starter": "use std::io::{self, Read};\n\nfn add_two(value: i64) -> i64 { value }\n\nfn main() {\n    assert_eq!(add_two(-2), 0);\n    assert_eq!(add_two(3), 5);\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", add_two(input.trim().parse::<i64>().unwrap()));\n    // TODO: implement add_two, keep both assertions, then remove this guard.\n    compile_error!(\"finish the TODO before compiling\");\n}\n",
+      "cases": [
+        {
+          "input": "3",
+          "output": "5\n"
+        },
+        {
+          "input": "-2",
+          "output": "0\n"
+        },
+        {
+          "input": "0",
+          "output": "2\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch11-03-test-organization.html",
+        "https://doc.rust-lang.org/std/macro.assert_eq.html"
+      ]
+    },
+    {
+      "id": "rust-async-await",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Poll one known-ready future to completion",
+      "body": "Calling an async function creates a Future but does not execute its body. This bounded standard-library executor polls exactly once and is valid only for futures documented to be immediately ready.",
+      "example": "use std::future::{ready, Future};\nuse std::sync::Arc;\nuse std::task::{Context, Poll, Wake, Waker};\n\nstruct Noop;\nimpl Wake for Noop { fn wake(self: Arc<Self>) {} }\n\nfn block_on_ready<F: Future>(future: F) -> F::Output {\n    let waker = Waker::from(Arc::new(Noop));\n    let mut context = Context::from_waker(&waker);\n    let mut future = Box::pin(future);\n    match future.as_mut().poll(&mut context) {\n        Poll::Ready(value) => value,\n        Poll::Pending => panic!(\"executor accepts only ready futures\"),\n    }\n}\n\nasync fn message() -> &'static str { ready(\"future:ready\").await }\n\nfn main() { println!(\"{}\", block_on_ready(message())); }\n",
+      "starter": "use std::future::{ready, Future};\nuse std::io::{self, Read};\nuse std::sync::Arc;\nuse std::task::{Context, Poll, Wake, Waker};\n\nstruct Noop;\nimpl Wake for Noop { fn wake(self: Arc<Self>) {} }\nfn block_on_ready<F: Future>(future: F) -> F::Output {\n    let waker = Waker::from(Arc::new(Noop));\n    let mut context = Context::from_waker(&waker);\n    let mut future = Box::pin(future);\n    match future.as_mut().poll(&mut context) { Poll::Ready(value) => value, Poll::Pending => panic!(\"ready future became pending\") }\n}\nasync fn double(value: i64) -> i64 {\n    // TODO: transform the value inside the awaited ready future.\n    ready(value).await\n}\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    println!(\"{}\", block_on_ready(double(input.trim().parse().unwrap())));\n}\n",
+      "cases": [
+        {
+          "input": "2",
+          "output": "4\n"
+        },
+        {
+          "input": "0",
+          "output": "0\n"
+        },
+        {
+          "input": "-3",
+          "output": "-6\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/book/ch17-01-futures-and-syntax.html",
+        "https://doc.rust-lang.org/std/future/fn.ready.html",
+        "https://doc.rust-lang.org/std/task/trait.Wake.html"
+      ]
+    },
+    {
+      "id": "rust-concurrency",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Move work into a thread and join it",
+      "body": "thread::spawn creates an independently scheduled operating-system thread that may start before or after the caller continues. The captured i64 is Copy, so move copies it into the closure without invalidating a caller binding; join waits for the worker result.",
+      "example": "use std::thread;\n\nfn main() {\n    let handle = thread::spawn(|| 6 * 7);\n    println!(\"{}\", handle.join().expect(\"worker panicked\"));\n}\n",
+      "starter": "use std::io::{self, Read};\nuse std::thread;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let value = input.trim().parse::<i64>().unwrap();\n    // TODO: perform the requested transformation inside the moved closure.\n    let handle = thread::spawn(move || value);\n    println!(\"{}\", handle.join().expect(\"worker panicked\"));\n}\n",
+      "cases": [
+        {
+          "input": "2",
+          "output": "4\n"
+        },
+        {
+          "input": "0",
+          "output": "0\n"
+        },
+        {
+          "input": "-3",
+          "output": "-6\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/std/thread/fn.spawn.html",
+        "https://doc.rust-lang.org/std/thread/struct.JoinHandle.html#method.join"
+      ]
+    },
+    {
+      "id": "rust-shared-state",
+      "aliases": [],
+      "track": "core",
+      "kind": "capstone",
+      "level": "advanced",
+      "title": "Join workers around Arc<Mutex> state",
+      "body": "Each input owns one worker that adds its square to a shared i64. Arc shares ownership, Mutex serializes access, lock can block or report poisoning, and the guard scope releases the lock before join completion.",
+      "example": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let total = Arc::new(Mutex::new(0));\n    let handles = (0..2).map(|_| {\n        let total = Arc::clone(&total);\n        thread::spawn(move || {\n            let mut guard = total.lock().expect(\"mutex poisoned\");\n            *guard += 1;\n        })\n    }).collect::<Vec<_>>();\n    for handle in handles { handle.join().expect(\"worker panicked\"); }\n    let answer = *total.lock().expect(\"mutex poisoned\");\n    println!(\"{answer}\");\n}\n",
+      "starter": "use std::io::{self, Read};\nuse std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let mut input = String::new();\n    io::stdin().read_to_string(&mut input).unwrap();\n    let values = input.split_whitespace().map(|part| part.parse::<i64>().unwrap()).collect::<Vec<_>>();\n    let total = Arc::new(Mutex::new(0_i64));\n    let mut handles = Vec::new();\n    for value in values {\n        let total = Arc::clone(&total);\n        handles.push(thread::spawn(move || {\n            // TODO: transform the owned value before entering the short lock scope.\n            let mut guard = total.lock().expect(\"worker mutex poisoned\");\n            *guard += value;\n        }));\n    }\n    for handle in handles { handle.join().expect(\"worker panicked\"); }\n    let answer = *total.lock().expect(\"main mutex poisoned\");\n    println!(\"{answer}\");\n}\n",
+      "cases": [
+        {
+          "input": "1 2 3",
+          "output": "14\n"
+        },
+        {
+          "input": "-2 3",
+          "output": "13\n"
+        },
+        {
+          "input": "",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://doc.rust-lang.org/std/sync/struct.Mutex.html",
+        "https://doc.rust-lang.org/std/sync/struct.Arc.html",
+        "https://doc.rust-lang.org/book/ch16-03-shared-state.html"
+      ]
     }
-  ],
-  "runtime": "rust",
-  "schema_version": 1
+  ]
 }

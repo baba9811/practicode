@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "lessons": {
+    "py-output": {
+      "reference_solution": "import sys\n\nname, score = sys.stdin.read().split()\nprint(name, score, sep=\":\", end=\"\\n\")\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "uses a space instead of the required separator",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "sep=\":\"",
+              "to": "sep=\" \""
+            }
+          ]
+        }
+      ]
+    },
+    "py-input": {
+      "reference_solution": "import sys\n\nvalues = [int(token) for token in sys.stdin.read().split()]\nprint(sum(values))\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "biases every parsed total by one",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "sum(values)",
+              "to": "sum(values, 1)"
+            }
+          ]
+        }
+      ]
+    },
+    "py-variables": {
+      "reference_solution": "import sys\n\nleft, right = map(int, sys.stdin.read().split())\ntotal = left\ntotal += right\nprint(total)\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "rebinds with subtraction instead of addition",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "total += right",
+              "to": "total -= right"
+            }
+          ]
+        }
+      ]
+    },
+    "py-numbers": {
+      "reference_solution": "import sys\n\ndividend, divisor = map(int, sys.stdin.read().split())\nprint(f\"{dividend // divisor}:{dividend % divisor}\")\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "truncates the quotient toward zero",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "dividend // divisor",
+              "to": "int(dividend / divisor)"
+            }
+          ]
+        }
+      ]
+    },
+    "py-tuples-sets": {
+      "reference_solution": "import sys\n\npair = tuple(sys.stdin.read().split())\nunique = set(pair)\nprint(\"\".join(pair), len(unique))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-strings": {
+      "reference_solution": "import sys\n\ntext = sys.stdin.read().rstrip(\"\\n\")\nprint(text[1:-1])\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "drops one extra trailing code point",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "text[1:-1]",
+              "to": "text[1:-2]"
+            }
+          ]
+        }
+      ]
+    },
+    "py-pathlib": {
+      "reference_solution": "import sys\nfrom pathlib import PurePosixPath\n\npath = PurePosixPath(sys.stdin.read().strip())\nprint(f\"{path.stem}:{path.suffix}\")\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-control-flow": {
+      "reference_solution": "import sys\n\nlimit = int(sys.stdin.read().strip())\ntotal = 0\nfor value in range(1, limit + 1):\n    if value % 2 == 1:\n        total += value\nprint(total)\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "excludes the inclusive upper boundary",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "range(1, limit + 1)",
+              "to": "range(1, limit)"
+            }
+          ]
+        }
+      ]
+    },
+    "py-functions": {
+      "reference_solution": "import sys\n\ndef area(width, height):\n    return width * height\n\nwidth, height = map(int, sys.stdin.read().split())\nprint(area(width, height))\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "returns perimeter where area is required",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "return width * height",
+              "to": "return 2 * (width + height)"
+            }
+          ]
+        }
+      ]
+    },
+    "py-modules-imports": {
+      "reference_solution": "import math\nimport sys\n\nvalue = float(sys.stdin.read().strip())\nprint(math.ceil(value))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-lambdas-closures": {
+      "reference_solution": "import sys\n\ndef make_adder(delta):\n    return lambda value: value + delta\n\ndelta, value = map(int, sys.stdin.read().split())\nprint(make_adder(delta)(value))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-decorators": {
+      "reference_solution": "import sys\nfrom functools import wraps\n\ndef bracket(function):\n    @wraps(function)\n    def wrapper(value):\n        return f\"[{function(value).upper()}]\"\n    return wrapper\n\n@bracket\ndef label(value):\n    return value\n\nprint(label(sys.stdin.read().strip()))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-async": {
+      "reference_solution": "import asyncio\nimport sys\n\nasync def double(value):\n    await asyncio.sleep(0)\n    return value * 2\n\nasync def main():\n    values = [int(token) for token in sys.stdin.read().split()]\n    results = await asyncio.gather(*(double(value) for value in values))\n    print(*results)\n\nasyncio.run(main())\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-lists-dicts": {
+      "reference_solution": "import sys\n\ntokens = sys.stdin.read().split()\nquery = tokens[0]\nscores = {}\nfor index in range(1, len(tokens), 2):\n    name = tokens[index]\n    score = int(tokens[index + 1])\n    scores.setdefault(name, []).append(score)\nprint(sum(scores.get(query, [])))\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "queries the first inserted name instead of the requested name",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "scores.get(query, [])",
+              "to": "scores.get(tokens[1], [])"
+            }
+          ]
+        }
+      ]
+    },
+    "py-sorting-keys": {
+      "reference_solution": "import sys\n\nusers = []\nfor token in sys.stdin.read().split():\n    name, score = token.rsplit(\":\", 1)\n    users.append((name, int(score)))\nbest = sorted(users, key=lambda item: (-item[1], item[0]))[0]\nprint(f\"{best[0]}:{best[1]}\")\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-counter-defaultdict": {
+      "reference_solution": "import sys\nfrom collections import Counter, defaultdict\n\nquery, *words = sys.stdin.read().split()\ncounts = Counter(words)\ngroups = defaultdict(list)\nfor word in words:\n    groups[word[0]].append(word)\nprint(counts[query], len(groups.get(query[0], [])))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-deque": {
+      "reference_solution": "import sys\nfrom collections import deque\n\nmiddle, left, right = sys.stdin.read().split()\nqueue = deque([middle])\nqueue.appendleft(left)\nqueue.append(right)\nprint(queue.popleft(), queue.pop())\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-comprehensions": {
+      "reference_solution": "import sys\n\nnumbers = [int(token) for token in sys.stdin.read().split()]\nsquares = [number * number for number in numbers if number % 2 == 0]\nprint(sum(squares))\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "keeps odd values instead of even values",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "number % 2 == 0",
+              "to": "number % 2 != 0"
+            }
+          ]
+        }
+      ]
+    },
+    "py-generators": {
+      "reference_solution": "import sys\n\ndef countdown(number):\n    while number > 0:\n        yield number\n        number -= 1\n\nnumber = int(sys.stdin.read().strip())\nprint(*countdown(number))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-itertools": {
+      "reference_solution": "import sys\nfrom itertools import chain\n\ngroups = sys.stdin.read().split()\nprint(\"\".join(chain.from_iterable(groups)))\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-errors": {
+      "reference_solution": "import sys\n\ncandidate, fallback = sys.stdin.read().split()\ntry:\n    value = int(candidate)\nexcept ValueError:\n    value = int(fallback)\nprint(value)\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "ignores the supplied fallback after conversion failure",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "value = int(fallback)",
+              "to": "value = 0"
+            }
+          ]
+        }
+      ]
+    },
+    "py-files-context": {
+      "reference_solution": "import sys\nfrom io import StringIO\n\nwith StringIO(sys.stdin.read()) as handle:\n    text = handle.read().strip()\nprint(text.upper() or \"EMPTY\")\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-dataclasses": {
+      "reference_solution": "import sys\nfrom dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\n    def total(self):\n        return self.x + self.y\n\nx, y = map(int, sys.stdin.read().split())\npoint = Point(x, y)\nprint(f\"{point.total()}:{point == Point(x, y)}\")\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "subtracts point coordinates instead of adding them",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "return self.x + self.y",
+              "to": "return self.x - self.y"
+            }
+          ]
+        }
+      ]
+    },
+    "py-typing": {
+      "reference_solution": "import sys\nfrom typing import Iterable, get_type_hints\n\ndef total(values: Iterable[int]) -> int:\n    return sum(values)\n\nvalues = [int(token) for token in sys.stdin.read().split()]\nhints = get_type_hints(total)\nlabel = \"typed\" if hints.get(\"return\") is int and \"values\" in hints else \"untyped\"\nprint(f\"{label}:{total(values)}\")\n",
+      "starter_failure": "output",
+      "mutants": []
+    },
+    "py-testing-assert": {
+      "reference_solution": "import sys\nfrom collections import Counter\nfrom typing import Iterable\n\ndef most_common(words: Iterable[str]) -> tuple[str, int]:\n    materialized = list(words)\n    counts = Counter(materialized)\n    assert sum(counts.values()) == len(materialized)\n    assert all(count > 0 for count in counts.values())\n    if not counts:\n        return \"empty\", 0\n    return sorted(counts.items(), key=lambda item: (-item[1], item[0]))[0]\n\nword, count = most_common(sys.stdin.read().split())\nprint(f\"{word}:{count}\")\n",
+      "starter_failure": "output",
+      "mutants": [
+        {
+          "name": "relies on insertion order for equal frequencies",
+          "expected_failure": "output",
+          "replacements": [
+            {
+              "from": "key=lambda item: (-item[1], item[0])",
+              "to": "key=lambda item: -item[1]"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

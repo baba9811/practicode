@@ -12,6 +12,9 @@ use practicode::{
 };
 use ratatui::{layout::Rect, style::Color};
 
+const PY_OUTPUT_SOLUTION: &str =
+    "import sys\n\nname, score = sys.stdin.read().split()\nprint(name, score, sep=\":\")\n";
+
 #[test]
 fn text_editor_preserves_utf8_while_editing() {
     let mut editor = TextEditor::default();
@@ -441,7 +444,7 @@ fn next_and_back_are_mode_aware() {
     app.handle_command_for_test("back").unwrap();
     assert!(app.output_for_test().contains("# Syntax:"));
     app.handle_command_for_test("next").unwrap();
-    assert!(app.status_text_for_test().contains("py-variables"));
+    assert!(app.status_text_for_test().contains("py-input"));
 }
 
 #[test]
@@ -450,7 +453,7 @@ fn learn_command_opens_syntax_course_separate_from_problem_mode() {
     let mut app = PracticodeApp::new(root).unwrap();
     app.handle_command_for_test("learn").unwrap();
     assert!(app.output_for_test().contains("Language delta"));
-    assert!(app.output_for_test().contains("judge-visible output"));
+    assert!(app.output_for_test().contains("raw stream write"));
     assert!(app.status_text_for_test().contains("learn"));
 
     app.handle_command_for_test("problems").unwrap();
@@ -482,9 +485,9 @@ fn run_in_learn_keeps_lesson_pane_visible() {
     app.handle_command_for_test("next").unwrap();
     app.handle_command_for_test("run").unwrap();
     assert!(app.output_for_test().contains("Exercise"));
-    assert!(app.output_for_test().contains("print and stdout"));
-    assert!(app.learn_result_for_test().contains("FAIL 0/1 [Output]"));
-    assert!(app.learn_result_for_test().contains("Got\n  TODO"));
+    assert!(app.output_for_test().contains("colon-delimited record"));
+    assert!(app.learn_result_for_test().contains("FAIL 0/3 [Output]"));
+    assert!(app.learn_result_for_test().contains("Got\n  Ada 7"));
     assert!(
         app.learn_result_for_test()
             .contains("Fix: press Esc or e to edit, then /run")
@@ -540,11 +543,12 @@ fn lesson_run_localizes_app_headline_and_preserves_raw_compiler_diagnostic() {
     .unwrap();
     save_state(&root, &state).unwrap();
     let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("back").unwrap();
 
     app.handle_command_for_test("run").unwrap();
 
     let output = app.learn_result_for_test();
-    assert!(output.contains("실패 0/1 [타입 검사]"), "{output}");
+    assert!(output.contains("실패 0/3 [타입 검사]"), "{output}");
     // Compiler stderr is tool-owned pass-through; only app-owned headline and guidance localize.
     assert!(output.contains("TS2322"), "{output}");
     assert!(output.contains("수정: Esc 또는 e로 편집한 뒤 /run"));
@@ -936,7 +940,7 @@ fn assert_guided_run_waits_for_exercise(name: &str, use_f5: bool) {
     app.handle_command_for_test("learn python").unwrap();
     let lesson = syntax_lessons_for("python")[0];
     let path = ensure_syntax_submission(&root, lesson).unwrap();
-    std::fs::write(&path, "print('Ada:7')\n").unwrap();
+    std::fs::write(&path, PY_OUTPUT_SOLUTION).unwrap();
     app.handle_command_for_test("code").unwrap();
 
     let run = |app: &mut PracticodeApp| {
@@ -961,7 +965,7 @@ fn assert_guided_run_waits_for_exercise(name: &str, use_f5: bool) {
             .get("python")
             .is_none_or(|mastery| !mastery.contains_key("py-output"))
     );
-    assert_eq!(std::fs::read_to_string(&path).unwrap(), "print('Ada:7')\n");
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), PY_OUTPUT_SOLUTION);
 
     app.handle_command_for_test("next").unwrap();
     run(&mut app).unwrap();
@@ -973,7 +977,7 @@ fn assert_guided_run_waits_for_exercise(name: &str, use_f5: bool) {
             .get("python")
             .is_none_or(|mastery| !mastery.contains_key("py-output"))
     );
-    assert_eq!(std::fs::read_to_string(&path).unwrap(), "print('Ada:7')\n");
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), PY_OUTPUT_SOLUTION);
 
     app.handle_command_for_test("next").unwrap();
     assert_eq!(app.learning_step_for_test(), LearningStep::Exercise);
@@ -1006,12 +1010,12 @@ fn manually_browsed_lessons_remain_runnable() {
     app.handle_command_for_test("back").unwrap();
     let lesson = syntax_lessons_for("python")[0];
     let path = ensure_syntax_submission(&root, lesson).unwrap();
-    std::fs::write(path, "print('Ada:7')\n").unwrap();
+    std::fs::write(path, PY_OUTPUT_SOLUTION).unwrap();
     app.handle_command_for_test("code").unwrap();
 
     app.handle_command_for_test("run").unwrap();
 
-    assert!(app.learn_result_for_test().contains("PASS 1/1"));
+    assert!(app.learn_result_for_test().contains("PASS 3/3"));
     let bank = load_bank(&root).unwrap();
     assert_eq!(
         load_state(&root, &bank).unwrap().syntax_mastery["python"]["py-output"].stage,
@@ -1048,7 +1052,7 @@ fn guided_session_records_each_judge_and_only_a_pass_reaches_reflect() {
 
     let lesson = syntax_lessons_for("python")[0];
     let path = ensure_syntax_submission(&root, lesson).unwrap();
-    std::fs::write(path, "print('Ada:7')\n").unwrap();
+    std::fs::write(path, PY_OUTPUT_SOLUTION).unwrap();
     app.handle_command_for_test("code").unwrap();
     app.handle_command_for_test("run").unwrap();
 
@@ -1069,13 +1073,13 @@ fn guided_session_records_each_judge_and_only_a_pass_reaches_reflect() {
 }
 
 #[test]
-fn guided_session_uses_lesson_copy_fallbacks_and_lesson_opens_the_full_reference() {
+fn guided_session_uses_step_copy_and_lesson_opens_the_full_reference() {
     let root = tmp_root("guided-session-copy-fallback");
     let mut app = PracticodeApp::new(root).unwrap();
     app.handle_command_for_test("learn python").unwrap();
 
     let step = app.output_for_test();
-    assert!(step.contains("judge-visible output"), "{step}");
+    assert!(step.contains("raw stream write"), "{step}");
     assert!(!step.contains("Worked example"), "{step}");
     assert!(!step.contains("References"), "{step}");
 

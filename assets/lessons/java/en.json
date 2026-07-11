@@ -4,424 +4,508 @@
   "ui_language": "en",
   "lessons": {
     "java-output": {
-      "title": "Stdout",
-      "concept": "Use Stdout when a judge compares every newline and character. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Stdout to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Exact standard output",
+      "concept": "`System.out.print` emits its argument, while `println` also terminates the line. This judge normalizes CRLF to LF; every other whitespace difference remains significant, including spaces and extra blank lines.",
+      "worked_example": "The example builds `Mina:4` from a `String` and an `int`, then includes one explicit newline in the text passed to `print`. No hidden conversion or extra label is added by the output API.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Stdout rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Stdout exercise.",
-        "Matching the judge output without checking this lesson idea: Use Stdout when a judge compares every newline and character."
+        "Using a space or hyphen where the required separator is a colon.",
+        "Calling `println` on text that already ends with a newline and producing a blank line."
       ],
       "self_check": [
-        "Which expression in the example applies Stdout before the `example:` output?",
-        "Which TODO line in the Stdout exercise must derive the value from its own data instead of copying the demo?"
+        "What bytes follow the digit when `print` receives a string ending in `\\n`?",
+        "Would replacing the example call with `println` preserve its exact output?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Stdout to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-variables-types": {
-      "title": "Variables and types",
-      "concept": "Use Variables and types when primitive values and object references must be declared before use. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Variables and types to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Variables and types rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Variables and types exercise.",
-        "Matching the judge output without checking this lesson idea: Use Variables and types when primitive values and object references must be declared before use."
-      ],
-      "self_check": [
-        "Which expression in the example applies Variables and types before the `example:` output?",
-        "Which TODO line in the Variables and types exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Variables and types to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-numbers-operators": {
-      "title": "Numbers and operators",
-      "concept": "Use Numbers and operators when division and remainder must stay integer-based in many stdin problems. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Numbers and operators to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Numbers and operators rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Numbers and operators exercise.",
-        "Matching the judge output without checking this lesson idea: Use Numbers and operators when division and remainder must stay integer-based in many stdin problems."
-      ],
-      "self_check": [
-        "Which expression in the example applies Numbers and operators before the `example:` output?",
-        "Which TODO line in the Numbers and operators exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Numbers and operators to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-strings": {
-      "title": "Strings",
-      "concept": "Use Strings when text cleanup and substring extraction happen before comparison or output. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Strings to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Strings rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Strings exercise.",
-        "Matching the judge output without checking this lesson idea: Use Strings when text cleanup and substring extraction happen before comparison or output."
-      ],
-      "self_check": [
-        "Which expression in the example applies Strings before the `example:` output?",
-        "Which TODO line in the Strings exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Strings to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-control-flow": {
-      "title": "Control flow",
-      "concept": "Use Control flow when branches and loops decide which values enter an accumulator. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Control flow to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Control flow rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Control flow exercise.",
-        "Matching the judge output without checking this lesson idea: Use Control flow when branches and loops decide which values enter an accumulator."
-      ],
-      "self_check": [
-        "Which expression in the example applies Control flow before the `example:` output?",
-        "Which TODO line in the Control flow exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Control flow to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-methods": {
-      "title": "Methods",
-      "concept": "Use Methods when a reusable calculation needs a named boundary. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Methods to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Methods rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Methods exercise.",
-        "Matching the judge output without checking this lesson idea: Use Methods when a reusable calculation needs a named boundary."
-      ],
-      "self_check": [
-        "Which expression in the example applies Methods before the `example:` output?",
-        "Which TODO line in the Methods exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Methods to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Parse the learner and score, compose one colon-separated line, and emit exactly one trailing newline.",
+      "objective": "Produce judge-clean stdout whose separator and line ending come from deliberate formatting choices.",
+      "language_delta": "Unlike languages with a built-in `print` function, Java routes console output through the `System.out` stream and distinguishes `print` from `println`.",
+      "prediction_prompt": "Before running, write down the complete character sequence from the example, including its final line break.",
+      "transfer_trap": "A visually identical terminal display can still fail if one version has a missing or doubled newline."
     },
     "java-input": {
-      "title": "Input parsing",
-      "concept": "Use Input parsing when stdin arrives as bytes and must become typed tokens. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Input parsing to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "UTF-8 standard input",
+      "concept": "`System.in` supplies bytes, not already-decoded text. `readAllBytes` plus `StandardCharsets.UTF_8` makes decoding portable; classes outside `java.lang` need an import or a fully qualified name.",
+      "worked_example": "A `ByteArrayInputStream` stands in for stdin, its bytes are decoded explicitly, and two tokens are added. The example prints a labeled demonstration total rather than any exercise answer.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Input parsing rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Input parsing exercise.",
-        "Matching the judge output without checking this lesson idea: Use Input parsing when stdin arrives as bytes and must become typed tokens."
+        "Constructing a `String` from bytes with the platform-default charset.",
+        "Splitting blank input into a token and attempting to parse an empty integer."
       ],
       "self_check": [
-        "Which expression in the example applies Input parsing before the `example:` output?",
-        "Which TODO line in the Input parsing exercise must derive the value from its own data instead of copying the demo?"
+        "Why is `StandardCharsets` imported while `String` is available without an import?",
+        "Which branch prevents the empty-input case from reaching `Integer.parseInt`?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Input parsing to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Decode all stdin as UTF-8, sum each signed integer token, and leave the accumulator at zero when no token exists.",
+      "objective": "Decode stdin as UTF-8 and sum valid signed integer tokens separated by the default-regex whitespace accepted by `\\s+`, returning zero for blank input.",
+      "language_delta": "Some runtimes expose stdin as text by default; Java exposes an `InputStream`, so charset selection belongs in the program.",
+      "prediction_prompt": "Predict the total for tokens split across several lines, then predict the result for zero input bytes.",
+      "transfer_trap": "An import only shortens a source-level type name; it neither installs nor dynamically loads the referenced JDK class."
     },
-    "java-arrays-collections": {
-      "title": "Arrays and collections",
-      "concept": "Use Arrays and collections when fixed arrays, growable List, keyed Map, and unique Set solve different container jobs. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Arrays and collections to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "java-variables-types": {
+      "title": "Typed values and final bindings",
+      "concept": "Local declarations give each value a compile-time type. Primitives carry values, references identify objects, `final` prevents rebinding, and `static` state belongs to a class rather than one instance.",
+      "worked_example": "The demo keeps the name binding final, compares a mutable integer score with its threshold, and stores the comparison in a boolean before rendering the report.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Arrays and collections rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Arrays and collections exercise.",
-        "Matching the judge output without checking this lesson idea: Use Arrays and collections when fixed arrays, growable List, keyed Map, and unique Set solve different container jobs."
+        "Treating equality with the threshold as a failure when the rule says at least.",
+        "Assuming a final reference makes every reachable object deeply immutable."
       ],
       "self_check": [
-        "Which expression in the example applies Arrays and collections before the `example:` output?",
-        "Which TODO line in the Arrays and collections exercise must derive the value from its own data instead of copying the demo?"
+        "Which declaration could be reassigned in the example, and which one could not?",
+        "What boolean results when score and threshold are both zero?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Arrays and collections to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Keep the parsed values in suitable declared types and derive the inclusive threshold report.",
+      "objective": "Connect `String`, `int`, and `boolean` values in one typed report without losing the boundary case.",
+      "language_delta": "Java's local types and final modifier are compile-time constraints; final resembles a fixed binding, not an immutable-object guarantee.",
+      "prediction_prompt": "Evaluate the comparison first for a score above the threshold and then for an exactly equal score.",
+      "transfer_trap": "Do not transfer JavaScript truthiness into Java: an integer cannot stand where a boolean condition is required."
     },
-    "java-classes-objects": {
-      "title": "Classes and objects",
-      "concept": "Use Classes and objects when objects need instance state plus behavior. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Classes and objects to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "java-numbers-operators": {
+      "title": "Truncating integer arithmetic",
+      "concept": "For two `int` operands, `/` produces an integer quotient truncated toward zero and `%` produces the corresponding remainder. Numeric parameter types also participate in compile-time overload selection.",
+      "worked_example": "Nineteen divided by four yields a quotient of four and remainder three. The labels make this demonstration output distinct from the compact exercise format.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Classes and objects rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Classes and objects exercise.",
-        "Matching the judge output without checking this lesson idea: Use Classes and objects when objects need instance state plus behavior."
+        "Replacing `/` with `Math.floorDiv` and changing negative quotients.",
+        "Deriving the remainder with floor-mod rules instead of Java's `%` operator."
       ],
       "self_check": [
-        "Which expression in the example applies Classes and objects before the `example:` output?",
-        "Which TODO line in the Classes and objects exercise must derive the value from its own data instead of copying the demo?"
+        "For a negative dividend and positive divisor, which direction does the quotient move?",
+        "How can you verify `dividend == quotient * divisor + remainder` for each case?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Classes and objects to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Parse two nonzero-divisor integers and print Java's quotient and remainder separated by a colon.",
+      "objective": "Compute signed integer division without importing floor-division behavior from another language.",
+      "language_delta": "Python's `//` floors toward negative infinity, whereas Java integer `/` truncates toward zero.",
+      "prediction_prompt": "Predict both fields for `-17 / 5` before checking the runtime result.",
+      "transfer_trap": "Changing either operand to floating point selects different arithmetic and no longer teaches integer truncation."
     },
-    "java-constructors": {
-      "title": "Constructors",
-      "concept": "Use Constructors when new objects must start with valid field values. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Constructors to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "java-strings": {
+      "title": "String cleanup and content equality",
+      "concept": "`strip` removes surrounding Unicode whitespace and returns a stripped String without mutating the source. Indexing and length use UTF-16 code units, while `.equals` compares contents and `==` compares references.",
+      "worked_example": "The sample strips spaces from a curly-wrapped word, verifies its delimiters, and extracts the interior with `substring`. The original string remains unchanged.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Constructors rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Constructors exercise.",
-        "Matching the judge output without checking this lesson idea: Use Constructors when new objects must start with valid field values."
+        "Using `==` to decide whether two separately created strings contain the same text.",
+        "Removing the first and last code unit without first confirming a matching wrapper pair."
       ],
       "self_check": [
-        "Which expression in the example applies Constructors before the `example:` output?",
-        "Which TODO line in the Constructors exercise must derive the value from its own data instead of copying the demo?"
+        "Why does the substring end index equal `length() - 1` rather than `length()`?",
+        "What does UTF-16 length count when a character is represented by a surrogate pair?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Constructors to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Strip the input and remove one surrounding `[]` or `{}` pair while preserving its Unicode interior.",
+      "objective": "Normalize wrapped text without mutating String data or relying on reference identity.",
+      "language_delta": "Java and JavaScript both index UTF-16 code units; Python string indices instead follow Unicode code points.",
+      "prediction_prompt": "Trace the stripped length and substring bounds for the bracketed Korean input.",
+      "transfer_trap": "Neither UTF-16 code units nor Unicode code points are user-perceived grapheme clusters."
     },
-    "java-encapsulation": {
-      "title": "Encapsulation",
-      "concept": "Use Encapsulation when callers should update state through methods instead of touching fields. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Encapsulation to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "java-control-flow": {
+      "title": "Branches and bounded loops",
+      "concept": "A `for` loop controls the inclusive numeric range and an `if` filters odd values. Enums offer fixed named alternatives; sealed hierarchies close subtype alternatives for pattern switches.",
+      "worked_example": "The counter advances from one through seven. Only values with a nonzero remainder after division by two enter the accumulator, producing a labeled odd sum.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Encapsulation rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Encapsulation exercise.",
-        "Matching the judge output without checking this lesson idea: Use Encapsulation when callers should update state through methods instead of touching fields."
+        "Using `< limit` and silently dropping the upper bound when it is odd.",
+        "Writing an integer directly as an `if` condition as though Java supported numeric truthiness."
       ],
       "self_check": [
-        "Which expression in the example applies Encapsulation before the `example:` output?",
-        "Which TODO line in the Encapsulation exercise must derive the value from its own data instead of copying the demo?"
+        "Which loop values contribute when the limit is six?",
+        "How do enum constants and permitted sealed subtypes differ as closed alternatives?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Encapsulation to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-static-members": {
-      "title": "Static members",
-      "concept": "Use Static members when a value belongs to the class rather than one instance. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Static members to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Static members rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Static members exercise.",
-        "Matching the judge output without checking this lesson idea: Use Static members when a value belongs to the class rather than one instance."
-      ],
-      "self_check": [
-        "Which expression in the example applies Static members before the `example:` output?",
-        "Which TODO line in the Static members exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Static members to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Traverse the inclusive range and accumulate only odd integers before printing the total.",
+      "objective": "Coordinate loop bounds, a parity branch, and an accumulator for zero and positive limits.",
+      "language_delta": "Java conditions must have boolean type, unlike languages that coerce zero and nonzero integers in branches.",
+      "prediction_prompt": "List every value visited for limit three, marking which ones change the total.",
+      "transfer_trap": "Arrow switch rules avoid fall-through, but an ordinary loop still needs correctly chosen initialization, condition, and update."
     },
     "java-enum-switch": {
-      "title": "Enum and switch",
-      "concept": "Use Enum and switch when a fixed set of states must map to explicit results. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Enum and switch to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Exhaustive enum switch expressions",
+      "concept": "An enum defines a finite set of singleton constants. A switch expression can map every constant to a value with arrow rules and no accidental fall-through.",
+      "worked_example": "The example maps `STARTED` and `STOPPED` to separate actions, assigns the switch result to a String, and prefixes it only for demonstration.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Enum and switch rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Enum and switch exercise.",
-        "Matching the judge output without checking this lesson idea: Use Enum and switch when a fixed set of states must map to explicit results."
+        "Adding a `default` arm that hides an unhandled enum constant after the enum evolves.",
+        "Expecting arrow-style cases to continue into the following case body."
       ],
       "self_check": [
-        "Which expression in the example applies Enum and switch before the `example:` output?",
-        "Which TODO line in the Enum and switch exercise must derive the value from its own data instead of copying the demo?"
+        "What compiler feedback appears if one enum constant lacks an arm and no default exists?",
+        "Does the switch expression execute more than one arrow rule for a single state?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Enum and switch to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Correct the mapping for each task state while keeping the switch expression exhaustive.",
+      "objective": "Convert a closed enum state into text without mutable result plumbing or fall-through.",
+      "language_delta": "Java switch expressions yield values, unlike older statement-only switch forms that commonly needed assignment and `break`.",
+      "prediction_prompt": "Choose the exact arm entered by `BLOCKED` and decide whether any later arm can run.",
+      "transfer_trap": "Exhaustiveness over an enum does not make arbitrary strings safe; `valueOf` still rejects unknown names."
     },
-    "java-exceptions": {
-      "title": "Exceptions",
-      "concept": "Use Exceptions when bad input can be recovered without hiding unrelated failures. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Exceptions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "java-methods": {
+      "title": "Typed static method checkpoint",
+      "concept": "A method signature fixes parameter and return types, while Java passes every argument by value, including copied object-reference values. Overload choice happens at compile time, varargs arrives as an array, and non-`java.lang` types need imports or qualified names.",
+      "worked_example": "The calculation lives in `area(int, int)`, and main supplies separate demo dimensions. The return value crosses the method boundary before formatting.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Exceptions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Exceptions exercise.",
-        "Matching the judge output without checking this lesson idea: Use Exceptions when bad input can be recovered without hiding unrelated failures."
+        "Repeating the multiplication in main instead of completing the named method.",
+        "Believing a method can replace the caller's reference variable merely because both variables refer to one object."
       ],
       "self_check": [
-        "Which expression in the example applies Exceptions before the `example:` output?",
-        "Which TODO line in the Exceptions exercise must derive the value from its own data instead of copying the demo?"
+        "Which parts of `static int area(int width, int height)` influence overload resolution?",
+        "When a varargs parameter is called, what concrete value does its method body receive?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Exceptions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-generics": {
-      "title": "Generics",
-      "concept": "Use Generics when one method must keep the caller's element type. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Generics to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Generics rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Generics exercise.",
-        "Matching the judge output without checking this lesson idea: Use Generics when one method must keep the caller's element type."
-      ],
-      "self_check": [
-        "Which expression in the example applies Generics before the `example:` output?",
-        "Which TODO line in the Generics exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Generics to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-interfaces": {
-      "title": "Interfaces",
-      "concept": "Use Interfaces when callers should depend on behavior rather than a concrete class. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Interfaces to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Interfaces rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Interfaces exercise.",
-        "Matching the judge output without checking this lesson idea: Use Interfaces when callers should depend on behavior rather than a concrete class."
-      ],
-      "self_check": [
-        "Which expression in the example applies Interfaces before the `example:` output?",
-        "Which TODO line in the Interfaces exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Interfaces to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-inheritance-composition": {
-      "title": "Inheritance and composition",
-      "concept": "Use Inheritance and composition when a subclass also needs a helper object to finish behavior. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Inheritance and composition to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Inheritance and composition rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Inheritance and composition exercise.",
-        "Matching the judge output without checking this lesson idea: Use Inheritance and composition when a subclass also needs a helper object to finish behavior."
-      ],
-      "self_check": [
-        "Which expression in the example applies Inheritance and composition before the `example:` output?",
-        "Which TODO line in the Inheritance and composition exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Inheritance and composition to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-records": {
-      "title": "Records",
-      "concept": "Use Records when immutable data carriers need less boilerplate. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Records to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Records rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Records exercise.",
-        "Matching the judge output without checking this lesson idea: Use Records when immutable data carriers need less boilerplate."
-      ],
-      "self_check": [
-        "Which expression in the example applies Records before the `example:` output?",
-        "Which TODO line in the Records exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Records to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-optional": {
-      "title": "Optional",
-      "concept": "Use Optional when a missing value must be handled explicitly. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Optional to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Optional rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Optional exercise.",
-        "Matching the judge output without checking this lesson idea: Use Optional when a missing value must be handled explicitly."
-      ],
-      "self_check": [
-        "Which expression in the example applies Optional before the `example:` output?",
-        "Which TODO line in the Optional exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Optional to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-streams-lambdas": {
-      "title": "Streams and lambdas",
-      "concept": "Use Streams and lambdas when collection processing is clearer as a pipeline. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Streams and lambdas to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Streams and lambdas rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Streams and lambdas exercise.",
-        "Matching the judge output without checking this lesson idea: Use Streams and lambdas when collection processing is clearer as a pipeline."
-      ],
-      "self_check": [
-        "Which expression in the example applies Streams and lambdas before the `example:` output?",
-        "Which TODO line in the Streams and lambdas exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Streams and lambdas to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-comparators-sorting": {
-      "title": "Comparators and sorting",
-      "concept": "Use Comparators and sorting when objects need ordering separate from their data shape. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Comparators and sorting to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Comparators and sorting rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Comparators and sorting exercise.",
-        "Matching the judge output without checking this lesson idea: Use Comparators and sorting when objects need ordering separate from their data shape."
-      ],
-      "self_check": [
-        "Which expression in the example applies Comparators and sorting before the `example:` output?",
-        "Which TODO line in the Comparators and sorting exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Comparators and sorting to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-try-with-resources": {
-      "title": "Try-with-resources",
-      "concept": "Use Try-with-resources when resources must close even when code exits early. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Try-with-resources to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Try-with-resources rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Try-with-resources exercise.",
-        "Matching the judge output without checking this lesson idea: Use Try-with-resources when resources must close even when code exits early."
-      ],
-      "self_check": [
-        "Which expression in the example applies Try-with-resources before the `example:` output?",
-        "Which TODO line in the Try-with-resources exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Try-with-resources to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-packages-imports": {
-      "title": "Packages and imports",
-      "concept": "Use Packages and imports when single-file exercises still need classes from JDK packages. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Packages and imports to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Packages and imports rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Packages and imports exercise.",
-        "Matching the judge output without checking this lesson idea: Use Packages and imports when single-file exercises still need classes from JDK packages."
-      ],
-      "self_check": [
-        "Which expression in the example applies Packages and imports before the `example:` output?",
-        "Which TODO line in the Packages and imports exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Packages and imports to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-annotations": {
-      "title": "Annotations",
-      "concept": "Use Annotations when metadata belongs on declarations rather than in runtime logic. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Annotations to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Annotations rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Annotations exercise.",
-        "Matching the judge output without checking this lesson idea: Use Annotations when metadata belongs on declarations rather than in runtime logic."
-      ],
-      "self_check": [
-        "Which expression in the example applies Annotations before the `example:` output?",
-        "Which TODO line in the Annotations exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Annotations to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-sealed-classes": {
-      "title": "Sealed classes",
-      "concept": "Use Sealed classes when a domain hierarchy should list its permitted implementations. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Sealed classes to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Sealed classes rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Sealed classes exercise.",
-        "Matching the judge output without checking this lesson idea: Use Sealed classes when a domain hierarchy should list its permitted implementations."
-      ],
-      "self_check": [
-        "Which expression in the example applies Sealed classes before the `example:` output?",
-        "Which TODO line in the Sealed classes exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Sealed classes to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-testing-assert": {
-      "title": "Testing and assert",
-      "concept": "Use Testing and assert when small checks should fail near the broken method. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Testing and assert to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Testing and assert rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Testing and assert exercise.",
-        "Matching the judge output without checking this lesson idea: Use Testing and assert when small checks should fail near the broken method."
-      ],
-      "self_check": [
-        "Which expression in the example applies Testing and assert before the `example:` output?",
-        "Which TODO line in the Testing and assert exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Testing and assert to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "java-equality-hashcode": {
-      "title": "equals and hashCode",
-      "concept": "Use equals and hashCode when HashSet must recognize equal value objects. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying equals and hashCode to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the equals and hashCode rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the equals and hashCode exercise.",
-        "Matching the judge output without checking this lesson idea: Use equals and hashCode when HashSet must recognize equal value objects."
-      ],
-      "self_check": [
-        "Which expression in the example applies equals and hashCode before the `example:` output?",
-        "Which TODO line in the equals and hashCode exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying equals and hashCode to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Finish the typed area method and keep stdin parsing and stdout formatting in main.",
+      "objective": "Demonstrate a reusable value-returning boundary rather than embedding all logic in the entry point.",
+      "language_delta": "Java has neither Python-style dynamic parameter binding nor TypeScript's erased overload implementations; one compiled signature must be applicable.",
+      "prediction_prompt": "Trace the two parsed integers into parameters, through the return statement, and back to println.",
+      "transfer_trap": "Imports do not affect overload selection; declared argument and parameter types do."
     },
     "java-overloading-varargs": {
-      "title": "Overloading and varargs",
-      "concept": "Use Overloading and varargs when method calls can choose among signatures and collect extra arguments. Keep the value path visible in one Solution.java file: setup, the Java construct, then stdout.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Overloading and varargs to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Overloads and varargs arrays",
+      "concept": "Overloading gives one method name multiple signatures. The compiler selects an applicable signature, and an `int...` parameter is represented as an `int[]` inside its method body.",
+      "worked_example": "The varargs overload totals two scores, then delegates the computed integer to the fixed-arity formatter. That second call resolves to the non-varargs signature.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Overloading and varargs rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Overloading and varargs exercise.",
-        "Matching the judge output without checking this lesson idea: Use Overloading and varargs when method calls can choose among signatures and collect extra arguments."
+        "Returning the number of varargs elements when the task asks for their numeric sum.",
+        "Assuming overload dispatch waits until runtime to inspect the actual array contents."
       ],
       "self_check": [
-        "Which expression in the example applies Overloading and varargs before the `example:` output?",
-        "Which TODO line in the Overloading and varargs exercise must derive the value from its own data instead of copying the demo?"
+        "Why does `label(name, total)` choose the two-argument overload?",
+        "What array reaches the varargs method for a user followed by a single zero?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Overloading and varargs to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Reduce the parsed score array and delegate its result to the formatting overload.",
+      "objective": "Observe both compile-time overload resolution and the array nature of variable arity.",
+      "language_delta": "Unlike JavaScript rest parameters, Java varargs participates in static applicability and overload ranking.",
+      "prediction_prompt": "Identify the selected overload at each of the two calls in the example before calculating output.",
+      "transfer_trap": "Adding a broad overload can make a call ambiguous even though each individual implementation looks valid."
+    },
+    "java-packages-imports": {
+      "title": "Imports and fully qualified names",
+      "concept": "An import lets source code use a simple type name. The same compilation unit may refer to another type by its package-qualified name, as with imported `ArrayList` assigned to `java.util.List`.",
+      "worked_example": "The declared variable exposes the List interface while the constructor names ArrayList through an import. Joining the stored words proves the collection is actually used.",
+      "common_mistakes": [
+        "Thinking an import downloads a library or executes initialization code.",
+        "Importing two types with the same simple name and expecting Java to guess which one is intended."
+      ],
+      "self_check": [
+        "Which source spelling would work if the `ArrayList` import were removed?",
+        "Why can `String` be written without either an import or `java.lang.String`?"
+      ],
+      "exercise_prompt": "Populate the qualified List with the imported implementation and concatenate its tokens without separators.",
+      "objective": "Distinguish namespace convenience from type availability while observing one real collection.",
+      "language_delta": "Java imports types into a compilation unit's naming context; they are not Python module execution or JavaScript module loading.",
+      "prediction_prompt": "Resolve every simple and qualified type name in the example to its package before running it.",
+      "transfer_trap": "A wildcard import does not include subpackages and cannot resolve an otherwise ambiguous simple name."
+    },
+    "java-arrays-collections": {
+      "title": "Collection observations",
+      "concept": "Arrays have fixed length, while generic List, Map, and Set types expose different collection behaviors. Streams can derive aggregates, and Comparator chains make ordering explicit instead of relying on subtraction.",
+      "worked_example": "Each array value enters a list, frequency map, and unique set. The sum is reconstructed from map keys times counts, so every printed field observes the advertised structure.",
+      "common_mistakes": [
+        "Printing the array length where the contract asks for a sum derived from Map entries.",
+        "Confusing list size, distinct set size, and number of map keys when duplicates appear."
+      ],
+      "self_check": [
+        "For `2 2 3`, what does each collection contain after the loop?",
+        "Which operation is terminal in the map-entry stream that computes the total?"
+      ],
+      "exercise_prompt": "Populate all three collection views and calculate the first report field from frequencies rather than the source array.",
+      "objective": "Explain three observable collection semantics through one duplicate-sensitive report.",
+      "language_delta": "Java arrays are reified fixed-size objects, while generic collection element types are checked statically and largely erased at runtime.",
+      "prediction_prompt": "Draw the List, Map, and Set states for repeated input before computing the three output fields.",
+      "transfer_trap": "A stream pipeline is lazy until its terminal operation, and a consumed stream cannot be reused."
+    },
+    "java-generics": {
+      "title": "Generic element preservation",
+      "concept": "A type parameter links input and output types: `<T> T last(List<T>)` returns the same element type accepted by the list. Raw types discard that useful check.",
+      "worked_example": "Type inference chooses String for the list of colors. The helper selects the last position and returns a String without an explicit cast.",
+      "common_mistakes": [
+        "Using raw `List` and moving a preventable type error to runtime.",
+        "Indexing with zero and accidentally returning the first element for multi-item input."
+      ],
+      "self_check": [
+        "What does T become for `List<Integer>` passed to the same helper?",
+        "Which precondition is necessary before subtracting one from `size()`?"
+      ],
+      "exercise_prompt": "Complete the reusable last-element selection while preserving the list's element type.",
+      "objective": "Use one type variable to express a relationship that callers can rely on without casts.",
+      "language_delta": "Java generics normally use erasure, unlike reified arrays, yet compile-time type relationships still prevent many invalid calls.",
+      "prediction_prompt": "Infer the method's T and the selected index for each provided word list.",
+      "transfer_trap": "Erasure does not make raw collections safe; it merely removes much generic representation from runtime."
+    },
+    "java-streams-lambdas": {
+      "title": "Lazy stream pipelines",
+      "concept": "A stream describes element processing until a terminal operation requests results. Here an `IntStream` uses a filtering lambda and `IntStream.map` for squaring; `sum` performs the traversal once.",
+      "worked_example": "`IntStream.of` creates two demo values, the predicate retains both evens, and the mapping squares them before the terminal total is labeled.",
+      "common_mistakes": [
+        "Building a filter and map pipeline but never invoking a terminal operation.",
+        "Trying to consume the same Stream object again after `sum` has closed its traversal."
+      ],
+      "self_check": [
+        "At what point are the example's predicate and mapping actually evaluated?",
+        "Why does zero survive the even filter yet contribute nothing to the squared total?"
+      ],
+      "exercise_prompt": "Keep even integers, square them, and produce one terminal sum from the parsed sequence.",
+      "objective": "Connect lazy intermediate operations to an observable numeric result.",
+      "language_delta": "Java streams are single-use traversal pipelines, not reusable collection containers or JavaScript arrays.",
+      "prediction_prompt": "Write the sequence after filtering and again after mapping for the mixed negative case.",
+      "transfer_trap": "A stream's encounter order and laziness do not imply parallel execution; parallelism is a separate choice."
+    },
+    "java-comparators-sorting": {
+      "title": "Comparator chains",
+      "concept": "`comparingInt`, `reversed`, and `thenComparing` state each ordering rule directly. This avoids subtraction, which can overflow for extreme integers.",
+      "worked_example": "Kai and Bea tie on score, so the secondary ascending name comparison places Bea first. The demo reads that first record after sorting.",
+      "common_mistakes": [
+        "Reversing the entire chained comparator and unintentionally reversing the name tie-break too.",
+        "Returning `right.score() - left.score()` and violating ordering through integer overflow."
+      ],
+      "self_check": [
+        "Which comparator stage decides between two equal scores?",
+        "Why does the single negative-score user remain the winner in its one-element list?"
+      ],
+      "exercise_prompt": "Compose descending score order with ascending name order, then print the first user.",
+      "objective": "Encode a stable business ordering as readable comparator composition.",
+      "language_delta": "Java Comparator objects make ordering explicit and reusable; operators such as `<` cannot directly sort arbitrary records.",
+      "prediction_prompt": "Order the three-user case by hand, applying only one comparator stage at a time.",
+      "transfer_trap": "`reversed()` applies to the comparator built so far, so call placement changes tie behavior."
+    },
+    "java-classes-objects": {
+      "title": "Per-instance object state",
+      "concept": "Each object owns its instance fields and receives behavior through methods. Constructors establish validity, private methods can enforce boundaries, static fields belong to the class, interfaces define contracts, and composition models has-a relationships.",
+      "worked_example": "One Counter starts at ten and receives a delta through `add`. The method changes `this` instance's field, and main observes twelve afterward.",
+      "common_mistakes": [
+        "Changing only the parameter variable and expecting the object's field to follow.",
+        "Making all state static, causing otherwise independent instances to share one value."
+      ],
+      "self_check": [
+        "Which storage location changes inside `add`, and which local variable merely carries an argument?",
+        "When is inheritance appropriate instead of holding a composed helper field?"
+      ],
+      "exercise_prompt": "Send the parsed delta to a Counter method that updates the receiver's own state.",
+      "objective": "Observe identity and encapsulated mutation through a minimal class instance.",
+      "language_delta": "Java classes use nominal declared types and explicit constructors, unlike purely structural object shapes.",
+      "prediction_prompt": "Track the Counter field separately from the `delta` parameter before and after the method call.",
+      "transfer_trap": "Private access prevents outside reads and writes, but only method logic can protect an invariant."
+    },
+    "java-constructors": {
+      "title": "Constructor-established invariants",
+      "concept": "A constructor has the class name and no return type. It must assign every blank final instance field before normal completion, often using `this.field` to disambiguate parameters.",
+      "worked_example": "The Rectangle constructor transfers two arguments into final dimensions. Its area method can then assume both fields were established.",
+      "common_mistakes": [
+        "Writing `void Rectangle(...)`, which declares a method instead of a constructor.",
+        "Assigning a parameter to itself and leaving the similarly named field uninitialized."
+      ],
+      "self_check": [
+        "What does the left side of `this.width = width` identify?",
+        "Why does the compiler reject a constructor path that omits a final field assignment?"
+      ],
+      "exercise_prompt": "Initialize both dimensions from the constructor arguments so area can use valid final fields.",
+      "objective": "Establish object state once at construction without placeholder dimensions.",
+      "language_delta": "Java constructors are special declarations, not ordinary value-returning initializer functions.",
+      "prediction_prompt": "Resolve each same-named field and parameter in the two assignments before calculating area.",
+      "transfer_trap": "Final fields prevent reassignment after construction but do not recursively freeze referenced values."
+    },
+    "java-encapsulation": {
+      "title": "Private state with enforced rules",
+      "concept": "A private field hides representation from unrelated code. The exposed operation must still validate requested changes; visibility and invariants solve different problems.",
+      "worked_example": "The Account accepts two positive deposits and ignores the negative request. Its accessor exposes only the resulting integer balance.",
+      "common_mistakes": [
+        "Assuming `private` automatically rejects invalid values passed through a method.",
+        "Returning a mutable internal collection directly and bypassing the intended boundary."
+      ],
+      "self_check": [
+        "Which call in the example leaves the balance unchanged?",
+        "Could code inside Account still assign an invalid value to its private field?"
+      ],
+      "exercise_prompt": "Place the positivity rule inside deposit and report the state only through its accessor.",
+      "objective": "Enforce a small invariant at the method that owns the state transition.",
+      "language_delta": "Java access modifiers are compile-time and runtime member-access rules, not automatic domain validation.",
+      "prediction_prompt": "Apply each parsed delta in order and record whether the guard accepts it.",
+      "transfer_trap": "A getter can leak encapsulation if it returns a mutable internal object rather than a safe view or copy."
+    },
+    "java-static-members": {
+      "title": "Class-owned static constants",
+      "concept": "A static field belongs to the class and is shared by calls and instances. `static final` fixes its binding, although an object reached through such a binding could remain mutable.",
+      "worked_example": "The scaling method reads `FACTOR` through class context and multiplies a demo value. No instance is needed to access either static member.",
+      "common_mistakes": [
+        "Creating an object solely to call a static utility and obscuring class ownership.",
+        "Reading `final` as a promise of deep immutability for every possible field type."
+      ],
+      "self_check": [
+        "How many FACTOR storage locations exist if ten Solution objects are created?",
+        "Can the scale method read an instance field without receiving or creating an instance?"
+      ],
+      "exercise_prompt": "Correct the shared factor so the static scaling method handles positive, zero, and negative input.",
+      "objective": "Use class-level state deliberately and distinguish it from per-object fields.",
+      "language_delta": "Java's `static` attaches a member to a declared class, unlike a module-level binding that has no containing type.",
+      "prediction_prompt": "Substitute the class factor into the multiplication for each signed input.",
+      "transfer_trap": "A static mutable field introduces shared state across every instance and often needs synchronization."
+    },
+    "java-interfaces": {
+      "title": "Behavior through an interface",
+      "concept": "An interface names a public behavioral contract. Code accepting `Named` can call `name()` without knowing whether the implementation is a record, class, or another permitted type.",
+      "worked_example": "A User record implements Named automatically through its accessor. The renderer consumes only the interface and performs locale-stable uppercasing.",
+      "common_mistakes": [
+        "Reducing an implementing method's visibility even though interface methods are public.",
+        "Typing the renderer as User and needlessly coupling it to one implementation."
+      ],
+      "self_check": [
+        "Which method is available through a variable declared as Named?",
+        "Could a different class participate without extending User?"
+      ],
+      "exercise_prompt": "Implement the uppercase transformation through the interface-facing helper.",
+      "objective": "Call shared behavior against a contract rather than a concrete representation.",
+      "language_delta": "Java interfaces are nominal: a class must declare implementation, unlike TypeScript's structural compatibility.",
+      "prediction_prompt": "Follow the record accessor through the Named reference before applying `Locale.ROOT` case conversion.",
+      "transfer_trap": "Default interface methods can provide behavior, but they do not turn interface fields into per-instance state."
+    },
+    "java-inheritance-composition": {
+      "title": "Inheritance plus composition",
+      "concept": "Inheritance models a substitutable is-a relationship and composition models a has-a relationship. The Player reuses base score state while owning a separate Bonus value.",
+      "worked_example": "Construction sends the base argument to `super` and creates the composed record for the bonus. `total` reads both sources to produce twelve.",
+      "common_mistakes": [
+        "Ignoring the composed field and returning inherited state alone.",
+        "Using inheritance only to reuse code when the subtype cannot honor the base type's expectations."
+      ],
+      "self_check": [
+        "Which constructor initializes the protected base field?",
+        "Why is Bonus held as a field rather than used as Player's superclass?"
+      ],
+      "exercise_prompt": "Combine the inherited base value with the composed bonus in the total method.",
+      "objective": "Separate two reuse mechanisms according to their semantic relationships.",
+      "language_delta": "Java permits one class superclass but multiple implemented interfaces, making composition especially useful for independent parts.",
+      "prediction_prompt": "Trace the two constructor arguments into their different objects before adding the final total.",
+      "transfer_trap": "Protected visibility allows selected access; it does not make an arbitrary has-a relationship into a sound subtype."
+    },
+    "java-exceptions": {
+      "title": "Narrow exception recovery",
+      "concept": "`Integer.parseInt` reports malformed input with unchecked `NumberFormatException`. Catch that precise failure, while using Optional for absence and try-with-resources for deterministic closing rather than treating every condition as one broad exception.",
+      "worked_example": "Parsing `oops` enters the narrow catch and returns the caller's fallback. Other unexpected runtime defects would not be swallowed by this helper.",
+      "common_mistakes": [
+        "Catching `Exception` and hiding unrelated programming errors.",
+        "Expecting parseInt to return an Optional or sentinel instead of throwing for malformed text."
+      ],
+      "self_check": [
+        "Does a valid negative integer enter the catch block?",
+        "Which resource-closing failures can a try-with-resources statement preserve as suppressed exceptions?"
+      ],
+      "exercise_prompt": "Return a successful parsed value or the supplied fallback only when numeric syntax is invalid.",
+      "objective": "Recover at the smallest relevant exception boundary without masking other faults.",
+      "language_delta": "Java distinguishes checked exceptions that must be handled or declared from unchecked RuntimeException subclasses such as NumberFormatException.",
+      "prediction_prompt": "Choose the try or catch return path for each candidate token before evaluating its fallback.",
+      "transfer_trap": "Missing data, malformed data, and I/O failure carry different meanings; one catch-all path erases that distinction."
+    },
+    "java-optional": {
+      "title": "Optional filtering and fallback",
+      "concept": "Optional represents a return value that may be absent. `filter` retains a present value only when its predicate succeeds, and `orElse` supplies a safe fallback without `get()`.",
+      "worked_example": "The present word `cat` satisfies the length predicate, so the fallback is not selected. A label distinguishes the demonstration line.",
+      "common_mistakes": [
+        "Calling `get()` without proving presence and risking `NoSuchElementException`.",
+        "Using Optional fields and parameters everywhere instead of mainly as an absence-aware return type."
+      ],
+      "self_check": [
+        "Does `filter` invoke its predicate when the Optional is already empty?",
+        "Which path produces `missing` for the dash sentinel?"
+      ],
+      "exercise_prompt": "Construct possible presence, retain only a short token, and choose the fallback declaratively.",
+      "objective": "Separate absent input from accepted present text without unsafe extraction.",
+      "language_delta": "Optional is an explicit container, unlike nullable references that carry no method-enforced handling path.",
+      "prediction_prompt": "Mark the Optional as present or empty after construction and again after filtering each case.",
+      "transfer_trap": "Optional does not replace exceptions for failures that need diagnostic information."
+    },
+    "java-try-with-resources": {
+      "title": "Observed try-with-resources",
+      "concept": "A try-with-resources declaration closes its AutoCloseable value on normal and abrupt exit. Reading from the declared resource makes lifetime management observable rather than decorative.",
+      "worked_example": "The managed ByteArrayInputStream contains demo bytes. Its contents are read inside the block, decoded with UTF-8, stripped, and uppercased before automatic close.",
+      "common_mistakes": [
+        "Declaring a resource but continuing to read from a separate untracked stream.",
+        "Forgetting that a close failure may be attached as suppressed when the body already threw."
+      ],
+      "self_check": [
+        "Which object is guaranteed to receive `close()` after the example block?",
+        "What text should the empty byte sequence become before printing?"
+      ],
+      "exercise_prompt": "Normalize the bytes actually read from the managed stream and give empty content its named form.",
+      "objective": "Tie deterministic resource lifetime to the data path whose result reaches stdout.",
+      "language_delta": "Java's statement encodes RAII-like cleanup in control flow even though general object lifetimes are garbage-collected.",
+      "prediction_prompt": "Trace input bytes through resource construction, reading, decoding, stripping, and case conversion.",
+      "transfer_trap": "Garbage collection is not a timely substitute for closing files, sockets, or other external resources."
+    },
+    "java-equality-hashcode": {
+      "title": "Equality and hash consistency",
+      "concept": "Logical equality must be reflexive, symmetric, transitive, consistent, and null-safe. Whenever two objects are equal, their hash codes must also match for hash collections to work.",
+      "worked_example": "A record supplies component-based equals and hashCode automatically, so two identical Points collapse to one HashSet entry.",
+      "common_mistakes": [
+        "Comparing only one coordinate and declaring distinct points equal.",
+        "Overriding equals while leaving a hashCode implementation that can differ for equal objects."
+      ],
+      "self_check": [
+        "Why may unequal objects still share a hash code even though equal objects may not differ?",
+        "How does pattern `instanceof Point other` combine the type test and cast?"
+      ],
+      "exercise_prompt": "Make both Point coordinates participate in equals while preserving the equal-implies-same-hash rule, then observe HashSet size.",
+      "objective": "Implement a value contract that remains correct inside hashed collections.",
+      "language_delta": "Java's default Object equality is identity-based; records opt into component value semantics automatically.",
+      "prediction_prompt": "Classify each point pair as equal or unequal before deciding whether HashSet adds a second entry.",
+      "transfer_trap": "A good hash distribution improves performance, but the equal-implies-same-hash rule is the correctness requirement."
+    },
+    "java-records": {
+      "title": "Defensive record snapshot checkpoint",
+      "concept": "Records make component references final and generate value members, but they are only shallowly immutable. `List.copyOf` in a compact constructor detaches the component from a mutable source and rejects null elements.",
+      "worked_example": "The compact constructor copies `[4, 5]`; adding another value to the original list cannot change the record's stored list, whose sum remains nine.",
+      "common_mistakes": [
+        "Calling a record deeply immutable while storing a caller-owned mutable List directly.",
+        "Breaking equals and hash consistency by adding unrelated mutable state to value semantics."
+      ],
+      "self_check": [
+        "Which reference is reassigned to the copy inside the compact constructor?",
+        "Why does removing an item from the source affect a record component that retained the same mutable list?"
+      ],
+      "exercise_prompt": "Defensively copy the list component before the source's final item is removed, then sum the retained snapshot.",
+      "objective": "Prove shallow record immutability and repair its aliasing boundary with an immutable copy.",
+      "language_delta": "A Java record is concise nominal data, not a recursively frozen object graph or a TypeScript structural type.",
+      "prediction_prompt": "Draw the source and component references before and after `List.copyOf`, then remove the source's final item.",
+      "transfer_trap": "Final record components prevent reassignment; they do not prevent mutation of a mutable object stored without defensive copying."
+    },
+    "java-annotations": {
+      "title": "Runtime annotation metadata",
+      "concept": "`@Target(METHOD)` restricts placement and `@Retention(RUNTIME)` preserves metadata for reflection. Without runtime retention, `getAnnotation` cannot observe the declared prefix.",
+      "worked_example": "Reflection locates the normalize method and reads its `trace` Label. The normal method call transforms demo text, and the reflected metadata supplies the prefix.",
+      "common_mistakes": [
+        "Relying on the default CLASS retention when runtime reflection is required.",
+        "Searching a different method signature and receiving no matching reflective Method."
+      ],
+      "self_check": [
+        "At which retention policy does the VM expose annotations to reflection?",
+        "What target prevents Label from being placed on a field?"
+      ],
+      "exercise_prompt": "Change the annotation declaration so its method metadata survives into the running program.",
+      "objective": "Observe an annotation value through reflection rather than treating metadata as unused decoration.",
+      "language_delta": "Java annotations require explicit retention for runtime use; many type-system annotations need only compile-time visibility.",
+      "prediction_prompt": "Predict whether `getAnnotation` returns an object or null before and after adding runtime retention.",
+      "transfer_trap": "Retention controls availability, not behavior: reflection code must still read and apply the annotation."
+    },
+    "java-sealed-classes": {
+      "title": "Sealed shapes and pattern switch",
+      "concept": "A sealed interface restricts direct implementors to its permits list. Java 21 pattern switch can deconstruct each record subtype and yield a value without a catch-all default.",
+      "worked_example": "The Rect pattern binds width and height directly, and the exhaustive switch computes its metric. Circle and Dot remain visibly handled alternatives.",
+      "common_mistakes": [
+        "Using virtual methods only and never demonstrating that the hierarchy is closed to other direct subtypes.",
+        "Adding a default arm that conceals a newly permitted shape from compiler exhaustiveness feedback."
+      ],
+      "self_check": [
+        "Which permitted record's components are multiplied in its pattern arm?",
+        "Why can the switch omit default and still compile under Java 21?"
+      ],
+      "exercise_prompt": "Correct the Circle record-pattern arm while preserving the exhaustive sealed-hierarchy switch.",
+      "objective": "Use closed subtype knowledge and record deconstruction in one observable expression.",
+      "language_delta": "Sealed types provide nominal hierarchy closure, unlike an unrestricted base class or a structurally inferred union.",
+      "prediction_prompt": "Select the runtime pattern for each shape token and bind its component variables before calculating.",
+      "transfer_trap": "Sealing controls direct extension according to permits rules; it does not automatically make instances immutable."
+    },
+    "java-testing-assert": {
+      "title": "Always-active capstone checks",
+      "concept": "This capstone combines UTF-8 parsing, methods, records, generic collections, streams, comparator chains, Optional fallback behavior, and explicit failure checks. Java `assert` statements are normally disabled unless the VM starts with `-ea`, so correctness checks that must always run use an ordinary method throwing AssertionError.",
+      "worked_example": "Two equal-score records are ordered by name, the helper verifies its empty fallback with `check`, and a labeled winner is printed. Imports, record accessors, stream termination, and explicit ordering all contribute.",
+      "common_mistakes": [
+        "Using Java `assert` for a mandatory validation while forgetting that the judge does not enable assertions.",
+        "Sorting scores alone and letting encounter order decide equal-score winners."
+      ],
+      "self_check": [
+        "Which capstone rules remain active even when the JVM lacks `-ea`?",
+        "How do enum and sealed closure, overloads and varargs, imports, generics, streams, comparators, constructors, encapsulation, static state, interfaces, inheritance and composition, Optional, managed resources, equality, and annotation retention guide extensions of this program?"
+      ],
+      "exercise_prompt": "Complete deterministic best-user selection and retain the explicit empty-result check before emitting the winner.",
+      "objective": "Integrate the core path in a testable record-and-collection program and connect each of the sixteen lab rules to an honest extension decision.",
+      "language_delta": "Unlike Python's optimization-removable assert and Java's disabled-by-default assert, an explicit method call always evaluates under normal execution.",
+      "prediction_prompt": "Order the tied users by both comparator stages, then separately trace the empty list through its fallback and check.",
+      "transfer_trap": "Assertions are for internal assumptions, not validating untrusted input; mandatory checks need ordinary control flow and clear failures."
     }
   }
 }

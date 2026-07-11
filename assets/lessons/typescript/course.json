@@ -1,672 +1,822 @@
 {
+  "schema_version": 1,
+  "runtime": "ts",
   "lessons": [
     {
-      "aliases": [],
-      "body": "console.log appends a newline, while process.stdout.write writes exactly the bytes you give it.",
-      "cases": [
-        {
-          "input": "",
-          "output": "score=7\n"
-        }
-      ],
-      "example": "const score: number = 7;\nprocess.stdout.write(`example:score=${score}\\n`);",
       "id": "ts-output",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://nodejs.org/api/typescript.html",
-        "https://nodejs.org/api/fs.html#fsreadfilesyncpath-options",
-        "https://nodejs.org/api/process.html#processstdout"
-      ],
-      "starter": "const score: number = 7;\n// TODO: format the score for stdout with one trailing newline\nprocess.stdout.write('TODO\\n');\n",
-      "title": "Console and stdout",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "const protects a binding from reassignment; let marks the few local values that intentionally change.",
+      "title": "Write exact stdout bytes",
+      "body": "Send a formatted record through process.stdout.write so the separator and final newline are deliberate. This also establishes that Node decides runtime behavior after TypeScript annotations are stripped; module syntax gets its own orientation lab.",
+      "example": "const learner: string = \"Mina\";\nconst points: number = 4;\nprocess.stdout.write(`demo ${learner}=${points}\\n`);\n",
+      "starter": "const input = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", score = \"\"] = input.split(/\\s+/);\n// TODO: make each byte of the record intentional.\nprocess.stdout.write(`${name}${score}\\n`);\n",
       "cases": [
         {
-          "input": "",
-          "output": "sum:3\n"
-        }
-      ],
-      "example": "const label = 'sum';\nlet total = 1;\ntotal += 2;\nconsole.log('example:', `${label}:${total}`);",
-      "id": "ts-let-const",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html"
-      ],
-      "starter": "const label = 'TODO';\nlet total = 1;\n// TODO: keep label stable and mutate total before formatting\ntotal += 0;\nconsole.log(`${label}:${total}`);\n",
-      "title": "let and const",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "string, number, and boolean describe the common scalar values that most stdin parsing produces.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:7:pass\n"
-        }
-      ],
-      "example": "function report(name: string, score: number, passed: boolean): string {\n  return `${name}:${score}:${passed ? 'pass' : 'retry'}`;\n}\n\nconsole.log('example:', report('Ada', 7, true));",
-      "id": "ts-primitives",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
-        "https://www.typescriptlang.org/docs/handbook/intro.html",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
-        "https://nodejs.org/api/typescript.html"
-      ],
-      "starter": "function report(name: string, score: number, passed: boolean): string {\n  return `${name}:${score}:${passed ? 'pass' : 'retry'}`;\n}\n\n// TODO: pass values whose types match the report contract\nconsole.log(report('Ada', 0, false));\n",
-      "title": "Primitive types",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Template literals keep formatting close to the values, and string methods return new strings instead of mutating text.",
-      "cases": [
-        {
-          "input": "",
+          "input": "Ada 7\n",
           "output": "Ada:7\n"
+        },
+        {
+          "input": "Lin 0\n",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": "José 12\n",
+          "output": "José:12\n"
         }
       ],
-      "example": "const raw = ' Ada ';\nconst score = 7;\nconsole.log('example:', `${raw.trim()}:${score}`);",
-      "id": "ts-strings-templates",
-      "kind": "lesson",
-      "level": "basic",
       "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html"
-      ],
-      "starter": "const raw = ' Ada ';\nconst score = 7;\n// TODO: trim the name and interpolate score without changing either value\nconsole.log(`${raw}:${score + 1}`);\n",
-      "title": "Strings and templates",
-      "track": "core"
+        "https://nodejs.org/docs/latest-v22.x/api/process.html#processstdout",
+        "https://nodejs.org/docs/latest-v22.x/api/typescript.html"
+      ]
     },
     {
-      "aliases": [],
-      "body": "number[] models a sequence of same-shaped values; a tuple fixes both position and type for small records.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:5\n"
-        }
-      ],
-      "example": "const scores: number[] = [2, 3];\nconst result: [string, number] = ['Ada', scores[0] + scores[1]];\nconsole.log('example:', `${result[0]}:${result[1]}`);",
-      "id": "ts-arrays-tuples",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays",
-        "https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"
-      ],
-      "starter": "const scores: number[] = [2, 3];\n// TODO: put the summed score in the tuple, not the array length\nconst result: [string, number] = ['Ada', scores.length];\nconsole.log(`${result[0]}:${result[1]}`);\n",
-      "title": "Arrays and tuples",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Object type annotations name required fields so calculations cannot silently ignore missing properties.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "type Rectangle = { width: number; height: number };\nconst rect: Rectangle = { width: 3, height: 4 };\nconsole.log('example:', rect.width * rect.height);",
-      "id": "ts-objects",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/objects.html",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects"
-      ],
-      "starter": "type Rectangle = { width: number; height: number };\nconst rect: Rectangle = { width: 3, height: 4 };\n// TODO: calculate area from both required fields\nconsole.log(rect.width + rect.height);\n",
-      "title": "Object types",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Parameter and return annotations make the input and output contract visible at the call site.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "function area(width: number, height: number): number {\n  return width * height;\n}\n\nconsole.log('example:', area(3, 4));",
-      "id": "ts-functions",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
-        "https://www.typescriptlang.org/docs/handbook/intro.html",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
-        "https://nodejs.org/api/typescript.html"
-      ],
-      "starter": "function area(width: number, height: number): number {\n  // TODO: return rectangle area, not perimeter\n  return width + height;\n}\n\nconsole.log(area(3, 4));\n",
-      "title": "Functions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "In coding tests, read fd 0 once, split the text into tokens, and convert tokens before doing numeric work.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "const fs = require('node:fs');\nconst input: string = fs.readFileSync(0, 'utf8');\nconst nums = input.trim().split(/\\s+/).filter(Boolean).map(Number);\nconsole.log('example:', nums.reduce((sum, n) => sum + n, 0));",
       "id": "ts-input",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://nodejs.org/api/typescript.html",
-        "https://nodejs.org/api/fs.html#fsreadfilesyncpath-options",
-        "https://nodejs.org/api/process.html#processstdout"
-      ],
-      "starter": "const fs = require('node:fs');\nconst input: string = fs.readFileSync(0, 'utf8');\n// TODO: parse all integers from stdin and print their sum\nconst nums: number[] = [];\nconsole.log(nums.reduce((sum, n) => sum + n, 0));\n",
-      "title": "Node stdin parsing",
-      "track": "core"
-    },
-    {
       "aliases": [],
-      "body": "if, for, while, and switch all narrow the path values can take before they reach stdout.",
-      "cases": [
-        {
-          "input": "",
-          "output": "4\n"
-        }
-      ],
-      "example": "let total = 0;\nfor (let n = 1; n <= 3; n++) {\n  if (n % 2 === 1) total += n;\n}\nconsole.log('example:', total);",
-      "id": "ts-control-flow",
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html"
-      ],
-      "starter": "let total = 0;\nfor (let n = 1; n <= 3; n++) {\n  // TODO: add only odd numbers\n  total += n;\n}\nconsole.log(total);\n",
-      "title": "Control flow",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A union accepts several shapes, but TypeScript only allows member-specific operations after a runtime check narrows the value.",
-      "cases": [
-        {
-          "input": "",
-          "output": "OK\n"
-        }
-      ],
-      "example": "function label(value: string | number): string {\n  if (typeof value === 'string') return value.toUpperCase();\n  return value.toFixed(0);\n}\n\nconsole.log('example:', label('ok'));",
-      "id": "ts-union-narrowing",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html"
-      ],
-      "starter": "function label(value: string | number): string {\n  if (typeof value === 'string') return value;\n  return value.toFixed(0);\n}\n\n// TODO: preserve the union but narrow the string branch to uppercase\nconsole.log(label('ok'));\n",
-      "title": "Union and narrowing",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Literal unions restrict values to exact strings or numbers, which is useful for modes, commands, and states.",
-      "cases": [
-        {
-          "input": "",
-          "output": "L\n"
-        }
-      ],
-      "example": "type Direction = 'left' | 'right';\nfunction turn(direction: Direction): string {\n  return direction === 'left' ? 'L' : 'R';\n}\n\nconsole.log('example:', turn('left'));",
-      "id": "ts-literal-types",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
-        "https://www.typescriptlang.org/docs/handbook/intro.html",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
-        "https://nodejs.org/api/typescript.html"
-      ],
-      "starter": "type Direction = 'left' | 'right';\nfunction turn(direction: Direction): string {\n  return direction === 'left' ? 'L' : 'R';\n}\n\n// TODO: choose the allowed direction literal for the left branch\nconsole.log(turn('right'));\n",
-      "title": "Literal types",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Optional properties read as possibly undefined, and ?? keeps valid falsey values such as 0 or an empty string.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:0\n"
-        }
-      ],
-      "example": "type User = { name: string; score?: number | null };\nconst user: User = { name: 'Ada', score: 0 };\nconsole.log('example:', `${user.name}:${user.score ?? 10}`);",
-      "id": "ts-optional-nullish",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#optional-properties",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining"
-      ],
-      "starter": "type User = { name: string; score?: number | null };\nconst user: User = { name: 'Ada', score: 0 };\n// TODO: keep score 0 instead of replacing it with the fallback\nconsole.log(`${user.name}:${user.score || 10}`);\n",
-      "title": "Optional and nullish",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Interfaces and aliases both name object contracts; aliases also name unions, tuples, and type expressions.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:5\n"
-        }
-      ],
-      "example": "interface Named {\n  name: string;\n}\ntype Score = { points: number };\nfunction summary(user: Named & Score): string {\n  return `${user.name}:${user.points}`;\n}\n\nconsole.log('example:', summary({ name: 'Ada', points: 5 }));",
-      "id": "ts-interfaces-aliases",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases",
-        "https://www.typescriptlang.org/docs/handbook/2/objects.html"
-      ],
-      "starter": "interface Named {\n  name: string;\n}\ntype Score = { points: number };\nfunction summary(user: Named & Score): string {\n  // TODO: include both the interface field and the alias field\n  return user.name;\n}\n\nconsole.log(summary({ name: 'Ada', points: 5 }));\n",
-      "title": "Interfaces and type aliases",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Generics let reusable functions preserve the caller's type instead of collapsing values to any.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "function first<T>(items: readonly T[]): T | undefined {\n  return items[0];\n}\n\nconsole.log('example:', first(['ok', 'skip']) ?? 'none');",
-      "id": "ts-generics",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html"
-      ],
-      "starter": "function first<T>(items: readonly T[]): T | undefined {\n  // TODO: return the first item while preserving T\n  return items[1];\n}\n\nconsole.log(first(['ok', 'skip']) ?? 'none');\n",
-      "title": "Generics",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "typeof captures the static type of a value, and keyof turns that object type into a union of valid keys.",
+      "title": "Tokenize Node standard input",
+      "body": "Read fd 0 once as UTF-8, split only when trimmed text is nonempty, convert every token, and add the numbers. The empty-input branch prevents a phantom zero token while preserving the stdin harness used later.",
+      "example": "const sample: string = \"4 6\";\nconst total: number = sample.split(/\\s+/).map(Number).reduce((sum, value) => sum + value, 0);\nprocess.stdout.write(`demo total=${total}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst values: number[] = raw ? raw.split(/\\s+/).map(Number) : [];\n// TODO: combine the complete token stream.\nconst total: number = values[0] ?? 0;\nprocess.stdout.write(`${total}\\n`);\n",
       "cases": [
         {
           "input": "2 3\n",
           "output": "5\n"
-        }
-      ],
-      "example": "const limits = { small: 2, large: 5 } as const;\ntype Size = keyof typeof limits;\nfunction limitFor(size: Size): number {\n  return limits[size];\n}\n\nconsole.log('example:', limitFor('large'));",
-      "id": "ts-keyof-typeof",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html"
-      ],
-      "starter": "const limits = { small: 2, large: 5 } as const;\ntype Size = keyof typeof limits;\nfunction limitFor(size: Size): number {\n  return limits[size];\n}\n\n// TODO: use the key that selects the larger limit\nconsole.log(limitFor('small'));\n",
-      "title": "keyof and typeof",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Indexed access types read a property type from another type so value code and type code stay in sync.",
-      "cases": [
+        },
         {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "type User = { name: string; scores: number[] };\ntype Score = User['scores'][number];\nconst score: Score = 5;\nconsole.log('example:', score);",
-      "id": "ts-indexed-access",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html"
-      ],
-      "starter": "type User = { name: string; scores: number[] };\ntype Score = User['scores'][number];\n// TODO: assign a value that satisfies the indexed access type\nconst score: Score = 0;\nconsole.log(score);\n",
-      "title": "Indexed access types",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Mapped types loop over keys at the type level, often to turn one object shape into another related shape.",
-      "cases": [
+          "input": "-1\n5 2\n",
+          "output": "6\n"
+        },
         {
           "input": "",
-          "output": "ok\n"
+          "output": "0\n"
         }
       ],
-      "example": "type Flags<T> = { [K in keyof T]: boolean };\ntype Features = { search: () => void; share: () => void };\nconst enabled: Flags<Features> = { search: true, share: false };\nconsole.log('example:', Object.entries(enabled).find(([, on]) => on)?.[0] ?? 'none');",
-      "id": "ts-mapped-types",
-      "kind": "lesson",
-      "level": "advanced",
       "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html"
-      ],
-      "starter": "type Flags<T> = { [K in keyof T]: boolean };\ntype Features = { search: () => void; share: () => void };\nconst enabled: Flags<Features> = { search: false, share: false };\n// TODO: enable search while keeping the mapped shape\nconsole.log(Object.entries(enabled).find(([, on]) => on)?.[0] ?? 'none');\n",
-      "title": "Mapped types",
-      "track": "core"
+        "https://nodejs.org/docs/latest-v22.x/api/fs.html#fsreadfilesyncpath-options",
+        "https://nodejs.org/docs/latest-v22.x/api/typescript.html#type-stripping"
+      ]
     },
     {
+      "id": "ts-primitives",
       "aliases": [],
-      "body": "Conditional types choose one type branch from another type, and infer can capture part of a matched shape.",
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Convert text into primitive values",
+      "body": "Parse a name, score, and threshold into string and number values before comparing them. An annotation is removed at runtime, so it documents and checks code but cannot turn input text into a number; const binding and UTF-16 string details are explored in nearby labs.",
+      "example": "const label: string = \"demo\";\nconst count: number = 3;\nconst ready: boolean = count > 1;\nprocess.stdout.write(`${label}:${count}:${ready}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText = \"\", thresholdText = \"\"] = raw.split(/\\s+/);\n// TODO: cross the text-to-number boundary explicitly.\nconst score: number = scoreText.length;\nconst threshold: number = thresholdText.length;\nconst status: string = score >= threshold ? \"pass\" : \"retry\";\nprocess.stdout.write(`${name}:${score}:${status}\\n`);\n",
       "cases": [
         {
-          "input": "",
-          "output": "ok\n"
+          "input": "Ada 7 5\n",
+          "output": "Ada:7:pass\n"
+        },
+        {
+          "input": "Lin 4 5\n",
+          "output": "Lin:4:retry\n"
+        },
+        {
+          "input": "Bo 0 0\n",
+          "output": "Bo:0:pass\n"
         }
       ],
-      "example": "type ElementType<T> = T extends readonly (infer Item)[] ? Item : T;\nconst word: ElementType<string[]> = 'ok';\nconsole.log('example:', word);",
-      "id": "ts-conditional-types",
-      "kind": "lesson",
-      "level": "advanced",
       "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html"
-      ],
-      "starter": "type ElementType<T> = T extends readonly (infer Item)[] ? Item : T;\n// TODO: assign the element type carried by string[]\nconst word: ElementType<string[]> = '';\nconsole.log(word);\n",
-      "title": "Conditional types",
-      "track": "core"
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html",
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#the-primitives-string-number-and-boolean"
+      ]
     },
     {
+      "id": "ts-let-const",
       "aliases": [],
-      "body": "Utility types such as Pick, Partial, Required, and Awaited express common transformations without custom aliases.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Rebind an accumulator, keep its label",
+      "body": "Keep the label in a const binding and update a numeric total through let. const prevents rebinding that variable; it does not freeze an object stored in the binding.",
+      "example": "const category: string = \"demo\";\nlet total: number = 5;\ntotal += -2;\nprocess.stdout.write(`${category}:${total}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [label = \"\", firstText = \"0\", secondText = \"0\"] = raw.split(/\\s+/);\nconst first: number = Number(firstText);\nconst second: number = Number(secondText);\n// TODO: update a mutable total without rebinding the label.\nconst total: number = first;\nprocess.stdout.write(`${label}:${total}\\n`);\n",
       "cases": [
         {
-          "input": "",
+          "input": "sum 1 2\n",
+          "output": "sum:3\n"
+        },
+        {
+          "input": "net -2 5\n",
+          "output": "net:3\n"
+        },
+        {
+          "input": "zero 0 0\n",
+          "output": "zero:0\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/variable-declarations.html"
+      ]
+    },
+    {
+      "id": "ts-strings-templates",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Trim the name, preserve the score",
+      "body": "Remove only one terminal LF or CRLF from the pipe-delimited record, trim the name field, and leave every score character intact. JavaScript strings still use UTF-16 code units for length and indexing.",
+      "example": "const record: string = \"  Mira |9  \\n\".replace(/\\r?\\n$/, \"\");\nconst [rawName, score] = record.split(\"|\");\nprocess.stdout.write(`demo ${rawName.trim()}=${score}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").replace(/\\r?\\n$/, \"\");\nconst [name = \"\", score = \"\"] = raw.split(\"|\");\n// TODO: normalize only the human-readable name field.\nprocess.stdout.write(`${name}:${score}\\n`);\n",
+      "cases": [
+        {
+          "input": " Ada |7  \n",
+          "output": "Ada:7  \n"
+        },
+        {
+          "input": "Lin|0\n",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": " José |12\n",
+          "output": "José:12\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#the-primitives-string-number-and-boolean"
+      ]
+    },
+    {
+      "id": "ts-arrays-tuples",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Return a named total as a tuple",
+      "body": "Gather the numeric tail of stdin into an array, total it, and place the name and sum in a fixed-position tuple. Tuples remain ordinary Arrays at runtime; iterable consumption and map/filter/reduce are optional follow-on labs.",
+      "example": "const demoValues: number[] = [1, 4];\nconst demoPair: [string, number] = [\"Neo\", demoValues.reduce((sum, value) => sum + value, 0)];\nprocess.stdout.write(`demo ${demoPair[0]}=${demoPair[1]}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", ...numberTexts] = raw ? raw.split(/\\s+/) : [\"\"];\nconst values: number[] = numberTexts.map(Number);\n// TODO: derive the tuple's numeric position from every value.\nconst result: [string, number] = [name, 0];\nprocess.stdout.write(`${result[0]}:${result[1]}\\n`);\n",
+      "cases": [
+        {
+          "input": "Ada 2 3\n",
           "output": "Ada:5\n"
+        },
+        {
+          "input": "Lin -1 4 2\n",
+          "output": "Lin:5\n"
+        },
+        {
+          "input": "Bo\n",
+          "output": "Bo:0\n"
         }
       ],
-      "example": "type User = { id: number; name: string; score: number };\ntype UserPatch = Partial<Pick<User, 'name' | 'score'>>;\nconst patch: UserPatch = { name: 'Ada', score: 5 };\nconsole.log('example:', `${patch.name}:${patch.score}`);",
-      "id": "ts-utility-types",
-      "kind": "lesson",
-      "level": "advanced",
       "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/generics.html",
-        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html",
-        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html",
-        "https://www.typescriptlang.org/docs/handbook/utility-types.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-6.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html"
-      ],
-      "starter": "type User = { id: number; name: string; score: number };\ntype UserPatch = Partial<Pick<User, 'name' | 'score'>>;\n// TODO: fill the patch fields allowed by Pick and Partial\nconst patch: UserPatch = { name: 'Ada' };\nconsole.log(`${patch.name}:${patch.score ?? 0}`);\n",
-      "title": "Utility types",
-      "track": "core"
+        "https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types"
+      ]
     },
     {
-      "aliases": [],
-      "body": "A shared literal field lets switch narrow each variant and makes missing cases visible during type checking.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "type Shape = { kind: 'rect'; width: number; height: number } | { kind: 'circle'; radius: number };\nfunction measure(shape: Shape): number {\n  switch (shape.kind) {\n    case 'rect':\n      return shape.width * shape.height;\n    case 'circle':\n      return shape.radius * 2;\n  }\n}\n\nconsole.log('example:', measure({ kind: 'rect', width: 3, height: 4 }));",
-      "id": "ts-discriminated-unions",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html"
-      ],
-      "starter": "type Shape = { kind: 'rect'; width: number; height: number } | { kind: 'circle'; radius: number };\nfunction measure(shape: Shape): number {\n  switch (shape.kind) {\n    case 'rect':\n      // TODO: use the fields that only exist on the rect variant\n      return shape.width + shape.height;\n    case 'circle':\n      return shape.radius * 2;\n  }\n}\n\nconsole.log(measure({ kind: 'rect', width: 3, height: 4 }));\n",
-      "title": "Discriminated unions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "async functions return Promise values; await unwraps the fulfilled value before later code uses it.",
-      "cases": [
-        {
-          "input": "",
-          "output": "4\n"
-        }
-      ],
-      "example": "async function double(value: number): Promise<number> {\n  return value * 2;\n}\n\nasync function main(): Promise<void> {\n  console.log('example:', await double(2));\n}\n\nmain();",
-      "id": "ts-async-promise",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await",
-        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#functions-which-return-promises"
-      ],
-      "starter": "async function double(value: number): Promise<number> {\n  return value * 2;\n}\n\nasync function main(): Promise<void> {\n  // TODO: await the Promise before printing its number\n  console.log(String(double(2)));\n}\n\nmain();\n",
-      "title": "Async and Promise",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "catch receives an unknown failure; narrow it before reading Error-specific fields or choosing a fallback.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "function parseCount(text: string): number {\n  try {\n    return Number.parseInt(text, 10);\n  } catch (error: unknown) {\n    return error instanceof Error ? 0 : -1;\n  }\n}\n\nconsole.log('example:', parseCount('12'));",
-      "id": "ts-error-handling",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
-        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html"
-      ],
-      "starter": "function parseCount(text: string): number {\n  try {\n    const value = Number.parseInt(text, 10);\n    if (Number.isNaN(value)) throw new Error('bad number');\n    return value;\n  } catch (error: unknown) {\n    // TODO: narrow the caught value and recover with 12\n    return error instanceof Error ? 0 : -1;\n  }\n}\n\nconsole.log(parseCount('bad'));\n",
-      "title": "Error handling",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "import and export make file boundaries explicit; in Node type stripping, module syntax still follows Node's module rules.",
-      "cases": [
-        {
-          "input": "",
-          "output": "OK\n"
-        }
-      ],
-      "example": "export function label(value: string): string {\n  return value.toUpperCase();\n}\n\nconsole.log('example:', label('ok'));",
-      "id": "ts-modules",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/modules.html",
-        "https://nodejs.org/api/typescript.html#determining-module-system"
-      ],
-      "starter": "export function label(value: string): string {\n  // TODO: export behavior that callers can trust\n  return value;\n}\n\nconsole.log(label('ok'));\n",
-      "title": "Modules and exports",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Classes combine state with methods; TypeScript access modifiers describe the intended boundary for that state.",
-      "cases": [
-        {
-          "input": "",
-          "output": "2\n"
-        }
-      ],
-      "example": "class Counter {\n  private value: number;\n\n  constructor(start: number) {\n    this.value = start;\n  }\n\n  increment(): number {\n    this.value += 1;\n    return this.value;\n  }\n}\n\nconsole.log('example:', new Counter(1).increment());",
-      "id": "ts-classes",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/classes.html",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes",
-        "https://nodejs.org/api/typescript.html#typescript-features"
-      ],
-      "starter": "class Counter {\n  private value: number;\n\n  constructor(start: number) {\n    this.value = start;\n  }\n\n  increment(): number {\n    // TODO: update private state before returning it\n    return this.value;\n  }\n}\n\nconsole.log(new Counter(1).increment());\n",
-      "title": "Classes and access modifiers",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "readonly documents that callers may read a property or array but should not replace or mutate it through that type.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:5\n"
-        }
-      ],
-      "example": "type Config = { readonly name: string; readonly scores: readonly number[] };\nconst config: Config = { name: 'Ada', scores: [2, 3] };\nconsole.log('example:', `${config.name}:${config.scores.reduce((sum, n) => sum + n, 0)}`);",
-      "id": "ts-readonly",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/2/objects.html#readonly-properties",
-        "https://www.typescriptlang.org/docs/handbook/2/objects.html#the-readonlyarray-type"
-      ],
-      "starter": "type Config = { readonly name: string; readonly scores: readonly number[] };\nconst config: Config = { name: 'Ada', scores: [2, 3] };\n// TODO: read from readonly data without replacing it\nconsole.log(`${config.name}:${config.scores.length}`);\n",
-      "title": "readonly",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "as const preserves literal values, and satisfies checks a wider contract without widening the value's own type.",
-      "cases": [
-        {
-          "input": "",
-          "output": "/users\n"
-        }
-      ],
-      "example": "const routes = {\n  home: '/',\n  user: '/users',\n} as const satisfies Record<string, `/${string}`>;\ntype RouteName = keyof typeof routes;\nconst selected: RouteName = 'user';\nconsole.log('example:', routes[selected]);",
-      "id": "ts-satisfies-as-const",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html",
-        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
-        "https://www.typescriptlang.org/docs/handbook/2/typeof-types.html"
-      ],
-      "starter": "const routes = {\n  home: '/',\n  user: '/users',\n} as const satisfies Record<string, `/${string}`>;\ntype RouteName = keyof typeof routes;\n// TODO: choose the route key that selects the user path\nconst selected: RouteName = 'home';\nconsole.log(routes[selected]);\n",
-      "title": "satisfies and as const",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "for...of consumes any iterable, so arrays, strings, sets, and many Node values can share loop code.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "const chars: Iterable<string> = ['o', 'k'];\nlet word = '';\nfor (const ch of chars) {\n  word += ch;\n}\nconsole.log('example:', word);",
       "id": "ts-iterables",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of",
-        "https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html"
-      ],
-      "starter": "const chars: Iterable<string> = ['o', 'k'];\nlet word = '';\nfor (const ch of chars) {\n  // TODO: collect every yielded character\n  word = ch;\n}\nconsole.log(word);\n",
-      "title": "Iterables",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "map transforms each item, filter keeps selected items, and reduce folds a sequence into one accumulated value.",
+      "title": "Consume an Iterable with for-of",
+      "body": "Accept Iterable<string> and concatenate values through for...of. An iterable need not support numeric indexing, and an iterator obtained from one may be single-pass rather than reusable.",
+      "example": "function collectDemo(values: Iterable<string>): string {\n  let text = \"\";\n  for (const value of values) text += value;\n  return text;\n}\nprocess.stdout.write(`demo:${collectDemo(new Set([\"T\", \"S\"]))}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst tokens: string[] = raw ? raw.split(/\\s+/) : [];\n// TODO: visit the iterable instead of selecting one array slot.\nconst joined: string = tokens[0] ?? \"\";\nprocess.stdout.write(`${joined}\\n`);\n",
       "cases": [
         {
+          "input": "o k\n",
+          "output": "ok\n"
+        },
+        {
+          "input": "a b c\n",
+          "output": "abc\n"
+        },
+        {
           "input": "",
-          "output": "20\n"
+          "output": "\n"
         }
       ],
-      "example": "const nums = [1, 2, 3, 4];\nconst total = nums\n  .filter((n) => n % 2 === 0)\n  .map((n) => n * n)\n  .reduce((sum, n) => sum + n, 0);\nconsole.log('example:', total);",
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html#iterables"
+      ]
+    },
+    {
       "id": "ts-array-methods",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce",
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration"
+      "title": "Filter, square, and reduce safely",
+      "body": "Select even values, square the survivors, and fold them with an explicit zero initial value. Supplying that initializer makes an empty filtered array a defined case rather than a reduce exception.",
+      "example": "const demoNumbers: number[] = [2, 5, 6];\nconst demoTotal = demoNumbers.filter((value) => value > 3).map((value) => value * 2).reduce((sum, value) => sum + value, 0);\nprocess.stdout.write(`demo:${demoTotal}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst values: number[] = raw ? raw.split(/\\s+/).map(Number) : [];\n// TODO: select the intended parity before squaring and folding.\nconst total = values.filter((value) => value % 2 !== 0).map((value) => value * value).reduce((sum, value) => sum + value, 0);\nprocess.stdout.write(`${total}\\n`);\n",
+      "cases": [
+        {
+          "input": "1 2 3 4\n",
+          "output": "20\n"
+        },
+        {
+          "input": "-2 -1 0\n",
+          "output": "4\n"
+        },
+        {
+          "input": "1 3\n",
+          "output": "0\n"
+        }
       ],
-      "starter": "const nums = [1, 2, 3, 4];\n// TODO: square only the even numbers before summing\nconst total = nums.reduce((sum, n) => sum + n, 0);\nconsole.log(total);\n",
-      "title": "map, filter, and reduce",
-      "track": "core"
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays"
+      ]
+    },
+    {
+      "id": "ts-objects",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Calculate through a structural object",
+      "body": "Parse dimensions into a Rectangle-shaped value and pass it to an area function. TypeScript checks compatible members rather than nominal identity; class runtime state and shallow readonly views remain optional labs.",
+      "example": "type DemoSize = { width: number; height: number };\nconst painted = { width: 2, height: 6, color: \"blue\" };\nfunction demoArea(size: DemoSize): number { return size.width * size.height; }\nprocess.stdout.write(`demo:${demoArea(painted)}\\n`);\n",
+      "starter": "type Rectangle = { width: number; height: number };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [widthText = \"0\", heightText = \"0\"] = raw.split(/\\s+/);\n// TODO: preserve the parsed height instead of a placeholder dimension.\nconst rectangle: Rectangle = { width: Number(widthText), height: 1 };\nconst area = (value: Rectangle): number => value.width * value.height;\nprocess.stdout.write(`${area(rectangle)}\\n`);\n",
+      "cases": [
+        {
+          "input": "3 4\n",
+          "output": "12\n"
+        },
+        {
+          "input": "0 5\n",
+          "output": "0\n"
+        },
+        {
+          "input": "7 1\n",
+          "output": "7\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/objects.html"
+      ]
+    },
+    {
+      "id": "ts-classes",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Update state behind a class method",
+      "body": "Store a counter value in a class and change it only through increment. TypeScript private is a checker restriction that is erased; JavaScript #private fields, by contrast, enforce a runtime boundary.",
+      "example": "class DemoCounter {\n  private value: number = 8;\n  increment(): number { this.value += 1; return this.value; }\n}\nprocess.stdout.write(`demo:${new DemoCounter().increment()}\\n`);\n",
+      "starter": "class Counter {\n  private value: number;\n  constructor(value: number) { this.value = value; }\n  // TODO: change the stored state before returning it.\n  increment(): number { return this.value; }\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nprocess.stdout.write(`${new Counter(Number(raw)).increment()}\\n`);\n",
+      "cases": [
+        {
+          "input": "1\n",
+          "output": "2\n"
+        },
+        {
+          "input": "-1\n",
+          "output": "0\n"
+        },
+        {
+          "input": "5\n",
+          "output": "6\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/classes.html#member-visibility"
+      ]
+    },
+    {
+      "id": "ts-readonly",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Read a shallow readonly configuration",
+      "body": "Accept a readonly name and readonly numeric sequence, then total the sequence without mutation. readonly is type-only and shallow: it neither freezes the runtime object nor recursively protects nested mutable values.",
+      "example": "type DemoConfig = { readonly name: string; readonly scores: readonly number[] };\nconst demoConfig: DemoConfig = { name: \"sample\", scores: [3, 4] };\nprocess.stdout.write(`demo:${demoConfig.name}=${demoConfig.scores.length}\\n`);\n",
+      "starter": "type Config = { readonly name: string; readonly scores: readonly number[] };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", ...scoreTexts] = raw ? raw.split(/\\s+/) : [\"\"];\nconst config: Config = { name, scores: scoreTexts.map(Number) };\n// TODO: derive the total without mutating the readonly view.\nconfig.scores.push(0);\nconst total = config.scores.reduce((sum, score) => sum + score, 0);\nprocess.stdout.write(`${config.name}:${total}\\n`);\n",
+      "cases": [
+        {
+          "input": "Ada 2 3\n",
+          "output": "Ada:5\n"
+        },
+        {
+          "input": "Lin\n",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": "Bo -1 4\n",
+          "output": "Bo:3\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/objects.html#readonly-properties"
+      ]
+    },
+    {
+      "id": "ts-control-flow",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Keep an inclusive loop boundary",
+      "body": "Sum odd integers from one through n with an explicit branch and loop bound. Strict equality avoids coercion, while <= rather than < decides whether an odd endpoint participates.",
+      "example": "const limit: number = 5;\nlet evenTotal = 0;\nfor (let value = 1; value <= limit; value += 1) if (value % 2 === 0) evenTotal += value;\nprocess.stdout.write(`demo:${evenTotal}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst n: number = Number(raw);\nlet total = 0;\n// TODO: include every value in the stated closed range.\nfor (let value = 1; value < n; value += 1) if (value % 2 === 1) total += value;\nprocess.stdout.write(`${total}\\n`);\n",
+      "cases": [
+        {
+          "input": "3\n",
+          "output": "4\n"
+        },
+        {
+          "input": "6\n",
+          "output": "9\n"
+        },
+        {
+          "input": "0\n",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#control-flow-analysis"
+      ]
+    },
+    {
+      "id": "ts-functions",
+      "aliases": [],
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "basic",
+      "title": "Checkpoint: typed calculation boundary",
+      "body": "Turn raw dimension text into a number-returning function and print its result. Parameter and return annotations expose a broken contract before execution; the branches and loops from the control-flow lab belong inside such boundaries.",
+      "example": "function perimeter(width: number, height: number): number {\n  return 2 * (width + height);\n}\nprocess.stdout.write(`demo:${perimeter(2, 5)}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n// TODO: make the declared result agree with the calculation.\nfunction area(input: string): string {\n  const [width, height] = input.split(/\\s+/).map(Number);\n  return width * height;\n}\nprocess.stdout.write(`${area(raw)}\\n`);\n",
+      "cases": [
+        {
+          "input": "3 4\n",
+          "output": "12\n"
+        },
+        {
+          "input": "0 5\n",
+          "output": "0\n"
+        },
+        {
+          "input": "7 1\n",
+          "output": "7\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/functions.html"
+      ]
+    },
+    {
+      "id": "ts-union-narrowing",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Narrow a union before formatting",
+      "body": "Represent parsed input as string | number, then use typeof so each branch calls methods available on its member. A runtime string must be validated before becoming a literal union; a cast alone cannot perform that check.",
+      "example": "function demoFormat(value: string | number): string {\n  return typeof value === \"string\" ? value.toLowerCase() : value.toFixed(1);\n}\nprocess.stdout.write(`demo:${demoFormat(3.14)}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [kind = \"\", text = \"\"] = raw.split(/\\s+/);\nconst value: string | number = kind === \"n\" ? Number(text) : text;\n// TODO: prove which union member is present before using its methods.\nconst formatted: string = value.toUpperCase();\nprocess.stdout.write(`${formatted}\\n`);\n",
+      "cases": [
+        {
+          "input": "s ok\n",
+          "output": "OK\n"
+        },
+        {
+          "input": "n 2.4\n",
+          "output": "2\n"
+        },
+        {
+          "input": "n -1.6\n",
+          "output": "-2\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#typeof-type-guards"
+      ]
+    },
+    {
+      "id": "ts-literal-types",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Validate text before a literal union",
+      "body": "Accept only left or right after checking the actual stdin string, then call a Direction function. Writing `as Direction` changes the checker's view but neither tests nor changes the runtime value.",
+      "example": "type DemoDirection = \"north\" | \"south\";\nconst arrow = (direction: DemoDirection): string => direction === \"north\" ? \"N\" : \"S\";\nprocess.stdout.write(`demo:${arrow(\"north\")}\\n`);\n",
+      "starter": "type Direction = \"left\" | \"right\";\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst turn = (direction: Direction): string => direction === \"left\" ? \"L\" : \"R\";\n// TODO: establish the literal union with a runtime check.\nconst direction = raw as Direction;\nprocess.stdout.write(`${turn(direction)}\\n`);\n",
+      "cases": [
+        {
+          "input": "left\n",
+          "output": "L\n"
+        },
+        {
+          "input": "right\n",
+          "output": "R\n"
+        },
+        {
+          "input": "up\n",
+          "output": "invalid\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types"
+      ]
+    },
+    {
+      "id": "ts-optional-nullish",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Default only nullish scores",
+      "body": "Model an absent score as null and use ?? so the numeric value zero survives. Logical OR also replaces other falsy values, making it the wrong defaulting operator for a legitimate zero.",
+      "example": "const demoCount: number | undefined = 0;\nprocess.stdout.write(`demo:${demoCount ?? 8}\\n`);\n",
+      "starter": "const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText = \"none\"] = raw.split(/\\s+/);\nconst score: number | null = scoreText === \"none\" ? null : Number(scoreText);\n// TODO: distinguish absence from a falsy numeric score.\nconst shown: number = score || 10;\nprocess.stdout.write(`${name}:${shown}\\n`);\n",
+      "cases": [
+        {
+          "input": "Ada 0\n",
+          "output": "Ada:0\n"
+        },
+        {
+          "input": "Lin none\n",
+          "output": "Lin:10\n"
+        },
+        {
+          "input": "Bo 5\n",
+          "output": "Bo:5\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#strictnullchecks-on"
+      ]
+    },
+    {
+      "id": "ts-interfaces-aliases",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Compose structural contracts",
+      "body": "Combine an interface-provided name with a type-alias score through an intersection and format the resulting object. Interfaces may declaration-merge, aliases can name unions, and both remain checker-only structural descriptions; classes, readonly, and satisfies labs refine those boundaries.",
+      "example": "interface Tagged { tag: string }\ntype Weighted = { weight: number };\ntype DemoItem = Tagged & Weighted;\nconst demoItem: DemoItem = { tag: \"sample\", weight: 6 };\nprocess.stdout.write(`demo:${demoItem.tag}=${demoItem.weight}\\n`);\n",
+      "starter": "interface Named { name: string }\ntype Scored = { score: number };\ntype Entry = Named & Scored;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText = \"0\"] = raw.split(/\\s+/);\n// TODO: build the intersection without altering parsed data.\nconst entry: Entry = { name, score: Number(scoreText) + 1 };\nprocess.stdout.write(`${entry.name}:${entry.score}\\n`);\n",
+      "cases": [
+        {
+          "input": "Ada 5\n",
+          "output": "Ada:5\n"
+        },
+        {
+          "input": "Lin 0\n",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": "Bo -2\n",
+          "output": "Bo:-2\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/objects.html#interface-extension-vs-intersection"
+      ]
+    },
+    {
+      "id": "ts-generics",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Preserve an element type through first",
+      "body": "Write first<T> so callers receive T | undefined without any, a cast, or a non-null assertion. keyof, indexed access, mapped, conditional, and utility types are optional transformations built on the same principle of deriving rather than repeating source types.",
+      "example": "function last<T>(items: readonly T[]): T | undefined { return items[items.length - 1]; }\nconst demoValue = last([\"a\", \"b\", \"c\"]);\nprocess.stdout.write(`demo:${demoValue ?? \"empty\"}\\n`);\n",
+      "starter": "function first<T>(items: readonly T[]): T | undefined {\n  // TODO: return the leading element when it exists.\n  return items[1];\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst tokens: string[] = raw ? raw.split(/\\s+/) : [];\nprocess.stdout.write(`${first(tokens) ?? \"none\"}\\n`);\n",
+      "cases": [
+        {
+          "input": "ok skip\n",
+          "output": "ok\n"
+        },
+        {
+          "input": "one\n",
+          "output": "one\n"
+        },
+        {
+          "input": "",
+          "output": "none\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/generics.html"
+      ]
+    },
+    {
+      "id": "ts-keyof-typeof",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Guard a runtime key for keyof",
+      "body": "Derive the key union from a limits value with keyof typeof, then narrow stdin with Object.hasOwn. Unlike the in operator, an own-property check rejects inherited names such as toString and constructor.",
+      "example": "const demoLimits = { tiny: 1, huge: 9 } as const;\ntype DemoKey = keyof typeof demoLimits;\nfunction isDemoKey(value: string): value is DemoKey { return Object.hasOwn(demoLimits, value); }\nconst demoInput: string = \"huge\";\nconst demoResult = isDemoKey(demoInput) ? String(demoLimits[demoInput]) : \"missing\";\nprocess.stdout.write(`demo:${demoResult}\\n`);\n",
+      "starter": "const limits = { small: 2, large: 5 } as const;\ntype LimitKey = keyof typeof limits;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n// TODO: prove the external text names an own property before indexing.\nconst key = raw as LimitKey;\nprocess.stdout.write(`${limits[key]}\\n`);\n",
+      "cases": [
+        {
+          "input": "small\n",
+          "output": "2\n"
+        },
+        {
+          "input": "large\n",
+          "output": "5\n"
+        },
+        {
+          "input": "medium\n",
+          "output": "invalid\n"
+        },
+        {
+          "input": "toString\n",
+          "output": "invalid\n"
+        },
+        {
+          "input": "constructor\n",
+          "output": "invalid\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html"
+      ]
+    },
+    {
+      "id": "ts-indexed-access",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Reuse an array element type",
+      "body": "Name a score with User[\"scores\"][number] so the element type follows the model. That derived annotation still requires explicit conversion because stdin arrives as a string.",
+      "example": "type DemoUser = { tags: string[] };\nconst demoTag: DemoUser[\"tags\"][number] = \"typed\";\nprocess.stdout.write(`demo:${demoTag}\\n`);\n",
+      "starter": "type User = { scores: number[] };\ntype Score = User[\"scores\"][number];\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n// TODO: convert the boundary value before assigning the derived type.\nconst score: Score = raw;\nprocess.stdout.write(`${score}\\n`);\n",
+      "cases": [
+        {
+          "input": "5\n",
+          "output": "5\n"
+        },
+        {
+          "input": "0\n",
+          "output": "0\n"
+        },
+        {
+          "input": "-2\n",
+          "output": "-2\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html"
+      ]
+    },
+    {
+      "id": "ts-mapped-types",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Map every feature key to a flag",
+      "body": "Transform the Feature union into a complete boolean object, then report the enabled key. A mapped type requires both search and share, fixing the earlier impossible exercise whose requested edit and expected result disagreed.",
+      "example": "type DemoFeature = \"dark\" | \"cache\";\ntype DemoFlags = { [Key in DemoFeature]: boolean };\nconst demoFlags: DemoFlags = { dark: true, cache: false };\nprocess.stdout.write(`demo:${demoFlags.dark ? \"dark\" : \"cache\"}\\n`);\n",
+      "starter": "type Feature = \"search\" | \"share\";\ntype Flags = { [Key in Feature]: boolean };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n// TODO: provide one boolean for every mapped feature key.\nconst flags: Flags = { search: raw === \"search\" };\nconst enabled: Feature | \"none\" = flags.search ? \"search\" : flags.share ? \"share\" : \"none\";\nprocess.stdout.write(`${enabled}\\n`);\n",
+      "cases": [
+        {
+          "input": "search\n",
+          "output": "search\n"
+        },
+        {
+          "input": "share\n",
+          "output": "share\n"
+        },
+        {
+          "input": "none\n",
+          "output": "none\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html"
+      ]
+    },
+    {
+      "id": "ts-conditional-types",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Extract an element with a conditional type",
+      "body": "Use infer inside a conditional type to derive the member of string[]. The conditional is evaluated only by the checker; it does not branch on stdin at runtime.",
+      "example": "type DemoElement<T> = T extends readonly (infer Item)[] ? Item : T;\nconst demoNumber: DemoElement<number[]> = 11;\nprocess.stdout.write(`demo:${demoNumber}\\n`);\n",
+      "starter": "type ElementType<T> = T extends readonly (infer Item)[] ? Item : T;\ntype TextElement = ElementType<string[]>;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n// TODO: assign a value compatible with the extracted member type.\nconst value: TextElement = Number(raw);\nprocess.stdout.write(`${value}\\n`);\n",
+      "cases": [
+        {
+          "input": "ok\n",
+          "output": "ok\n"
+        },
+        {
+          "input": "hello\n",
+          "output": "hello\n"
+        },
+        {
+          "input": "42\n",
+          "output": "42\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html"
+      ]
+    },
+    {
+      "id": "ts-utility-types",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Patch selected fields with utility types",
+      "body": "Represent an optional score update as Partial<Pick<User, \"score\">> and supply zero only when that property is absent. Partial changes static optionality; it neither inserts properties nor defaults runtime values.",
+      "example": "type DemoProfile = { name: string; active: boolean };\nconst demoPatch: Partial<Pick<DemoProfile, \"active\">> = { active: true };\nprocess.stdout.write(`demo:${demoPatch.active ?? false}\\n`);\n",
+      "starter": "type User = { name: string; score: number };\ntype ScorePatch = Partial<Pick<User, \"score\">>;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [name = \"\", scoreText] = raw.split(/\\s+/);\n// TODO: leave an omitted score absent rather than inventing one.\nconst patch: ScorePatch = { score: scoreText === undefined ? 1 : Number(scoreText) };\nprocess.stdout.write(`${name}:${patch.score ?? 0}\\n`);\n",
+      "cases": [
+        {
+          "input": "Ada 5\n",
+          "output": "Ada:5\n"
+        },
+        {
+          "input": "Lin\n",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": "Bo -2\n",
+          "output": "Bo:-2\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype"
+      ]
+    },
+    {
+      "id": "ts-satisfies-as-const",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Check routes while preserving literals",
+      "body": "Define route strings with as const, check their Record shape through satisfies, and require Object.hasOwn before indexing external text. satisfies is not a cast, and as const neither freezes the object nor admits inherited keys.",
+      "example": "const demoStatuses = { ready: \"R\", waiting: \"W\" } as const satisfies Record<string, string>;\ntype DemoStatusKey = keyof typeof demoStatuses;\nfunction hasDemoStatus(value: string): value is DemoStatusKey { return Object.hasOwn(demoStatuses, value); }\nconst demoInput: string = \"ready\";\nconst demoResult = hasDemoStatus(demoInput) ? demoStatuses[demoInput] : \"missing\";\nprocess.stdout.write(`demo:${demoResult}\\n`);\n",
+      "starter": "const routes = { home: \"/\", user: \"/users\" } as const satisfies Record<string, string>;\ntype RouteKey = keyof typeof routes;\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n// TODO: validate the external text as an own route key.\nconst key = raw as RouteKey;\nprocess.stdout.write(`${routes[key]}\\n`);\n",
+      "cases": [
+        {
+          "input": "home\n",
+          "output": "/\n"
+        },
+        {
+          "input": "user\n",
+          "output": "/users\n"
+        },
+        {
+          "input": "other\n",
+          "output": "invalid\n"
+        },
+        {
+          "input": "toString\n",
+          "output": "invalid\n"
+        },
+        {
+          "input": "constructor\n",
+          "output": "invalid\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator",
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions"
+      ]
+    },
+    {
+      "id": "ts-discriminated-unions",
+      "aliases": [],
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "advanced",
+      "title": "Checkpoint: exhaust a tagged shape union",
+      "body": "Parse rectangle and circle records into variants sharing a literal kind, then switch exhaustively with a never check. Literal tags enable sound narrowing, while satisfies can preserve such tags in configuration objects.",
+      "example": "type DemoResult = { kind: \"ok\"; value: number } | { kind: \"error\"; message: string };\nfunction showDemo(result: DemoResult): string {\n  switch (result.kind) { case \"ok\": return `value=${result.value}`; case \"error\": return result.message; }\n}\nprocess.stdout.write(`demo:${showDemo({ kind: \"ok\", value: 8 })}\\n`);\n",
+      "starter": "type Shape = { kind: \"rect\"; width: number; height: number } | { kind: \"circle\"; radius: number };\nfunction measure(shape: Shape): number {\n  if (shape.kind === \"rect\") return shape.width * shape.height;\n  // TODO: finish the remaining variant before proving exhaustiveness.\n  const exhaustive: never = shape;\n  return exhaustive;\n}\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nconst [kind, first = \"0\", second = \"0\"] = raw.split(/\\s+/);\nconst shape: Shape = kind === \"rect\" ? { kind, width: Number(first), height: Number(second) } : { kind: \"circle\", radius: Number(first) };\nprocess.stdout.write(`${measure(shape)}\\n`);\n",
+      "cases": [
+        {
+          "input": "rect 3 4\n",
+          "output": "12\n"
+        },
+        {
+          "input": "circle 5\n",
+          "output": "10\n"
+        },
+        {
+          "input": "rect 0 7\n",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions"
+      ]
+    },
+    {
+      "id": "ts-async-promise",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Await a typed promise",
+      "body": "Return Promise<number> from an async function, await it in main, and attach a top-level rejection handler. Every async function returns a Promise even when its return statement names a plain number.",
+      "example": "async function increment(value: number): Promise<number> { return value + 1; }\nasync function demo(): Promise<void> {\n  const value = await increment(9);\n  process.stdout.write(`demo:${value}\\n`);\n}\ndemo().catch((error: unknown) => process.stdout.write(`demo-error:${String(error)}\\n`));\n",
+      "starter": "async function double(value: number): Promise<number> {\n  // TODO: resolve with the requested transformation.\n  return value;\n}\nasync function main(): Promise<void> {\n  const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n  process.stdout.write(`${await double(Number(raw))}\\n`);\n}\nmain().catch((error: unknown) => process.stdout.write(`error:${String(error)}\\n`));\n",
+      "cases": [
+        {
+          "input": "2\n",
+          "output": "4\n"
+        },
+        {
+          "input": "0\n",
+          "output": "0\n"
+        },
+        {
+          "input": "-3\n",
+          "output": "-6\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html#asyncawait-support-in-es6-targets-node-v4"
+      ]
+    },
+    {
+      "id": "ts-modules",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Orient a public API in a single-file runner",
+      "body": "Model a public label function behind an explicit API object. This exercise intentionally does not claim multi-file import/export mastery: the judge runs one .ts file under an arbitrary nearest package.json, while real Node projects choose ESM or CommonJS through extensions and package metadata.",
+      "example": "type DemoApi = { transform(value: string): string };\nconst demoApi: DemoApi = { transform: (value) => value.split(\"\").reverse().join(\"\") };\nprocess.stdout.write(`demo:${demoApi.transform(\"module\")}\\n`);\n",
+      "starter": "type LabelApi = { label(value: string): string };\n// TODO: implement the public surface promised by this local API shape.\nconst api: LabelApi = { label: (value) => value.toLowerCase() };\nconst raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\nprocess.stdout.write(`${api.label(raw)}\\n`);\n",
+      "cases": [
+        {
+          "input": "ok\n",
+          "output": "OK\n"
+        },
+        {
+          "input": "Ada\n",
+          "output": "ADA\n"
+        },
+        {
+          "input": "é\n",
+          "output": "É\n"
+        }
+      ],
+      "refs": [
+        "https://nodejs.org/docs/latest-v22.x/api/typescript.html#determining-module-system",
+        "https://www.typescriptlang.org/docs/handbook/2/modules.html"
+      ]
+    },
+    {
+      "id": "ts-error-handling",
+      "aliases": [],
+      "track": "core",
+      "kind": "capstone",
+      "level": "advanced",
+      "title": "Capstone: validate and execute commands",
+      "body": "Inputs use add or divide commands. Parse them into a discriminated union, reject partial or non-finite numbers, reject zero division, execute asynchronously, and narrow catch values from unknown. Number.parseInt accepts a numeric prefix such as 12px and returns NaN for bad text instead of throwing, so full-token validation must be explicit.",
+      "example": "function inspect(token: string): string {\n  const value = Number.parseInt(token, 10);\n  return Number.isNaN(value) ? \"NaN\" : String(value);\n}\ntry {\n  throw \"sample\";\n} catch (error: unknown) {\n  const caught = typeof error === \"string\" ? error : \"other\";\n  process.stdout.write(`demo:${inspect(\"12px\")}:${inspect(\"bad\")}:${caught}\\n`);\n}\n",
+      "starter": "type Command = { kind: \"add\"; left: number; right: number } | { kind: \"divide\"; left: number; right: number };\nfunction parse(input: string): Command {\n  const [kind, leftText = \"\", rightText = \"\"] = input.split(/\\s+/);\n  // TODO: validate complete finite numeric tokens and reject zero division.\n  const left = Number.parseInt(leftText, 10);\n  const right = Number.parseInt(rightText, 10);\n  return kind === \"divide\" ? { kind, left, right } : { kind: \"add\", left, right };\n}\nasync function execute(command: Command): Promise<number> {\n  return command.kind === \"add\" ? command.left + command.right : command.left / command.right;\n}\nasync function main(): Promise<void> {\n  const raw = require(\"node:fs\").readFileSync(0, \"utf8\").trim();\n  process.stdout.write(`${await execute(parse(raw))}\\n`);\n}\nmain().catch((error: unknown) => process.stdout.write(`${error instanceof Error ? \"invalid\" : \"unknown\"}\\n`));\n",
+      "cases": [
+        {
+          "input": "add 2 3\n",
+          "output": "5\n"
+        },
+        {
+          "input": "divide 7 2\n",
+          "output": "3.5\n"
+        },
+        {
+          "input": "add 12px 1\n",
+          "output": "invalid\n"
+        },
+        {
+          "input": "divide 1 0\n",
+          "output": "invalid\n"
+        },
+        {
+          "input": "add 1e309 1\n",
+          "output": "invalid\n"
+        }
+      ],
+      "refs": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html#defaulting-to-the-unknown-type-in-catch-variables---useunknownincatchvariables",
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions",
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt",
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN"
+      ]
     }
-  ],
-  "runtime": "ts",
-  "schema_version": 1
+  ]
 }

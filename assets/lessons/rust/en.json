@@ -4,439 +4,526 @@
   "ui_language": "en",
   "lessons": {
     "rust-output": {
-      "title": "Output",
-      "concept": "Use Output to practice formatting values with println! and matching judge-exact stdout. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Output to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Make stdout byte-exact",
+      "concept": "The println! macro validates its format arguments during compilation and appends exactly one line feed after the rendered text.",
+      "worked_example": "The sample combines a tool name and an edition number with a hyphen, demonstrating captured format arguments without copying the exercise answer.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Output rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Output exercise.",
-        "Matching the judge output without checking this lesson idea: Use Output to practice formatting values with println!"
+        "Calling println! as though it were a function omits the required exclamation mark.",
+        "Adding a space around the colon changes judged stdout even though the values are correct."
       ],
       "self_check": [
-        "Which expression in the example applies Output before the `example:` output?",
-        "Which TODO line in the Output exercise must derive the value from its own data instead of copying the demo?"
+        "Can you point to the characters produced by the format string and the newline added by the macro?",
+        "Would print! or println! be appropriate if the required output had no trailing line break?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Output to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Read a name and score, then render the two fields with the exact delimiter shown by the cases.",
+      "objective": "Produce a compile-checked formatted line whose bytes match the required stdout.",
+      "language_delta": "Unlike string concatenation in many languages, Rust formatting keeps the template and typed arguments separate and validates their relationship.",
+      "prediction_prompt": "Before running, predict whether punctuation outside the braces is repeated for every substituted value.",
+      "transfer_trap": "Do not transfer the idea that println! is an ordinary variadic function; it is a macro expansion with a statically known format string."
     },
     "rust-variables": {
-      "title": "Bindings and mutability",
-      "concept": "Use Bindings and mutability to practice choosing immutable let bindings first and using mut only where a value really changes. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Bindings and mutability to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Track changing state with one mutable binding",
+      "concept": "A mut binding permits assignment to the same storage. A later let with the same name is shadowing: it introduces a new binding rather than mutating the old one.",
+      "worked_example": "The demonstration updates value once and then shadows it with a transformed result, making both mechanisms visible in a six-line program.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Bindings and mutability rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Bindings and mutability exercise.",
-        "Matching the judge output without checking this lesson idea: Use Bindings and mutability to practice choosing immutable let bindings first and using mut only where a value really changes."
+        "Writing value += 1 without mut is rejected because the original binding cannot be assigned.",
+        "Assuming shadowing performs an in-place update obscures when the old binding stops being accessible."
       ],
       "self_check": [
-        "Which expression in the example applies Bindings and mutability before the `example:` output?",
-        "Which TODO line in the Bindings and mutability exercise must derive the value from its own data instead of copying the demo?"
+        "Which line in the sample mutates storage, and which line creates a new name binding?",
+        "Does the immutable label need mut merely because it is printed after the accumulator changes?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Bindings and mutability to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Keep the label fixed while summing every following integer into a mutable accumulator.",
+      "objective": "Distinguish an intentionally mutable running total from immutable contextual data.",
+      "language_delta": "Rust makes binding mutability explicit; shadowing can change type without declaring a variable mutable.",
+      "prediction_prompt": "Predict the total after each loop iteration before checking the final formatted line.",
+      "transfer_trap": "The numeric tuple lab extends this rule with inferred and explicit number types, tuple products, and the contrast between mut and shadowing."
     },
     "rust-numbers-tuples": {
-      "title": "Numbers and tuples",
-      "concept": "Use Numbers and tuples to practice combining explicit numeric types with tuple field access such as pair.0 and pair.1. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Numbers and tuples to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Observe signed division through a tuple",
+      "concept": "For valid i64 operands, slash truncates the quotient toward zero and percent returns the corresponding remainder. The divisor is nonzero and the i64::MIN / -1 overflow pair is excluded.",
+      "worked_example": "Dividing twenty-three by four supplies a positive quotient and remainder that can be inspected independently as result.0 and result.1.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Numbers and tuples rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Numbers and tuples exercise.",
-        "Matching the judge output without checking this lesson idea: Use Numbers and tuples to practice combining explicit numeric types with tuple field access such as pair.0 and pair.1."
+        "Importing Python floor-division expectations gives the wrong quotient for a negative dividend.",
+        "Swapping tuple indices preserves compilation while reversing the required output fields."
       ],
       "self_check": [
-        "Which expression in the example applies Numbers and tuples before the `example:` output?",
-        "Which TODO line in the Numbers and tuples exercise must derive the value from its own data instead of copying the demo?"
+        "For negative seventeen divided by five, does truncation move toward zero or negative infinity?",
+        "Can you verify dividend equals quotient times divisor plus remainder, and identify the excluded overflow pair?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Numbers and tuples to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-strings": {
-      "title": "Strings",
-      "concept": "Use Strings to practice deciding when owned String is needed and when a borrowed &str slice is enough. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Strings to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Strings rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Strings exercise.",
-        "Matching the judge output without checking this lesson idea: Use Strings to practice deciding when owned String is needed and when a borrowed &str slice is enough."
-      ],
-      "self_check": [
-        "Which expression in the example applies Strings before the `example:` output?",
-        "Which TODO line in the Strings exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Strings to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-control-flow": {
-      "title": "Control flow",
-      "concept": "Use Control flow to practice using if as an expression and for ranges to build a value instead of branching by habit. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Control flow to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Control flow rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Control flow exercise.",
-        "Matching the judge output without checking this lesson idea: Use Control flow to practice using if as an expression and for ranges to build a value instead of branching by habit."
-      ],
-      "self_check": [
-        "Which expression in the example applies Control flow before the `example:` output?",
-        "Which TODO line in the Control flow exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Control flow to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-functions": {
-      "title": "Functions",
-      "concept": "Use Functions to practice writing signatures whose parameter and return types document the calculation boundary. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Functions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Functions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Functions exercise.",
-        "Matching the judge output without checking this lesson idea: Use Functions to practice writing signatures whose parameter and return types document the calculation boundary."
-      ],
-      "self_check": [
-        "Which expression in the example applies Functions before the `example:` output?",
-        "Which TODO line in the Functions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Functions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-structs-impl": {
-      "title": "Structs and impl",
-      "concept": "Use Structs and impl to practice grouping domain fields in a struct and putting behavior that needs those fields in impl. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Structs and impl to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Structs and impl rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Structs and impl exercise.",
-        "Matching the judge output without checking this lesson idea: Use Structs and impl to practice grouping domain fields in a struct and putting behavior that needs those fields in impl."
-      ],
-      "self_check": [
-        "Which expression in the example applies Structs and impl before the `example:` output?",
-        "Which TODO line in the Structs and impl exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Structs and impl to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-enum-match": {
-      "title": "Enums and match",
-      "concept": "Use Enums and match to practice modeling alternatives with enum variants and handling each variant exhaustively with match. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Enums and match to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Enums and match rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Enums and match exercise.",
-        "Matching the judge output without checking this lesson idea: Use Enums and match to practice modeling alternatives with enum variants and handling each variant exhaustively with match."
-      ],
-      "self_check": [
-        "Which expression in the example applies Enums and match before the `example:` output?",
-        "Which TODO line in the Enums and match exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Enums and match to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-option": {
-      "title": "Option and if let",
-      "concept": "Use Option and if let to practice making missing values explicit with Option<T> and unpacking the Some case safely. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Option and if let to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Option and if let rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Option and if let exercise.",
-        "Matching the judge output without checking this lesson idea: Use Option and if let to practice making missing values explicit with Option<T> and unpacking the Some case safely."
-      ],
-      "self_check": [
-        "Which expression in the example applies Option and if let before the `example:` output?",
-        "Which TODO line in the Option and if let exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Option and if let to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-modules-use": {
-      "title": "Modules and use",
-      "concept": "Use Modules and use to practice controlling namespace, privacy, and local paths with mod, pub, and use. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Modules and use to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Modules and use rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Modules and use exercise.",
-        "Matching the judge output without checking this lesson idea: Use Modules and use to practice controlling namespace, privacy, and local paths with mod, pub, and use."
-      ],
-      "self_check": [
-        "Which expression in the example applies Modules and use before the `example:` output?",
-        "Which TODO line in the Modules and use exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Modules and use to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Parse two integers with a nonzero divisor, excluding i64::MIN divided by -1, and print the quotient-remainder tuple in order.",
+      "objective": "Compute and destructure a two-value numeric result while respecting Rust signed arithmetic.",
+      "language_delta": "Rust integer slash differs from Python double-slash: it truncates rather than floors when signs differ.",
+      "prediction_prompt": "Calculate the quotient and remainder for the mixed-sign fixture before invoking rustc.",
+      "transfer_trap": "Do not infer floating-point division from the slash token; operand types determine integer behavior here."
     },
     "rust-input": {
-      "title": "Input parsing",
-      "concept": "Use Input parsing to practice reading stdin once, splitting text into tokens, and converting tokens into typed values. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Input parsing to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Consume a whitespace-delimited stdin stream",
+      "concept": "The Read trait method fills an owned String, after which split_whitespace visits every token across arbitrary line boundaries. Empty input produces an empty iterator.",
+      "worked_example": "A byte slice implements Read, so the example exercises read_to_string deterministically without depending on terminal input.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Input parsing rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Input parsing exercise.",
-        "Matching the judge output without checking this lesson idea: Use Input parsing to practice reading stdin once, splitting text into tokens, and converting tokens into typed values."
+        "Reading only one line silently ignores valid tokens that follow a newline.",
+        "Treating parse as infallible beyond the stated valid-input contract turns malformed data into an unexplained panic."
       ],
       "self_check": [
-        "Which expression in the example applies Input parsing before the `example:` output?",
-        "Which TODO line in the Input parsing exercise must derive the value from its own data instead of copying the demo?"
+        "Why does sum over an empty iterator yield the additive identity?",
+        "Which imported trait makes read_to_string available on standard input?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Input parsing to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Read stdin to completion, parse all whitespace-separated integers, and print their sum.",
+      "objective": "Handle single-line, multiline, and empty valid input through one tokenization path.",
+      "language_delta": "Rust parsing returns Result rather than coercing text to a number; unwrap is justified here only because the exercise guarantees integer tokens.",
+      "prediction_prompt": "Predict whether the multiline case differs from a space-separated case after split_whitespace.",
+      "transfer_trap": "The Vec and HashMap lab builds on this owned token buffer to preserve ordered values while also maintaining keyed counts."
     },
     "rust-vec-hashmap": {
-      "title": "Vec and HashMap",
-      "concept": "Use Vec and HashMap to practice choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Vec and HashMap to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Combine sequence and lookup collections",
+      "concept": "The first token is a query; the remaining borrowed words stay ordered in a Vec while a HashMap built with entry records frequencies.",
+      "worked_example": "The sample counts repeated color tags, then prints the number of distinct keys rather than relying on map iteration order.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Vec and HashMap rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Vec and HashMap exercise.",
-        "Matching the judge output without checking this lesson idea: Use Vec and HashMap to practice choosing Vec for ordered data and HashMap entry APIs for keyed counting and lookup."
+        "Printing HashMap iteration directly makes output depend on an unspecified order.",
+        "Indexing counts[query] panics when the query never appears among the values."
       ],
       "self_check": [
-        "Which expression in the example applies Vec and HashMap before the `example:` output?",
-        "Which TODO line in the Vec and HashMap exercise must derive the value from its own data instead of copying the demo?"
+        "Which collection answers how many values were supplied, and which answers how often the query occurred?",
+        "Why does get followed by copied and unwrap_or handle an absent key without mutation?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Vec and HashMap to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Store all value tokens in order, count them by key, and report value length plus query frequency.",
+      "objective": "Select Vec for ordered storage and HashMap for safe keyed aggregation in the same program.",
+      "language_delta": "Unlike insertion-ordered dictionaries in some languages, Rust standard HashMap intentionally offers no iteration-order promise.",
+      "prediction_prompt": "Trace the missing-query case and predict whether any map entry is created by get.",
+      "transfer_trap": "Do not replace entry with two lookups unless measurement establishes a reason; the occupied-or-vacant operation already expresses the update."
     },
-    "rust-borrowing-slices": {
-      "title": "Borrowing and slices",
-      "concept": "Use Borrowing and slices to practice passing borrowed slices so functions can read data without taking ownership. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Borrowing and slices to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+    "rust-control-flow": {
+      "title": "Let branches return a label",
+      "concept": "Rust if is an expression, so the parity branches yield the string later formatted beside an inclusive-range sum. Both branch values must share a type.",
+      "worked_example": "The worked program chooses a readiness label and separately consumes an inclusive integer range to calculate a triangular number.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Borrowing and slices rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Borrowing and slices exercise.",
-        "Matching the judge output without checking this lesson idea: Use Borrowing and slices to practice passing borrowed slices so functions can read data without taking ownership."
+        "Writing 1..n drops the upper endpoint and changes every positive total.",
+        "Returning a string from one branch and an integer from the other fails because one if expression needs one resulting type."
       ],
       "self_check": [
-        "Which expression in the example applies Borrowing and slices before the `example:` output?",
-        "Which TODO line in the Borrowing and slices exercise must derive the value from its own data instead of copying the demo?"
+        "What sequence does 1..=0 produce, and what identity does sum return for it?",
+        "Is parity decided before or after the total is calculated, and does that ordering affect ownership?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Borrowing and slices to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-result": {
-      "title": "Result and ?",
-      "concept": "Use Result and ? to practice returning recoverable errors with Result<T, E> and propagating them with the ? operator. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Result and ? to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Result and ? rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Result and ? exercise.",
-        "Matching the judge output without checking this lesson idea: Use Result and ?"
-      ],
-      "self_check": [
-        "Which expression in the example applies Result and ? before the `example:` output?",
-        "Which TODO line in the Result and ? exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Result and ? to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-ownership": {
-      "title": "Ownership and borrowing",
-      "concept": "Use Ownership and borrowing to practice tracking when a String moves, when it is returned, and when a reference only borrows it. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Ownership and borrowing to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Ownership and borrowing rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Ownership and borrowing exercise.",
-        "Matching the judge output without checking this lesson idea: Use Ownership and borrowing to practice tracking when a String moves, when it is returned, and when a reference only borrows it."
-      ],
-      "self_check": [
-        "Which expression in the example applies Ownership and borrowing before the `example:` output?",
-        "Which TODO line in the Ownership and borrowing exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Ownership and borrowing to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Classify the input as odd or even and pair that label with the inclusive sum from one through n.",
+      "objective": "Build one output from a typed branch expression and a boundary-sensitive range calculation.",
+      "language_delta": "Rust conditions require bool; numeric truthiness from C, JavaScript, or Python does not apply.",
+      "prediction_prompt": "For n equal to four, list the exact range elements before predicting the displayed total.",
+      "transfer_trap": "The iterator lab reexpresses traversal with lazy adapters; this core lesson keeps the equivalent loop and range boundaries visible first."
     },
     "rust-iterators": {
-      "title": "Iterators and closures",
-      "concept": "Use Iterators and closures to practice composing lazy iterator adapters with closures and consuming them with sum or collect. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Iterators and closures to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Drive filter and map with a terminal sum",
+      "concept": "Parsing produces owned integers; filter borrows each candidate for its predicate, map receives accepted items, and sum finally consumes the pipeline.",
+      "worked_example": "An unbounded range becomes safe in the sample because take limits consumption before collect requests a concrete Vec.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Iterators and closures rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Iterators and closures exercise.",
-        "Matching the judge output without checking this lesson idea: Use Iterators and closures to practice composing lazy iterator adapters with closures and consuming them with sum or collect."
+        "Creating map and filter adapters without a terminal operation performs no transformations.",
+        "Omitting the square map computes the sum of even inputs rather than the sum of their squares."
       ],
       "self_check": [
-        "Which expression in the example applies Iterators and closures before the `example:` output?",
-        "Which TODO line in the Iterators and closures exercise must derive the value from its own data instead of copying the demo?"
+        "At which method call does iteration actually begin?",
+        "Why is zero retained by the even predicate yet harmless after squaring?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Iterators and closures to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Parse the integer stream, retain evens, square them lazily, and consume the pipeline into one total.",
+      "objective": "Express a multi-stage numeric traversal through iterator ownership and one terminal consumer.",
+      "language_delta": "Iterator chains resemble streams in other languages, but Rust adapters encode borrowing and item ownership in their types.",
+      "prediction_prompt": "Predict each intermediate item sequence for negative two, negative one, and zero.",
+      "transfer_trap": "Do not collect between every adapter; an intermediate Vec is unnecessary when sum can pull items directly."
+    },
+    "rust-functions": {
+      "title": "Checkpoint: values cross a function boundary",
+      "concept": "The area function receives two i64 values by value and returns an i64 through its trailing expression. main remains responsible for input and output.",
+      "worked_example": "A separate greeting function returns an allocated String made by format!, showing expression return syntax on nonnumeric data.",
+      "common_mistakes": [
+        "Putting a semicolon after width times height changes the body result to unit.",
+        "Printing inside area instead of returning a value couples calculation to one output context."
+      ],
+      "self_check": [
+        "Can area be called twice without any hidden state from the first call?",
+        "Which signature fragment promises the compiler and caller that an i64 comes back?"
+      ],
+      "exercise_prompt": "Parse width and height, call a pure area function, and print only the returned value.",
+      "objective": "Separate typed computation from stdin and stdout at a reusable function boundary.",
+      "language_delta": "Rust has no implicit return keyword requirement for the final expression, but semicolon placement is semantically significant.",
+      "prediction_prompt": "Before compiling, predict the function body type both with and without a trailing semicolon.",
+      "transfer_trap": "The module, generic, trait, macro, and Cargo orientation labs extend this boundary into reusable items, expansion, crates, packages, and workspaces."
+    },
+    "rust-modules-use": {
+      "title": "Shorten a visible module path",
+      "concept": "The grading module exposes verdict with pub, and use introduces its short name in the surrounding scope. These are separate name-resolution and visibility decisions.",
+      "worked_example": "A nested units item is public and then imported before main calls it, so the sample shows the complete path-to-short-name flow.",
+      "common_mistakes": [
+        "Adding use for a private sibling function does not bypass privacy.",
+        "Writing a relative path from the wrong module can resolve to a different namespace or fail entirely."
+      ],
+      "self_check": [
+        "Could main call grading::verdict directly without the use declaration?",
+        "Which keyword changes whether code outside grading may call verdict?"
+      ],
+      "exercise_prompt": "Expose a grading function, import its path, and use it to classify the parsed score.",
+      "objective": "Separate module organization, public visibility, and local path convenience.",
+      "language_delta": "Rust use is closer to a lexical alias than a runtime import that loads a package.",
+      "prediction_prompt": "Predict whether removing pub or removing use causes the same compiler diagnostic.",
+      "transfer_trap": "Cargo packages and crates define larger build boundaries; this single-file lab demonstrates only language modules and paths."
     },
     "rust-generics": {
-      "title": "Generics",
-      "concept": "Use Generics to practice writing one function over T while preserving concrete type checking at compile time. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Generics to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Return a copied element from a generic slice",
+      "concept": "last_copy accepts a shared slice of any T implementing Copy. copied converts Option<&T> to Option<T> without claiming that every Rust type is cheaply duplicable.",
+      "worked_example": "The companion function retrieves the first u8 from a borrowed array and displays its Option result with debug formatting.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Generics rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Generics exercise.",
-        "Matching the judge output without checking this lesson idea: Use Generics to practice writing one function over T while preserving concrete type checking at compile time."
+        "Leaving off the Copy bound prevents extracting a T value through copied.",
+        "Calling clone unconditionally would require Clone and could hide a more expensive operation."
       ],
       "self_check": [
-        "Which expression in the example applies Generics before the `example:` output?",
-        "Which TODO line in the Generics exercise must derive the value from its own data instead of copying the demo?"
+        "What is borrowed by last_copy, and what small value is returned?",
+        "Would String satisfy this exact bound, and if not, should the API return a reference instead?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Generics to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Implement a generic last-element helper and apply it to the parsed integer slice.",
+      "objective": "Use a trait bound that precisely justifies copying a value through a shared borrow.",
+      "language_delta": "Generic syntax resembles templates, but Rust checks one constrained definition rather than accepting arbitrary operations during later expansion.",
+      "prediction_prompt": "Predict the Option produced by a one-element slice before unwrap is applied by main.",
+      "transfer_trap": "Do not broaden the bound to Clone merely for familiarity; Copy is the behavior this numeric exercise actually needs."
     },
     "rust-traits": {
-      "title": "Traits and bounds",
-      "concept": "Use Traits and bounds to practice describing required behavior with traits and using bounds to call that behavior generically. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Traits and bounds to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Require summarizable values without cloning",
+      "concept": "ScoreCard implements Summary by borrowing self. The generic render function accepts any borrowed value satisfying that trait bound and returns the produced text.",
+      "worked_example": "The Size example implements a tiny behavior for every Vec element type, then calls the method through normal dot syntax.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Traits and bounds rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Traits and bounds exercise.",
-        "Matching the judge output without checking this lesson idea: Use Traits and bounds to practice describing required behavior with traits and using bounds to call that behavior generically."
+        "Moving self.name out of a shared self borrow is forbidden and unnecessary for formatting.",
+        "Using a concrete ScoreCard parameter in render loses the reuse supplied by the Summary contract."
       ],
       "self_check": [
-        "Which expression in the example applies Traits and bounds before the `example:` output?",
-        "Which TODO line in the Traits and bounds exercise must derive the value from its own data instead of copying the demo?"
+        "Does calling summary consume the card or leave it usable?",
+        "Where is the requirement T implements Summary stated for the generic function?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Traits and bounds to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-lifetimes": {
-      "title": "Lifetimes",
-      "concept": "Use Lifetimes to practice annotating relationships between borrowed inputs and borrowed outputs without extending storage. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Lifetimes to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Lifetimes rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Lifetimes exercise.",
-        "Matching the judge output without checking this lesson idea: Use Lifetimes to practice annotating relationships between borrowed inputs and borrowed outputs without extending storage."
-      ],
-      "self_check": [
-        "Which expression in the example applies Lifetimes before the `example:` output?",
-        "Which TODO line in the Lifetimes exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Lifetimes to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-traits-lifetimes": {
-      "title": "Trait objects and dyn dispatch",
-      "concept": "Use Trait objects and dyn dispatch to practice using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Trait objects and dyn dispatch to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Trait objects and dyn dispatch rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Trait objects and dyn dispatch exercise.",
-        "Matching the judge output without checking this lesson idea: Use Trait objects and dyn dispatch to practice using &dyn Trait when runtime dispatch is worth the flexibility over a single generic type."
-      ],
-      "self_check": [
-        "Which expression in the example applies Trait objects and dyn dispatch before the `example:` output?",
-        "Which TODO line in the Trait objects and dyn dispatch exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Trait objects and dyn dispatch to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-testing": {
-      "title": "Tests and assertions",
-      "concept": "Use Tests and assertions to practice separating pure logic from main so #[test] functions and assert macros can verify behavior. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Tests and assertions to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Tests and assertions rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Tests and assertions exercise.",
-        "Matching the judge output without checking this lesson idea: Use Tests and assertions to practice separating pure logic from main so #[test] functions and assert macros can verify behavior."
-      ],
-      "self_check": [
-        "Which expression in the example applies Tests and assertions before the `example:` output?",
-        "Which TODO line in the Tests and assertions exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Tests and assertions to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-smart-pointers": {
-      "title": "Smart pointers",
-      "concept": "Use Smart pointers to practice using Box<T> to own heap data while still working through pointer-like deref behavior. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Smart pointers to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Smart pointers rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Smart pointers exercise.",
-        "Matching the judge output without checking this lesson idea: Use Smart pointers to practice using Box<T> to own heap data while still working through pointer-like deref behavior."
-      ],
-      "self_check": [
-        "Which expression in the example applies Smart pointers before the `example:` output?",
-        "Which TODO line in the Smart pointers exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Smart pointers to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-interior-mutability": {
-      "title": "Interior mutability",
-      "concept": "Use Interior mutability to practice using RefCell<T> when runtime borrow checking is the simplest correct model. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Interior mutability to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Interior mutability rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Interior mutability exercise.",
-        "Matching the judge output without checking this lesson idea: Use Interior mutability to practice using RefCell<T> when runtime borrow checking is the simplest correct model."
-      ],
-      "self_check": [
-        "Which expression in the example applies Interior mutability before the `example:` output?",
-        "Which TODO line in the Interior mutability exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Interior mutability to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-concurrency": {
-      "title": "Threads and join",
-      "concept": "Use Threads and join to practice moving work into thread::spawn and using join to recover the worker result safely. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Threads and join to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Threads and join rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Threads and join exercise.",
-        "Matching the judge output without checking this lesson idea: Use Threads and join to practice moving work into thread::spawn and using join to recover the worker result safely."
-      ],
-      "self_check": [
-        "Which expression in the example applies Threads and join before the `example:` output?",
-        "Which TODO line in the Threads and join exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Threads and join to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-shared-state": {
-      "title": "Shared state with Arc and Mutex",
-      "concept": "Use Shared state with Arc and Mutex to practice combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Shared state with Arc and Mutex to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Shared state with Arc and Mutex rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Shared state with Arc and Mutex exercise.",
-        "Matching the judge output without checking this lesson idea: Use Shared state with Arc and Mutex to practice combining Arc<T> for shared ownership with Mutex<T> for one-at-a-time mutation."
-      ],
-      "self_check": [
-        "Which expression in the example applies Shared state with Arc and Mutex before the `example:` output?",
-        "Which TODO line in the Shared state with Arc and Mutex exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Shared state with Arc and Mutex to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-async-await": {
-      "title": "Async and await",
-      "concept": "Use Async and await to practice recognizing that async creates a Future and that running it requires an executor or runtime. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Async and await to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Async and await rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Async and await exercise.",
-        "Matching the judge output without checking this lesson idea: Use Async and await to practice recognizing that async creates a Future and that running it requires an executor or runtime."
-      ],
-      "self_check": [
-        "Which expression in the example applies Async and await before the `example:` output?",
-        "Which TODO line in the Async and await exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Async and await to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Construct a score card and render its borrowed fields through a Summary-bound helper.",
+      "objective": "Define shared behavior with a trait and call it without surrendering ownership of the implementing value.",
+      "language_delta": "Rust traits can provide static dispatch through generics; unlike inheritance, they do not require an object hierarchy.",
+      "prediction_prompt": "Predict whether render could accept two unrelated structs that both implement Summary.",
+      "transfer_trap": "Do not clone owned fields merely to quiet a borrowing error; formatting accepts references to displayable values."
     },
     "rust-macros": {
-      "title": "macro_rules!",
-      "concept": "Use macro_rules! to practice matching token patterns with macro_rules! and expanding repeated Rust code at compile time. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying macro_rules! to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Transform matched tokens into an expression",
+      "concept": "greet! is exported and expands to $crate::helper, anchoring helper lookup in the defining crate before ordinary type checking.",
+      "worked_example": "caller::run invokes the exported increment! macro from a nested module, yet $crate still resolves helper at the defining crate root.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the macro_rules! rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the macro_rules! exercise.",
-        "Matching the judge output without checking this lesson idea: Use macro_rules!"
+        "Forgetting the exclamation mark asks the compiler to find a function instead of invoking a macro.",
+        "Expanding an input expression twice can execute side effects twice even when the resulting text looks simple."
       ],
       "self_check": [
-        "Which expression in the example applies macro_rules! before the `example:` output?",
-        "Which TODO line in the macro_rules! exercise must derive the value from its own data instead of copying the demo?"
+        "Why does $crate keep helper lookup stable when a macro is invoked through another path?",
+        "Where is the expanded helper call typechecked after macro matching finishes?"
       ],
-      "exercise_prompt": "Complete the TODO by applying macro_rules! to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
-    },
-    "rust-unsafe": {
-      "title": "Unsafe Rust",
-      "concept": "Use Unsafe Rust to practice placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Unsafe Rust to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
-      "common_mistakes": [
-        "Changing only the final output line while leaving the Unsafe Rust rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Unsafe Rust exercise.",
-        "Matching the judge output without checking this lesson idea: Use Unsafe Rust to practice placing unverifiable operations in unsafe blocks while keeping the surrounding API as safe as possible."
-      ],
-      "self_check": [
-        "Which expression in the example applies Unsafe Rust before the `example:` output?",
-        "Which TODO line in the Unsafe Rust exercise must derive the value from its own data instead of copying the demo?"
-      ],
-      "exercise_prompt": "Complete the TODO by applying Unsafe Rust to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Complete the defining-crate greeting helper invoked by the exported macro through the nested caller module, using the trimmed stdin name.",
+      "objective": "Export a macro whose expansion resolves a helper hygienically through $crate.",
+      "language_delta": "Macros operate on Rust syntax before runtime; they are not string substitution or reflection.",
+      "prediction_prompt": "Expand crate::greet!(name) inside caller::greet_from and identify the exact helper path rustc resolves.",
+      "transfer_trap": "If an exported macro needs a helper from its own crate, a caller-relative path is fragile; $crate anchors that lookup."
     },
     "rust-cargo-workspaces": {
-      "title": "Cargo packages and workspaces",
-      "concept": "Use Cargo packages and workspaces to practice understanding when Cargo package structure and cargo check --workspace matter beyond one file. Read the type or item boundary first, then follow the value into the labeled demo output.",
-      "worked_example": "The worked code labels its demo output with `example:` while applying Cargo packages and workspaces to separate data. Follow the value-changing line before stdout; the exercise uses the same idea without the label on its own case.",
+      "title": "Orient yourself to Cargo workspace scope",
+      "concept": "A workspace coordinates member packages and a shared target directory. Here the observable skill is only choosing commands that address all members.",
+      "worked_example": "The example prints a metadata inspection command, deliberately avoiding any suggestion that this rustc-only file has loaded a real Cargo manifest.",
       "common_mistakes": [
-        "Changing only the final output line while leaving the Cargo packages and workspaces rule out of the code path.",
-        "Copying the labeled demo output instead of solving the TODO in the Cargo packages and workspaces exercise.",
-        "Matching the judge output without checking this lesson idea: Use Cargo packages and workspaces to practice understanding when Cargo package structure and cargo check --workspace matter beyond one file."
+        "Assuming cargo test in one member necessarily covers every workspace member can leave packages unchecked.",
+        "Treating this text mapping as proof of workspace configuration would overstate what the runner executed."
       ],
       "self_check": [
-        "Which expression in the example applies Cargo packages and workspaces before the `example:` output?",
-        "Which TODO line in the Cargo packages and workspaces exercise must derive the value from its own data instead of copying the demo?"
+        "Which flag asks cargo check or cargo test to select the entire workspace?",
+        "Why does rustfmt receive its check arguments after a double dash in the formatting command?"
       ],
-      "exercise_prompt": "Complete the TODO by applying Cargo packages and workspaces to the starter data. Keep stdout judge-clean; the `example:` label belongs only to the worked example."
+      "exercise_prompt": "Map check, test, and fmt intents to the documented workspace-oriented command lines.",
+      "objective": "Identify safe workspace-wide maintenance commands without pretending to execute a multi-package build.",
+      "language_delta": "Cargo workspaces are a build-tool feature, not a Rust language construct that plain rustc can verify.",
+      "prediction_prompt": "Given the intent fmt, predict which arguments belong to Cargo and which are forwarded to rustfmt.",
+      "transfer_trap": "Do not promote this lab into the core path until the judge can construct a temporary workspace and inspect real member behavior."
+    },
+    "rust-ownership": {
+      "title": "Transfer and recover String ownership",
+      "concept": "main removes line endings from its original String buffer and moves that owner into describe. A String value is fixed-size pointer, length, and capacity metadata for one allocation.",
+      "worked_example": "wrap consumes its String metadata and takes ownership of the existing buffer; main cannot reuse the moved binding afterward.",
+      "common_mistakes": [
+        "Trying to read the caller binding after passing it by value triggers a moved-value error.",
+        "Adding clone to every ownership error creates unnecessary allocation instead of choosing a suitable parameter or return shape."
+      ],
+      "self_check": [
+        "At what exact call does ownership leave main, and at what pattern does an owner come back?",
+        "Why can describe call len before moving text into the tuple?"
+      ],
+      "exercise_prompt": "Trim line endings in the original stdin String, move it into describe, and return that owner with its UTF-8 byte length.",
+      "objective": "Follow one allocation across a by-value function boundary without cloning or losing it.",
+      "language_delta": "Moving a String transfers fixed-size pointer, length, and capacity metadata; it neither copies the heap buffer nor reduces the value to one pointer word.",
+      "prediction_prompt": "Predict the byte count for é before comparing it with the later scalar-count lesson.",
+      "transfer_trap": "Box and Arc make alternate ownership structures explicit, while RefCell moves borrowing checks to runtime; learn this ordinary move before either extension."
+    },
+    "rust-smart-pointers": {
+      "title": "Own the next recursive node indirectly",
+      "concept": "List::Cons stores its tail in Box<List>, making every enum value a finite known size while retaining exclusive ownership of the recursive chain.",
+      "worked_example": "The sample constructs two boxed links and walks them through shared references, so traversal does not consume the list.",
+      "common_mistakes": [
+        "Placing List directly inside Cons creates an infinitely sized type rejected by rustc.",
+        "Saying Box makes code faster confuses its purpose; the relevant property is indirection with ownership and known pointer size."
+      ],
+      "self_check": [
+        "Which part of Cons has fixed size even when the remaining list is arbitrarily long?",
+        "Why does building from a reversed iterator preserve the original token order?"
+      ],
+      "exercise_prompt": "Fold parsed integers into a boxed recursive list and print the sum found by traversal.",
+      "objective": "Use Box to make a recursive owning data type representable and visit it without moving nodes.",
+      "language_delta": "A garbage-collected language may hide recursive indirection; Rust requires the ownership edge to be explicit in the type.",
+      "prediction_prompt": "Sketch the Cons chain produced from three tokens before evaluating the recursive sum.",
+      "transfer_trap": "Arc and Rc express shared ownership, but this list has exactly one owner for every tail and needs only Box."
+    },
+    "rust-interior-mutability": {
+      "title": "Borrow mutably at runtime inside an immutable owner",
+      "concept": "EventLog exposes record through &self while RefCell checks each mutable and shared borrow dynamically. The mutable guard ends after push, before the final shared borrow.",
+      "worked_example": "Cell handles a Copy integer without lending references, so the example increments a counter through an immutable binding.",
+      "common_mistakes": [
+        "Holding borrow_mut while taking borrow causes a runtime panic due to overlapping access.",
+        "An owned RefCell<T> may move to another thread when T is Send, but RefCell is not Sync and cannot be shared for concurrent mutation."
+      ],
+      "self_check": [
+        "Where does the RefMut guard from borrow_mut stop being live in record?",
+        "Which rule remains enforced despite the owner itself never being declared mut?"
+      ],
+      "exercise_prompt": "Record every input token through &self and report the final RefCell-backed vector length.",
+      "objective": "Apply interior mutability only within a short, nonoverlapping, single-threaded borrow scope.",
+      "language_delta": "Unlike ordinary Rust references, RefCell postpones exclusivity checks until execution rather than removing them.",
+      "prediction_prompt": "Predict what would happen if record kept one mutable guard while requesting a second.",
+      "transfer_trap": "RefCell is not a synchronization primitive: use Mutex when multiple threads share and mutate the same value."
+    },
+    "rust-strings": {
+      "title": "Measure three different views of UTF-8 text",
+      "concept": "String and str store UTF-8. len reports storage bytes, chars yields Unicode scalar values, and a valid range slice must begin and end at character boundaries.",
+      "worked_example": "The crab scalar occupies four bytes, so the example safely slices the first four-byte range and reports a byte count different from its scalar count.",
+      "common_mistakes": [
+        "Using text[0] is impossible because one byte is not necessarily one character.",
+        "Slicing at an arbitrary byte offset can panic even when the offset is below len."
+      ],
+      "self_check": [
+        "How many bytes and scalar values does an accented e contain in the fixture spelling?",
+        "Why is the crab prefix range four bytes rather than one?"
+      ],
+      "exercise_prompt": "For the input text, print UTF-8 byte length, scalar count, and first scalar as separate fields.",
+      "objective": "Choose len, chars, and a boundary-safe scalar lookup according to the measurement requested.",
+      "language_delta": "Rust UTF-8 byte length differs from Java and JavaScript UTF-16 code-unit length, and grapheme segmentation would require additional Unicode logic.",
+      "prediction_prompt": "Predict every field for the crab-plus-a case before compiling.",
+      "transfer_trap": "Do not transfer ASCII indexing intuition to str; byte positions are implementation offsets with validity constraints."
+    },
+    "rust-borrowing-slices": {
+      "title": "Checkpoint: lend a slice of owned input",
+      "concept": "main owns the String buffer while first_word temporarily borrows it and returns a &str into that same storage. No word allocation occurs.",
+      "worked_example": "The key helper uses split_once to lend the prefix of an owned record until the record is no longer needed.",
+      "common_mistakes": [
+        "Returning a slice of a local String would leave a reference to dropped storage and is rejected.",
+        "Calling to_owned inside first_word changes the API and performs an allocation the slice can avoid."
+      ],
+      "self_check": [
+        "Which value must remain alive while the returned first-word slice is printed?",
+        "Why does empty input safely produce an empty borrowed string instead of requiring unwrap?"
+      ],
+      "exercise_prompt": "Borrow the complete stdin buffer and return its first whitespace-delimited word as &str.",
+      "objective": "Relate a returned slice to the caller-owned String and handle the absence of words safely.",
+      "language_delta": "Rust references carry compile-time validity relationships; garbage-collected languages often permit substring values without exposing their ownership connection.",
+      "prediction_prompt": "Predict whether leading whitespace belongs to the returned slice when split_whitespace is used.",
+      "transfer_trap": "Lifetime annotations, dyn trait results, and unsafe pointer obligations all build on this same owner-bounded slice relationship rather than extending the data."
+    },
+    "rust-lifetimes": {
+      "title": "Name the lifetime shared by a returned choice",
+      "concept": "longer may return either argument, so one lifetime parameter relates both input references to the output. The caller still owns all underlying text.",
+      "worked_example": "shorter needs the explicit 'a because two borrowed inputs leave output lifetime elision unable to choose which input supplies the returned reference.",
+      "common_mistakes": [
+        "Assuming output elision can choose between two input references fails; the relationship must be written explicitly.",
+        "Comparing str::len here would rank UTF-8 bytes, not the requested Unicode scalar values."
+      ],
+      "self_check": [
+        "What data does the lifetime parameter allocate or retain at runtime? Nothing.",
+        "Why must the returned reference be valid for a period supported by whichever input was selected?"
+      ],
+      "exercise_prompt": "Split the input at the bar and return the scalar-longer borrowed side, preferring left on ties.",
+      "objective": "Annotate a reference relationship while leaving ownership and storage duration unchanged.",
+      "language_delta": "Lifetime syntax is compile-time reasoning about borrows, unlike a reference-counting handle that actively keeps an allocation alive.",
+      "prediction_prompt": "Compare é with aa first by bytes and then by scalar count; predict why the requested winner changes.",
+      "transfer_trap": "Do not add static to silence the compiler; that would demand globally lasting data instead of describing the actual caller borrows."
+    },
+    "rust-traits-lifetimes": {
+      "title": "Dispatch dynamically while lending the result",
+      "concept": "render accepts &dyn Draw, chooses the concrete implementation through a vtable, and returns a &str borrowed from the widget for no longer than that widget borrow.",
+      "worked_example": "The Named example sends a Tag through a trait object and receives its inner text without cloning the owned String.",
+      "common_mistakes": [
+        "Adding a generic method to Draw can make the trait incompatible with dyn dispatch.",
+        "Returning a reference to a temporary String created inside draw would dangle and is rejected."
+      ],
+      "self_check": [
+        "What remains owned by Button or Label after render returns?",
+        "Which call is dynamically dispatched, and which lifetime is inferred for the returned str?"
+      ],
+      "exercise_prompt": "Build the requested widget and render its borrowed label through a dyn Draw reference.",
+      "objective": "Combine object-safe runtime dispatch with a result whose lifetime follows the object borrow.",
+      "language_delta": "A Rust trait object is explicit dynamic dispatch, unlike a generic trait bound that is normally monomorphized for each concrete type.",
+      "prediction_prompt": "Predict which implementation receives label:Rust and how long its returned slice remains valid.",
+      "transfer_trap": "Do not box every value automatically; a short-lived &dyn Draw borrow is enough because main owns each concrete widget."
+    },
+    "rust-unsafe": {
+      "title": "Make the safety obligation local and explicit",
+      "concept": "read_copy converts a valid shared reference to a raw pointer and performs exactly one unsafe read. Its comment names liveness, alignment, and copyability assumptions.",
+      "worked_example": "The sample proves index zero exists before using get_unchecked inside a small block whose invariant can be reviewed in isolation.",
+      "common_mistakes": [
+        "Using unsafe as a broad escape hatch does not make a dangling or misaligned pointer valid.",
+        "In Rust 2024, an unsafe operation directly inside unsafe fn triggers the warn-by-default unsafe_op_in_unsafe_fn lint; denying that lint promotes it to an error."
+      ],
+      "self_check": [
+        "Which facts about pointer make pointer.read valid at that line?",
+        "What safe reference continues to guarantee the pointee remains alive during the operation?"
+      ],
+      "exercise_prompt": "Wrap a raw-pointer copy of the parsed integer behind a safe function with a documented invariant.",
+      "objective": "Constrain unsafe code to one auditable operation while preserving a safe caller contract.",
+      "language_delta": "Unsafe relaxes checks only for listed operations; Rust 2024 warns when an unsafe fn performs an unsafe operation outside an explicit unsafe block, which documents the audited scope.",
+      "prediction_prompt": "Imagine the reference were dropped before the read and identify which stated safety fact would become false.",
+      "transfer_trap": "Do not mark the entire function unsafe when callers need no extra obligation and the wrapper can establish every precondition internally."
+    },
+    "rust-structs-impl": {
+      "title": "Place borrowed behavior beside its data",
+      "concept": "Rectangle owns two dimensions, while area borrows &self and leaves the instance available after computing. The method call supplies that receiver automatically.",
+      "worked_example": "Counter demonstrates another read-only method whose receiver is borrowed rather than consumed or mutably borrowed.",
+      "common_mistakes": [
+        "Declaring area with self would consume the rectangle even though calculation only reads fields.",
+        "Confusing Rectangle::area with a no-receiver associated function overlooks the explicit &self parameter."
+      ],
+      "self_check": [
+        "Can rectangle.area be called twice, and which receiver choice makes that possible?",
+        "How could a generic bound or trait later provide similar method behavior across several types?"
+      ],
+      "exercise_prompt": "Construct a Rectangle from parsed dimensions and print the result of its borrowing area method.",
+      "objective": "Model related fields as a struct and attach nonconsuming behavior through impl.",
+      "language_delta": "Rust methods make receiver ownership explicit rather than hiding whether an object call consumes, mutates, or borrows its target.",
+      "prediction_prompt": "Predict whether changing &self to &mut self is necessary for a pure multiplication.",
+      "transfer_trap": "Generic and trait labs can layer reusable behavior on structs, but one concrete impl is the clearest boundary for this core lesson."
+    },
+    "rust-enum-match": {
+      "title": "Make closed alternatives exhaustive",
+      "concept": "Command represents add, multiply, or quit with variant-specific data. evaluate names every case, letting rustc flag the match if another variant is later introduced.",
+      "worked_example": "The traffic-light match covers all three unit variants and returns one u8 duration from the expression.",
+      "common_mistakes": [
+        "A wildcard arm suppresses the useful nonexhaustive diagnostic when the enum grows.",
+        "Reading payload fields before deciding the command makes the payload-free quit variant awkward or unsafe."
+      ],
+      "self_check": [
+        "Which variants own two integers, and which owns no payload?",
+        "What compiler assistance is lost when every unmatched command is swallowed by underscore?"
+      ],
+      "exercise_prompt": "Parse one command into its enum variant and evaluate it with explicit exhaustive match arms.",
+      "objective": "Represent a closed command set with payload-carrying variants and total pattern matching.",
+      "language_delta": "Rust match exhaustiveness is checked statically; switch statements in some languages permit missing cases or fall-through.",
+      "prediction_prompt": "Predict the bound names available in each arm before calculating its result.",
+      "transfer_trap": "Option is also an enum: its Some and None variants deserve the same deliberate handling in the following lab."
+    },
+    "rust-option": {
+      "title": "Branch on presence instead of unwrapping",
+      "concept": "The first Unicode scalar is Some(char) for nonempty text and None otherwise. An explicit match produces meaningful output for both ordinary states.",
+      "worked_example": "checked_half uses then_some to build an Option only when an integer is even, and debug formatting reveals the wrapper.",
+      "common_mistakes": [
+        "Calling unwrap treats expected empty input as a panic-worthy programmer error.",
+        "Using bytes().next would return the first UTF-8 byte rather than the first Unicode scalar."
+      ],
+      "self_check": [
+        "What payload type is stored inside Some for chars().next?",
+        "Which branch runs for a zero-length trimmed string?"
+      ],
+      "exercise_prompt": "Inspect the optional first scalar and print either that char or the documented absence word.",
+      "objective": "Handle a normal missing value exhaustively without nulls, sentinels, or panic.",
+      "language_delta": "Option encodes absence in the type, unlike nullable references that can be forgotten until runtime.",
+      "prediction_prompt": "Predict the scalar selected from the Korean fixture rather than reasoning in raw bytes.",
+      "transfer_trap": "Reserve unwrap for states whose absence truly violates an invariant; empty user input is explicitly part of this exercise."
+    },
+    "rust-result": {
+      "title": "Carry parse errors across a pure helper",
+      "concept": "sum_tokens uses try_fold so each integer conversion can apply ?. The first ParseIntError exits the helper, while main decides how that failure appears on stdout.",
+      "worked_example": "positive shows question-mark propagation followed by a second domain check, making clear that propagation and error recovery are separate decisions.",
+      "common_mistakes": [
+        "Reading ? as a catch operator hides that it immediately returns the error from the enclosing function.",
+        "Unwrapping every token prevents main from converting malformed input into the required error line."
+      ],
+      "self_check": [
+        "What is the return type of the function containing the question mark?",
+        "Does try_fold visit tokens after one parse returns Err?"
+      ],
+      "exercise_prompt": "Sum all valid integer tokens through Result and print a stable error marker if any parse fails.",
+      "objective": "Separate fallible conversion from user-facing recovery while preserving the original error path.",
+      "language_delta": "Rust Result makes recoverable failure explicit in signatures rather than using exceptions that can cross unmarked call boundaries.",
+      "prediction_prompt": "Trace the accumulator for two followed by bad and identify the exact point where control returns.",
+      "transfer_trap": "Executable assertions can test this pure helper, and an async function can likewise return a Future whose eventual output contains success or failure."
+    },
+    "rust-testing": {
+      "title": "Keep checks on the code path the judge executes",
+      "concept": "The reference binary calls assert_eq! before reading stdin, so those checks genuinely run. A cfg(test) module would be absent from this ordinary compilation mode.",
+      "worked_example": "The triple example performs an inline assertion and then prints a non-answer status line, proving the check ran without invoking a test harness.",
+      "common_mistakes": [
+        "Assuming #[test] functions run in a normal rustc binary gives false confidence because the harness was never built.",
+        "Using assertions for untrusted input validation can panic rather than returning a controlled user-facing error."
+      ],
+      "self_check": [
+        "If an inline equality is wrong, does execution reach the later println?",
+        "Which commands activate harness tests? cargo test and rustc --test do; plain rustc does not."
+      ],
+      "exercise_prompt": "Implement add_two, retain two executable boundary assertions, and print the function result for stdin.",
+      "objective": "Leave a runnable correctness check in the same execution mode used by this lesson judge.",
+      "language_delta": "Rust test attributes depend on compilation mode; unlike always-called assertions in main, they need cargo test or rustc --test to generate and run the harness.",
+      "prediction_prompt": "Predict the process behavior if add_two returns its input unchanged while the inline checks remain.",
+      "transfer_trap": "Do not claim unit-test mastery from this lab alone; it teaches executable assertions and the exact boundary of the available runner."
+    },
+    "rust-async-await": {
+      "title": "Execute an await with a deliberately bounded executor",
+      "concept": "double awaits std::future::ready, and block_on_ready polls the resulting Future once. Pending is a hard error because this miniature executor has no wake-and-repoll loop.",
+      "worked_example": "message contains a real .await and is driven by the same one-poll mechanism, producing observable execution instead of merely constructing and dropping a future.",
+      "common_mistakes": [
+        "Calling double without polling its Future executes none of the async body.",
+        "Using this one-poll helper for timers, I/O, or any potentially pending future is incorrect."
+      ],
+      "self_check": [
+        "Where does the future first run: at the async call or at poll?",
+        "What explicit bound makes a no-op waker acceptable in this exercise? The awaited future is immediately ready."
+      ],
+      "exercise_prompt": "Transform the parsed number inside the ready future and drive that async computation to its output.",
+      "objective": "Observe a genuine await while keeping the executor honest about its single-poll limitation.",
+      "language_delta": "Rust async is inert until an executor polls the Future; it does not automatically start work like an eagerly scheduled task abstraction.",
+      "prediction_prompt": "Predict which match arm receives the ready future and why no second poll occurs.",
+      "transfer_trap": "Use a production executor when work can yield Pending; extending this teaching helper into a scheduler is outside the runner scope."
+    },
+    "rust-concurrency": {
+      "title": "Wait for an owned worker result",
+      "concept": "The parsed i64 is Copy, so a move closure receives its own copied value and would not invalidate the caller's binding. join synchronizes with that worker and yields its computed value.",
+      "worked_example": "A handle for a small multiplication is joined before output, so the demonstration cannot exit before the worker result is available.",
+      "common_mistakes": [
+        "Dropping JoinHandle detaches the worker; it does not implicitly wait.",
+        "Borrowing stack data into a spawned closure usually fails the static lifetime requirement because the worker could outlive that stack frame."
+      ],
+      "self_check": [
+        "Which copied value crosses the thread boundary, and why could the caller's original i64 remain usable?",
+        "What failure does expect convert into a main-thread panic when join reports Err?"
+      ],
+      "exercise_prompt": "Capture the parsed Copy integer in one worker, double it there, join, and print the returned value.",
+      "objective": "Coordinate one thread result explicitly instead of relying on timing or process shutdown.",
+      "language_delta": "Unlike an inert async Future, spawn creates an independently scheduled OS thread that may begin before or after the caller continues; join is the synchronization point.",
+      "prediction_prompt": "Predict which result join guarantees without assuming whether the worker or caller receives CPU time first.",
+      "transfer_trap": "Shared mutation is unnecessary for one returned value; Arc and Mutex belong in the multiworker capstone."
+    },
+    "rust-shared-state": {
+      "title": "Capstone: scope shared mutation across joined workers",
+      "concept": "main owns the input Vec and spawns one worker per integer. Every closure owns its value plus an Arc clone, computes outside the critical section, locks briefly, and then drops its MutexGuard.",
+      "worked_example": "The sample launches two genuine threads, joins both handles, and reads the protected total only after all updates have completed.",
+      "common_mistakes": [
+        "Calling lock is not an instant field access: it may block and can return a poisoned error after another holder panics.",
+        "Holding the guard while doing unrelated work lengthens contention; compute the square before acquiring the mutex."
+      ],
+      "self_check": [
+        "Are all JoinHandles consumed before main takes its final guard?",
+        "Which lab rules appear here: Vec iteration, Arc ownership, thread moves, Mutex guard scope, and explicit poison handling?"
+      ],
+      "exercise_prompt": "Spawn and join one worker for each input, adding every square into a shared Arc<Mutex<i64>> total.",
+      "objective": "Integrate ownership, iteration, threading, synchronization, and deterministic output in one bounded program.",
+      "language_delta": "Arc manages shared lifetime and Mutex manages exclusive access; RefCell is not Sync and cannot protect concurrently shared mutation.",
+      "prediction_prompt": "Predict why scheduling order cannot change the final sum after every worker is joined.",
+      "transfer_trap": "Arc is the shared smart pointer here rather than singly owning Box; an owned RefCell<T> may move when T is Send but cannot be shared concurrently, and unsafe is unnecessary because Mutex enforces the aliasing invariant."
     }
   }
 }

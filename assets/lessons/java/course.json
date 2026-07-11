@@ -1,625 +1,559 @@
 {
+  "schema_version": 1,
+  "runtime": "java",
   "lessons": [
     {
-      "aliases": [],
-      "body": "System.out.print writes text as-is, while System.out.println appends a line break that judges usually compare exactly.",
-      "cases": [
-        {
-          "input": "",
-          "output": "score=7\n"
-        }
-      ],
-      "example": "class Solution {\n    public static void main(String[] args) {\n        int score = 7;\n        System.out.println(\"example:\" + (\"score=\" + score));\n    }\n}\n",
       "id": "java-output",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html"
+      "title": "Exact standard output",
+      "body": "Build one line from stdin data and choose print or println deliberately; the judge normalizes CRLF to LF, while every other whitespace difference remains significant.",
+      "example": "class Solution {\n    public static void main(String[] args) {\n        String learner = \"Mina\";\n        int points = 4;\n        System.out.print(learner + \":\" + points + \"\\n\");\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        String name = parts[0];\n        int score = Integer.parseInt(parts[1]);\n        // TODO: format the two parsed values with the required separator.\n        System.out.println(name + \"-\" + score);\n    }\n}\n",
+      "cases": [
+        { "input": "Ada 7\n", "output": "Ada:7\n" },
+        { "input": "Lin 0\n", "output": "Lin:0\n" },
+        { "input": "José 12\n", "output": "José:12\n" }
       ],
-      "starter": "class Solution {\n    public static void main(String[] args) {\n        int score = 7;\n        // TODO: format the score for stdout with one trailing newline.\n        System.out.println(\"TODO\");\n    }\n}\n",
-      "title": "Stdout",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/PrintStream.html#println(java.lang.String)",
+        "https://dev.java/learn/"
+      ]
     },
     {
-      "aliases": [],
-      "body": "Local variables have declared types; primitives hold values directly and references point at objects such as String.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:7:true\n"
-        }
-      ],
-      "example": "class Solution {\n    public static void main(String[] args) {\n        String name = \"Ada\";\n        int score = 7;\n        boolean passed = score >= 5;\n        System.out.println(\"example:\" + (name + \":\" + score + \":\" + passed));\n    }\n}\n",
-      "id": "java-variables-types",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html"
-      ],
-      "starter": "class Solution {\n    public static void main(String[] args) {\n        String name = \"Ada\";\n        int score = 0;\n        boolean passed = false;\n        // TODO: update the typed values before the report is formatted.\n        System.out.println(name + \":\" + score + \":\" + passed);\n    }\n}\n",
-      "title": "Variables and types",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Integer division, remainder, casts, and numeric promotion decide the value before it ever reaches stdout.",
-      "cases": [
-        {
-          "input": "",
-          "output": "3:2\n"
-        }
-      ],
-      "example": "class Solution {\n    public static void main(String[] args) {\n        int total = 17;\n        int size = 5;\n        System.out.println(\"example:\" + ((total / size) + \":\" + (total % size)));\n    }\n}\n",
-      "id": "java-numbers-operators",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html"
-      ],
-      "starter": "class Solution {\n    public static void main(String[] args) {\n        int total = 17;\n        int size = 5;\n        // TODO: use integer division and remainder together.\n        System.out.println((total / 2) + \":\" + (total - size));\n    }\n}\n",
-      "title": "Numbers and operators",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "String is immutable; methods such as trim, substring, charAt, and equals return or compare values without changing the original.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "class Solution {\n    public static void main(String[] args) {\n        String raw = \"  ok!  \";\n        String cleaned = raw.trim().substring(0, 2);\n        System.out.println(\"example:\" + (cleaned));\n    }\n}\n",
-      "id": "java-strings",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html"
-      ],
-      "starter": "class Solution {\n    public static void main(String[] args) {\n        String raw = \"  ok!  \";\n        // TODO: trim the text and keep only ok.\n        String cleaned = raw.substring(0, 2);\n        System.out.println(cleaned);\n    }\n}\n",
-      "title": "Strings",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "if selects a branch, loops repeat work, and each block must move the same typed values toward the final answer.",
-      "cases": [
-        {
-          "input": "",
-          "output": "4\n"
-        }
-      ],
-      "example": "class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int n = 1; n <= 3; n++) {\n            if (n % 2 == 1) {\n                total += n;\n            }\n        }\n        System.out.println(\"example:\" + (total));\n    }\n}\n",
-      "id": "java-control-flow",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/flow.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html"
-      ],
-      "starter": "class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int n = 1; n <= 3; n++) {\n            // TODO: add only odd numbers.\n            total += n;\n        }\n        System.out.println(total);\n    }\n}\n",
-      "title": "Control flow",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A method signature declares parameter types and a return type; return sends the computed value back to the caller.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "class Solution {\n    static int area(int width, int height) {\n        return width * height;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (area(3, 4)));\n    }\n}\n",
-      "id": "java-methods",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/index.html"
-      ],
-      "starter": "class Solution {\n    static int area(int width, int height) {\n        // TODO: return rectangle area, not perimeter.\n        return width + height;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(area(3, 4));\n    }\n}\n",
-      "title": "Methods",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Coding-test Java usually reads System.in once, splits whitespace, then converts tokens before doing numeric work.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "import java.io.IOException;\n\nclass Solution {\n    public static void main(String[] args) throws IOException {\n        String input = new String(System.in.readAllBytes());\n        int sum = 0;\n        for (String token : input.trim().split(\"\\\\s+\")) {\n            if (!token.isEmpty()) {\n                sum += Integer.parseInt(token);\n            }\n        }\n        System.out.println(\"example:\" + (sum));\n    }\n}\n",
       "id": "java-input",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/System.html#in",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Scanner.html"
-      ],
-      "starter": "import java.io.IOException;\n\nclass Solution {\n    public static void main(String[] args) throws IOException {\n        String input = new String(System.in.readAllBytes());\n        int sum = 0;\n        // TODO: split input into tokens and add every parsed integer.\n        if (input.isEmpty()) {\n            sum = 0;\n        }\n        System.out.println(sum);\n    }\n}\n",
-      "title": "Input parsing",
-      "track": "core"
-    },
-    {
       "aliases": [],
-      "body": "Arrays keep a fixed length, while List, Map, and Set cover growable order, keyed lookup, and uniqueness.",
-      "cases": [
-        {
-          "input": "",
-          "output": "5:2:2\n"
-        }
-      ],
-      "example": "import java.util.ArrayList;\nimport java.util.HashMap;\nimport java.util.HashSet;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.Set;\n\nclass Solution {\n    public static void main(String[] args) {\n        int[] nums = {2, 3};\n        List<Integer> list = new ArrayList<>();\n        Map<String, Integer> totals = new HashMap<>();\n        Set<Integer> seen = new HashSet<>();\n        for (int n : nums) {\n            list.add(n);\n            totals.merge(\"sum\", n, Integer::sum);\n            seen.add(n);\n        }\n        System.out.println(\"example:\" + (totals.get(\"sum\") + \":\" + list.size() + \":\" + seen.size()));\n    }\n}\n",
-      "id": "java-arrays-collections",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/collections/index.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html"
-      ],
-      "starter": "import java.util.ArrayList;\nimport java.util.HashMap;\nimport java.util.HashSet;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.Set;\n\nclass Solution {\n    public static void main(String[] args) {\n        int[] nums = {2, 3};\n        List<Integer> list = new ArrayList<>();\n        Map<String, Integer> totals = new HashMap<>();\n        Set<Integer> seen = new HashSet<>();\n        for (int n : nums) {\n            list.add(n);\n            // TODO: update both the Map total and Set of seen values.\n        }\n        System.out.println(nums.length + \":\" + list.size() + \":\" + seen.size());\n    }\n}\n",
-      "title": "Arrays and collections",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A class defines fields and behavior; new creates an object whose instance methods read or change that state.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "class Counter {\n    int value = 3;\n\n    int add(int delta) {\n        value += delta;\n        return value;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Counter counter = new Counter();\n        System.out.println(\"example:\" + (counter.add(2)));\n    }\n}\n",
-      "id": "java-classes-objects",
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/javaOO/classes.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
+      "title": "UTF-8 standard input",
+      "body": "Read every stdin byte, decode with UTF-8 explicitly, split only when text is nonblank, and total any number of signed integer tokens.",
+      "example": "import java.io.ByteArrayInputStream;\nimport java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        var demo = new ByteArrayInputStream(\"4 6\".getBytes(StandardCharsets.UTF_8));\n        String text = new String(demo.readAllBytes(), StandardCharsets.UTF_8);\n        int sum = 0;\n        for (String token : text.split(\"\\\\s+\")) sum += Integer.parseInt(token);\n        System.out.println(\"sum=\" + sum);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        int sum = 1;\n        // TODO: accumulate the decoded integer tokens, including the blank-input case.\n        if (!text.isEmpty()) for (String token : text.split(\"\\\\s+\")) sum += Integer.parseInt(token);\n        System.out.println(sum);\n    }\n}\n",
+      "cases": [
+        { "input": "2 3\n", "output": "5\n" },
+        { "input": "-1\n5 2\n", "output": "6\n" },
+        { "input": "", "output": "0\n" }
       ],
-      "starter": "class Counter {\n    int value = 3;\n\n    int add(int delta) {\n        // TODO: change this object's state by delta before returning it.\n        return value;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Counter counter = new Counter();\n        System.out.println(counter.add(2));\n    }\n}\n",
-      "title": "Classes and objects",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/charset/StandardCharsets.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/InputStream.html"
+      ]
     },
     {
+      "id": "java-variables-types",
       "aliases": [],
-      "body": "A constructor initializes each new object before methods run; overloaded constructors provide different entry points.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "class Rectangle {\n    private final int width;\n    private final int height;\n\n    Rectangle(int width, int height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    int area() {\n        return width * height;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (new Rectangle(3, 4).area()));\n    }\n}\n",
-      "id": "java-constructors",
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/javaOO/constructors.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
+      "title": "Typed values and final bindings",
+      "body": "Parse a String and two ints, derive a boolean with a typed comparison, and remember that final blocks reassignment rather than mutation inside an object.",
+      "example": "class Solution {\n    public static void main(String[] args) {\n        final String name = \"Mira\";\n        int score = 2;\n        int threshold = 3;\n        boolean passed = score >= threshold;\n        System.out.println(\"report=\" + name + \":\" + score + \":\" + passed);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        final String name = parts[0];\n        int score = Integer.parseInt(parts[1]);\n        int threshold = Integer.parseInt(parts[2]);\n        // TODO: include the threshold itself in the passing range.\n        boolean passed = score > threshold;\n        System.out.println(name + \":\" + score + \":\" + passed);\n    }\n}\n",
+      "cases": [
+        { "input": "Ada 7 5\n", "output": "Ada:7:true\n" },
+        { "input": "Lin 4 5\n", "output": "Lin:4:false\n" },
+        { "input": "Bo 0 0\n", "output": "Bo:0:true\n" }
       ],
-      "starter": "class Rectangle {\n    private final int width;\n    private final int height;\n\n    Rectangle(int width, int height) {\n        this.width = width;\n        // TODO: store the height parameter in the field.\n        this.height = 0;\n    }\n\n    int area() {\n        return width * height;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        System.out.println(new Rectangle(3, 4).area());\n    }\n}\n",
-      "title": "Constructors",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html"
+      ]
     },
     {
+      "id": "java-numbers-operators",
       "aliases": [],
-      "body": "private fields protect representation; public methods expose the operations callers are allowed to perform.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "class Score {\n    private int points;\n\n    void add(int delta) {\n        if (delta > 0) {\n            points += delta;\n        }\n    }\n\n    int points() {\n        return points;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Score score = new Score();\n        score.add(5);\n        System.out.println(\"example:\" + (score.points()));\n    }\n}\n",
-      "id": "java-encapsulation",
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/javaOO/classes.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
+      "title": "Truncating integer arithmetic",
+      "body": "Compute quotient and remainder with Java int operators; division truncates toward zero, and the remainder keeps the dividend's sign.",
+      "example": "class Solution {\n    public static void main(String[] args) {\n        int dividend = 19;\n        int divisor = 4;\n        System.out.println(\"quotient=\" + dividend / divisor + \",remainder=\" + dividend % divisor);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        int dividend = Integer.parseInt(parts[0]);\n        int divisor = Integer.parseInt(parts[1]);\n        // TODO: preserve Java's integer quotient and remainder rules.\n        System.out.println(Math.floorDiv(dividend, divisor) + \":\" + Math.floorMod(dividend, divisor));\n    }\n}\n",
+      "cases": [
+        { "input": "17 5\n", "output": "3:2\n" },
+        { "input": "-17 5\n", "output": "-3:-2\n" },
+        { "input": "17 -5\n", "output": "-3:2\n" }
       ],
-      "starter": "class Score {\n    private int points;\n\n    void add(int delta) {\n        if (delta > 0) {\n            // TODO: update the private field through this method.\n        }\n    }\n\n    int points() {\n        return points;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Score score = new Score();\n        score.add(5);\n        System.out.println(score.points());\n    }\n}\n",
-      "title": "Encapsulation",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.17",
+        "https://dev.java/learn/numbers-strings/numbers/"
+      ]
     },
     {
+      "id": "java-strings",
       "aliases": [],
-      "body": "static fields and methods belong to the class, not one object, so they are shared through the class name.",
-      "cases": [
-        {
-          "input": "",
-          "output": "6\n"
-        }
-      ],
-      "example": "class Scale {\n    static final int FACTOR = 3;\n\n    static int apply(int value) {\n        return value * FACTOR;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (Scale.apply(2)));\n    }\n}\n",
-      "id": "java-static-members",
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/javaOO/classvars.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
+      "title": "String cleanup and content equality",
+      "body": "Strip surrounding Unicode whitespace, remove a matching ASCII bracket pair, and treat String length and indices as UTF-16 code units.",
+      "example": "class Solution {\n    public static void main(String[] args) {\n        String raw = \"  {demo}  \";\n        String text = raw.strip();\n        if (text.startsWith(\"{\") && text.endsWith(\"}\")) text = text.substring(1, text.length() - 1);\n        System.out.println(\"cleaned=\" + text);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        // TODO: remove one matching square or curly wrapper from the stripped content.\n        System.out.println(text);\n    }\n}\n",
+      "cases": [
+        { "input": "  [ok]  \n", "output": "ok\n" },
+        { "input": "{Java}\n", "output": "Java\n" },
+        { "input": "[서울]\n", "output": "서울\n" }
       ],
-      "starter": "class Scale {\n    static final int FACTOR = 3;\n\n    static int apply(int value) {\n        // TODO: use the shared FACTOR constant.\n        return value;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        System.out.println(Scale.apply(2));\n    }\n}\n",
-      "title": "Static members",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-3.html#jls-3.10.5"
+      ]
     },
     {
+      "id": "java-control-flow",
       "aliases": [],
-      "body": "enum names a fixed set of constants, and switch expressions turn those constants into explicit result branches.",
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Branches and bounded loops",
+      "body": "Walk from one through an inclusive limit and add only odd values, using a boolean condition because Java integers are not truth values.",
+      "example": "class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int value = 1; value <= 7; value++) {\n            if (value % 2 != 0) total += value;\n        }\n        System.out.println(\"oddSum=\" + total);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        int limit = Integer.parseInt(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip());\n        int total = 0;\n        // TODO: make the loop accumulate the intended parity.\n        for (int value = 1; value <= limit; value++) if (value % 2 == 0) total += value;\n        System.out.println(total);\n    }\n}\n",
       "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
+        { "input": "3\n", "output": "4\n" },
+        { "input": "6\n", "output": "9\n" },
+        { "input": "0\n", "output": "0\n" }
       ],
-      "example": "enum Status {\n    TODO, DONE\n}\n\nclass Solution {\n    static String label(Status status) {\n        return switch (status) {\n            case TODO -> \"work\";\n            case DONE -> \"ok\";\n        };\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (label(Status.DONE)));\n    }\n}\n",
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html",
+        "https://dev.java/learn/language-basics/controlling-flow/"
+      ]
+    },
+    {
       "id": "java-enum-switch",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html"
+      "title": "Exhaustive enum switch expressions",
+      "body": "Represent three fixed states with an enum and map each constant through an arrow-style switch expression without fall-through.",
+      "example": "class Solution {\n    enum Mode { STARTED, STOPPED }\n\n    public static void main(String[] args) {\n        Mode mode = Mode.STARTED;\n        String action = switch (mode) {\n            case STARTED -> \"go\";\n            case STOPPED -> \"wait\";\n        };\n        System.out.println(\"state=\" + action);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    enum State { TODO, DONE, BLOCKED }\n\n    public static void main(String[] args) throws Exception {\n        State state = State.valueOf(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip());\n        // TODO: give every enum constant its intended switch result.\n        String result = switch (state) {\n            case TODO -> \"pending\";\n            case DONE -> \"ok\";\n            case BLOCKED -> \"blocked\";\n        };\n        System.out.println(result);\n    }\n}\n",
+      "cases": [
+        { "input": "TODO\n", "output": "work\n" },
+        { "input": "DONE\n", "output": "ok\n" },
+        { "input": "BLOCKED\n", "output": "blocked\n" }
       ],
-      "starter": "enum Status {\n    TODO, DONE\n}\n\nclass Solution {\n    static String label(Status status) {\n        return switch (status) {\n            case TODO -> \"work\";\n            // TODO: return ok for the DONE branch.\n            case DONE -> \"done\";\n        };\n    }\n\n    public static void main(String[] args) {\n        System.out.println(label(Status.DONE));\n    }\n}\n",
-      "title": "Enum and switch",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11"
+      ]
     },
     {
+      "id": "java-methods",
       "aliases": [],
-      "body": "try/catch handles recoverable failures; checked exceptions must be caught or declared in a method signature.",
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "basic",
+      "title": "Typed static method checkpoint",
+      "body": "Put an integer area calculation behind a typed static method, parse its arguments in main, and call the method rather than duplicating its expression.",
+      "example": "class Solution {\n    static int area(int width, int height) {\n        return width * height;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"area=\" + area(2, 5));\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static int area(int width, int height) {\n        // TODO: return the rectangular calculation from this method boundary.\n        return width + height;\n    }\n\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        System.out.println(area(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));\n    }\n}\n",
       "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
+        { "input": "3 4\n", "output": "12\n" },
+        { "input": "0 5\n", "output": "0\n" },
+        { "input": "7 1\n", "output": "7\n" }
       ],
-      "example": "class Solution {\n    static int parseOrDefault(String text) {\n        try {\n            return Integer.parseInt(text);\n        } catch (NumberFormatException error) {\n            return 12;\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (parseOrDefault(\"bad\")));\n    }\n}\n",
-      "id": "java-exceptions",
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4",
+        "https://dev.java/learn/classes-objects/more-on-classes/"
+      ]
+    },
+    {
+      "id": "java-overloading-varargs",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/essential/exceptions/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html"
+      "title": "Overloads and varargs arrays",
+      "body": "Let a varargs overload total an int array, then delegate to the fixed-arity overload that formats a name and one computed total.",
+      "example": "class Solution {\n    static String label(String name, int total) { return name + \":\" + total; }\n    static String label(String name, int... values) {\n        int total = 0;\n        for (int value : values) total += value;\n        return label(name, total);\n    }\n    public static void main(String[] args) {\n        System.out.println(\"result=\" + label(\"Mia\", 1, 4));\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Arrays;\n\nclass Solution {\n    static String label(String name, int total) { return name + \":\" + total; }\n    static String label(String name, int... values) {\n        // TODO: reduce the varargs array before selecting the fixed overload.\n        return label(name, values.length);\n    }\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        int[] values = Arrays.stream(parts, 1, parts.length).mapToInt(Integer::parseInt).toArray();\n        System.out.println(label(parts[0], values));\n    }\n}\n",
+      "cases": [
+        { "input": "Ada 2 3\n", "output": "Ada:5\n" },
+        { "input": "Lin -1 4 2\n", "output": "Lin:5\n" },
+        { "input": "Bo 0\n", "output": "Bo:0\n" }
       ],
-      "starter": "class Solution {\n    static int parseOrDefault(String text) {\n        try {\n            return Integer.parseInt(text);\n        } catch (NumberFormatException error) {\n            // TODO: recover in the NumberFormatException branch.\n            return 0;\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(parseOrDefault(\"bad\"));\n    }\n}\n",
-      "title": "Exceptions",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.12",
+        "https://dev.java/learn/classes-objects/more-on-classes/"
+      ]
     },
     {
+      "id": "java-packages-imports",
       "aliases": [],
-      "body": "Generics let one class or method preserve the caller's element type instead of falling back to Object casts.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Imports and fully qualified names",
+      "body": "Use an imported ArrayList implementation through a fully qualified java.util.List type; imports shorten source names but do not load dependencies.",
+      "example": "import java.util.ArrayList;\n\nclass Solution {\n    public static void main(String[] args) {\n        java.util.List<String> words = new ArrayList<>();\n        words.add(\"package\");\n        words.add(\"demo\");\n        System.out.println(\"joined=\" + String.join(\"\", words));\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.ArrayList;\nimport java.util.Arrays;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        java.util.List<String> words = new ArrayList<>();\n        if (!text.isEmpty()) words.addAll(Arrays.asList(text.split(\"\\\\s+\")));\n        // TODO: join the values while preserving the imported and qualified type roles.\n        System.out.println(String.join(\" \" , words));\n    }\n}\n",
       "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
+        { "input": "o k\n", "output": "ok\n" },
+        { "input": "Java 21\n", "output": "Java21\n" },
+        { "input": "", "output": "\n" }
       ],
-      "example": "import java.util.List;\n\nclass Solution {\n    static <T> T last(List<T> items) {\n        return items.get(items.size() - 1);\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (last(List.of(\"skip\", \"ok\"))));\n    }\n}\n",
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.5",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html"
+      ]
+    },
+    {
+      "id": "java-arrays-collections",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Collection observations",
+      "body": "Parse an int array, copy values into a List, count them in a Map, and report the Map-derived sum, List size, and Set uniqueness.",
+      "example": "import java.util.*;\n\nclass Solution {\n    public static void main(String[] args) {\n        int[] values = {4, 5};\n        List<Integer> list = new ArrayList<>();\n        Map<Integer, Integer> counts = new HashMap<>();\n        Set<Integer> unique = new HashSet<>();\n        for (int value : values) { list.add(value); counts.merge(value, 1, Integer::sum); unique.add(value); }\n        int sum = counts.entrySet().stream().mapToInt(e -> e.getKey() * e.getValue()).sum();\n        System.out.println(\"sum=\" + sum + \",count=\" + list.size() + \",unique=\" + unique.size());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        int[] values = text.isEmpty() ? new int[0] : Arrays.stream(text.split(\"\\\\s+\")).mapToInt(Integer::parseInt).toArray();\n        List<Integer> list = new ArrayList<>();\n        Map<Integer, Integer> counts = new HashMap<>();\n        Set<Integer> unique = new HashSet<>();\n        for (int value : values) { list.add(value); counts.merge(value, 1, Integer::sum); unique.add(value); }\n        // TODO: derive the first field from the frequency map entries.\n        int sum = values.length;\n        System.out.println(sum + \":\" + list.size() + \":\" + unique.size());\n    }\n}\n",
+      "cases": [
+        { "input": "2 3\n", "output": "5:2:2\n" },
+        { "input": "2 2 3\n", "output": "7:3:2\n" },
+        { "input": "", "output": "0:0:0\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
+        "https://dev.java/learn/api/collections-framework/"
+      ]
+    },
+    {
       "id": "java-generics",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
+      "title": "Generic element preservation",
+      "body": "Write a last-element helper whose type parameter connects the List element type to the return type without raw collections or casts.",
+      "example": "import java.util.List;\n\nclass Solution {\n    static <T> T last(List<T> values) { return values.get(values.size() - 1); }\n    public static void main(String[] args) {\n        System.out.println(\"last=\" + last(List.of(\"red\", \"blue\")));\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Arrays;\nimport java.util.List;\n\nclass Solution {\n    static <T> T last(List<T> values) {\n        // TODO: select the element at the generic list's far end.\n        return values.get(0);\n    }\n    public static void main(String[] args) throws Exception {\n        List<String> words = Arrays.asList(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\"));\n        System.out.println(last(words));\n    }\n}\n",
+      "cases": [
+        { "input": "skip ok\n", "output": "ok\n" },
+        { "input": "one\n", "output": "one\n" },
+        { "input": "a b c\n", "output": "c\n" }
+      ],
       "refs": [
         "https://dev.java/learn/generics/",
-        "https://docs.oracle.com/javase/tutorial/java/generics/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
-      ],
-      "starter": "import java.util.List;\n\nclass Solution {\n    static <T> T last(List<T> items) {\n        // TODO: return the last element while preserving T.\n        return items.get(0);\n    }\n\n    public static void main(String[] args) {\n        System.out.println(last(List.of(\"skip\", \"ok\")));\n    }\n}\n",
-      "title": "Generics",
-      "track": "core"
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.5"
+      ]
     },
     {
-      "aliases": [],
-      "body": "An interface names behavior a class promises to implement; callers can depend on that contract instead of the concrete class.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "interface Named {\n    String name();\n}\n\nclass User implements Named {\n    public String name() {\n        return \"ok\";\n    }\n}\n\nclass Solution {\n    static String describe(Named named) {\n        return named.name();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (describe(new User())));\n    }\n}\n",
-      "id": "java-interfaces",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html"
-      ],
-      "starter": "interface Named {\n    String name();\n}\n\nclass User implements Named {\n    public String name() {\n        // TODO: satisfy the interface through the implementing method.\n        return \"\";\n    }\n}\n\nclass Solution {\n    static String describe(Named named) {\n        return named.name();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(describe(new User()));\n    }\n}\n",
-      "title": "Interfaces",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Inheritance reuses an is-a relationship; composition keeps a helper object as a field when behavior is only a has-a dependency.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "class Bonus {\n    int apply(int base) {\n        return base + 2;\n    }\n}\n\nclass User {\n    int baseScore() {\n        return 3;\n    }\n}\n\nclass PremiumUser extends User {\n    private final Bonus bonus = new Bonus();\n\n    int score() {\n        return bonus.apply(baseScore());\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (new PremiumUser().score()));\n    }\n}\n",
-      "id": "java-inheritance-composition",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
-      ],
-      "starter": "class Bonus {\n    int apply(int base) {\n        return base + 2;\n    }\n}\n\nclass User {\n    int baseScore() {\n        return 3;\n    }\n}\n\nclass PremiumUser extends User {\n    private final Bonus bonus = new Bonus();\n\n    int score() {\n        // TODO: compose Bonus with the inherited baseScore.\n        return baseScore();\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        System.out.println(new PremiumUser().score());\n    }\n}\n",
-      "title": "Inheritance and composition",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A record declares an immutable data carrier and gives you a constructor, accessors, equals, hashCode, and toString.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "record Point(int x, int y) {\n    int sum() {\n        return x + y;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Point point = new Point(2, 3);\n        System.out.println(\"example:\" + (point.sum()));\n    }\n}\n",
-      "id": "java-records",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://dev.java/learn/records/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
-      ],
-      "starter": "record Point(int x, int y) {\n    int sum() {\n        // TODO: use both generated accessors.\n        return x();\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Point point = new Point(2, 3);\n        System.out.println(point.sum());\n    }\n}\n",
-      "title": "Records",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Optional<T> makes a maybe-present value explicit and asks the caller to map, filter, or provide a fallback.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "import java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) {\n        Optional<String> value = Optional.of(\"ok\");\n        String label = value.filter(text -> text.length() == 2).orElse(\"missing\");\n        System.out.println(\"example:\" + (label));\n    }\n}\n",
-      "id": "java-optional",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html"
-      ],
-      "starter": "import java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) {\n        Optional<String> value = Optional.empty();\n        // TODO: keep ok present and filter it before the fallback.\n        String label = value.filter(text -> text.length() == 2).orElse(\"missing\");\n        System.out.println(label);\n    }\n}\n",
-      "title": "Optional",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A lambda supplies behavior to a pipeline, and a stream processes elements only when a terminal operation consumes it.",
-      "cases": [
-        {
-          "input": "",
-          "output": "20\n"
-        }
-      ],
-      "example": "import java.util.List;\n\nclass Solution {\n    public static void main(String[] args) {\n        int total = List.of(1, 2, 3, 4).stream()\n            .filter(n -> n % 2 == 0)\n            .mapToInt(n -> n * n)\n            .sum();\n        System.out.println(\"example:\" + (total));\n    }\n}\n",
       "id": "java-streams-lambdas",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "advanced",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html"
+      "title": "Lazy stream pipelines",
+      "body": "Filter even integers, square them with IntStream.map, and trigger the lazy pipeline with one sum terminal operation.",
+      "example": "import java.util.stream.IntStream;\n\nclass Solution {\n    public static void main(String[] args) {\n        int total = IntStream.of(2, 6).filter(n -> n % 2 == 0).map(n -> n * n).sum();\n        System.out.println(\"squares=\" + total);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Arrays;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        int[] values = text.isEmpty() ? new int[0] : Arrays.stream(text.split(\"\\\\s+\")).mapToInt(Integer::parseInt).toArray();\n        // TODO: keep the intended subset before squaring and terminating the stream.\n        int total = Arrays.stream(values).filter(n -> n % 2 != 0).map(n -> n * n).sum();\n        System.out.println(total);\n    }\n}\n",
+      "cases": [
+        { "input": "1 2 3 4\n", "output": "20\n" },
+        { "input": "-2 -1 0\n", "output": "4\n" },
+        { "input": "1 3\n", "output": "0\n" }
       ],
-      "starter": "import java.util.List;\n\nclass Solution {\n    public static void main(String[] args) {\n        // TODO: square only the even numbers before summing.\n        int total = List.of(1, 2, 3, 4).stream()\n            .mapToInt(n -> n)\n            .sum();\n        System.out.println(total);\n    }\n}\n",
-      "title": "Streams and lambdas",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/IntStream.html#map(java.util.function.IntUnaryOperator)",
+        "https://dev.java/learn/api/streams/"
+      ]
     },
     {
-      "aliases": [],
-      "body": "Comparator objects define ordering for sorted collections and list sorting without changing the stored type.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Lin:5\n"
-        }
-      ],
-      "example": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\n\nrecord User(String name, int score) {}\n\nclass Solution {\n    public static void main(String[] args) {\n        List<User> users = new ArrayList<>(List.of(\n            new User(\"Ada\", 3),\n            new User(\"Lin\", 5),\n            new User(\"Bo\", 4)\n        ));\n        users.sort(Comparator.comparingInt(User::score).reversed());\n        User best = users.get(0);\n        System.out.println(\"example:\" + (best.name() + \":\" + best.score()));\n    }\n}\n",
       "id": "java-comparators-sorting",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Comparator.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html"
+      "title": "Comparator chains",
+      "body": "Order users by descending score and then ascending name, avoiding subtraction comparators that can overflow.",
+      "example": "import java.util.*;\n\nclass Solution {\n    record User(String name, int score) {}\n    public static void main(String[] args) {\n        var users = new ArrayList<>(List.of(new User(\"Kai\", 2), new User(\"Bea\", 2)));\n        users.sort(Comparator.comparingInt(User::score).reversed().thenComparing(User::name));\n        System.out.println(\"best=\" + users.get(0).name() + \":\" + users.get(0).score());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    record User(String name, int score) {}\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        List<User> users = new ArrayList<>();\n        for (int i = 0; i < parts.length; i += 2) users.add(new User(parts[i], Integer.parseInt(parts[i + 1])));\n        // TODO: compose the requested primary and tie-break directions.\n        users.sort(Comparator.comparingInt(User::score).thenComparing(User::name));\n        User best = users.get(0);\n        System.out.println(best.name() + \":\" + best.score());\n    }\n}\n",
+      "cases": [
+        { "input": "Ada 3 Lin 5 Bo 4\n", "output": "Lin:5\n" },
+        { "input": "Zed 5 Amy 5\n", "output": "Amy:5\n" },
+        { "input": "Solo -1\n", "output": "Solo:-1\n" }
       ],
-      "starter": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\n\nrecord User(String name, int score) {}\n\nclass Solution {\n    public static void main(String[] args) {\n        List<User> users = new ArrayList<>(List.of(\n            new User(\"Ada\", 3),\n            new User(\"Lin\", 5),\n            new User(\"Bo\", 4)\n        ));\n        // TODO: sort by score descending, not by name.\n        users.sort(Comparator.comparing(User::name));\n        User best = users.get(0);\n        System.out.println(best.name() + \":\" + best.score());\n    }\n}\n",
-      "title": "Comparators and sorting",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Comparator.html"
+      ]
     },
     {
+      "id": "java-classes-objects",
       "aliases": [],
-      "body": "try-with-resources closes AutoCloseable values automatically after the block, even when reading or parsing fails.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "import java.io.ByteArrayInputStream;\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws IOException {\n        try (ByteArrayInputStream in = new ByteArrayInputStream(\"ok\".getBytes(StandardCharsets.UTF_8))) {\n            System.out.println(\"example:\" + (new String(in.readAllBytes(), StandardCharsets.UTF_8)));\n        }\n    }\n}\n",
-      "id": "java-try-with-resources",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AutoCloseable.html"
-      ],
-      "starter": "import java.io.ByteArrayInputStream;\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws IOException {\n        try (ByteArrayInputStream in = new ByteArrayInputStream(\"todo\".getBytes(StandardCharsets.UTF_8))) {\n            // TODO: read ok from the managed resource.\n            System.out.println(new String(in.readAllBytes(), StandardCharsets.UTF_8));\n        }\n    }\n}\n",
-      "title": "Try-with-resources",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A package names a namespace across files; in this single-file judge, imports are the practical way to use packaged JDK classes.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "import java.util.ArrayList;\nimport java.util.List;\n\nclass Solution {\n    public static void main(String[] args) {\n        List<String> words = new ArrayList<>();\n        words.add(\"o\");\n        words.add(\"k\");\n        System.out.println(\"example:\" + (String.join(\"\", words)));\n    }\n}\n",
-      "id": "java-packages-imports",
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/package/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html"
+      "title": "Per-instance object state",
+      "body": "Create a Counter object from parsed state, send it a delta through a method, and observe the field owned by that instance.",
+      "example": "class Solution {\n    static class Counter {\n        int value;\n        Counter(int value) { this.value = value; }\n        void add(int delta) { value += delta; }\n    }\n    public static void main(String[] args) {\n        Counter counter = new Counter(10);\n        counter.add(2);\n        System.out.println(\"value=\" + counter.value);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class Counter {\n        int value;\n        Counter(int value) { this.value = value; }\n        void add(int delta) {\n            // TODO: update this object's field with the received delta.\n            delta += value;\n        }\n    }\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        Counter counter = new Counter(Integer.parseInt(parts[0]));\n        counter.add(Integer.parseInt(parts[1]));\n        System.out.println(counter.value);\n    }\n}\n",
+      "cases": [
+        { "input": "3 2\n", "output": "5\n" },
+        { "input": "0 7\n", "output": "7\n" },
+        { "input": "-2 1\n", "output": "-1\n" }
       ],
-      "starter": "import java.util.ArrayList;\nimport java.util.List;\n\nclass Solution {\n    public static void main(String[] args) {\n        List<String> words = new ArrayList<>();\n        words.add(\"o\");\n        // TODO: add the second letter using the imported List implementation.\n        System.out.println(String.join(\"\", words));\n    }\n}\n",
-      "title": "Packages and imports",
-      "track": "core"
+      "refs": [
+        "https://dev.java/learn/classes-objects/creating-objects/",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html"
+      ]
     },
     {
+      "id": "java-constructors",
       "aliases": [],
-      "body": "Annotations attach metadata to declarations; tools and frameworks can read them without changing normal method execution.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "@interface Audit {\n    String value();\n}\n\nclass Solution {\n    @Audit(\"stdout\")\n    static String label() {\n        return \"ok\";\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (label()));\n    }\n}\n",
-      "id": "java-annotations",
+      "track": "lab",
       "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/java/annotations/index.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html"
+      "level": "basic",
+      "title": "Constructor-established invariants",
+      "body": "Initialize both final dimensions in a no-return-type constructor and use this to distinguish fields from same-named parameters.",
+      "example": "class Solution {\n    static class Rectangle {\n        final int width;\n        final int height;\n        Rectangle(int width, int height) { this.width = width; this.height = height; }\n        int area() { return width * height; }\n    }\n    public static void main(String[] args) {\n        System.out.println(\"area=\" + new Rectangle(2, 5).area());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class Rectangle {\n        final int width;\n        final int height;\n        Rectangle(int width, int height) {\n            this.width = width;\n            // TODO: initialize height from its same-named constructor argument.\n            this.height = 1;\n        }\n        int area() { return width * height; }\n    }\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        System.out.println(new Rectangle(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])).area());\n    }\n}\n",
+      "cases": [
+        { "input": "3 4\n", "output": "12\n" },
+        { "input": "0 5\n", "output": "0\n" },
+        { "input": "7 1\n", "output": "7\n" }
       ],
-      "starter": "@interface Audit {\n    String value();\n}\n\nclass Solution {\n    @Audit(\"stdout\")\n    static String label() {\n        // TODO: keep the annotated method behavior correct.\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        System.out.println(label());\n    }\n}\n",
-      "title": "Annotations",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.8",
+        "https://dev.java/learn/classes-objects/creating-objects/"
+      ]
     },
     {
+      "id": "java-encapsulation",
       "aliases": [],
-      "body": "sealed restricts which classes or records may implement a hierarchy, making closed domain alternatives visible to readers.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "sealed interface Shape permits Rect, Dot {\n    int measure();\n}\n\nrecord Rect(int width, int height) implements Shape {\n    public int measure() {\n        return width * height;\n    }\n}\n\nrecord Dot() implements Shape {\n    public int measure() {\n        return 0;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Shape shape = new Rect(3, 4);\n        System.out.println(\"example:\" + (shape.measure()));\n    }\n}\n",
-      "id": "java-sealed-classes",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html"
-      ],
-      "starter": "sealed interface Shape permits Rect, Dot {\n    int measure();\n}\n\nrecord Rect(int width, int height) implements Shape {\n    public int measure() {\n        // TODO: compute rectangle area inside the permitted record.\n        return width + height;\n    }\n}\n\nrecord Dot() implements Shape {\n    public int measure() {\n        return 0;\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Shape shape = new Rect(3, 4);\n        System.out.println(shape.measure());\n    }\n}\n",
-      "title": "Sealed classes",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Small testable methods let assertions check behavior before main prints; AssertionError is the simplest failure signal.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "class Solution {\n    static int addTwo(int value) {\n        return value + 2;\n    }\n\n    static void check() {\n        if (addTwo(3) != 5) {\n            throw new AssertionError(\"addTwo should add 2\");\n        }\n    }\n\n    public static void main(String[] args) {\n        check();\n        System.out.println(\"example:\" + (addTwo(3)));\n    }\n}\n",
-      "id": "java-testing-assert",
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AssertionError.html",
-        "https://docs.oracle.com/javase/tutorial/essential/exceptions/"
+      "title": "Private state with enforced rules",
+      "body": "Keep balance private and expose a deposit method that accepts positive changes only; access control alone does not enforce an invariant.",
+      "example": "class Solution {\n    static class Account {\n        private int balance;\n        void deposit(int amount) { if (amount > 0) balance += amount; }\n        int balance() { return balance; }\n    }\n    public static void main(String[] args) {\n        Account account = new Account();\n        account.deposit(2); account.deposit(-7); account.deposit(4);\n        System.out.println(\"balance=\" + account.balance());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class Account {\n        private int balance;\n        void deposit(int amount) {\n            // TODO: guard the state transition with the account invariant.\n            balance += amount;\n        }\n        int balance() { return balance; }\n    }\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Account account = new Account();\n        if (!text.isEmpty()) for (String token : text.split(\"\\\\s+\")) account.deposit(Integer.parseInt(token));\n        System.out.println(account.balance());\n    }\n}\n",
+      "cases": [
+        { "input": "5 -2 3\n", "output": "8\n" },
+        { "input": "-1\n", "output": "0\n" },
+        { "input": "", "output": "0\n" }
       ],
-      "starter": "class Solution {\n    static int addTwo(int value) {\n        // TODO: make the method satisfy the assertion before stdout.\n        return value;\n    }\n\n    static void check() {\n        if (addTwo(3) != 3) {\n            throw new AssertionError(\"current starter expectation\");\n        }\n    }\n\n    public static void main(String[] args) {\n        check();\n        System.out.println(addTwo(3));\n    }\n}\n",
-      "title": "Testing and assert",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-6.html#jls-6.6"
+      ]
     },
     {
+      "id": "java-static-members",
       "aliases": [],
-      "body": "Hash-based collections rely on equals and hashCode agreeing about which objects represent the same value.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Class-owned static constants",
+      "body": "Apply one static final scaling factor shared by every call, while separating class ownership from the deeper mutability of referenced objects.",
+      "example": "class Solution {\n    static final int FACTOR = 3;\n    static int scale(int value) { return value * FACTOR; }\n    public static void main(String[] args) { System.out.println(\"scaled=\" + scale(4)); }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    // TODO: correct the class-owned multiplier used by every invocation.\n    static final int FACTOR = 1;\n    static int scale(int value) { return value * FACTOR; }\n    public static void main(String[] args) throws Exception {\n        int value = Integer.parseInt(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip());\n        System.out.println(scale(value));\n    }\n}\n",
       "cases": [
-        {
-          "input": "",
-          "output": "1\n"
-        }
+        { "input": "2\n", "output": "6\n" },
+        { "input": "0\n", "output": "0\n" },
+        { "input": "-2\n", "output": "-6\n" }
       ],
-      "example": "import java.util.HashSet;\nimport java.util.Objects;\nimport java.util.Set;\n\nclass Point {\n    private final int x;\n    private final int y;\n\n    Point(int x, int y) {\n        this.x = x;\n        this.y = y;\n    }\n\n    public boolean equals(Object other) {\n        if (!(other instanceof Point point)) {\n            return false;\n        }\n        return x == point.x && y == point.y;\n    }\n\n    public int hashCode() {\n        return Objects.hash(x, y);\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Set<Point> points = new HashSet<>();\n        points.add(new Point(2, 3));\n        points.add(new Point(2, 3));\n        System.out.println(\"example:\" + (points.size()));\n    }\n}\n",
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.3.1.1"
+      ]
+    },
+    {
+      "id": "java-interfaces",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Behavior through an interface",
+      "body": "Pass an implementation through a Named interface and call its public contract without depending on the concrete User type.",
+      "example": "import java.util.Locale;\n\nclass Solution {\n    interface Named { String name(); }\n    record User(String name) implements Named {}\n    static String render(Named value) { return value.name().toUpperCase(Locale.ROOT); }\n    public static void main(String[] args) { System.out.println(\"name=\" + render(new User(\"Mira\"))); }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Locale;\n\nclass Solution {\n    interface Named { String name(); }\n    record User(String name) implements Named {}\n    static String render(Named value) {\n        // TODO: implement the interface-facing text transformation.\n        return value.name().toLowerCase(Locale.ROOT);\n    }\n    public static void main(String[] args) throws Exception {\n        String name = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        System.out.println(render(new User(name)));\n    }\n}\n",
+      "cases": [
+        { "input": "ok\n", "output": "OK\n" },
+        { "input": "Ada\n", "output": "ADA\n" },
+        { "input": "é\n", "output": "É\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html"
+      ]
+    },
+    {
+      "id": "java-inheritance-composition",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Inheritance plus composition",
+      "body": "Reuse substitutable base state through inheritance and model an independent bonus with a composed helper object.",
+      "example": "class Solution {\n    static class BaseScore { protected final int base; BaseScore(int base) { this.base = base; } }\n    record Bonus(int value) {}\n    static class Player extends BaseScore {\n        private final Bonus bonus;\n        Player(int base, int bonus) { super(base); this.bonus = new Bonus(bonus); }\n        int total() { return base + bonus.value(); }\n    }\n    public static void main(String[] args) { System.out.println(\"total=\" + new Player(10, 2).total()); }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static class BaseScore { protected final int base; BaseScore(int base) { this.base = base; } }\n    record Bonus(int value) {}\n    static class Player extends BaseScore {\n        private final Bonus bonus;\n        Player(int base, int bonus) { super(base); this.bonus = new Bonus(bonus); }\n        int total() {\n            // TODO: include the composed object's contribution.\n            return base;\n        }\n    }\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        System.out.println(new Player(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])).total());\n    }\n}\n",
+      "cases": [
+        { "input": "3 2\n", "output": "5\n" },
+        { "input": "0 7\n", "output": "7\n" },
+        { "input": "-2 1\n", "output": "-1\n" }
+      ],
+      "refs": [
+        "https://dev.java/learn/inheritance/",
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.4"
+      ]
+    },
+    {
+      "id": "java-exceptions",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Narrow exception recovery",
+      "body": "Return a parsed integer when valid and recover with the supplied fallback only from NumberFormatException, an unchecked parsing failure.",
+      "example": "class Solution {\n    static int parseOr(String text, int fallback) {\n        try { return Integer.parseInt(text); }\n        catch (NumberFormatException error) { return fallback; }\n    }\n    public static void main(String[] args) { System.out.println(\"parsed=\" + parseOr(\"oops\", 4)); }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    static int parseOr(String text, int fallback) {\n        try { return Integer.parseInt(text); }\n        catch (NumberFormatException error) {\n            // TODO: recover with the caller-provided value.\n            return 0;\n        }\n    }\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        System.out.println(parseOr(parts[0], Integer.parseInt(parts[1])));\n    }\n}\n",
+      "cases": [
+        { "input": "7 12\n", "output": "7\n" },
+        { "input": "bad 12\n", "output": "12\n" },
+        { "input": "-3 9\n", "output": "-3\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NumberFormatException.html"
+      ]
+    },
+    {
+      "id": "java-optional",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Optional filtering and fallback",
+      "body": "Model a possibly accepted token with Optional, filter by length, and use orElse rather than calling get on an empty container.",
+      "example": "import java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) {\n        String value = Optional.of(\"cat\").filter(s -> s.length() <= 3).orElse(\"missing\");\n        System.out.println(\"value=\" + value);\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.Optional;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        String token = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        Optional<String> value = token.equals(\"-\") ? Optional.empty() : Optional.of(token);\n        // TODO: retain only the accepted short token before choosing the fallback.\n        System.out.println(value.filter(s -> s.length() > 3).orElse(\"missing\"));\n    }\n}\n",
+      "cases": [
+        { "input": "ok\n", "output": "ok\n" },
+        { "input": "toolong\n", "output": "missing\n" },
+        { "input": "-\n", "output": "missing\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html",
+        "https://dev.java/learn/api/streams/optionals/"
+      ]
+    },
+    {
+      "id": "java-try-with-resources",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Observed try-with-resources",
+      "body": "Place the received bytes in a managed stream, read from that resource inside the try block, decode as UTF-8, and normalize the observed content.",
+      "example": "import java.io.ByteArrayInputStream;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Locale;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        try (var resource = new ByteArrayInputStream(\" demo \".getBytes(StandardCharsets.UTF_8))) {\n            String text = new String(resource.readAllBytes(), StandardCharsets.UTF_8).strip().toUpperCase(Locale.ROOT);\n            System.out.println(\"normalized=\" + text);\n        }\n    }\n}\n",
+      "starter": "import java.io.ByteArrayInputStream;\nimport java.nio.charset.StandardCharsets;\n\nclass Solution {\n    public static void main(String[] args) throws Exception {\n        byte[] input = System.in.readAllBytes();\n        try (var resource = new ByteArrayInputStream(input)) {\n            String text = new String(resource.readAllBytes(), StandardCharsets.UTF_8).strip();\n            // TODO: normalize the resource content and handle its empty form.\n            System.out.println(text);\n        }\n    }\n}\n",
+      "cases": [
+        { "input": "ok\n", "output": "OK\n" },
+        { "input": " Ada \n", "output": "ADA\n" },
+        { "input": "", "output": "EMPTY\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AutoCloseable.html"
+      ]
+    },
+    {
       "id": "java-equality-hashcode",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "advanced",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/tutorial/collections/index.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html"
+      "title": "Equality and hash consistency",
+      "body": "Compare both Point coordinates with pattern instanceof and keep hashCode consistent so HashSet can honor logical equality. Unequal points may legally collide; equal points must never produce different hashes.",
+      "example": "import java.util.*;\n\nclass Solution {\n    record Point(int x, int y) {}\n    public static void main(String[] args) {\n        Set<Point> points = new HashSet<>();\n        points.add(new Point(1, 1)); points.add(new Point(1, 1));\n        System.out.println(\"setSize=\" + points.size());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    static final class Point {\n        final int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        // TODO: compare both coordinates while preserving equal-implies-same-hash.\n        @Override public boolean equals(Object value) { return value instanceof Point other && x == other.x; }\n        @Override public int hashCode() { return Integer.hashCode(x); }\n    }\n    public static void main(String[] args) throws Exception {\n        int[] n = Arrays.stream(new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\")).mapToInt(Integer::parseInt).toArray();\n        Set<Point> points = new HashSet<>();\n        points.add(new Point(n[0], n[1])); points.add(new Point(n[2], n[3]));\n        System.out.println(points.size());\n    }\n}\n",
+      "cases": [
+        { "input": "2 3 2 3\n", "output": "1\n" },
+        { "input": "2 3 2 4\n", "output": "2\n" },
+        { "input": "0 0 1 0\n", "output": "2\n" }
       ],
-      "starter": "import java.util.HashSet;\nimport java.util.Objects;\nimport java.util.Set;\n\nclass Point {\n    private final int x;\n    private final int y;\n\n    Point(int x, int y) {\n        this.x = x;\n        this.y = y;\n    }\n\n    public boolean equals(Object other) {\n        // TODO: compare Point values by fields, not object identity.\n        return this == other;\n    }\n\n    public int hashCode() {\n        return Objects.hash(x, y);\n    }\n}\n\nclass Solution {\n    public static void main(String[] args) {\n        Set<Point> points = new HashSet<>();\n        points.add(new Point(2, 3));\n        points.add(new Point(2, 3));\n        System.out.println(points.size());\n    }\n}\n",
-      "title": "equals and hashCode",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashSet.html"
+      ]
     },
     {
+      "id": "java-records",
       "aliases": [],
-      "body": "Overloading chooses a method by argument types, while varargs gathers remaining arguments into an array parameter.",
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "advanced",
+      "title": "Defensive record snapshot checkpoint",
+      "body": "Store a List in a record compact constructor with List.copyOf, mutate the source afterward, and sum the stable snapshot to expose shallow immutability.",
+      "example": "import java.util.*;\n\nclass Solution {\n    record Snapshot(List<Integer> values) {\n        Snapshot { values = List.copyOf(values); }\n    }\n    public static void main(String[] args) {\n        List<Integer> source = new ArrayList<>(List.of(4, 5));\n        Snapshot snapshot = new Snapshot(source);\n        source.add(6);\n        System.out.println(\"snapshot=\" + snapshot.values().stream().mapToInt(Integer::intValue).sum());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    record Snapshot(List<Integer> values) {\n        // TODO: detach the record component from its mutable source list.\n    }\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        List<Integer> source = new ArrayList<>();\n        if (!text.isEmpty()) for (String token : text.split(\"\\\\s+\")) source.add(Integer.parseInt(token));\n        Snapshot snapshot = new Snapshot(source);\n        source.remove(source.size() - 1);\n        System.out.println(snapshot.values().stream().mapToInt(Integer::intValue).sum());\n    }\n}\n",
       "cases": [
-        {
-          "input": "",
-          "output": "Ada:5\n"
-        }
+        { "input": "2 3\n", "output": "5\n" },
+        { "input": "-1 1\n", "output": "0\n" },
+        { "input": "7\n", "output": "7\n" }
       ],
-      "example": "class Solution {\n    static int total(int first, int... rest) {\n        int sum = first;\n        for (int value : rest) {\n            sum += value;\n        }\n        return sum;\n    }\n\n    static String label(String name, int score) {\n        return name + \":\" + score;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"example:\" + (label(\"Ada\", total(2, 3))));\n    }\n}\n",
-      "id": "java-overloading-varargs",
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html",
+        "https://dev.java/learn/records/"
+      ]
+    },
+    {
+      "id": "java-annotations",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "advanced",
-      "refs": [
-        "https://dev.java/learn/",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html",
-        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html"
+      "title": "Runtime annotation metadata",
+      "body": "Retain a method annotation at runtime, restrict its target, and retrieve its prefix through reflection before formatting normalized input.",
+      "example": "import java.lang.annotation.*;\nimport java.util.Locale;\n\nclass Solution {\n    @Retention(RetentionPolicy.RUNTIME) @Target(ElementType.METHOD)\n    @interface Label { String value(); }\n    @Label(\"trace\") static String normalize(String text) { return text.toUpperCase(Locale.ROOT); }\n    public static void main(String[] args) throws Exception {\n        Label label = Solution.class.getDeclaredMethod(\"normalize\", String.class).getAnnotation(Label.class);\n        System.out.println(label.value() + \":\" + normalize(\"demo\"));\n    }\n}\n",
+      "starter": "import java.lang.annotation.*;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Locale;\n\nclass Solution {\n    @Target(ElementType.METHOD)\n    @interface Label { String value(); }\n    @Label(\"audit\") static String normalize(String text) { return text.toUpperCase(Locale.ROOT); }\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        // TODO: make the annotation observable to this reflective lookup.\n        Label label = Solution.class.getDeclaredMethod(\"normalize\", String.class).getAnnotation(Label.class);\n        String prefix = label == null ? \"missing\" : label.value();\n        System.out.println(prefix + \":\" + normalize(text));\n    }\n}\n",
+      "cases": [
+        { "input": "ok\n", "output": "audit:OK\n" },
+        { "input": "Ada\n", "output": "audit:ADA\n" },
+        { "input": "é\n", "output": "audit:É\n" }
       ],
-      "starter": "class Solution {\n    static int total(int first, int... rest) {\n        int sum = first;\n        for (int value : rest) {\n            // TODO: include every varargs value.\n        }\n        return sum;\n    }\n\n    static String label(String name, int score) {\n        return name + \":\" + score;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(label(\"Ada\", total(2, 3)));\n    }\n}\n",
-      "title": "Overloading and varargs",
-      "track": "core"
+      "refs": [
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html"
+      ]
+    },
+    {
+      "id": "java-sealed-classes",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Sealed shapes and pattern switch",
+      "body": "Close a Shape hierarchy with permits and evaluate every record subtype using Java 21 record patterns in an exhaustive switch expression.",
+      "example": "class Solution {\n    sealed interface Shape permits Rect, Circle, Dot {}\n    record Rect(int width, int height) implements Shape {}\n    record Circle(int radius) implements Shape {}\n    record Dot() implements Shape {}\n    static int metric(Shape shape) {\n        return switch (shape) {\n            case Rect(int w, int h) -> w * h;\n            case Circle(int r) -> r * 2;\n            case Dot() -> 0;\n        };\n    }\n    public static void main(String[] args) { System.out.println(\"metric=\" + metric(new Rect(2, 5))); }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\n\nclass Solution {\n    sealed interface Shape permits Rect, Circle, Dot {}\n    record Rect(int width, int height) implements Shape {}\n    record Circle(int radius) implements Shape {}\n    record Dot() implements Shape {}\n    static int metric(Shape shape) {\n        return switch (shape) {\n            case Rect(int w, int h) -> w * h;\n            // TODO: compute the circular case's requested measure.\n            case Circle(int r) -> r;\n            case Dot() -> 0;\n        };\n    }\n    public static void main(String[] args) throws Exception {\n        String[] parts = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip().split(\"\\\\s+\");\n        Shape shape = switch (parts[0]) {\n            case \"rect\" -> new Rect(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));\n            case \"circle\" -> new Circle(Integer.parseInt(parts[1]));\n            default -> new Dot();\n        };\n        System.out.println(metric(shape));\n    }\n}\n",
+      "cases": [
+        { "input": "rect 3 4\n", "output": "12\n" },
+        { "input": "circle 5\n", "output": "10\n" },
+        { "input": "dot\n", "output": "0\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11"
+      ]
+    },
+    {
+      "id": "java-testing-assert",
+      "aliases": [],
+      "track": "core",
+      "kind": "capstone",
+      "level": "advanced",
+      "title": "Always-active capstone checks",
+      "body": "Parse User records, order them by score and name, select a fallback for empty input, and validate helpers with an explicit check that cannot be disabled.",
+      "example": "import java.util.*;\n\nclass Solution {\n    record User(String name, int score) {}\n    static User choose(List<User> users) {\n        return users.stream().sorted(Comparator.comparingInt(User::score).reversed().thenComparing(User::name)).findFirst().orElse(new User(\"none\", 0));\n    }\n    static void check(boolean condition, String message) { if (!condition) throw new AssertionError(message); }\n    public static void main(String[] args) {\n        User winner = choose(List.of(new User(\"Zoe\", 2), new User(\"Ada\", 2)));\n        check(choose(List.of()).name().equals(\"none\"), \"empty fallback\");\n        System.out.println(\"winner=\" + winner.name() + \":\" + winner.score());\n    }\n}\n",
+      "starter": "import java.nio.charset.StandardCharsets;\nimport java.util.*;\n\nclass Solution {\n    record User(String name, int score) {}\n    static User choose(List<User> users) {\n        // TODO: make equal scores use the required deterministic name order.\n        return users.stream().sorted(Comparator.comparingInt(User::score).reversed()).findFirst().orElse(new User(\"none\", 0));\n    }\n    static void check(boolean condition, String message) { if (!condition) throw new AssertionError(message); }\n    public static void main(String[] args) throws Exception {\n        String text = new String(System.in.readAllBytes(), StandardCharsets.UTF_8).strip();\n        List<User> users = new ArrayList<>();\n        if (!text.isEmpty()) {\n            String[] parts = text.split(\"\\\\s+\");\n            for (int i = 0; i < parts.length; i += 2) users.add(new User(parts[i], Integer.parseInt(parts[i + 1])));\n        }\n        check(choose(List.of()).equals(new User(\"none\", 0)), \"fallback contract\");\n        User winner = choose(users);\n        System.out.println(winner.name() + \":\" + winner.score());\n    }\n}\n",
+      "cases": [
+        { "input": "Ada 3 Lin 5 Bo 4\n", "output": "Lin:5\n" },
+        { "input": "Zed 5 Amy 5\n", "output": "Amy:5\n" },
+        { "input": "", "output": "none:0\n" }
+      ],
+      "refs": [
+        "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.10",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AssertionError.html"
+      ]
     }
-  ],
-  "runtime": "java",
-  "schema_version": 1
+  ]
 }

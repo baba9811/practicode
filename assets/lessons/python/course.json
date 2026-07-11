@@ -1,537 +1,706 @@
 {
+  "schema_version": 1,
+  "runtime": "python",
   "lessons": [
     {
-      "aliases": [],
-      "body": "print converts values to text, writes them to stdout, and adds a newline unless told otherwise.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Ada:7\n"
-        }
-      ],
-      "example": "name = 'Ada'\nscore = 7\nprint('example:', f'{name}:{score}')",
       "id": "py-output",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/library/functions.html#print",
-        "https://docs.python.org/3/tutorial/inputoutput.html",
-        "https://peps.python.org/pep-0008/"
-      ],
-      "starter": "name = 'Ada'\nscore = 7\n# TODO: format the variables for stdout\nprint('TODO')\n",
-      "title": "print and stdout",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Assignment binds a name to an object; rebinding changes what the name points at, not the old object.",
+      "title": "Exact output with print",
+      "body": "print converts each argument, inserts sep between arguments, and writes end afterward. Online judges compare stdout exactly, so an extra space or missing newline is observable behavior.",
+      "example": "name = \"Mina\"\nscore = 9\nprint(name, score, sep=\"=\", end=\"!\\n\")\n",
+      "starter": "import sys\n\nname, score = sys.stdin.read().split()\n# TODO: choose print separators and a line ending for the required record\nprint(name, score)\n",
       "cases": [
         {
-          "input": "",
-          "output": "ok\n"
+          "input": "Ada 7\n",
+          "output": "Ada:7\n"
+        },
+        {
+          "input": "Lin 0\n",
+          "output": "Lin:0\n"
+        },
+        {
+          "input": "José 12\n",
+          "output": "José:12\n"
         }
       ],
-      "example": "count = 1\ncount = count + 2\nprint('example:', count)",
-      "id": "py-variables",
-      "kind": "lesson",
-      "level": "basic",
       "refs": [
-        "https://docs.python.org/3/tutorial/index.html",
-        "https://docs.python.org/3/reference/index.html",
-        "https://docs.python.org/3/library/index.html",
-        "https://peps.python.org/pep-0008/"
-      ],
-      "starter": "word = 'todo'\n# TODO: rebind word before it reaches stdout\nprint(word)\n",
-      "title": "Variables",
-      "track": "core"
+        "https://docs.python.org/3.12/library/functions.html#print"
+      ]
     },
     {
-      "aliases": [],
-      "body": "int and float cover most numeric work; //, %, and ** are common in problem solutions.",
-      "cases": [
-        {
-          "input": "",
-          "output": "3:1\n"
-        }
-      ],
-      "example": "total = 7\nsize = 2\nprint('example:', f'{total // size}:{total % size}')",
-      "id": "py-numbers",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/tutorial/introduction.html#numbers",
-        "https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex"
-      ],
-      "starter": "total = 7\nsize = 2\n# TODO: use integer division and remainder together\nprint(f'{total / size}:0')\n",
-      "title": "Numbers",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Strings are immutable sequences, so indexing and slicing read characters without changing the original text.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "text = 'python'\nprint('example:', text[1:4])",
-      "id": "py-strings",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/tutorial/introduction.html#text",
-        "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str"
-      ],
-      "starter": "text = 'xokx'\n# TODO: slice away the marker characters before printing\nprint(text)\n",
-      "title": "Strings",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "if chooses a block, for iterates over an iterable, and while repeats until its condition changes.",
-      "cases": [
-        {
-          "input": "",
-          "output": "4\n"
-        }
-      ],
-      "example": "total = 0\nfor n in range(1, 4):\n    if n % 2 == 1:\n        total += n\nprint('example:', total)",
-      "id": "py-control-flow",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/tutorial/controlflow.html",
-        "https://docs.python.org/3/reference/compound_stmts.html"
-      ],
-      "starter": "total = 0\nfor n in range(1, 4):\n    # TODO: add only odd numbers\n    total += 0\nprint(total)\n",
-      "title": "Control flow",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "def creates a callable object; parameters receive arguments and return sends a value back to the caller.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "def area(width, height):\n    return width * height\n\nprint('example:', area(3, 4))",
-      "id": "py-functions",
-      "kind": "lesson",
-      "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
-        "https://docs.python.org/3/reference/compound_stmts.html#function-definitions"
-      ],
-      "starter": "def area(width, height):\n    # TODO: return rectangle area, not perimeter\n    return width + height\n\nprint(area(3, 4))\n",
-      "title": "Functions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "stdin starts as text; read it once, split into tokens when structure matters, then convert tokens explicitly.",
-      "cases": [
-        {
-          "input": "2 3\n",
-          "output": "5\n"
-        }
-      ],
-      "example": "import sys\nnums = [int(token) for token in sys.stdin.read().split()]\nprint('example:', sum(nums))",
       "id": "py-input",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/library/sys.html#sys.stdin",
-        "https://docs.python.org/3/tutorial/inputoutput.html"
-      ],
-      "starter": "import sys\nnums = []\n# TODO: parse all integers from stdin and print their sum\nprint(sum(nums))\n",
-      "title": "Input parsing",
-      "track": "core"
-    },
-    {
       "aliases": [],
-      "body": "Lists keep ordered values by position; dicts map keys to values for direct lookup and counting.",
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Read stdin once",
+      "body": "sys.stdin.read returns the complete input as text. Splitting without an explicit separator accepts spaces, newlines, and repeated whitespace; an empty stream produces no tokens and therefore a zero sum.",
+      "example": "raw = \"10\\n4\"\nvalues = [int(token) for token in raw.split()]\nprint(sum(values))\n",
+      "starter": "import sys\n\nraw = sys.stdin.read()\n# TODO: convert every whitespace-delimited token instead of only the first\nvalues = [int(token) for token in raw.split()[:1]]\nprint(sum(values))\n",
       "cases": [
         {
           "input": "2 3\n",
           "output": "5\n"
-        }
-      ],
-      "example": "scores = {'Ada': [2, 3], 'Lin': [4]}\nprint('example:', sum(scores['Ada']))",
-      "id": "py-lists-dicts",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/tutorial/datastructures.html#more-on-lists",
-        "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
-        "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict"
-      ],
-      "starter": "nums = [2, 3]\nscores = {'Ada': nums}\n# TODO: print the sum stored under Ada without hard-coding 5\nprint(len(scores['Ada']))\n",
-      "title": "Lists and dicts",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Tuples group a fixed sequence of values; sets keep unique members and make membership checks cheap.",
-      "cases": [
+        },
+        {
+          "input": "-1\n5 2\n",
+          "output": "6\n"
+        },
         {
           "input": "",
-          "output": "ok 2\n"
+          "output": "0\n"
         }
       ],
-      "example": "pair = ('o', 'k')\nseen = set(pair)\nprint('example:', ''.join(pair), len(seen))",
-      "id": "py-tuples-sets",
+      "refs": [
+        "https://docs.python.org/3.12/library/sys.html#sys.stdin"
+      ]
+    },
+    {
+      "id": "py-variables",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences",
-        "https://docs.python.org/3/tutorial/datastructures.html#sets",
-        "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset"
-      ],
-      "starter": "pair = ('o', 'k')\nseen = set()\n# TODO: build a set from the tuple and print ok 2\nprint(''.join(pair[:1]), len(seen))\n",
-      "title": "Tuples and sets",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A comprehension combines an output expression, a loop, and optional filters into one collection-building expression.",
+      "title": "Names and rebinding",
+      "body": "Assignment binds a name to an object; augmented assignment then rebinds the accumulator to the computed integer. The original integer is unchanged because integers are immutable, while closures may later read the current value stored in an enclosing cell.",
+      "example": "total = 10\ntotal += 5\nprint(total)\n",
+      "starter": "import sys\n\nleft, right = map(int, sys.stdin.read().split())\ntotal = left\n# TODO: rebind the accumulator using the second parsed value\nprint(total)\n",
       "cases": [
         {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "nums = [1, 2, 3, 4]\nsquares = [n * n for n in nums if n % 2 == 0]\nprint('example:', sum(squares))",
-      "id": "py-comprehensions",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
-        "https://docs.python.org/3/tutorial/datastructures.html#dictionaries"
-      ],
-      "starter": "letters = ['o', 'x', 'k']\n# TODO: keep only the letters needed for ok with a comprehension\nword = ''.join([ch for ch in letters if ch != 'x' and ch != 'k'])\nprint(word)\n",
-      "title": "Comprehensions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "try isolates code that may fail; except handles a specific recoverable error without hiding unrelated bugs.",
-      "cases": [
-        {
-          "input": "",
-          "output": "12\n"
-        }
-      ],
-      "example": "try:\n    value = int('12')\nexcept ValueError:\n    value = 0\nprint('example:', value)",
-      "id": "py-errors",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/tutorial/errors.html",
-        "https://docs.python.org/3/reference/compound_stmts.html#the-try-statement"
-      ],
-      "starter": "try:\n    value = int('bad')\nexcept ValueError:\n    # TODO: recover in the ValueError branch\n    value = 0\nprint(value)\n",
-      "title": "Exceptions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "with enters a managed scope and calls cleanup automatically; file handles and contextlib helpers use this pattern.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "from io import StringIO\n\nwith StringIO('ok') as handle:\n    text = handle.read()\nprint('example:', text)",
-      "id": "py-files-context",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files",
-        "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
-        "https://docs.python.org/3/library/contextlib.html"
-      ],
-      "starter": "from io import StringIO\n\nwith StringIO('ok') as handle:\n    # TODO: read from the managed handle before it closes\n    text = ''\nprint(text)\n",
-      "title": "Files and context managers",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "import binds a module or object name so code can reuse standard-library behavior instead of rewriting it.",
-      "cases": [
-        {
-          "input": "",
+          "input": "1 2\n",
           "output": "3\n"
+        },
+        {
+          "input": "-4 9\n",
+          "output": "5\n"
+        },
+        {
+          "input": "0 0\n",
+          "output": "0\n"
         }
       ],
-      "example": "import math\n\nprint('example:', math.ceil(2.1))",
-      "id": "py-modules-imports",
+      "refs": [
+        "https://docs.python.org/3.12/reference/simple_stmts.html#assignment-statements"
+      ]
+    },
+    {
+      "id": "py-numbers",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
       "level": "basic",
-      "refs": [
-        "https://docs.python.org/3/tutorial/modules.html",
-        "https://docs.python.org/3/reference/import.html",
-        "https://peps.python.org/pep-0008/#imports"
-      ],
-      "starter": "import math\n\n# TODO: use the imported module to round upward\nprint(math.floor(2.1))\n",
-      "title": "Modules and imports",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "dataclass generates the routine class methods for simple data containers while leaving behavior explicit.",
+      "title": "Floor quotient and remainder",
+      "body": "For a nonzero divisor, integer // rounds the quotient toward negative infinity and % supplies the paired remainder. That differs from truncating division: negative operands can make the quotient one smaller, and the remainder follows the divisor's sign.",
+      "example": "dividend = -11\ndivisor = 4\nprint(f\"{dividend // divisor}:{dividend % divisor}\")\n",
+      "starter": "import sys\n\ndividend, divisor = map(int, sys.stdin.read().split())\n# TODO: compute the integer quotient with Python's floor rule\nprint(f\"{dividend / divisor}:{dividend % divisor}\")\n",
       "cases": [
         {
-          "input": "2 3\n",
-          "output": "5\n"
+          "input": "7 2\n",
+          "output": "3:1\n"
+        },
+        {
+          "input": "-7 2\n",
+          "output": "-4:1\n"
+        },
+        {
+          "input": "7 -2\n",
+          "output": "-4:-1\n"
         }
       ],
-      "example": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\npoint = Point(2, 3)\nprint('example:', point.x + point.y)",
-      "id": "py-dataclasses",
-      "kind": "lesson",
-      "level": "intermediate",
       "refs": [
-        "https://docs.python.org/3/library/dataclasses.html"
-      ],
-      "starter": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\npoint = Point(2, 3)\n# TODO: use both fields\nprint(point.x)\n",
-      "title": "Dataclasses",
-      "track": "core"
+        "https://docs.python.org/3.12/reference/expressions.html#binary-arithmetic-operations"
+      ]
     },
     {
+      "id": "py-tuples-sets",
       "aliases": [],
-      "body": "Type hints document expected shapes for readers and tools; Python still executes values dynamically at runtime.",
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Ordered pairs and unique members",
+      "body": "A tuple preserves the two input positions, while set(pair) retains one instance of each hashable value. Empty braces create a dict rather than a set, so an empty set must be written as set().",
+      "example": "pair = (\"r\", \"s\", \"r\")\nunique = set(pair)\nprint(\"\".join(pair), len(unique))\n",
+      "starter": "import sys\n\npair = tuple(sys.stdin.read().split())\n# TODO: derive the unique members from the ordered pair\nunique = set()\nprint(\"\".join(pair), len(unique))\n",
       "cases": [
         {
-          "input": "2 3\n",
-          "output": "5\n"
+          "input": "o k\n",
+          "output": "ok 2\n"
+        },
+        {
+          "input": "a a\n",
+          "output": "aa 1\n"
+        },
+        {
+          "input": "é e\n",
+          "output": "ée 2\n"
         }
       ],
-      "example": "from typing import Iterable\n\ndef total(values: Iterable[int]) -> int:\n    return sum(values)\n\nprint('example:', total([2, 3]))",
-      "id": "py-typing",
-      "kind": "lesson",
-      "level": "intermediate",
       "refs": [
-        "https://docs.python.org/3/library/typing.html",
-        "https://docs.python.org/3/tutorial/controlflow.html#function-annotations"
-      ],
-      "starter": "from typing import Iterable\n\ndef total(values: Iterable[int]) -> int:\n    # TODO: return the sum of the iterable\n    return 0\n\nprint(total([2, 3]))\n",
-      "title": "Type hints",
-      "track": "core"
+        "https://docs.python.org/3.12/tutorial/datastructures.html#tuples-and-sequences"
+      ]
     },
     {
+      "id": "py-strings",
       "aliases": [],
-      "body": "Iterators produce values one at a time; a generator function uses yield to pause and resume that production.",
+      "track": "core",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Unicode-aware string slicing",
+      "body": "Python str values are immutable sequences of Unicode code points. A half-open slice can remove the first and last code point without altering the source, including when those boundary values are emoji.",
+      "example": "wrapped = \"★서울★\"\nprint(wrapped[1:-1])\n",
+      "starter": "import sys\n\ntext = sys.stdin.read().rstrip(\"\\n\")\n# TODO: slice away both boundary code points\nprint(text[1:])\n",
       "cases": [
         {
-          "input": "",
+          "input": "xokx\n",
           "output": "ok\n"
+        },
+        {
+          "input": "[rust]\n",
+          "output": "rust\n"
+        },
+        {
+          "input": "🙂go🙂\n",
+          "output": "go\n"
         }
       ],
-      "example": "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nprint('example:', next(countdown(3)))",
-      "id": "py-generators",
-      "kind": "lesson",
-      "level": "advanced",
       "refs": [
-        "https://docs.python.org/3/tutorial/classes.html#iterators",
-        "https://docs.python.org/3/tutorial/classes.html#generators",
-        "https://docs.python.org/3/reference/simple_stmts.html#the-yield-statement"
-      ],
-      "starter": "def words():\n    # TODO: yield ok as the first generated value\n    yield ''\n\nprint(next(words()))\n",
-      "title": "Iterators and generators",
-      "track": "core"
+        "https://docs.python.org/3.12/library/stdtypes.html#text-sequence-type-str"
+      ]
     },
     {
-      "aliases": [],
-      "body": "lambda makes a small expression function; a closure remembers names from the surrounding scope.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "def make_adder(delta):\n    return lambda value: value + delta\n\nadd_two = make_adder(2)\nprint('example:', add_two(3))",
-      "id": "py-lambdas-closures",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions",
-        "https://docs.python.org/3/reference/expressions.html#lambda",
-        "https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces"
-      ],
-      "starter": "def make_suffix(suffix):\n    # TODO: return a lambda that appends suffix to word\n    return lambda word: word\n\nadd_ok = make_suffix('ok')\nprint(add_ok(''))\n",
-      "title": "Lambdas and closures",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "A decorator receives a function at definition time and returns the function object that name should now refer to.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "def identity(fn):\n    return fn\n\n@identity\ndef word():\n    return 'ok'\n\nprint('example:', word())",
-      "id": "py-decorators",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
-        "https://docs.python.org/3/glossary.html#term-decorator"
-      ],
-      "starter": "def identity(fn):\n    # TODO: return the original function unchanged\n    return lambda: ''\n\n@identity\ndef word():\n    return 'ok'\n\nprint(word())\n",
-      "title": "Decorators",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "sorted returns a new ordered list; key functions choose the value used for each comparison.",
-      "cases": [
-        {
-          "input": "",
-          "output": "Lin:5\n"
-        }
-      ],
-      "example": "users = [('Ada', 3), ('Lin', 5), ('Bo', 4)]\nbest = sorted(users, key=lambda item: item[1], reverse=True)[0]\nprint('example:', f'{best[0]}:{best[1]}')",
-      "id": "py-sorting-keys",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/library/functions.html#sorted",
-        "https://docs.python.org/3/howto/sorting.html"
-      ],
-      "starter": "users = [('Ada', 3), ('Lin', 5), ('Bo', 4)]\n# TODO: sort by score descending, not by name\nbest = sorted(users)[0]\nprint(f'{best[0]}:{best[1]}')\n",
-      "title": "Sorting and key functions",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "Counter counts hashable values directly; defaultdict creates missing collection values when grouping.",
-      "cases": [
-        {
-          "input": "",
-          "output": "2 2\n"
-        }
-      ],
-      "example": "from collections import Counter, defaultdict\n\nwords = ['red', 'blue', 'red']\ncounts = Counter(words)\ngroups = defaultdict(list)\nfor word in words:\n    groups[word[0]].append(word)\nprint('example:', counts['red'], len(groups['r']))",
-      "id": "py-counter-defaultdict",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/library/collections.html"
-      ],
-      "starter": "from collections import Counter, defaultdict\n\nwords = ['red', 'blue', 'red']\ncounts = Counter()\ngroups = defaultdict(list)\n# TODO: count words and group them by first letter\nprint(counts['red'], len(groups['r']))\n",
-      "title": "Counter and defaultdict",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "deque supports efficient appends and pops on both ends, which is why it is the usual queue type.",
-      "cases": [
-        {
-          "input": "",
-          "output": "start end\n"
-        }
-      ],
-      "example": "from collections import deque\n\nqueue = deque(['middle'])\nqueue.appendleft('start')\nqueue.append('end')\nprint('example:', queue.popleft(), queue.pop())",
-      "id": "py-deque",
-      "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/library/collections.html#collections.deque"
-      ],
-      "starter": "from collections import deque\n\nqueue = deque(['middle'])\n# TODO: add start on the left and end on the right\nprint(queue.popleft(), 'missing')\n",
-      "title": "deque",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "itertools provides lazy iterator building blocks for pairing, chaining, slicing, and combinatorics.",
-      "cases": [
-        {
-          "input": "",
-          "output": "ok\n"
-        }
-      ],
-      "example": "import itertools\n\nparts = [['o'], ['k']]\nprint('example:', ''.join(itertools.chain.from_iterable(parts)))",
-      "id": "py-itertools",
-      "kind": "lesson",
-      "level": "advanced",
-      "refs": [
-        "https://docs.python.org/3/library/itertools.html"
-      ],
-      "starter": "import itertools\n\nparts = [['o'], ['k']]\n# TODO: flatten both inner lists lazily\nprint(''.join(itertools.chain.from_iterable(parts[:1])))\n",
-      "title": "itertools",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "pathlib represents paths as objects, so code can ask for names, suffixes, and parents without manual string splitting.",
-      "cases": [
-        {
-          "input": "",
-          "output": "app:.txt\n"
-        }
-      ],
-      "example": "from pathlib import PurePosixPath\n\npath = PurePosixPath('logs/app.txt')\nprint('example:', f'{path.stem}:{path.suffix}')",
       "id": "py-pathlib",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/library/pathlib.html"
-      ],
-      "starter": "from pathlib import PurePosixPath\n\npath = PurePosixPath('logs/app.txt')\n# TODO: combine the stem and suffix properties\nprint(path.name)\n",
-      "title": "pathlib",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "assert checks an invariant in small examples; test frameworks build on the same idea with repeatable test functions.",
+      "title": "Path components with pathlib",
+      "body": "PurePosixPath parses POSIX path structure without touching the filesystem. stem removes only the final suffix, suffix reports that final extension, and a leading-dot filename such as .env has no suffix.",
+      "example": "from pathlib import PurePosixPath\n\npath = PurePosixPath(\"/srv/report.csv\")\nprint(f\"{path.stem}:{path.suffix}\")\n",
+      "starter": "import sys\nfrom pathlib import PurePosixPath\n\npath = PurePosixPath(sys.stdin.read().strip())\n# TODO: report the final stem and final suffix as separate properties\nprint(path.name)\n",
       "cases": [
         {
-          "input": "",
-          "output": "ok\n"
+          "input": "logs/app.txt\n",
+          "output": "app:.txt\n"
+        },
+        {
+          "input": "/tmp/archive.tar.gz\n",
+          "output": "archive.tar:.gz\n"
+        },
+        {
+          "input": ".env\n",
+          "output": ".env:\n"
         }
       ],
-      "example": "def add_two(value):\n    return value + 2\n\nassert add_two(3) == 5\nprint('example:', 'ok')",
-      "id": "py-testing-assert",
+      "refs": [
+        "https://docs.python.org/3.12/library/pathlib.html#pathlib.PurePath.stem"
+      ]
+    },
+    {
+      "id": "py-control-flow",
+      "aliases": [],
+      "track": "core",
       "kind": "lesson",
-      "level": "intermediate",
-      "refs": [
-        "https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement",
-        "https://docs.python.org/3/library/unittest.html",
-        "https://docs.python.org/3/tutorial/stdlib.html#quality-control"
-      ],
-      "starter": "def add_two(value):\n    # TODO: make the assertion describe the intended behavior\n    return value\n\nassert add_two(3) == 3\nprint('todo')\n",
-      "title": "Testing and assert",
-      "track": "core"
-    },
-    {
-      "aliases": [],
-      "body": "async def creates a coroutine; await pauses until the awaited operation completes, and asyncio.run drives the top-level coroutine.",
+      "level": "basic",
+      "title": "Branches, loops, and range bounds",
+      "body": "Indentation determines which statements belong to a loop or branch. range excludes its stop, so including n requires n + 1; the condition then selects only odd values before they reach the accumulator.",
+      "example": "limit = 7\ntotal = 0\nfor value in range(1, limit + 1):\n    if value % 2:\n        total += value\nprint(total)\n",
+      "starter": "import sys\n\nlimit = int(sys.stdin.read().strip())\ntotal = 0\nfor value in range(1, limit + 1):\n    # TODO: select the parity requested by the exercise\n    if value % 2 == 0:\n        total += value\nprint(total)\n",
       "cases": [
         {
-          "input": "",
-          "output": "ok\n"
+          "input": "3\n",
+          "output": "4\n"
+        },
+        {
+          "input": "6\n",
+          "output": "9\n"
+        },
+        {
+          "input": "0\n",
+          "output": "0\n"
         }
       ],
-      "example": "import asyncio\n\nasync def label():\n    return 'ok'\n\nasync def main():\n    print('example:', await label())\n\nasyncio.run(main())",
-      "id": "py-async",
+      "refs": [
+        "https://docs.python.org/3.12/tutorial/controlflow.html#the-range-function"
+      ]
+    },
+    {
+      "id": "py-functions",
+      "aliases": [],
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "basic",
+      "title": "Checkpoint: return a computed area",
+      "body": "A function boundary separates parsing, calculation, and output. Parameters receive the two dimensions, return hands the product back to the caller, and only the outer print writes judge-visible text.",
+      "example": "def area(width, height):\n    return width * height\n\nprint(area(8, 2))\n",
+      "starter": "import sys\n\ndef area(width, height):\n    # TODO: return the rectangle calculation to the caller\n    return width + height\n\nwidth, height = map(int, sys.stdin.read().split())\nprint(area(width, height))\n",
+      "cases": [
+        {
+          "input": "3 4\n",
+          "output": "12\n"
+        },
+        {
+          "input": "0 5\n",
+          "output": "0\n"
+        },
+        {
+          "input": "7 1\n",
+          "output": "7\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/tutorial/controlflow.html#defining-functions"
+      ]
+    },
+    {
+      "id": "py-modules-imports",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "basic",
+      "title": "Visible dependencies through modules",
+      "body": "import math binds the module namespace, making math.ceil's origin explicit at the call site. Star imports hide where names came from and make collisions harder to review.",
+      "example": "import math\n\nvalue = -3.8\nprint(math.ceil(value))\n",
+      "starter": "import math\nimport sys\n\nvalue = float(sys.stdin.read().strip())\n# TODO: call the upward-rounding operation through the module namespace\nprint(math.floor(value))\n",
+      "cases": [
+        {
+          "input": "2.1\n",
+          "output": "3\n"
+        },
+        {
+          "input": "-2.1\n",
+          "output": "-2\n"
+        },
+        {
+          "input": "5.0\n",
+          "output": "5\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/tutorial/modules.html"
+      ]
+    },
+    {
+      "id": "py-lambdas-closures",
+      "aliases": [],
+      "track": "lab",
       "kind": "lesson",
       "level": "advanced",
-      "refs": [
-        "https://docs.python.org/3/library/asyncio.html",
-        "https://docs.python.org/3/reference/datamodel.html#coroutines",
-        "https://docs.python.org/3/reference/expressions.html#await"
+      "title": "Closures capture cells, not snapshots",
+      "body": "A nested function can read a binding from an enclosing scope after that outer call returns. The captured cell is resolved when the closure runs, which is why lambdas created by one loop commonly all observe the loop's final value.",
+      "example": "readers = [lambda: index for index in range(3)]\nprint([reader() for reader in readers])\n",
+      "starter": "import sys\n\ndef make_adder(delta):\n    # TODO: return a closure that uses the enclosing binding\n    return lambda value: value\n\ndelta, value = map(int, sys.stdin.read().split())\nprint(make_adder(delta)(value))\n",
+      "cases": [
+        {
+          "input": "2 3\n",
+          "output": "5\n"
+        },
+        {
+          "input": "-1 4\n",
+          "output": "3\n"
+        },
+        {
+          "input": "0 0\n",
+          "output": "0\n"
+        }
       ],
-      "starter": "import asyncio\n\nasync def label():\n    return 'ok'\n\nasync def main():\n    # TODO: await the coroutine before printing\n    result = 'pending'\n    print(result)\n\nasyncio.run(main())\n",
-      "title": "Async concepts",
-      "track": "core"
+      "refs": [
+        "https://docs.python.org/3.12/reference/executionmodel.html#resolution-of-names"
+      ]
+    },
+    {
+      "id": "py-decorators",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Definition-time decorators",
+      "body": "Decorator expressions run when the def statement executes, while the returned wrapper runs on each later call. functools.wraps copies identifying metadata so tooling still sees the wrapped function's name and documentation.",
+      "example": "from functools import wraps\n\ndef tag(function):\n    @wraps(function)\n    def wrapper(value):\n        return f\"<{function(value).upper()}>\"\n    return wrapper\n\n@tag\ndef label(value):\n    return value\n\nprint(label(\"Mina\"))\n",
+      "starter": "import sys\nfrom functools import wraps\n\ndef bracket(function):\n    @wraps(function)\n    def wrapper(value):\n        # TODO: decorate the transformed return value at call time\n        return function(value).upper()\n    return wrapper\n\n@bracket\ndef label(value):\n    return value\n\nprint(label(sys.stdin.read().strip()))\n",
+      "cases": [
+        {
+          "input": "ok\n",
+          "output": "[OK]\n"
+        },
+        {
+          "input": "Ada\n",
+          "output": "[ADA]\n"
+        },
+        {
+          "input": "é\n",
+          "output": "[É]\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/functools.html#functools.wraps"
+      ]
+    },
+    {
+      "id": "py-async",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Drive real coroutines with asyncio",
+      "body": "Calling an async function creates a coroutine object but does not schedule it. asyncio.run drives the top-level coroutine, gather schedules the child awaitables, and sleep(0) provides an actual suspension point while preserving result order.",
+      "example": "import asyncio\n\nasync def upper(word):\n    await asyncio.sleep(0)\n    return word.upper()\n\nasync def main():\n    results = await asyncio.gather(upper(\"go\"), upper(\"now\"))\n    print(*results)\n\nasyncio.run(main())\n",
+      "starter": "import asyncio\nimport sys\n\nasync def double(value):\n    await asyncio.sleep(0)\n    return value * 2\n\nasync def main():\n    values = [int(token) for token in sys.stdin.read().split()]\n    # TODO: gather and await one double coroutine for each parsed value\n    results = values\n    print(*results)\n\nasyncio.run(main())\n",
+      "cases": [
+        {
+          "input": "1 2\n",
+          "output": "2 4\n"
+        },
+        {
+          "input": "-1 3\n",
+          "output": "-2 6\n"
+        },
+        {
+          "input": "",
+          "output": "\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/asyncio-runner.html#asyncio.run"
+      ]
+    },
+    {
+      "id": "py-lists-dicts",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Group list values by dictionary key",
+      "body": "Lists retain every score in insertion order, while a dict maps each name to its own list. setdefault can create a fresh list per missing key, and get handles a query that never appeared without raising KeyError.",
+      "example": "scores = {\"Mina\": [8, 1], \"Kai\": [2]}\nquery = \"Mina\"\nprint(sum(scores.get(query, [])))\n",
+      "starter": "import sys\n\ntokens = sys.stdin.read().split()\nquery = tokens[0]\nscores = {}\n# TODO: group every following name-score pair, not only the first one\nname, score = tokens[1], int(tokens[2])\nscores.setdefault(name, []).append(score)\nprint(sum(scores.get(query, [])))\n",
+      "cases": [
+        {
+          "input": "Ada Ada 2 Lin 4 Ada 3\n",
+          "output": "5\n"
+        },
+        {
+          "input": "Lin Ada 2 Lin -1 Lin 4\n",
+          "output": "3\n"
+        },
+        {
+          "input": "Bo Ada 1 Lin 2\n",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/tutorial/datastructures.html#dictionaries"
+      ]
+    },
+    {
+      "id": "py-sorting-keys",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Multi-field sorting keys",
+      "body": "A key tuple can encode descending score as a negated number and ascending name as the second field. Python's sort is stable, but stability alone preserves input order on ties rather than inventing the required alphabetical rule.",
+      "example": "users = [(\"Mina\", 7), (\"Ana\", 7), (\"Bo\", 9)]\nbest = sorted(users, key=lambda item: (-item[1], item[0]))[0]\nprint(f\"{best[0]}:{best[1]}\")\n",
+      "starter": "import sys\n\nusers = []\nfor token in sys.stdin.read().split():\n    name, score = token.rsplit(\":\", 1)\n    users.append((name, int(score)))\n# TODO: rank by the numeric result before applying the tie-break\nbest = sorted(users, key=lambda item: item[0])[0]\nprint(f\"{best[0]}:{best[1]}\")\n",
+      "cases": [
+        {
+          "input": "Ada:3 Lin:5 Bo:4\n",
+          "output": "Lin:5\n"
+        },
+        {
+          "input": "Zed:5 Amy:5\n",
+          "output": "Amy:5\n"
+        },
+        {
+          "input": "Solo:-1\n",
+          "output": "Solo:-1\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/howto/sorting.html#sort-stability-and-complex-sorts"
+      ]
+    },
+    {
+      "id": "py-counter-defaultdict",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Count and group with collections",
+      "body": "Counter records frequencies of hashable values, and defaultdict(list) supplies a fresh bucket while grouping. Indexing a missing defaultdict key creates that entry, whereas get can inspect an absent group without mutating the mapping.",
+      "example": "from collections import Counter, defaultdict\n\nquery = \"owl\"\nwords = [\"oak\", \"owl\", \"ox\", \"owl\", \"otter\"]\ncounts = Counter(words)\ngroups = defaultdict(list)\nfor word in words:\n    groups[word[0]].append(word)\nprint(counts[query], len(groups.get(query[0], [])))\n",
+      "starter": "import sys\nfrom collections import Counter, defaultdict\n\nquery, *words = sys.stdin.read().split()\n# TODO: count and group every word instead of only the first one\ncounts = Counter(words[:1])\ngroups = defaultdict(list)\nif words:\n    groups[words[0][0]].append(words[0])\nprint(counts[query], len(groups.get(query[0], [])))\n",
+      "cases": [
+        {
+          "input": "red red blue red\n",
+          "output": "2 2\n"
+        },
+        {
+          "input": "blue red blue black blue\n",
+          "output": "2 3\n"
+        },
+        {
+          "input": "x a b\n",
+          "output": "0 0\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/collections.html#collections.Counter"
+      ]
+    },
+    {
+      "id": "py-deque",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Constant-time operations at both ends",
+      "body": "collections.deque supports append, appendleft, pop, and popleft at opposite ends. A list can pop efficiently from its right, but removing index zero shifts the remaining elements and is not the equivalent queue operation.",
+      "example": "from collections import deque\n\nqueue = deque([\"center\"])\nqueue.appendleft(\"first\")\nqueue.append(\"last\")\nprint(queue.popleft(), queue.pop())\n",
+      "starter": "import sys\nfrom collections import deque\n\nmiddle, left, right = sys.stdin.read().split()\nqueue = deque([middle])\n# TODO: place the second token on the opposite end from the third\nqueue.append(left)\nqueue.append(right)\nprint(queue.popleft(), queue.pop())\n",
+      "cases": [
+        {
+          "input": "middle start end\n",
+          "output": "start end\n"
+        },
+        {
+          "input": "x a b\n",
+          "output": "a b\n"
+        },
+        {
+          "input": "z α ω\n",
+          "output": "α ω\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/collections.html#collections.deque"
+      ]
+    },
+    {
+      "id": "py-comprehensions",
+      "aliases": [],
+      "track": "core",
+      "kind": "checkpoint",
+      "level": "intermediate",
+      "title": "Checkpoint: filter, transform, then total",
+      "body": "A list comprehension reads from left to right as an output expression, an iteration clause, and an optional filter. It eagerly builds the selected squares; a generator expression would instead feed a lazy, single-pass pipeline.",
+      "example": "numbers = [5, 6, 7, 8]\neven_squares = [number * number for number in numbers if number % 2 == 0]\nprint(sum(even_squares))\n",
+      "starter": "import sys\n\nnumbers = [int(token) for token in sys.stdin.read().split()]\n# TODO: keep the requested parity while building squared values\nsquares = [number * number for number in numbers if number % 2 != 0]\nprint(sum(squares))\n",
+      "cases": [
+        {
+          "input": "1 2 3 4\n",
+          "output": "20\n"
+        },
+        {
+          "input": "-2 -1 0\n",
+          "output": "4\n"
+        },
+        {
+          "input": "1 3\n",
+          "output": "0\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/tutorial/datastructures.html#list-comprehensions"
+      ]
+    },
+    {
+      "id": "py-generators",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Lazy countdown generators",
+      "body": "Calling a generator function returns a generator object before its body executes. Each advance runs until yield, saves the suspended state, and resumes later; exhausting the iterator produces no more values.",
+      "example": "def reverse_letters(text):\n    for letter in reversed(text):\n        yield letter\n\nprint(*reverse_letters(\"abc\"))\n",
+      "starter": "import sys\n\ndef countdown(number):\n    # TODO: continue yielding while decreasing toward the stopping boundary\n    if number > 0:\n        yield number\n\nnumber = int(sys.stdin.read().strip())\nprint(*countdown(number))\n",
+      "cases": [
+        {
+          "input": "3\n",
+          "output": "3 2 1\n"
+        },
+        {
+          "input": "1\n",
+          "output": "1\n"
+        },
+        {
+          "input": "0\n",
+          "output": "\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/reference/expressions.html#generator-iterator-methods"
+      ]
+    },
+    {
+      "id": "py-itertools",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "advanced",
+      "title": "Flatten iterables lazily",
+      "body": "itertools.chain.from_iterable visits each inner iterable in sequence without first copying every element into a new list. The resulting iterator is single-pass, so a second consumer sees only whatever remains.",
+      "example": "from itertools import chain\n\ngroups = (\"py\", \"thon\")\nprint(\"\".join(chain.from_iterable(groups)))\n",
+      "starter": "import sys\nfrom itertools import chain\n\ngroups = sys.stdin.read().split()\n# TODO: let the chain consume every inner character group\ncharacters = chain.from_iterable(groups[:1])\nprint(\"\".join(characters))\n",
+      "cases": [
+        {
+          "input": "o k\n",
+          "output": "ok\n"
+        },
+        {
+          "input": "ab cd\n",
+          "output": "abcd\n"
+        },
+        {
+          "input": "1 23 4\n",
+          "output": "1234\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/itertools.html#itertools.chain.from_iterable"
+      ]
+    },
+    {
+      "id": "py-errors",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Recover narrowly from ValueError",
+      "body": "Only conversion of the first token belongs inside the try block. Catching ValueError selects the supplied fallback for malformed numeric text without swallowing unrelated programming errors.",
+      "example": "candidate = \"oops\"\nfallback = \"-8\"\ntry:\n    value = int(candidate)\nexcept ValueError:\n    value = int(fallback)\nprint(value)\n",
+      "starter": "import sys\n\ncandidate, fallback = sys.stdin.read().split()\ntry:\n    value = int(candidate)\nexcept ValueError:\n    # TODO: recover from conversion using the supplied token\n    value = 0\nprint(value)\n",
+      "cases": [
+        {
+          "input": "7 12\n",
+          "output": "7\n"
+        },
+        {
+          "input": "bad 12\n",
+          "output": "12\n"
+        },
+        {
+          "input": "-3 9\n",
+          "output": "-3\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/tutorial/errors.html#handling-exceptions"
+      ]
+    },
+    {
+      "id": "py-files-context",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Guaranteed context-manager exit",
+      "body": "The with statement calls __enter__, runs the managed block, and invokes __exit__ on normal or exceptional departure. StringIO supplies file-like behavior in memory, allowing the exercise to observe resource reading without filesystem state.",
+      "example": "from io import StringIO\n\nwith StringIO(\"  Seoul  \") as handle:\n    text = handle.read().strip()\nprint(text.upper() or \"EMPTY\")\n",
+      "starter": "import sys\nfrom io import StringIO\n\nwith StringIO(sys.stdin.read()) as handle:\n    text = handle.read()\n    # TODO: strip surrounding whitespace before normalizing the managed text\nprint(text.upper() or \"EMPTY\")\n",
+      "cases": [
+        {
+          "input": "ok\n",
+          "output": "OK\n"
+        },
+        {
+          "input": " Ada \n",
+          "output": "ADA\n"
+        },
+        {
+          "input": "",
+          "output": "EMPTY\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/reference/compound_stmts.html#the-with-statement"
+      ]
+    },
+    {
+      "id": "py-dataclasses",
+      "aliases": [],
+      "track": "core",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Classes and generated data-model methods",
+      "body": "A class defines behavior shared by instances, and @dataclass generates field-based construction, representation, and equality. Generated methods do not freeze mutable fields or enforce annotations at runtime; explicit methods still carry domain behavior.",
+      "example": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\n    def total(self):\n        return self.x + self.y\n\npoint = Point(4, 5)\nprint(f\"{point.total()}:{point == Point(4, 5)}\")\n",
+      "starter": "import sys\nfrom dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\n    def total(self):\n        # TODO: combine both instance fields in this behavior\n        return self.x\n\nx, y = map(int, sys.stdin.read().split())\npoint = Point(x, y)\nprint(f\"{point.total()}:{point == Point(x, y)}\")\n",
+      "cases": [
+        {
+          "input": "2 3\n",
+          "output": "5:True\n"
+        },
+        {
+          "input": "-2 3\n",
+          "output": "1:True\n"
+        },
+        {
+          "input": "0 0\n",
+          "output": "0:True\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/dataclasses.html"
+      ]
+    },
+    {
+      "id": "py-typing",
+      "aliases": [],
+      "track": "lab",
+      "kind": "lesson",
+      "level": "intermediate",
+      "title": "Inspect annotations without runtime enforcement",
+      "body": "Annotations describe a callable contract for readers and static tools, but Python does not automatically reject mismatched argument values. get_type_hints resolves the recorded annotations; the function body must still perform the promised calculation.",
+      "example": "from typing import Iterable, get_type_hints\n\ndef head(words: Iterable[str]) -> str:\n    return next(iter(words), \"missing\")\n\nhints = get_type_hints(head)\nprint(hints[\"return\"].__name__, head([\"elm\", \"oak\"]))\n",
+      "starter": "import sys\nfrom typing import Iterable, get_type_hints\n\ndef total(values: Iterable[int]) -> int:\n    # TODO: total the complete iterable instead of returning only its first item\n    return next(iter(values), 0)\n\nvalues = [int(token) for token in sys.stdin.read().split()]\nhints = get_type_hints(total)\nlabel = \"typed\" if hints.get(\"return\") is int and \"values\" in hints else \"untyped\"\nprint(f\"{label}:{total(values)}\")\n",
+      "cases": [
+        {
+          "input": "2 3\n",
+          "output": "typed:5\n"
+        },
+        {
+          "input": "-2\n",
+          "output": "typed:-2\n"
+        },
+        {
+          "input": "",
+          "output": "typed:0\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/library/typing.html#typing.get_type_hints"
+      ]
+    },
+    {
+      "id": "py-testing-assert",
+      "aliases": [],
+      "track": "core",
+      "kind": "capstone",
+      "level": "advanced",
+      "title": "Capstone: deterministic word ranking",
+      "body": "The capstone combines typed functions, Counter, and an explicit sort key to select the highest frequency with an alphabetical tie-break. Internal assert statements document development invariants, but Python removes assert bytecode under -O, so assertions must never protect input, security, or data integrity.",
+      "example": "from collections import Counter\nfrom typing import Iterable\n\ndef most_common(words: Iterable[str]) -> tuple[str, int]:\n    materialized = list(words)\n    counts = Counter(materialized)\n    assert sum(counts.values()) == len(materialized)\n    if not counts:\n        return \"empty\", 0\n    return sorted(counts.items(), key=lambda item: (-item[1], item[0]))[0]\n\nword, count = most_common(\"pear plum pear apple plum\".split())\nprint(f\"{word}:{count}\")\n",
+      "starter": "import sys\nfrom collections import Counter\nfrom typing import Iterable\n\ndef most_common(words: Iterable[str]) -> tuple[str, int]:\n    materialized = list(words)\n    counts = Counter(materialized)\n    assert sum(counts.values()) == len(materialized)\n    if not counts:\n        return \"empty\", 0\n    # TODO: make equal frequencies deterministic with the required ranking rule\n    return counts.most_common(1)[0]\n\nword, count = most_common(sys.stdin.read().split())\nprint(f\"{word}:{count}\")\n",
+      "cases": [
+        {
+          "input": "red blue red\n",
+          "output": "red:2\n"
+        },
+        {
+          "input": "b a b a\n",
+          "output": "a:2\n"
+        },
+        {
+          "input": "",
+          "output": "empty:0\n"
+        }
+      ],
+      "refs": [
+        "https://docs.python.org/3.12/reference/simple_stmts.html#the-assert-statement"
+      ]
     }
-  ],
-  "runtime": "python",
-  "schema_version": 1
+  ]
 }

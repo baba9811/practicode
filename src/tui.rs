@@ -1,7 +1,7 @@
 use crate::{
     ai::{
-        ModelCatalog, append_problem_note, available_models, provider_status, read_problem_notes,
-        run_ai_generate, run_ai_lesson_prompt, run_ai_next, run_ai_prompt,
+        AiGenerationResult, ModelCatalog, append_problem_note, available_models, provider_status,
+        read_problem_notes, run_ai_generate, run_ai_lesson_prompt, run_ai_next, run_ai_prompt,
     },
     core::{
         AI_PROVIDERS, AppState, CLAUDE_AI_EFFORTS, CODEX_AI_EFFORTS, DIFFICULTIES, HistoryItem,
@@ -12,7 +12,8 @@ use crate::{
         normalize_next_source, normalize_ui_language, parse_language_list, parse_topic_list,
         parse_ui_language_list, previous_problem, problem_by_id, record_pass, record_syntax_result,
         render_problem_tui, render_syntax_lesson, save_state, set_current_syntax_lesson,
-        syntax_cases, syntax_core_progress_count, syntax_language_name, template_for, ui_text,
+        syntax_cases, syntax_core_progress_count, syntax_language_name, syntax_review_due_at,
+        template_for, ui_text,
     },
     text::{
         byte_index, char_len, compose_hangul_jamo, display_width, prefix, render_markdown_plain,
@@ -135,16 +136,16 @@ pub struct PracticodeApp {
     list_cursor: Option<usize>,
     settings_cursor: Option<usize>,
     busy_label: String,
-    busy_body: String,
+    busy_arg: String,
     busy_started: Option<Instant>,
     busy_frame: usize,
     busy_hits: usize,
     busy_misses: usize,
     task_rx: Option<Receiver<TaskResult>>,
-    generate_rx: Option<Receiver<String>>,
+    generate_rx: Option<Receiver<AiGenerationResult>>,
     generate_bank_len: usize,
     generate_started: Option<Instant>,
-    generate_notice: Option<String>,
+    generate_notice: Option<GenerationNotice>,
     update_rx: Option<Receiver<UpdateCheck>>,
     model_rx: Option<Receiver<ModelCatalog>>,
     available_models: Vec<String>,
@@ -171,6 +172,20 @@ enum TaskResult {
         old_problem: String,
         fallback_to_local: bool,
     },
+}
+
+enum GenerationNotice {
+    Started,
+    Duplicate,
+    Generated(usize),
+    Failed {
+        status: Option<i32>,
+        detail: String,
+        added: usize,
+        reload_error: Option<String>,
+    },
+    Finished,
+    ReloadFailed(String),
 }
 
 impl PracticodeApp {
@@ -208,7 +223,7 @@ impl PracticodeApp {
             list_cursor: None,
             settings_cursor: None,
             busy_label: String::new(),
-            busy_body: String::new(),
+            busy_arg: String::new(),
             busy_started: None,
             busy_frame: 0,
             busy_hits: 0,

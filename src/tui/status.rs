@@ -42,7 +42,16 @@ impl PracticodeApp {
         let activity = if self.busy_label.is_empty() {
             ui_text(lang, "status_idle").to_string()
         } else {
-            format!("{}{}", self.busy_body, self.busy_dots())
+            let elapsed = self
+                .busy_started
+                .map(|started| started.elapsed().as_secs())
+                .unwrap_or_default();
+            format!(
+                "{}{} {}",
+                self.busy_text(),
+                self.busy_dots(),
+                self.elapsed_text(elapsed)
+            )
         };
         let tail = if let Some(version) = self.update_notice.as_ref() {
             format!(
@@ -80,14 +89,81 @@ impl PracticodeApp {
                 .map(|started| started.elapsed().as_secs())
                 .unwrap_or_default();
             Some(format!(
-                "{} {elapsed}s",
+                "{} {}",
                 ui_text(
                     &self.state.settings.ui_language,
                     "status_background_generation"
-                )
+                ),
+                self.elapsed_text(elapsed)
             ))
         } else {
-            self.generate_notice.clone()
+            self.generate_notice
+                .as_ref()
+                .map(|notice| self.generation_notice_text(notice))
+        }
+    }
+
+    pub(super) fn busy_text(&self) -> String {
+        let lang = &self.state.settings.ui_language;
+        match self.busy_label.as_str() {
+            "ai" => ui_text(lang, "busy_ai_thinking").replace("{provider}", &self.busy_arg),
+            "next" => ui_text(lang, "generating_next").to_string(),
+            _ => self.busy_arg.clone(),
+        }
+    }
+
+    pub(super) fn elapsed_text(&self, seconds: u64) -> String {
+        ui_text(&self.state.settings.ui_language, "elapsed_seconds")
+            .replace("{seconds}", &seconds.to_string())
+    }
+
+    pub(super) fn generation_notice_text(&self, notice: &GenerationNotice) -> String {
+        let lang = &self.state.settings.ui_language;
+        match notice {
+            GenerationNotice::Started => ui_text(lang, "generation_started").to_string(),
+            GenerationNotice::Duplicate => ui_text(lang, "generation_duplicate").to_string(),
+            GenerationNotice::Generated(count) => {
+                ui_text(lang, "generation_generated").replace("{count}", &count.to_string())
+            }
+            GenerationNotice::Failed {
+                status,
+                detail,
+                added,
+                reload_error,
+            } => {
+                let mut lines = vec![ui_text(lang, "generation_failed").to_string()];
+                if let Some(status) = status {
+                    lines.push(
+                        ui_text(lang, "generation_exit_status")
+                            .replace("{status}", &status.to_string()),
+                    );
+                }
+                if !detail.is_empty() {
+                    lines.push(detail.clone());
+                }
+                if *added > 0 {
+                    lines.push(
+                        ui_text(lang, "generation_partial_count")
+                            .replace("{count}", &added.to_string()),
+                    );
+                }
+                if let Some(error) = reload_error {
+                    lines.push(ui_text(lang, "generation_reload_failed").to_string());
+                    if !error.is_empty() {
+                        lines.push(error.clone());
+                    }
+                }
+                lines.join("\n")
+            }
+            GenerationNotice::Finished => ui_text(lang, "generation_finished").to_string(),
+            GenerationNotice::ReloadFailed(detail) => {
+                let mut text = ui_text(lang, "generation_reload_failed").to_string();
+                if !detail.is_empty() {
+                    text.push('\n');
+                    text.push_str(detail);
+                }
+                text
+            }
         }
     }
 

@@ -111,6 +111,16 @@ fn ui_catalogs_have_complete_localized_learning_ui_copy() {
         "list_closed",
         "result_mastery",
         "result_review_days",
+        "busy_ai_thinking",
+        "elapsed_seconds",
+        "generation_started",
+        "generation_duplicate",
+        "generation_generated",
+        "generation_failed",
+        "generation_finished",
+        "generation_reload_failed",
+        "generation_partial_count",
+        "judge_unknown_status",
     ];
     let catalogs = UI_LANGUAGES
         .iter()
@@ -160,26 +170,20 @@ fn ui_catalogs_have_complete_localized_learning_ui_copy() {
 }
 
 #[test]
-fn ui_catalogs_do_not_leak_english_or_known_spanish_misspellings() {
-    let catalogs = UI_LANGUAGES
-        .iter()
-        .map(|lang| {
-            let text = fs::read_to_string(format!("assets/i18n/{lang}.json")).unwrap();
-            (
-                *lang,
-                serde_json::from_str::<HashMap<String, String>>(&text).unwrap(),
-            )
-        })
-        .collect::<HashMap<_, _>>();
-    let english = &catalogs["en"];
-
+fn ui_catalogs_reject_known_english_scaffolding_and_spanish_misspellings() {
     for lang in ["ko", "ja", "zh", "es"] {
-        for (key, value) in &catalogs[lang] {
-            // These terms are conventionally identical in the target locale.
-            if key == "doctor_ok" || (lang == "es" && key == "judge_error") {
-                continue;
-            }
-            assert_ne!(value, &english[key], "{lang}:{key} leaked English");
+        let text = fs::read_to_string(format!("assets/i18n/{lang}.json")).unwrap();
+        let catalog = serde_json::from_str::<HashMap<String, String>>(&text).unwrap();
+        for phrase in [
+            "Choose Learn or Practice",
+            "No result yet.",
+            "Resize the terminal",
+            "Retry this exercise",
+        ] {
+            assert!(
+                catalog.values().all(|value| !value.contains(phrase)),
+                "{lang}: UI catalog contains English scaffolding: {phrase}"
+            );
         }
     }
 

@@ -130,7 +130,12 @@ pub fn run_ai_next(root: &Path, state: &AppState, force: bool, request: &str) ->
     }
 }
 
-pub fn run_ai_generate(root: &Path, state: &AppState, request: &str) -> String {
+pub(crate) enum AiGenerationResult {
+    Succeeded,
+    Failed { status: Option<i32>, detail: String },
+}
+
+pub(crate) fn run_ai_generate(root: &Path, state: &AppState, request: &str) -> AiGenerationResult {
     let provider = normalize_ai_provider(&state.settings.ai_provider);
     let command = if state.settings.next_ai_command().trim().is_empty() {
         default_ai_generate_command(root, &state.settings, request)
@@ -146,20 +151,15 @@ pub fn run_ai_generate(root: &Path, state: &AppState, request: &str) -> String {
         .env("PRACTICODE_AI_MODEL", &state.settings.ai_model)
         .env("PRACTICODE_AI_EFFORT", &state.settings.ai_effort);
     match run_capture(&mut process, "", Duration::from_secs(900)) {
-        Ok(run) if run.code == Some(0) => {
-            let output = output_text(&run.stdout, &run.stderr);
-            format!("{provider} background generation finished\n{output}")
-                .trim()
-                .to_string()
-        }
-        Ok(run) => {
-            let output = output_text(&run.stdout, &run.stderr);
-            format!(
-                "{provider} background generation failed ({})\n{output}",
-                run.code.unwrap_or(-1)
-            )
-        }
-        Err(error) => format!("{provider} background generation failed\n{error}"),
+        Ok(run) if run.code == Some(0) => AiGenerationResult::Succeeded,
+        Ok(run) => AiGenerationResult::Failed {
+            status: run.code,
+            detail: output_text(&run.stdout, &run.stderr),
+        },
+        Err(error) => AiGenerationResult::Failed {
+            status: None,
+            detail: error.to_string(),
+        },
     }
 }
 

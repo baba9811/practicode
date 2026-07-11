@@ -779,6 +779,19 @@ fn render_problem_tui_is_scannable_plain_text() {
 }
 
 #[test]
+fn render_problem_tui_localizes_empty_example_values() {
+    let root = tmp_root("render-tui-empty-ko");
+    let mut problem = load_bank(&root).unwrap().remove(0);
+    problem.examples[0].input.clear();
+    problem.examples[0].output.clear();
+
+    let rendered = render_problem_tui(&problem, "ko");
+
+    assert!(rendered.contains("      <비어 있음>"), "{rendered}");
+    assert!(!rendered.contains("<empty>"), "{rendered}");
+}
+
+#[test]
 fn render_markdown_plain_hides_problem_markdown_syntax() {
     let root = tmp_root("render-plain");
     let problem = load_bank(&root).unwrap().remove(0);

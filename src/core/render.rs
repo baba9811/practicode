@@ -84,9 +84,9 @@ pub fn render_problem_tui(problem: &Problem, ui_language: &str) -> String {
     for (index, case) in problem.examples.iter().enumerate() {
         lines.push(format!("  {} {}", ui_text(&lang, "example"), index + 1));
         lines.push(format!("    {}:", ui_text(&lang, "input")));
-        push_case_text(&mut lines, &case.input);
+        push_case_text(&mut lines, &case.input, &lang);
         lines.push(format!("    {}:", ui_text(&lang, "output")));
-        push_case_text(&mut lines, &case.output);
+        push_case_text(&mut lines, &case.output, &lang);
     }
     lines.join("\n").trim_end().to_string()
 }
@@ -99,10 +99,10 @@ fn push_tui_section(lines: &mut Vec<String>, title: &str, body: &str) {
     }
 }
 
-fn push_case_text(lines: &mut Vec<String>, body: &str) {
+fn push_case_text(lines: &mut Vec<String>, body: &str, ui_language: &str) {
     let body = body.trim_end();
     if body.is_empty() {
-        lines.push("      <empty>".to_string());
+        lines.push(format!("      {}", ui_text(ui_language, "empty_value")));
     } else {
         for line in body.lines() {
             lines.push(format!("      {line}"));

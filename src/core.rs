@@ -27,6 +27,7 @@ pub use judge::*;
 pub use language::*;
 #[cfg(test)]
 pub(crate) use learning::record_syntax_result_for_lessons;
+pub(crate) use learning::syntax_review_due_at;
 pub use learning::*;
 pub use model::*;
 pub use problem_files::*;

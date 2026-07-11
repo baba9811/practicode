@@ -45,7 +45,7 @@ pub(crate) fn record_syntax_result_for_lessons(
         .or_default();
     mastery.attempts = mastery.attempts.saturating_add(1);
     if (mastery.stage != MasteryStage::New
-        && !clamped_review_due_at(mastery, now).is_some_and(|due_at| due_at <= now))
+        && syntax_review_due_at(mastery, now).is_none_or(|due_at| due_at > now))
         || (passed && assisted && lesson.kind == SyntaxKind::Capstone)
     {
         return;
@@ -78,7 +78,7 @@ pub(crate) fn record_syntax_result_for_lessons(
     }
 }
 
-fn clamped_review_due_at(mastery: &LessonMastery, now: u64) -> Option<u64> {
+pub(crate) fn syntax_review_due_at(mastery: &LessonMastery, now: u64) -> Option<u64> {
     let max_delay = match mastery.stage {
         MasteryStage::New => return None,
         MasteryStage::Practiced => DAY_SECONDS,
@@ -166,7 +166,7 @@ fn due_syntax_lesson_candidates<'a>(
         .enumerate()
         .filter_map(|(index, lesson)| {
             let progress = mastery.get(lesson.id)?;
-            let review_due_at = clamped_review_due_at(progress, now)?;
+            let review_due_at = syntax_review_due_at(progress, now)?;
             (lesson.track != SyntaxTrack::Lab && review_due_at <= now).then_some((
                 review_due_at,
                 index,

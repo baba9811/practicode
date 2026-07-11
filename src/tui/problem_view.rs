@@ -96,12 +96,12 @@ pub(super) fn render(problem: &Problem, ui_language: &str, light: bool) -> Text<
             format!("    {}", ui_text(&lang, "input")),
             meta_style,
         )));
-        push_code_lines(&mut lines, &case.input, code_style);
+        push_code_lines(&mut lines, &case.input, code_style, &lang);
         lines.push(Line::from(Span::styled(
             format!("    {}", ui_text(&lang, "output")),
             meta_style,
         )));
-        push_code_lines(&mut lines, &case.output, code_style);
+        push_code_lines(&mut lines, &case.output, code_style, &lang);
     }
     Text::from(lines)
 }
@@ -120,12 +120,17 @@ fn push_problem_section(
     }
 }
 
-fn push_code_lines(lines: &mut Vec<Line<'static>>, body: &str, code_style: Style) {
+fn push_code_lines(
+    lines: &mut Vec<Line<'static>>,
+    body: &str,
+    code_style: Style,
+    ui_language: &str,
+) {
     let body = body.trim_end();
     if body.is_empty() {
         lines.push(Line::from(vec![
             Span::raw("      "),
-            Span::styled("<empty>".to_string(), code_style),
+            Span::styled(ui_text(ui_language, "empty_value").to_string(), code_style),
         ]));
         return;
     }
@@ -134,5 +139,28 @@ fn push_code_lines(lines: &mut Vec<Line<'static>>, body: &str, code_style: Style
             Span::raw("      "),
             Span::styled(line.to_string(), code_style),
         ]));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn tui_problem_view_localizes_empty_example_values() {
+        let mut problem = crate::core::starter_problem();
+        problem.examples[0].input.clear();
+        problem.examples[0].output.clear();
+
+        let text = render(&problem, "ko", false);
+        let rendered = text
+            .lines
+            .iter()
+            .flat_map(|line| line.spans.iter())
+            .map(|span| span.content.as_ref())
+            .collect::<String>();
+
+        assert!(rendered.contains("<비어 있음>"), "{rendered}");
+        assert!(!rendered.contains("<empty>"), "{rendered}");
     }
 }

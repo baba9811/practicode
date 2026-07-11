@@ -166,6 +166,7 @@ impl LearningSession {
 
     pub(super) fn finish_judge(&mut self, passed: bool) {
         self.assisted = false;
+        self.view = LearningView::Result;
         if !self.guided || self.step == LearningStep::Complete || self.queue.is_empty() {
             return;
         }
@@ -174,7 +175,6 @@ impl LearningSession {
         } else {
             LearningStep::Exercise
         };
-        self.view = LearningView::Result;
     }
 
     pub(super) fn advance(&mut self) -> LearningAdvance {
@@ -612,6 +612,18 @@ mod tests {
         assert_eq!(session.view(), LearningView::Lesson);
         session.cycle_view();
         assert_eq!(session.view(), LearningView::Code);
+    }
+
+    #[test]
+    fn inactive_judge_selects_result_without_changing_manual_step() {
+        let mut session = LearningSession::inactive();
+        session.mark_assisted();
+
+        session.finish_judge(false);
+
+        assert!(!session.assisted());
+        assert_eq!(session.step(), LearningStep::Complete);
+        assert_eq!(session.view(), LearningView::Result);
     }
 
     #[test]

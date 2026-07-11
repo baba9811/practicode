@@ -30,45 +30,110 @@ fn judge_headline(result: &JudgeResult, language: &str) -> String {
     )
 }
 
-fn localized_judge_output(output: &str, language: &str) -> String {
+fn localized_judge_result_output(result: &JudgeResult, language: &str) -> String {
+    let output = &result.output;
+    if output == "problem has no judge cases" {
+        return ui_text(language, "judge_no_cases").to_string();
+    }
+    if let Some(runtime) = output.strip_prefix("Missing runtime for ")
+        && LANGUAGES.contains(&runtime)
+    {
+        return ui_text(language, "judge_missing_runtime").replace("{runtime}", runtime);
+    }
+    if matches!(
+        result.failure_kind,
+        Some(JudgeFailureKind::Compile | JudgeFailureKind::TypeCheck)
+    ) {
+        return output.clone();
+    }
     let structured = output.lines().any(|line| {
         line.strip_prefix("Case ")
             .and_then(|rest| rest.split_once(": "))
-            .is_some_and(|(_, outcome)| matches!(outcome, "PASS" | "FAIL"))
+            .is_some_and(|(case, outcome)| {
+                case.parse::<usize>().is_ok() && matches!(outcome, "PASS" | "FAIL")
+            })
     });
     if !structured {
         return output.to_string();
     }
+    let mut under_error = false;
     output
         .lines()
         .map(|line| {
             if let Some((case, outcome)) = line
                 .strip_prefix("Case ")
                 .and_then(|rest| rest.split_once(": "))
+                && case.parse::<usize>().is_ok()
+                && matches!(outcome, "PASS" | "FAIL")
             {
-                let outcome = match outcome {
-                    "PASS" => ui_text(language, "result_pass"),
-                    "FAIL" => ui_text(language, "result_fail"),
-                    _ => outcome,
-                };
+                under_error = false;
+                let outcome = ui_text(
+                    language,
+                    if outcome == "PASS" {
+                        "result_pass"
+                    } else {
+                        "result_fail"
+                    },
+                );
                 return format!("{} {case}: {outcome}", ui_text(language, "judge_case"));
             }
-            match line {
-                "Input" => ui_text(language, "judge_input").to_string(),
-                "Expected" => ui_text(language, "judge_expected").to_string(),
-                "Got" => ui_text(language, "judge_got").to_string(),
-                "Stdout" => ui_text(language, "judge_stdout").to_string(),
-                "Stderr" => ui_text(language, "judge_stderr").to_string(),
-                "Error" => ui_text(language, "judge_error").to_string(),
-                "Compile" => ui_text(language, "judge_compile").to_string(),
-                "  <hidden>" => format!("  <{}>", ui_text(language, "judge_hidden")),
-                "  <empty>" => format!("  {}", ui_text(language, "empty_value")),
-                "  timeout: 5s" => format!("  {}", ui_text(language, "judge_timeout_detail")),
-                _ => line.to_string(),
+            let label = match line {
+                "Input" => Some("judge_input"),
+                "Expected" => Some("judge_expected"),
+                "Got" => Some("judge_got"),
+                "Stdout" => Some("judge_stdout"),
+                "Stderr" => Some("judge_stderr"),
+                "Error" => Some("judge_error"),
+                "Compile" => Some("judge_compile"),
+                _ => None,
+            };
+            if let Some(label) = label {
+                under_error = line == "Error";
+                return ui_text(language, label).to_string();
             }
+            if under_error && line == "  timeout: 5s" {
+                return format!("  {}", ui_text(language, "judge_timeout_detail"));
+            }
+            if under_error
+                && let Some(status) = line.strip_prefix("  process exited with status ")
+                && (status == "unknown" || status.parse::<i32>().is_ok())
+            {
+                let status = if status == "unknown" {
+                    ui_text(language, "judge_unknown_status")
+                } else {
+                    status
+                };
+                return format!(
+                    "  {}",
+                    ui_text(language, "judge_process_exit").replace("{status}", status)
+                );
+            }
+            if !line.is_empty() && !line.starts_with("  ") {
+                under_error = false;
+            }
+            line.to_string()
         })
         .collect::<Vec<_>>()
         .join("\n")
+}
+
+fn learning_state_text(mastery: &crate::core::LessonMastery, now: u64, language: &str) -> String {
+    let stage = ui_text(
+        language,
+        match mastery.stage {
+            crate::core::MasteryStage::New => "mastery_new",
+            crate::core::MasteryStage::Practiced => "mastery_practiced",
+            crate::core::MasteryStage::Retained => "mastery_retained",
+            crate::core::MasteryStage::Mastered => "mastery_mastered",
+        },
+    );
+    let review = if let Some(due_at) = syntax_review_due_at(mastery, now) {
+        let days = due_at.saturating_sub(now).saturating_add(86_399) / 86_400;
+        format!("{}: {days}", ui_text(language, "result_review_days"))
+    } else {
+        ui_text(language, "result_retry_no_review").to_string()
+    };
+    format!("{}: {stage}\n{review}", ui_text(language, "result_mastery"))
 }
 
 impl PracticodeApp {
@@ -183,7 +248,7 @@ impl PracticodeApp {
         } else {
             ui_text(&self.state.settings.ui_language, "run_fail_next")
         };
-        let detail = localized_judge_output(&result.output, &self.state.settings.ui_language);
+        let detail = localized_judge_result_output(&result, &self.state.settings.ui_language);
         self.write_text_output(&format!("{headline}\n{detail}\n\n{next_step}"));
         Ok(())
     }
@@ -208,9 +273,10 @@ impl PracticodeApp {
             return Ok(());
         }
         if self.generate_rx.is_some() {
-            self.write_text_output(
-                "A background generation is already running. Keep solving; /next will pick up the new problem when it finishes.",
-            );
+            self.write_text_output(ui_text(
+                &self.state.settings.ui_language,
+                "generation_already_running",
+            ));
             return Ok(());
         }
         self.start_next_problem(old_problem, true, request.to_string());
@@ -220,9 +286,10 @@ impl PracticodeApp {
     pub(super) fn action_generate(&mut self, request: &str) {
         self.check_background_generation();
         if self.task_rx.is_some() || self.generate_rx.is_some() {
-            let message = "Generation is already running; skipped duplicate /generate.";
-            self.generate_notice = Some(message.to_string());
-            self.write_text_output(message);
+            let notice = GenerationNotice::Duplicate;
+            let message = self.generation_notice_text(&notice);
+            self.generate_notice = Some(notice);
+            self.write_text_output(&message);
             return;
         }
         self.start_background_generation(request.trim().to_string());
@@ -231,8 +298,11 @@ impl PracticodeApp {
     pub(super) fn start_background_generation(&mut self, request: String) {
         self.transition_mode(AppMode::Problems);
         self.state.settings.start_mode = "problems".to_string();
-        if save_state(&self.root, &self.state).is_err() {
-            self.write_text_output("Could not save practice mode before generation.");
+        if let Err(error) = save_state(&self.root, &self.state) {
+            self.write_text_output(&format!(
+                "{}\n{error}",
+                ui_text(&self.state.settings.ui_language, "generation_save_failed")
+            ));
             return;
         }
         let root = self.root.clone();
@@ -243,7 +313,7 @@ impl PracticodeApp {
         });
         self.generate_bank_len = self.bank.len();
         self.generate_started = Some(Instant::now());
-        self.generate_notice = Some("Generating in background.".to_string());
+        self.generate_notice = Some(GenerationNotice::Started);
         self.generate_rx = Some(rx);
         self.settings_cursor = None;
         self.left_scroll = 0;
@@ -262,10 +332,7 @@ impl PracticodeApp {
             self.write_text_output(ui_text(&self.state.settings.ui_language, "already_busy"));
             return;
         }
-        self.start_busy(
-            "next",
-            ui_text(&self.state.settings.ui_language, "generating_next"),
-        );
+        self.start_busy("next", "");
         let root = self.root.clone();
         let state = self.state.clone();
         let (tx, rx) = mpsc::channel();
@@ -382,6 +449,7 @@ impl PracticodeApp {
         if !self.learning_session.can_judge() {
             self.learn_result =
                 ui_text(&self.state.settings.ui_language, "learning_run_gate").to_string();
+            self.learning_session.set_view(LearningView::Result);
             self.show_current_syntax_lesson();
             return Ok(());
         }
@@ -406,25 +474,10 @@ impl PracticodeApp {
             now,
             assisted,
         );
-        let mastery = &self.state.syntax_mastery[lesson.language][lesson.id];
-        let stage = ui_text(
+        let learning_state = learning_state_text(
+            &self.state.syntax_mastery[lesson.language][lesson.id],
+            now,
             &self.state.settings.ui_language,
-            match mastery.stage {
-                crate::core::MasteryStage::New => "mastery_new",
-                crate::core::MasteryStage::Practiced => "mastery_practiced",
-                crate::core::MasteryStage::Retained => "mastery_retained",
-                crate::core::MasteryStage::Mastered => "mastery_mastered",
-            },
-        );
-        let review_days = mastery
-            .review_due_at
-            .saturating_sub(now)
-            .saturating_add(86_399)
-            / 86_400;
-        let learning_state = format!(
-            "{}: {stage}\n{}: {review_days}",
-            ui_text(&self.state.settings.ui_language, "result_mastery"),
-            ui_text(&self.state.settings.ui_language, "result_review_days"),
         );
         self.learning_session.finish_judge(result.passed);
         save_state(&self.root, &self.state)?;
@@ -440,7 +493,7 @@ impl PracticodeApp {
         );
         self.learn_result = format!(
             "{headline}\n{}\n\n{learning_state}\n\n{next_step}",
-            localized_judge_output(&result.output, &self.state.settings.ui_language).trim_end()
+            localized_judge_result_output(&result, &self.state.settings.ui_language).trim_end()
         );
         self.show_current_syntax_lesson();
         Ok(())
@@ -507,14 +560,10 @@ impl PracticodeApp {
         self.show_output = false;
         self.settings_cursor = None;
         self.list_cursor = None;
-        self.focus = if self.learning_session.is_guided() {
-            match self.learning_session.view() {
-                LearningView::Lesson => Focus::Left,
-                LearningView::Code => Focus::Code,
-                LearningView::Result => Focus::Output,
-            }
-        } else {
-            Focus::Code
+        self.focus = match self.learning_session.view() {
+            LearningView::Lesson => Focus::Left,
+            LearningView::Code => Focus::Code,
+            LearningView::Result => Focus::Output,
         };
     }
 
@@ -762,13 +811,124 @@ impl PracticodeApp {
 mod tests {
     use super::*;
 
+    fn localize(output: &str, kind: Option<JudgeFailureKind>) -> String {
+        localized_judge_result_output(
+            &JudgeResult {
+                passed: false,
+                passed_cases: 0,
+                total_cases: 1,
+                failure_kind: kind,
+                output: output.to_string(),
+            },
+            "ko",
+        )
+    }
+
     #[test]
     fn judge_localization_preserves_tool_owned_compiler_diagnostics() {
         let raw = "Case 1: compiler-owned diagnostic\nTS2322: raw detail";
-        assert_eq!(localized_judge_output(raw, "ko"), raw);
+        assert_eq!(localize(raw, Some(JudgeFailureKind::TypeCheck)), raw);
         assert_eq!(
-            localized_judge_output("Case 1: FAIL\n\nGot\n  value", "ko"),
+            localize(
+                "Case 1: FAIL\n\nGot\n  value",
+                Some(JudgeFailureKind::Output)
+            ),
             "케이스 1: 실패\n\n실제 출력\n  value"
         );
+
+        let structured_looking = "Case 1: FAIL\nTS2322: compiler-owned detail";
+        let result = JudgeResult {
+            passed: false,
+            passed_cases: 0,
+            total_cases: 1,
+            failure_kind: Some(JudgeFailureKind::TypeCheck),
+            output: structured_looking.to_string(),
+        };
+        assert_eq!(
+            localized_judge_result_output(&result, "ko"),
+            structured_looking
+        );
+
+        let missing_tool = "Missing runtime for TypeScript: tsc 5.9";
+        assert_eq!(
+            localize(missing_tool, Some(JudgeFailureKind::TypeCheck)),
+            missing_tool
+        );
+    }
+
+    #[test]
+    fn judge_localization_preserves_indented_program_output_byte_for_byte() {
+        let output = "Case 1: PASS\n\nStdout\n  <empty>";
+
+        assert_eq!(
+            localize(output, None),
+            "케이스 1: 통과\n\n표준 출력\n  <empty>"
+        );
+
+        let non_numeric_case = "Case literal: PASS\n\nGot\n  value";
+        assert_eq!(localize(non_numeric_case, None), non_numeric_case);
+    }
+
+    #[test]
+    fn judge_localization_translates_only_known_error_provenance() {
+        let output = "Case 1: FAIL\n\nError\n  process exited with status 7\n\nGot\n  literal";
+        assert_eq!(
+            localize(output, Some(JudgeFailureKind::Runtime)),
+            "케이스 1: 실패\n\n오류\n  프로세스 종료 상태 7\n\n실제 출력\n  literal"
+        );
+
+        let unknown = "Case 1: FAIL\n\nError\n  No such file or directory";
+        assert_eq!(
+            localize(unknown, Some(JudgeFailureKind::Runtime)),
+            "케이스 1: 실패\n\n오류\n  No such file or directory"
+        );
+
+        let malformed = "Case 1: FAIL\n\nError\n  process exited with status 7 extra";
+        assert_eq!(
+            localize(malformed, Some(JudgeFailureKind::Runtime)),
+            "케이스 1: 실패\n\n오류\n  process exited with status 7 extra"
+        );
+
+        let unknown_status = "Case 1: FAIL\n\nError\n  process exited with status unknown";
+        assert_eq!(
+            localize(unknown_status, Some(JudgeFailureKind::Runtime)),
+            "케이스 1: 실패\n\n오류\n  프로세스 종료 상태 알 수 없음"
+        );
+    }
+
+    #[test]
+    fn judge_localization_handles_no_cases_and_missing_runtime_app_prose() {
+        assert_eq!(
+            localize("problem has no judge cases", None),
+            "채점 케이스가 없습니다."
+        );
+        assert_eq!(
+            localize("Missing runtime for python", None),
+            "python 런타임이 없습니다."
+        );
+        for malformed in [
+            "Missing runtime for ruby",
+            "Missing runtime for python\nraw detail",
+        ] {
+            assert_eq!(localize(malformed, None), malformed);
+        }
+    }
+
+    #[test]
+    fn assisted_new_capstone_result_has_retry_instead_of_fake_review() {
+        let mastery = crate::core::LessonMastery {
+            stage: crate::core::MasteryStage::New,
+            review_due_at: 0,
+            attempts: 1,
+        };
+
+        let text = learning_state_text(&mastery, 1_000, "en");
+
+        assert!(text.contains("Mastery: New"), "{text}");
+        assert!(
+            text.contains("Retry this exercise; no review is scheduled."),
+            "{text}"
+        );
+        assert!(!text.contains("Next review (days)"), "{text}");
     }
 }

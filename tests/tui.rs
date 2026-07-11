@@ -1033,6 +1033,11 @@ fn guided_session_records_each_judge_and_only_a_pass_reaches_reflect() {
     app.handle_command_for_test("run").unwrap();
     assert_eq!(app.learning_step_for_test(), LearningStep::Exercise);
     assert!(app.learn_result_for_test().contains("Mastery: New"));
+    assert!(
+        app.learn_result_for_test()
+            .contains("Retry this exercise; no review is scheduled.")
+    );
+    assert!(!app.learn_result_for_test().contains("Next review (days)"));
     let bank = load_bank(&root).unwrap();
     let failed = load_state(&root, &bank).unwrap();
     assert_eq!(failed.syntax_mastery["python"]["py-output"].attempts, 1);

@@ -386,7 +386,12 @@ impl PracticodeApp {
                 .map(|started| started.elapsed().as_secs())
                 .unwrap_or_default();
             let mut lines = vec![Line::from(Span::styled(
-                format!("{}{}  {}s", self.busy_body, self.busy_dots(), elapsed),
+                format!(
+                    "{}{}  {}",
+                    self.busy_text(),
+                    self.busy_dots(),
+                    self.elapsed_text(elapsed)
+                ),
                 title_style,
             ))];
             if self.busy_label == "next" {
@@ -703,6 +708,7 @@ fn push_markdown_code_block(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::process::which;
     use crossterm::event::{
         KeyCode, KeyEvent, KeyModifiers, MouseButton, MouseEvent, MouseEventKind,
     };
@@ -949,6 +955,55 @@ mod tests {
         assert_eq!(app.output_area, Rect::new(0, 0, 80, 22));
         assert_eq!(app.left_area, Rect::default());
         assert_eq!(app.code_area, Rect::default());
+    }
+
+    #[test]
+    fn learning_gate_selects_visible_result_at_narrow_and_wide_widths() {
+        for (width, height) in [(80, 24), (100, 30)] {
+            let mut app = PracticodeApp::new(tmp_root(&format!("gate-visible-{width}"))).unwrap();
+            app.handle_command("learn python").unwrap();
+
+            app.handle_command("run").unwrap();
+            let terminal = draw_at(&mut app, width, height);
+            let text = buffer_text(&terminal);
+
+            assert_eq!(app.learning_session.view(), LearningView::Result);
+            assert!(
+                text.contains("Next: use /next until Exercise"),
+                "{width}: {text}"
+            );
+            assert!(app.output_area.width > 0, "{width}");
+            assert_eq!(app.code_area, Rect::default(), "{width}");
+        }
+    }
+
+    #[test]
+    fn manual_judge_selects_visible_result_at_narrow_and_wide_widths() {
+        if which("python3").or_else(|| which("python")).is_none() {
+            return;
+        }
+        for (width, height) in [(80, 24), (100, 30)] {
+            let mut app = PracticodeApp::new(tmp_root(&format!("manual-visible-{width}"))).unwrap();
+            app.handle_command("learn python").unwrap();
+            app.handle_command("back").unwrap();
+
+            app.handle_command("run").unwrap();
+            let terminal = draw_at(&mut app, width, height);
+            let text = buffer_text(&terminal);
+
+            assert!(!app.learning_session.is_guided());
+            assert_eq!(app.learning_session.view(), LearningView::Result);
+            assert!(text.contains("FAIL"), "{width}: {text}");
+            assert!(
+                app.learn_result
+                    .contains("Retry this exercise; no review is scheduled."),
+                "{width}: {}",
+                app.learn_result
+            );
+            assert!(!app.learn_result.contains("Next review (days)"));
+            assert!(app.output_area.width > 0, "{width}");
+            assert_eq!(app.code_area, Rect::default(), "{width}");
+        }
     }
 
     #[test]

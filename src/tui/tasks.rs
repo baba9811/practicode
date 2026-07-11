@@ -17,7 +17,7 @@ impl PracticodeApp {
             return Ok(());
         }
         let label = normalize_ai_provider(&self.state.settings.ai_provider);
-        self.start_busy("ai", &format!("{label} is thinking"));
+        self.start_busy("ai", &label);
         let root = self.root.clone();
         let problem = self.problem.clone();
         let settings = self.state.settings.clone();
@@ -62,31 +62,38 @@ impl PracticodeApp {
 
     pub(super) fn check_background_generation(&mut self) {
         let output = self.generate_rx.as_ref().and_then(|rx| rx.try_recv().ok());
-        let Some(output) = output else {
+        let Some(result) = output else {
             return;
         };
         self.generate_rx = None;
         self.generate_started = None;
         let old_len = self.generate_bank_len;
-        match load_bank(&self.root) {
+        let (added, reload_error) = match load_bank(&self.root) {
             Ok(bank) => {
                 let added = bank.len().saturating_sub(old_len);
                 self.bank = bank;
                 let _ = save_state(&self.root, &self.state);
-                self.generate_notice = Some(if added > 0 {
-                    format!("Generated {added} problem in background. Use /next.")
-                } else if output.contains("failed") {
-                    "Background generation failed. Use /generate to retry.".to_string()
+                (added, None)
+            }
+            Err(error) => (0, Some(error.to_string())),
+        };
+        self.generate_notice = Some(match result {
+            AiGenerationResult::Failed { status, detail } => GenerationNotice::Failed {
+                status,
+                detail,
+                added,
+                reload_error,
+            },
+            AiGenerationResult::Succeeded => {
+                if let Some(error) = reload_error {
+                    GenerationNotice::ReloadFailed(error)
+                } else if added > 0 {
+                    GenerationNotice::Generated(added)
                 } else {
-                    "Background generation finished. Use /problems to review.".to_string()
-                });
+                    GenerationNotice::Finished
+                }
             }
-            Err(error) => {
-                self.generate_notice = Some(format!(
-                    "Background generation finished, but bank reload failed: {error}"
-                ));
-            }
-        }
+        });
     }
 
     pub(super) fn check_update(&mut self) {
@@ -215,10 +222,10 @@ impl PracticodeApp {
         lines.join("\n")
     }
 
-    pub(super) fn start_busy(&mut self, label: &str, body: &str) {
+    pub(super) fn start_busy(&mut self, label: &str, arg: &str) {
         self.settings_cursor = None;
         self.busy_label = label.to_string();
-        self.busy_body = body.to_string();
+        self.busy_arg = arg.to_string();
         self.busy_started = Some(Instant::now());
         self.busy_frame = 0;
         self.busy_hits = 0;
@@ -229,7 +236,7 @@ impl PracticodeApp {
 
     pub(super) fn stop_busy(&mut self) {
         self.busy_label.clear();
-        self.busy_body.clear();
+        self.busy_arg.clear();
         self.busy_started = None;
         self.busy_frame = 0;
     }
@@ -331,6 +338,28 @@ impl PracticodeApp {
 mod tests {
     use super::*;
 
+    fn output_text_content(app: &PracticodeApp) -> String {
+        app.output_text()
+            .lines
+            .iter()
+            .map(|line| {
+                line.spans
+                    .iter()
+                    .map(|span| span.content.as_ref())
+                    .collect::<String>()
+            })
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+
+    fn finish_generation(app: &mut PracticodeApp, result: AiGenerationResult, old_len: usize) {
+        let (tx, rx) = std::sync::mpsc::channel();
+        tx.send(result).unwrap();
+        app.generate_bank_len = old_len;
+        app.generate_rx = Some(rx);
+        app.check_background_generation();
+    }
+
     fn learning_app(name: &str) -> PracticodeApp {
         let root = crate::process::unique_temp_path(name, "dir");
         std::fs::create_dir_all(&root).unwrap();
@@ -369,6 +398,129 @@ mod tests {
         app.check_update();
 
         assert_eq!(app.output, ui_text("en", "update_check_disabled"));
+    }
+
+    #[test]
+    fn busy_copy_and_elapsed_time_render_in_the_selected_locale() {
+        let root = crate::process::unique_temp_path("practicode-busy-locale", "dir");
+        std::fs::create_dir_all(&root).unwrap();
+        let mut app = PracticodeApp::new(root).unwrap();
+        app.state.settings.ui_language = "ko".to_string();
+
+        app.start_busy("ai", "codex");
+
+        let output = output_text_content(&app);
+        let status = app.status_text();
+        assert!(output.contains("codex가 생각 중"), "{output}");
+        assert!(output.contains("0초"), "{output}");
+        assert!(status.contains("codex가 생각 중"), "{status}");
+        assert!(status.contains("0초"), "{status}");
+        assert!(!output.contains("is thinking"), "{output}");
+        assert!(!output.contains("0s"), "{output}");
+
+        app.state.settings.ui_language = "ja".to_string();
+        app.start_busy("next", "");
+
+        let output = output_text_content(&app);
+        assert!(output.contains("次の問題を生成中"), "{output}");
+        assert!(output.contains("0秒"), "{output}");
+        assert!(!output.contains("Generating next problem"), "{output}");
+    }
+
+    #[test]
+    fn background_generation_notices_render_in_the_selected_locale() {
+        let root = crate::process::unique_temp_path("practicode-generation-locale", "dir");
+        std::fs::create_dir_all(&root).unwrap();
+        let mut app = PracticodeApp::new(root.clone()).unwrap();
+        app.state.settings.ui_language = "ko".to_string();
+
+        finish_generation(&mut app, AiGenerationResult::Succeeded, 0);
+        let generated = app.background_generation_status().unwrap();
+        assert!(generated.contains("문제 1개"), "{generated}");
+        assert!(!generated.contains("Generated"), "{generated}");
+
+        finish_generation(
+            &mut app,
+            AiGenerationResult::Failed {
+                status: Some(7),
+                detail: "raw provider detail".to_string(),
+            },
+            0,
+        );
+        let failed = app.background_generation_status().unwrap();
+        assert!(failed.contains("백그라운드 생성에 실패"), "{failed}");
+        assert!(failed.contains("raw provider detail"), "{failed}");
+        assert!(failed.contains("문제 1개"), "{failed}");
+        assert!(!failed.contains("Background generation failed"), "{failed}");
+
+        app.state.settings.ui_language = "ja".to_string();
+        let (tx, rx) = std::sync::mpsc::channel();
+        app.generate_rx = Some(rx);
+        app.generate_started = Some(Instant::now());
+        app.generate_notice = Some(GenerationNotice::Started);
+        let running = app.background_generation_status().unwrap();
+        assert!(running.contains("バックグラウンド生成"), "{running}");
+        assert!(running.contains("0秒"), "{running}");
+        assert!(!running.contains("background generation"), "{running}");
+        assert_eq!(
+            app.generation_notice_text(&GenerationNotice::Started),
+            "バックグラウンドで生成中です。"
+        );
+
+        app.action_generate("");
+        assert!(app.output.contains("重複した /generate"), "{}", app.output);
+        assert!(!app.output.contains("duplicate"), "{}", app.output);
+        drop(tx);
+        app.generate_rx = None;
+
+        let bank_len = app.bank.len();
+        finish_generation(&mut app, AiGenerationResult::Succeeded, bank_len);
+        let finished = app.background_generation_status().unwrap();
+        assert!(
+            finished.contains("バックグラウンド生成が完了"),
+            "{finished}"
+        );
+        assert!(
+            !finished.contains("Background generation finished"),
+            "{finished}"
+        );
+
+        std::fs::write(root.join("problem_bank.json"), "not json").unwrap();
+        let bank_len = app.bank.len();
+        finish_generation(&mut app, AiGenerationResult::Succeeded, bank_len);
+        let reload_failed = app.background_generation_status().unwrap();
+        assert!(
+            reload_failed.contains("問題バンクを再読み込みできませんでした"),
+            "{reload_failed}"
+        );
+        assert!(reload_failed.contains("parse"), "{reload_failed}");
+        assert!(
+            !reload_failed.contains("bank reload failed"),
+            "{reload_failed}"
+        );
+
+        finish_generation(
+            &mut app,
+            AiGenerationResult::Failed {
+                status: Some(9),
+                detail: "raw failed-generation detail".to_string(),
+            },
+            bank_len,
+        );
+        let failed_reload = app.background_generation_status().unwrap();
+        assert!(
+            failed_reload.contains("バックグラウンド生成に失敗"),
+            "{failed_reload}"
+        );
+        assert!(
+            failed_reload.contains("raw failed-generation detail"),
+            "{failed_reload}"
+        );
+        assert!(
+            failed_reload.contains("問題バンクを再読み込みできませんでした"),
+            "{failed_reload}"
+        );
+        assert!(failed_reload.contains("parse"), "{failed_reload}");
     }
 
     #[test]

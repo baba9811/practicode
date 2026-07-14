@@ -30,7 +30,7 @@ impl PracticodeApp {
             || self.editing_notes
             || self.focus == Focus::Command
             || self.list_cursor.is_some()
-            || self.show_output
+            || (self.show_output && self.busy_label.is_empty())
         {
             return format!(" {} ", self.mode_hint());
         }

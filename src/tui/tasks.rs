@@ -80,30 +80,39 @@ impl PracticodeApp {
         self.generate_rx = None;
         self.generate_started = None;
         let old_len = self.generate_bank_len;
-        let (added, reload_error) = match load_bank(&self.root) {
-            Ok(bank)
-                if !bank
-                    .iter()
-                    .any(|problem| problem.id == self.state.current_problem) =>
-            {
-                (
-                    0,
-                    Some(format!(
+        let (added, reload_error) =
+            match save_state(&self.root, &self.state).and_then(|()| load_bank(&self.root)) {
+                Ok(bank)
+                    if !bank
+                        .iter()
+                        .any(|problem| problem.id == self.state.current_problem) =>
+                {
+                    let detail = format!(
                         "current problem {} is missing from the reloaded bank",
                         self.state.current_problem
-                    )),
-                )
-            }
-            Ok(bank) => {
-                let added = bank.len().saturating_sub(old_len);
-                self.bank = bank;
-                if let Some(cursor) = self.list_cursor.as_mut() {
-                    *cursor = (*cursor).min(self.bank.len() - 1);
+                    );
+                    (
+                        0,
+                        Some(restore_generated_bank(&self.root, &self.bank, detail)),
+                    )
                 }
-                (added, None)
-            }
-            Err(error) => (0, Some(error.to_string())),
-        };
+                Ok(bank) => {
+                    let added = bank.len().saturating_sub(old_len);
+                    self.bank = bank;
+                    if let Some(cursor) = self.list_cursor.as_mut() {
+                        *cursor = (*cursor).min(self.bank.len() - 1);
+                    }
+                    (added, None)
+                }
+                Err(error) => (
+                    0,
+                    Some(restore_generated_bank(
+                        &self.root,
+                        &self.bank,
+                        error.to_string(),
+                    )),
+                ),
+            };
         self.generate_notice = Some(match result {
             AiGenerationResult::Failed { status, detail } => GenerationNotice::Failed {
                 status,
@@ -401,6 +410,13 @@ impl PracticodeApp {
     }
 }
 
+fn restore_generated_bank(root: &std::path::Path, bank: &[Problem], detail: String) -> String {
+    match save_bank(root, bank) {
+        Ok(()) => detail,
+        Err(error) => format!("{detail}; restore previous problem bank: {error}"),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -425,6 +441,31 @@ mod tests {
         app.generate_bank_len = old_len;
         app.generate_rx = Some(rx);
         app.check_background_generation();
+    }
+
+    #[test]
+    fn background_generation_restores_invalid_metadata() {
+        let mut app = localized_app("practicode-invalid-background-metadata", "en");
+        let current_problem = app.state.current_problem.clone();
+        std::fs::write(app.root.join("problem_bank.json"), "not json").unwrap();
+        std::fs::write(app.root.join("problem-state.json"), "not json").unwrap();
+
+        let bank_len = app.bank.len();
+        finish_generation(
+            &mut app,
+            AiGenerationResult::Succeeded(String::new()),
+            bank_len,
+        );
+
+        let bank = load_bank(&app.root).unwrap();
+        assert_eq!(
+            load_state(&app.root, &bank).unwrap().current_problem,
+            current_problem
+        );
+        assert!(matches!(
+            app.generate_notice,
+            Some(GenerationNotice::ReloadFailed(_))
+        ));
     }
 
     fn learning_app(name: &str) -> PracticodeApp {
@@ -680,6 +721,7 @@ mod tests {
             !reload_failed.contains("bank reload failed"),
             "{reload_failed}"
         );
+        load_bank(&root).unwrap();
 
         finish_generation(
             &mut app,
@@ -698,11 +740,7 @@ mod tests {
             failed_reload.contains("raw failed-generation detail"),
             "{failed_reload}"
         );
-        assert!(
-            failed_reload.contains("問題バンクを再読み込みできませんでした"),
-            "{failed_reload}"
-        );
-        assert!(failed_reload.contains("parse"), "{failed_reload}");
+        assert!(!failed_reload.contains("parse"), "{failed_reload}");
     }
 
     #[test]

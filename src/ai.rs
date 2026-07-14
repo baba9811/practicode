@@ -1,13 +1,13 @@
 use crate::{
     core::{
-        AppState, CLAUDE_AI_EFFORTS, LANGUAGES, PROBLEM_NOTES_PATH, Problem, Settings,
-        SyntaxLesson, UI_LANGUAGES, ensure_submission, ensure_syntax_submission,
-        normalize_ai_provider, regular_file_exists, render_problem, save_user_text,
-        syntax_lesson_study_context, ui_text,
+        AppState, BANK_PATH, CLAUDE_AI_EFFORTS, LANGUAGES, PROBLEM_NOTES_PATH, Problem, STATE_PATH,
+        Settings, SyntaxLesson, UI_LANGUAGES, ensure_submission, ensure_syntax_submission,
+        load_bank, load_state, normalize_ai_provider, regular_file_exists, render_problem,
+        save_bank, save_state, save_user_text, syntax_lesson_study_context, ui_text,
     },
-    process::{run_capture, sh_quote, shell_process, unique_temp_path, which},
+    process::{RunOutput, run_capture, sh_quote, shell_process, unique_temp_path, which},
 };
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, bail};
 use std::{
     env, fs,
     path::{Path, PathBuf},
@@ -24,6 +24,7 @@ pub struct ModelCatalog {
 const CODEX_MODEL_FALLBACKS: &[&str] =
     &["gpt-5.5", "gpt-5.4", "gpt-5.4-mini", "gpt-5.3-codex-spark"];
 const CLAUDE_MODEL_FALLBACKS: &[&str] = &["sonnet", "opus", "fable", "claude-fable-5"];
+const PROBLEM_BANK_SCHEMA: &str = "problem_bank.json is an array. Preserve every existing problem. Each item must contain id and slug as strings; difficulty as a string; topics as an array of strings; title, statement, input, and output as objects mapping UI language codes to strings; examples and cases as arrays of objects with string input and output fields; answers as an object mapping code language names to complete source strings.";
 
 pub fn build_lesson_ai_prompt(
     lesson: &SyntaxLesson,
@@ -124,7 +125,7 @@ pub fn run_ai_next(root: &Path, state: &AppState, force: bool, request: &str) ->
         .env("PRACTICODE_AI_PROVIDER", &provider)
         .env("PRACTICODE_AI_MODEL", &state.settings.ai_model)
         .env("PRACTICODE_AI_EFFORT", &state.settings.ai_effort);
-    match run_capture(&mut process, "", Duration::from_secs(900)) {
+    match run_problem_generation_command(root, Some(state), &mut process) {
         Ok(run) if run.code == Some(0) => {
             let output = output_text(&run.stdout, &run.stderr);
             format!("{provider} command finished\n{output}")
@@ -188,7 +189,7 @@ pub(crate) fn run_ai_generate_result(
         .env("PRACTICODE_AI_PROVIDER", &provider)
         .env("PRACTICODE_AI_MODEL", &state.settings.ai_model)
         .env("PRACTICODE_AI_EFFORT", &state.settings.ai_effort);
-    match run_capture(&mut process, "", Duration::from_secs(900)) {
+    match run_problem_generation_command(root, None, &mut process) {
         Ok(run) if run.code == Some(0) => {
             AiGenerationResult::Succeeded(output_text(&run.stdout, &run.stderr))
         }
@@ -198,6 +199,70 @@ pub(crate) fn run_ai_generate_result(
         },
         Err(error) => AiGenerationResult::FailedToRun(error.to_string()),
     }
+}
+
+fn run_problem_generation_command(
+    root: &Path,
+    state_snapshot: Option<&AppState>,
+    process: &mut Command,
+) -> Result<RunOutput> {
+    let bank = load_bank(root)?;
+    save_bank(root, &bank).context("materialize problem bank before AI command")?;
+    if let Some(state) = state_snapshot {
+        save_state(root, state).context("save problem state before AI command")?;
+    }
+
+    let run = match run_capture(process, "", Duration::from_secs(900)) {
+        Ok(run) => run,
+        Err(error) => {
+            if let Err(restore_error) = restore_ai_metadata(root, &bank, state_snapshot) {
+                return Err(error.context(format!(
+                    "restore Practicode metadata after AI command failure: {restore_error}"
+                )));
+            }
+            return Err(error);
+        }
+    };
+
+    if run.code != Some(0) {
+        restore_ai_metadata(root, &bank, state_snapshot)?;
+        return Ok(run);
+    }
+
+    let validation: Result<()> = (|| {
+        if !regular_file_exists(&root.join(BANK_PATH))? {
+            bail!("AI command removed {BANK_PATH}");
+        }
+        let generated_bank = load_bank(root)?;
+        if state_snapshot.is_some() {
+            if !regular_file_exists(&root.join(STATE_PATH))? {
+                bail!("AI command removed {STATE_PATH}");
+            }
+            load_state(root, &generated_bank)?;
+        }
+        Ok(())
+    })();
+    if let Err(error) = validation {
+        if let Err(restore_error) = restore_ai_metadata(root, &bank, state_snapshot) {
+            return Err(error.context(format!(
+                "restore Practicode metadata after invalid AI output: {restore_error}"
+            )));
+        }
+        return Err(error.context("AI command produced invalid Practicode metadata"));
+    }
+    Ok(run)
+}
+
+fn restore_ai_metadata(
+    root: &Path,
+    bank: &[Problem],
+    state_snapshot: Option<&AppState>,
+) -> Result<()> {
+    save_bank(root, bank).context("restore problem bank after AI command")?;
+    if let Some(state) = state_snapshot {
+        save_state(root, state).context("restore problem state after AI command")?;
+    }
+    Ok(())
 }
 
 pub fn default_ai_next_command(root: &Path, settings: &Settings, request: &str) -> String {
@@ -283,7 +348,7 @@ pub fn default_ai_next_prompt(request: &str) -> String {
 
 pub fn default_ai_next_prompt_with_settings(settings: &Settings, request: &str) -> String {
     format!(
-        "Read problem_notes.md if present, problems/INDEX.md if present, problem_bank.json if present, and problem-state.json. Create exactly one new non-duplicate coding practice problem. The built-in 001-hello-world already exists, so do not duplicate it. User request: {}. User profile: difficulty preference: {}; preferred topics: {}; avoid topics: {}; code language: {}; UI language: {}; generated answer languages: {}; generated UI languages: {}. Treat difficulty auto as gradual progression from state; otherwise prefer the requested difficulty unless the direct user request conflicts. Make the smallest valid edits: update problem_bank.json, one problem directory, problems/INDEX.md, and problem-state.json. Do not include the answer in the problem statement. Do not create solution.*, test_solution.*, or any answer-revealing file inside the problem directory.",
+        "Read problem_notes.md if present, problems/INDEX.md if present, problem_bank.json if present, and problem-state.json. {PROBLEM_BANK_SCHEMA} Create exactly one new non-duplicate coding practice problem. The built-in 001-hello-world already exists, so do not duplicate it. User request: {}. User profile: difficulty preference: {}; preferred topics: {}; avoid topics: {}; code language: {}; UI language: {}; generated answer languages: {}; generated UI languages: {}. Treat difficulty auto as gradual progression from state; otherwise prefer the requested difficulty unless the direct user request conflicts. Make the smallest valid edits: update problem_bank.json, one problem directory, problems/INDEX.md, and problem-state.json. Do not include the answer in the problem statement. Do not create solution.*, test_solution.*, or any answer-revealing file inside the problem directory.",
         if request.is_empty() {
             "(none)"
         } else {
@@ -301,7 +366,7 @@ pub fn default_ai_next_prompt_with_settings(settings: &Settings, request: &str) 
 
 pub fn default_ai_generate_prompt_with_settings(settings: &Settings, request: &str) -> String {
     format!(
-        "Read problem_notes.md if present, problems/INDEX.md if present, problem_bank.json if present, and problem-state.json. Create exactly one new non-duplicate coding practice problem for later use. The built-in 001-hello-world already exists, so do not duplicate it. User request: {}. User profile: difficulty preference: {}; preferred topics: {}; avoid topics: {}; current code language: {}; current UI language: {}; generated answer languages: {}; generated UI languages: {}. Treat difficulty auto as gradual progression from state; otherwise prefer the requested difficulty unless the direct user request conflicts. Make the smallest valid edits: update problem_bank.json, one problem directory, and problems/INDEX.md. Preserve problem-state.json current_problem, history, solved, and settings; do not switch the current problem. Do not include the answer in the problem statement. Do not create solution.*, test_solution.*, or any answer-revealing file inside the problem directory.",
+        "Read problem_notes.md if present, problems/INDEX.md if present, problem_bank.json if present, and problem-state.json. {PROBLEM_BANK_SCHEMA} Create exactly one new non-duplicate coding practice problem for later use. The built-in 001-hello-world already exists, so do not duplicate it. User request: {}. User profile: difficulty preference: {}; preferred topics: {}; avoid topics: {}; current code language: {}; current UI language: {}; generated answer languages: {}; generated UI languages: {}. Treat difficulty auto as gradual progression from state; otherwise prefer the requested difficulty unless the direct user request conflicts. Make the smallest valid edits: update problem_bank.json, one problem directory, and problems/INDEX.md. Preserve problem-state.json current_problem, history, solved, and settings; do not switch the current problem. Do not include the answer in the problem statement. Do not create solution.*, test_solution.*, or any answer-revealing file inside the problem directory.",
         if request.is_empty() {
             "(none)"
         } else {

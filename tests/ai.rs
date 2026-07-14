@@ -7,7 +7,7 @@ use practicode::{
         default_ai_next_command, default_ai_next_prompt, default_ai_next_prompt_with_settings,
         provider_status, read_problem_notes, run_ai_generate, run_ai_next,
     },
-    core::{AppState, Settings, syntax_lessons_for},
+    core::{AppState, Settings, load_bank, load_state, syntax_lessons_for},
 };
 
 #[test]
@@ -87,6 +87,25 @@ fn default_ai_prompts_include_generation_language_scope() {
     let background = default_ai_generate_prompt_with_settings(&settings, "strings");
     assert!(background.contains("for later use"));
     assert!(background.contains("Preserve problem-state.json current_problem"));
+}
+
+#[test]
+fn default_ai_prompts_include_problem_bank_schema() {
+    let settings = Settings::default();
+    for prompt in [
+        default_ai_next_prompt_with_settings(&settings, "arrays"),
+        default_ai_generate_prompt_with_settings(&settings, "arrays"),
+    ] {
+        for contract in [
+            "id and slug as strings",
+            "topics as an array of strings",
+            "title, statement, input, and output as objects",
+            "examples and cases as arrays",
+            "answers as an object",
+        ] {
+            assert!(prompt.contains(contract), "missing {contract}: {prompt}");
+        }
+    }
 }
 
 #[test]
@@ -217,6 +236,70 @@ fn run_ai_next_exposes_request_provider_and_model_to_custom_command() {
 
 #[test]
 #[cfg(unix)]
+fn ai_next_restores_bank_after_invalid_successful_edit() {
+    let root = tmp_root("ai-invalid-next-bank");
+    let state = app_state(Settings {
+        next_source: "ai".to_string(),
+        ai_next_command: "printf 'not json' > problem_bank.json".to_string(),
+        ..Settings::default()
+    });
+
+    let output = run_ai_next(&root, &state, false, "arrays");
+
+    assert!(output.contains("failed"), "{output}");
+    let bank = load_bank(&root).unwrap();
+    assert_eq!(bank.len(), 1);
+    assert_eq!(bank[0].id, "001-hello-world");
+    assert_eq!(
+        load_state(&root, &bank).unwrap().current_problem,
+        bank[0].id
+    );
+}
+
+#[test]
+#[cfg(unix)]
+fn ai_next_restores_state_after_invalid_successful_edit() {
+    let root = tmp_root("ai-invalid-next-state");
+    let state = app_state(Settings {
+        next_source: "ai".to_string(),
+        ai_next_command: "printf 'not json' > problem-state.json".to_string(),
+        ..Settings::default()
+    });
+
+    let output = run_ai_next(&root, &state, false, "arrays");
+
+    assert!(output.contains("failed"), "{output}");
+    let bank = load_bank(&root).unwrap();
+    assert_eq!(
+        load_state(&root, &bank).unwrap().current_problem,
+        state.current_problem
+    );
+}
+
+#[test]
+#[cfg(unix)]
+fn ai_next_restores_deleted_metadata() {
+    let root = tmp_root("ai-deleted-next-metadata");
+    let state = app_state(Settings {
+        next_source: "ai".to_string(),
+        ai_next_command: "rm problem_bank.json problem-state.json".to_string(),
+        ..Settings::default()
+    });
+
+    let output = run_ai_next(&root, &state, false, "arrays");
+
+    assert!(output.contains("failed"), "{output}");
+    let bank = load_bank(&root).unwrap();
+    assert!(root.join("problem_bank.json").is_file());
+    assert!(root.join("problem-state.json").is_file());
+    assert_eq!(
+        load_state(&root, &bank).unwrap().current_problem,
+        state.current_problem
+    );
+}
+
+#[test]
+#[cfg(unix)]
 fn run_ai_generate_preserves_public_success_output_and_runs_once() {
     let root = tmp_root("ai-generate-success-api");
     let state = app_state(Settings {
@@ -239,11 +322,29 @@ fn run_ai_generate_preserves_public_success_output_and_runs_once() {
 
 #[test]
 #[cfg(unix)]
+fn ai_generate_restores_bank_after_invalid_successful_edit() {
+    let root = tmp_root("ai-invalid-generate-bank");
+    let state = app_state(Settings {
+        ai_next_command: "printf 'not json' > problem_bank.json".to_string(),
+        ..Settings::default()
+    });
+
+    let output = run_ai_generate(&root, &state, "arrays");
+
+    assert!(output.contains("failed"), "{output}");
+    let bank = load_bank(&root).unwrap();
+    assert_eq!(bank.len(), 1);
+    assert_eq!(bank[0].id, "001-hello-world");
+}
+
+#[test]
+#[cfg(unix)]
 fn run_ai_generate_preserves_public_failure_output() {
     let root = tmp_root("ai-generate-failure-api");
     let state = app_state(Settings {
         ai_provider: "codex".to_string(),
-        ai_next_command: "printf 'failure detail' >&2; exit 7".to_string(),
+        ai_next_command:
+            "printf 'not json' > problem_bank.json; printf 'failure detail' >&2; exit 7".to_string(),
         ..Settings::default()
     });
 
@@ -253,6 +354,7 @@ fn run_ai_generate_preserves_public_failure_output() {
         output,
         "codex background generation failed (7)\nfailure detail"
     );
+    assert_eq!(load_bank(&root).unwrap()[0].id, "001-hello-world");
 }
 
 #[test]

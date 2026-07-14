@@ -12,9 +12,9 @@ use crate::{
         normalize_ai_effort, normalize_ai_provider, normalize_difficulty, normalize_language,
         normalize_next_source, normalize_ui_language, parse_language_list, parse_topic_list,
         parse_ui_language_list, previous_problem, problem_by_id, record_pass, record_syntax_result,
-        render_syntax_lesson, save_state, save_user_text, set_current_syntax_lesson, syntax_cases,
-        syntax_core_progress_count, syntax_language_name, syntax_review_due_at, template_for,
-        ui_text,
+        render_syntax_lesson, save_bank, save_state, save_user_text, set_current_syntax_lesson,
+        syntax_cases, syntax_core_progress_count, syntax_language_name, syntax_review_due_at,
+        template_for, ui_text,
     },
     text::{
         byte_index, char_len, compose_hangul_jamo, display_width, prefix, render_markdown_plain,

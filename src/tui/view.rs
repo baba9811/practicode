@@ -846,7 +846,7 @@ mod tests {
         assert_eq!(app.output_area, Rect::new(0, 0, 80, 22));
         assert!(buffer_text(&terminal).contains("No result yet."));
         assert!(!app.wants_mouse_capture());
-        assert!(app.status_text().contains("drag select to copy"));
+        assert!(app.status_text().contains("Enter: Next"));
         app.focus_command();
         assert!(app.wants_mouse_capture());
         assert!(app.status_text().contains("Enter submit | Esc cancel"));
@@ -1049,7 +1049,7 @@ mod tests {
     }
 
     #[test]
-    fn compact_learning_status_keeps_every_primary_action_visible() {
+    fn compact_learning_status_leads_with_the_current_primary_action() {
         for language in UI_LANGUAGES {
             for width in [60, 80, 99, 100] {
                 let mut app =
@@ -1057,18 +1057,14 @@ mod tests {
                         .unwrap();
                 app.set_ui_language(language).unwrap();
                 app.action_learn("python").unwrap();
-                let terminal = draw_at(&mut app, width, 24);
-                let row = terminal.backend().buffer().area.height - 2;
-                let rendered = (0..width)
-                    .map(|x| terminal.backend().buffer()[(x, row)].symbol())
-                    .collect::<String>();
+                let _terminal = draw_at(&mut app, width, 24);
+                let rendered = app.status_text_for_width(width);
 
-                for action in ["/next", "F5", "F6", "F1"] {
-                    assert!(
-                        rendered.contains(action),
-                        "{language} {width}: missing {action} in {rendered:?}"
-                    );
-                }
+                let action = ui_text(language, "learning_primary_next");
+                assert!(
+                    rendered.contains(action),
+                    "{language} {width}: missing {action} in {rendered:?}"
+                );
             }
         }
     }

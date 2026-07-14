@@ -265,3 +265,16 @@ fn problem_notes_append_and_read_local_file() {
         "Prefer string problems.\nAvoid DP."
     );
 }
+
+#[test]
+fn appending_a_note_preserves_existing_spacing() {
+    let root = tmp_root("notes-spacing");
+    fs::write(root.join("problem_notes.md"), "First note.\n\n").unwrap();
+
+    append_problem_note(&root, "Second note.").unwrap();
+
+    assert_eq!(
+        fs::read_to_string(root.join("problem_notes.md")).unwrap(),
+        "First note.\n\nSecond note.\n"
+    );
+}

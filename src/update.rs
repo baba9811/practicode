@@ -34,12 +34,18 @@ pub fn check_latest_version() -> UpdateCheck {
 }
 
 pub fn is_newer(latest: &str, current: &str) -> bool {
-    version_parts(latest) > version_parts(current)
+    matches!(
+        (version_parts(latest), version_parts(current)),
+        (Some(latest), Some(current)) if latest > current
+    )
 }
 
-fn version_parts(version: &str) -> Vec<u64> {
-    version
-        .split('.')
-        .map(|part| part.parse::<u64>().unwrap_or(0))
-        .collect()
+fn version_parts(version: &str) -> Option<[u64; 3]> {
+    let mut parts = version.split('.');
+    let version = [
+        parts.next()?.parse().ok()?,
+        parts.next()?.parse().ok()?,
+        parts.next()?.parse().ok()?,
+    ];
+    parts.next().is_none().then_some(version)
 }

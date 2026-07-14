@@ -475,8 +475,8 @@ impl PracticodeApp {
         if let Some(lesson_id) = self.learning_session.current_lesson_id() {
             set_current_syntax_lesson(&mut self.state, &language, lesson_id);
         }
-        save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
+        save_state(&self.root, &self.state)?;
         self.show_current_syntax_lesson();
         Ok(())
     }
@@ -547,8 +547,8 @@ impl PracticodeApp {
             LearningAdvance::Item(lesson_id) => {
                 let language = self.state.settings.language.clone();
                 set_current_syntax_lesson(&mut self.state, &language, lesson_id);
-                save_state(&self.root, &self.state)?;
                 self.load_syntax_editor()?;
+                save_state(&self.root, &self.state)?;
                 self.learn_result.clear();
                 self.show_current_syntax_lesson();
             }
@@ -565,8 +565,8 @@ impl PracticodeApp {
         self.learning_session = LearningSession::inactive();
         let language = self.state.settings.language.clone();
         next_syntax_lesson(&mut self.state, &language, 1);
-        save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
+        save_state(&self.root, &self.state)?;
         self.learn_result.clear();
         self.left_scroll = 0;
         self.output_scroll = 0;
@@ -579,8 +579,8 @@ impl PracticodeApp {
         self.learning_session = LearningSession::inactive();
         let language = self.state.settings.language.clone();
         next_syntax_lesson(&mut self.state, &language, -1);
-        save_state(&self.root, &self.state)?;
         self.load_syntax_editor()?;
+        save_state(&self.root, &self.state)?;
         self.learn_result.clear();
         self.left_scroll = 0;
         self.output_scroll = 0;
@@ -663,8 +663,8 @@ impl PracticodeApp {
         if self.mode == AppMode::Learn {
             return self.action_learn(language);
         }
-        save_state(&self.root, &self.state)?;
         self.load_code_editor()?;
+        save_state(&self.root, &self.state)?;
         self.settings_cursor = None;
         self.show_output = false;
         self.focus = match self.practice_view {
@@ -730,6 +730,23 @@ impl PracticodeApp {
     }
 
     pub(super) fn set_generate_languages(&mut self, value: &str, ui: bool) -> Result<()> {
+        let all = value.trim().eq_ignore_ascii_case("all");
+        let valid = all
+            || value.split(',').all(|language| {
+                let language = language.trim().to_lowercase();
+                if ui {
+                    language
+                        .split(['-', '_'])
+                        .next()
+                        .is_some_and(|language| UI_LANGUAGES.contains(&language))
+                } else {
+                    LANGUAGES.contains(&language.as_str())
+                }
+            });
+        if !valid {
+            self.show_profile();
+            return Ok(());
+        }
         if ui {
             self.state.settings.generate_ui_languages = parse_ui_language_list(value);
         } else {
@@ -741,8 +758,20 @@ impl PracticodeApp {
     }
 
     pub(super) fn set_ai_effort(&mut self, effort: &str) -> Result<()> {
+        let effort = effort.trim().to_lowercase();
+        let allowed = if self.state.settings.ai_provider == "claude" {
+            CLAUDE_AI_EFFORTS
+        } else {
+            CODEX_AI_EFFORTS
+        };
+        if !(allowed.contains(&effort.as_str())
+            || self.state.settings.ai_provider == "codex" && effort == "max")
+        {
+            self.write_model_status();
+            return Ok(());
+        }
         self.state.settings.ai_effort =
-            normalize_ai_effort(&self.state.settings.ai_provider, effort);
+            normalize_ai_effort(&self.state.settings.ai_provider, &effort);
         save_state(&self.root, &self.state)?;
         self.write_model_status();
         Ok(())
@@ -836,8 +865,8 @@ impl PracticodeApp {
 
     pub(super) fn start_note_editor(&mut self) -> Result<()> {
         self.save_code()?;
-        self.note_editor
-            .set_text(&read_problem_notes(&self.root).unwrap_or_default());
+        let notes = read_problem_notes(&self.root)?;
+        self.note_editor.set_text(&notes);
         self.settings_cursor = None;
         self.showing_model_status = false;
         self.editing_notes = true;
@@ -854,7 +883,7 @@ impl PracticodeApp {
         }
         let text = self.note_editor.text();
         let text = text.trim_end();
-        fs::write(path, if text.is_empty() { "" } else { text })?;
+        save_user_text(&path, if text.is_empty() { "" } else { text })?;
         Ok(())
     }
 
@@ -1116,5 +1145,17 @@ mod tests {
             .unwrap();
 
         assert_eq!(app.output, ui_text("zh", "next_unavailable"));
+    }
+
+    #[test]
+    fn unreadable_notes_do_not_clear_the_note_editor() {
+        let mut app = localized_app("practicode-unreadable-notes", "en");
+        app.note_editor.set_text("keep this note");
+        let path = app.root.join(PROBLEM_NOTES_PATH);
+        std::fs::write(&path, [0xff]).unwrap();
+
+        assert!(app.start_note_editor().is_err());
+        assert_eq!(app.note_editor.text(), "keep this note");
+        assert_eq!(std::fs::read(path).unwrap(), [0xff]);
     }
 }

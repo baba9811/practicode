@@ -1,5 +1,5 @@
 use super::*;
-use std::env;
+use std::{env, ffi::OsString};
 
 const TYPESCRIPT_TYPECHECK_FLAGS: [&str; 8] = [
     "--noEmit",
@@ -16,6 +16,12 @@ const RUST_EDITION_FLAG: &str = "--edition=2024";
 const MAX_COMPILER_DIAGNOSTIC_LINES: usize = 12;
 const MAX_COMPILER_DIAGNOSTIC_BYTES: usize = 4_096;
 const DIAGNOSTIC_TRUNCATED_MARKER: &str = "[diagnostic truncated]";
+
+#[derive(Clone, Debug)]
+struct PreparedCommand {
+    program: PathBuf,
+    args: Vec<OsString>,
+}
 
 #[derive(Debug)]
 struct CommandFailure {
@@ -41,11 +47,11 @@ pub fn ensure_submission(root: &Path, problem: &Problem, settings: &Settings) ->
         .join("submissions")
         .join(&problem.id)
         .join(format!("solution.{}", ext_for(&language)));
-    if !path.exists() {
+    if !regular_file_exists(&path)? {
         if let Some(parent) = path.parent() {
-            fs::create_dir_all(parent)?;
+            create_dir_all_beneath(root, parent)?;
         }
-        fs::write(&path, template_for(&language))?;
+        save_user_text(&path, &template_for(&language))?;
     }
     Ok(path)
 }
@@ -82,7 +88,7 @@ pub fn judge_path(
     language: &str,
     cases: &[IoCase],
 ) -> JudgeResult {
-    judge_path_with(root, id, path, language, cases, command_for)
+    judge_path_with(root, id, path, language, cases, command_for_os)
 }
 
 fn judge_path_with<F>(
@@ -94,7 +100,7 @@ fn judge_path_with<F>(
     mut prepare: F,
 ) -> JudgeResult
 where
-    F: FnMut(&Path, &Path, &str) -> Result<Option<CommandSpec>>,
+    F: FnMut(&Path, &Path, &str) -> Result<Option<PreparedCommand>>,
 {
     if cases.is_empty() {
         return JudgeResult {
@@ -136,7 +142,7 @@ where
         }
     };
     let run_dir = root.join("build").join(id).join("run");
-    if let Err(error) = fs::create_dir_all(&run_dir) {
+    if let Err(error) = create_dir_all_beneath(root, &run_dir) {
         return JudgeResult {
             passed: false,
             passed_cases: 0,
@@ -257,13 +263,34 @@ fn apply_judge_env(process: &mut Command) {
 }
 
 pub fn command_for(root: &Path, path: &Path, language: &str) -> Result<Option<CommandSpec>> {
+    command_for_os(root, path, language)?
+        .map(|command| {
+            let args = command
+                .args
+                .into_iter()
+                .map(|arg| {
+                    arg.into_string()
+                        .map_err(|arg| anyhow!("command argument {arg:?} is not valid UTF-8"))
+                })
+                .collect::<Result<Vec<_>>>()?;
+            Ok(CommandSpec {
+                program: command.program,
+                args,
+            })
+        })
+        .transpose()
+}
+
+fn command_for_os(root: &Path, path: &Path, language: &str) -> Result<Option<PreparedCommand>> {
     match language {
-        "python" => Ok(which("python3")
-            .or_else(|| which("python"))
-            .map(|program| CommandSpec {
-                program,
-                args: vec![path.display().to_string()],
-            })),
+        "python" => {
+            Ok(which("python3")
+                .or_else(|| which("python"))
+                .map(|program| PreparedCommand {
+                    program,
+                    args: vec![path.as_os_str().to_owned()],
+                }))
+        }
         "ts" => compile_typescript(root, path),
         "java" => compile_java(root, path),
         "rust" => compile_rust(root, path),
@@ -271,7 +298,7 @@ pub fn command_for(root: &Path, path: &Path, language: &str) -> Result<Option<Co
     }
 }
 
-fn compile_typescript(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
+fn compile_typescript(root: &Path, path: &Path) -> Result<Option<PreparedCommand>> {
     compile_typescript_with(root, path, which, |program, args| {
         let mut command = Command::new(program);
         command.args(args).current_dir(root);
@@ -284,38 +311,42 @@ fn compile_typescript_with<F, R>(
     path: &Path,
     mut find: F,
     mut run: R,
-) -> Result<Option<CommandSpec>>
+) -> Result<Option<PreparedCommand>>
 where
     F: FnMut(&str) -> Option<PathBuf>,
-    R: FnMut(&Path, &[String]) -> Result<crate::process::RunOutput>,
+    R: FnMut(&Path, &[OsString]) -> Result<crate::process::RunOutput>,
 {
     let Some(tsc) = find("tsc") else {
         return Err(missing_typescript_tool_failure("tsc").into());
     };
-    let version = run(&tsc, &["--version".to_string()])?;
+    let version = run(&tsc, &[OsString::from("--version")])?;
     validate_typescript_version(&version)?;
 
     let build = root
         .join("build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default())
         .join("typescript");
-    fs::create_dir_all(&build)?;
+    create_dir_all_beneath(root, &build)?;
     let shim = build.join("node-shim.d.ts");
     let type_root = build.join("type-roots");
-    if type_root.exists() {
-        fs::remove_dir_all(&type_root)?;
+    match fs::symlink_metadata(&type_root) {
+        Ok(metadata) if metadata.file_type().is_dir() => fs::remove_dir_all(&type_root)?,
+        Ok(_) => bail!("{} is not a regular directory", type_root.display()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
     }
-    fs::create_dir_all(&type_root)?;
+    create_dir_all_beneath(root, &type_root)?;
+    regular_file_exists(&shim)?;
     fs::write(
         &shim,
         include_str!("../../assets/typescript/node-shim.d.ts"),
     )?;
-    let mut args = TYPESCRIPT_TYPECHECK_FLAGS.map(str::to_string).to_vec();
+    let mut args = TYPESCRIPT_TYPECHECK_FLAGS.map(OsString::from).to_vec();
     args.extend([
-        "--typeRoots".to_string(),
-        type_root.display().to_string(),
-        shim.display().to_string(),
-        path.display().to_string(),
+        OsString::from("--typeRoots"),
+        type_root.as_os_str().to_owned(),
+        shim.as_os_str().to_owned(),
+        path.as_os_str().to_owned(),
     ]);
     let output = run(&tsc, &args)?;
     if compiler_gate_failed(&output) {
@@ -324,11 +355,11 @@ where
     let Some(node) = find("node") else {
         return Err(missing_typescript_tool_failure("node").into());
     };
-    Ok(Some(CommandSpec {
+    Ok(Some(PreparedCommand {
         program: node,
         args: vec![
-            "--experimental-strip-types".to_string(),
-            path.display().to_string(),
+            OsString::from("--experimental-strip-types"),
+            path.as_os_str().to_owned(),
         ],
     }))
 }
@@ -446,7 +477,7 @@ fn missing_typescript_tool_failure(tool: &str) -> CommandFailure {
     }
 }
 
-fn compile_java(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
+fn compile_java(root: &Path, path: &Path) -> Result<Option<PreparedCommand>> {
     let Some(javac) = which("javac") else {
         return Ok(None);
     };
@@ -457,57 +488,62 @@ fn compile_java(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
         .join("build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default())
         .join("java");
-    fs::create_dir_all(&build)?;
+    let build_parent = build.parent().context("find Java build parent")?;
+    create_dir_all_beneath(root, build_parent)?;
+    match fs::symlink_metadata(&build) {
+        Ok(metadata) if metadata.file_type().is_dir() => fs::remove_dir_all(&build)?,
+        Ok(_) => bail!("{} is not a regular directory", build.display()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
+    }
+    create_dir_all_beneath(root, &build)?;
     let mut compile = Command::new(javac);
     compile
         .args(JAVA_RELEASE_FLAGS)
-        .args([
-            "-d",
-            &build.display().to_string(),
-            &path.display().to_string(),
-        ])
+        .arg("-d")
+        .arg(&build)
+        .arg(path)
         .current_dir(root);
     let output = run_capture(&mut compile, "", Duration::from_secs(30))?;
     if compiler_gate_failed(&output) {
         return Err(compiler_failure(JudgeFailureKind::Compile, &output).into());
     }
-    Ok(Some(CommandSpec {
+    Ok(Some(PreparedCommand {
         program: java,
         args: vec![
-            "-cp".to_string(),
-            build.display().to_string(),
-            "Solution".to_string(),
+            OsString::from("-cp"),
+            build.as_os_str().to_owned(),
+            OsString::from("Solution"),
         ],
     }))
 }
 
-fn compile_rust(root: &Path, path: &Path) -> Result<Option<CommandSpec>> {
+fn compile_rust(root: &Path, path: &Path) -> Result<Option<PreparedCommand>> {
     let Some(rustc) = which("rustc") else {
         return Ok(None);
     };
     let build = root
         .join("build")
         .join(path.parent().and_then(Path::file_name).unwrap_or_default());
-    fs::create_dir_all(&build)?;
+    create_dir_all_beneath(root, &build)?;
     let exe = build.join(if cfg!(windows) {
         "solution.exe"
     } else {
         "solution"
     });
+    regular_file_exists(&exe)?;
     let mut compile = Command::new(rustc);
     compile
         .arg(RUST_EDITION_FLAG)
-        .args([
-            path.display().to_string(),
-            "-o".to_string(),
-            exe.display().to_string(),
-        ])
+        .arg(path)
+        .arg("-o")
+        .arg(&exe)
         .current_dir(root);
     let output = run_capture(&mut compile, "", Duration::from_secs(30))?;
     if compiler_gate_failed(&output) {
         return Err(compiler_failure(JudgeFailureKind::Compile, &output).into());
     }
-    Ok(Some(CommandSpec {
+    Ok(Some(PreparedCommand {
         program: exe,
         args: Vec::new(),
     }))

@@ -4,7 +4,7 @@ use std::{fs::OpenOptions, io::Write};
 pub fn load_state(root: &Path, bank: &[Problem]) -> Result<AppState> {
     let path = root.join(STATE_PATH);
     let backup = sibling_path(&path, ".bak");
-    if !path.exists() {
+    if !regular_file_exists(&path)? {
         match fs::symlink_metadata(&backup) {
             Ok(metadata) if metadata.file_type().is_file() => {
                 let contents =
@@ -20,7 +20,7 @@ pub fn load_state(root: &Path, bank: &[Problem]) -> Result<AppState> {
             }
         }
     }
-    if !path.exists() {
+    if !regular_file_exists(&path)? {
         return Ok(AppState {
             current_problem: bank[0].id.clone(),
             settings: Settings::default(),
@@ -80,6 +80,7 @@ pub fn save_state(root: &Path, state: &AppState) -> Result<()> {
     }
 
     let path = root.join(STATE_PATH);
+    regular_file_exists(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .with_context(|| format!("create state directory {}", parent.display()))?;
@@ -109,6 +110,19 @@ fn sibling_path(path: &Path, suffix: &str) -> PathBuf {
 }
 
 fn replace_state_file(path: &Path, contents: &[u8]) -> Result<()> {
+    replace_file(path, contents, true)
+}
+
+pub(crate) fn save_user_text(path: &Path, contents: &str) -> Result<()> {
+    regular_file_exists(path)?;
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)
+            .with_context(|| format!("create directory {}", parent.display()))?;
+    }
+    replace_file(path, contents.as_bytes(), false)
+}
+
+fn replace_file(path: &Path, contents: &[u8], durable: bool) -> Result<()> {
     let temporary = sibling_path(path, ".tmp");
     let backup = sibling_path(path, ".bak");
     remove_file_if_exists(&temporary)?;
@@ -124,8 +138,10 @@ fn replace_state_file(path: &Path, contents: &[u8]) -> Result<()> {
             .with_context(|| format!("write {}", temporary.display()))?;
         file.flush()
             .with_context(|| format!("flush {}", temporary.display()))?;
-        file.sync_all()
-            .with_context(|| format!("sync {}", temporary.display()))?;
+        if durable {
+            file.sync_all()
+                .with_context(|| format!("sync {}", temporary.display()))?;
+        }
         drop(file);
         replace_state_file_inner(path, &temporary, &backup)
     })();

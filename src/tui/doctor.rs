@@ -100,16 +100,17 @@ where
     V: FnMut(&str, &[&str]) -> Option<String>,
 {
     vec![
-        python_check(lang, has_command),
+        python_check(lang, has_command, command_version),
         node_check(lang, has_command, command_version),
-        java_check(lang, has_command),
-        rust_check(lang, has_command),
+        java_check(lang, has_command, command_version),
+        rust_check(lang, has_command, command_version),
     ]
 }
 
-fn python_check<F>(lang: &str, has_command: &mut F) -> DoctorCheck
+fn python_check<F, V>(lang: &str, has_command: &mut F, command_version: &mut V) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
+    V: FnMut(&str, &[&str]) -> Option<String>,
 {
     let command = if has_command("python3") {
         Some("python3")
@@ -118,21 +119,40 @@ where
     } else {
         None
     };
-    DoctorCheck {
-        status: if command.is_some() {
-            DoctorStatus::Ok
-        } else {
-            DoctorStatus::Missing
-        },
-        name: "Python",
-        detail: command.map(str::to_string).unwrap_or_else(|| {
-            format!(
+    let Some(command) = command else {
+        return DoctorCheck {
+            status: DoctorStatus::Missing,
+            name: "Python",
+            detail: format!(
                 "{}; {}",
                 missing_tool(lang, "python3"),
                 missing_tool(lang, "python")
+            ),
+            install: Some(InstallHelp::Python),
+        };
+    };
+    let version = command_version(command, &["--version"]);
+    let ok = version
+        .as_deref()
+        .is_some_and(|version| reported_version_at_least(version, 3, 12, 0));
+    DoctorCheck {
+        status: if ok {
+            DoctorStatus::Ok
+        } else {
+            DoctorStatus::Update
+        },
+        name: "Python",
+        detail: if ok {
+            version.unwrap()
+        } else {
+            ui_text(lang, "doctor_python_required").replace(
+                "{version}",
+                version
+                    .as_deref()
+                    .unwrap_or_else(|| ui_text(lang, "doctor_unknown_version")),
             )
-        }),
-        install: command.is_none().then_some(InstallHelp::Python),
+        },
+        install: (!ok).then_some(InstallHelp::Python),
     }
 }
 
@@ -224,50 +244,96 @@ where
     }
 }
 
-fn java_check<F>(lang: &str, has_command: &mut F) -> DoctorCheck
+fn java_check<F, V>(lang: &str, has_command: &mut F, command_version: &mut V) -> DoctorCheck
 where
     F: FnMut(&str) -> bool,
+    V: FnMut(&str, &[&str]) -> Option<String>,
 {
     let has_javac = has_command("javac");
     let has_java = has_command("java");
-    let detail = match (has_javac, has_java) {
-        (true, true) => "javac + java".to_string(),
-        (false, true) => missing_tool(lang, "javac"),
-        (true, false) => missing_tool(lang, "java"),
-        (false, false) => format!(
+    let missing_detail = match (has_javac, has_java) {
+        (true, true) => None,
+        (false, true) => Some(missing_tool(lang, "javac")),
+        (true, false) => Some(missing_tool(lang, "java")),
+        (false, false) => Some(format!(
             "{}; {}",
             missing_tool(lang, "javac"),
             missing_tool(lang, "java")
-        ),
+        )),
     };
-    DoctorCheck {
-        status: if has_javac && has_java {
-            DoctorStatus::Ok
-        } else {
-            DoctorStatus::Missing
-        },
-        name: "Java",
-        detail,
-        install: (!(has_javac && has_java)).then_some(InstallHelp::Java),
+    if let Some(detail) = missing_detail {
+        return DoctorCheck {
+            status: DoctorStatus::Missing,
+            name: "Java",
+            detail,
+            install: Some(InstallHelp::Java),
+        };
     }
-}
-
-fn rust_check<F>(lang: &str, has_command: &mut F) -> DoctorCheck
-where
-    F: FnMut(&str) -> bool,
-{
-    let ok = has_command("rustc");
+    let javac = command_version("javac", &["--version"]);
+    let java = command_version("java", &["--version"]);
+    let ok = javac
+        .as_deref()
+        .is_some_and(|version| reported_version_at_least(version, 21, 0, 0))
+        && java
+            .as_deref()
+            .is_some_and(|version| reported_version_at_least(version, 21, 0, 0));
+    let versions = format!(
+        "{} + {}",
+        javac
+            .as_deref()
+            .unwrap_or_else(|| ui_text(lang, "doctor_unknown_version")),
+        java.as_deref()
+            .unwrap_or_else(|| ui_text(lang, "doctor_unknown_version"))
+    );
     DoctorCheck {
         status: if ok {
             DoctorStatus::Ok
         } else {
-            DoctorStatus::Missing
+            DoctorStatus::Update
+        },
+        name: "Java",
+        detail: if ok {
+            versions
+        } else {
+            ui_text(lang, "doctor_java_required").replace("{version}", &versions)
+        },
+        install: (!ok).then_some(InstallHelp::Java),
+    }
+}
+
+fn rust_check<F, V>(lang: &str, has_command: &mut F, command_version: &mut V) -> DoctorCheck
+where
+    F: FnMut(&str) -> bool,
+    V: FnMut(&str, &[&str]) -> Option<String>,
+{
+    if !has_command("rustc") {
+        return DoctorCheck {
+            status: DoctorStatus::Missing,
+            name: "Rust",
+            detail: missing_tool(lang, "rustc"),
+            install: Some(InstallHelp::Rust),
+        };
+    }
+    let version = command_version("rustc", &["--version"]);
+    let ok = version
+        .as_deref()
+        .is_some_and(|version| reported_version_at_least(version, 1, 85, 0));
+    DoctorCheck {
+        status: if ok {
+            DoctorStatus::Ok
+        } else {
+            DoctorStatus::Update
         },
         name: "Rust",
         detail: if ok {
-            "rustc".to_string()
+            version.unwrap()
         } else {
-            missing_tool(lang, "rustc")
+            ui_text(lang, "doctor_rust_required").replace(
+                "{version}",
+                version
+                    .as_deref()
+                    .unwrap_or_else(|| ui_text(lang, "doctor_unknown_version")),
+            )
         },
         install: (!ok).then_some(InstallHelp::Rust),
     }
@@ -366,7 +432,11 @@ fn command_version(program: &str, args: &[&str]) -> Option<String> {
     if output.timed_out || output.code != Some(0) {
         return None;
     }
-    let output = output.stdout.trim().to_string();
+    let output = if output.stdout.trim().is_empty() {
+        output.stderr.trim().to_string()
+    } else {
+        output.stdout.trim().to_string()
+    };
     (!output.is_empty()).then_some(output)
 }
 
@@ -374,17 +444,35 @@ fn node_supports_strip_types(version: &str) -> bool {
     version_at_least(version.trim_start_matches('v'), 22, 6, 0)
 }
 
+fn reported_version_at_least(output: &str, major: u64, minor: u64, patch: u64) -> bool {
+    output
+        .split_whitespace()
+        .find(|part| {
+            part.trim_start_matches('v')
+                .starts_with(|char: char| char.is_ascii_digit())
+        })
+        .is_some_and(|version| {
+            version_at_least(version.trim_start_matches('v'), major, minor, patch)
+        })
+}
+
 fn version_at_least(version: &str, major: u64, minor: u64, patch: u64) -> bool {
-    let mut parts = version
-        .split(['.', '-'])
-        .take(3)
-        .map(|part| part.parse::<u64>().unwrap_or(0));
-    let found = (
-        parts.next().unwrap_or(0),
-        parts.next().unwrap_or(0),
-        parts.next().unwrap_or(0),
-    );
-    found >= (major, minor, patch)
+    let mut found = [0; 3];
+    let mut count = 0;
+    for part in version.split('.') {
+        if count == found.len()
+            || part.is_empty()
+            || !part.bytes().all(|byte| byte.is_ascii_digit())
+        {
+            return false;
+        }
+        let Ok(value) = part.parse() else {
+            return false;
+        };
+        found[count] = value;
+        count += 1;
+    }
+    count > 0 && found >= [major, minor, patch]
 }
 
 const PYTHON_INSTALL: &str = "macOS: brew install python\nWindows: winget install -e --id Python.Python.3.12\nUbuntu/Debian: sudo apt install -y python3";
@@ -397,6 +485,41 @@ const RUST_INSTALL: &str = "macOS/Linux: curl --proto '=https' --tlsv1.2 -sSf ht
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn doctor_rejects_runtimes_that_cannot_run_the_documented_targets() {
+        let output = doctor_text_with(
+            "en",
+            "python",
+            "codex",
+            |_| true,
+            |program, _| {
+                Some(
+                    match program {
+                        "python3" | "python" => "Python 3.11.9",
+                        "node" => "v22.6.0",
+                        "tsc" => "Version 5.9.3",
+                        "javac" => "javac 17.0.12",
+                        "java" => "openjdk 17.0.12",
+                        "rustc" => "rustc 1.84.1",
+                        _ => "unknown",
+                    }
+                    .to_string(),
+                )
+            },
+        );
+
+        assert!(output.contains("UPDATE Python"), "{output}");
+        assert!(output.contains("UPDATE Java"), "{output}");
+        assert!(output.contains("UPDATE Rust"), "{output}");
+    }
+
+    #[test]
+    fn doctor_rejects_malformed_versions_with_large_major_numbers() {
+        assert!(!reported_version_at_least("Python 999.invalid", 3, 12, 0));
+        assert!(!reported_version_at_least("javac 999.unknown", 21, 0, 0));
+        assert!(!node_supports_strip_types("v999.invalid"));
+    }
 
     #[test]
     fn doctor_output_includes_install_help_for_missing_runtimes() {

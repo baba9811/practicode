@@ -23,6 +23,7 @@ const { pipeline } = require("node:stream/promises");
 const REQUEST_TIMEOUT_MS = 15_000;
 const MAX_REDIRECTS = 5;
 const MAX_MANIFEST_BYTES = 1024 * 1024;
+const MAX_BINARY_BYTES = 128 * 1024 * 1024;
 const STALE_TEMPORARY_FILE_MS = 60 * 60 * 1000;
 const RELEASE_ROOT = "https://github.com/baba9811/practicode/releases/download";
 
@@ -126,11 +127,17 @@ async function downloadText(url, timeoutMs) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-async function downloadFile(url, filename, timeoutMs) {
+async function downloadFile(url, filename, timeoutMs, maxBytes) {
   const response = await responseFor(url, timeoutMs);
   const hash = createHash("sha256");
+  let bytes = 0;
   const tap = new Transform({
     transform(chunk, _encoding, callback) {
+      bytes += chunk.length;
+      if (bytes > maxBytes) {
+        callback(new Error(`Binary download is unexpectedly large: ${url}`));
+        return;
+      }
       hash.update(chunk);
       callback(null, chunk);
     },
@@ -179,6 +186,7 @@ async function ensureBinary({
   cacheDir = cacheDirectory(),
   releaseBaseUrl = `${RELEASE_ROOT}/v${version}`,
   requestTimeoutMs = REQUEST_TIMEOUT_MS,
+  maxBinaryBytes = MAX_BINARY_BYTES,
 }) {
   const asset = assetFor(platform, arch);
   const versionDir = path.join(cacheDir, version);
@@ -196,7 +204,12 @@ async function ensureBinary({
   try {
     const manifest = await downloadText(`${releaseBaseUrl}/SHA256SUMS`, requestTimeoutMs);
     const expected = checksumFor(manifest, asset);
-    const actual = await downloadFile(`${releaseBaseUrl}/${asset}`, temporaryBinary, requestTimeoutMs);
+    const actual = await downloadFile(
+      `${releaseBaseUrl}/${asset}`,
+      temporaryBinary,
+      requestTimeoutMs,
+      maxBinaryBytes,
+    );
     if (actual !== expected) {
       throw new Error(`Checksum mismatch for ${asset}: expected ${expected}, received ${actual}`);
     }

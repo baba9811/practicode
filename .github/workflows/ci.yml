@@ -29,6 +29,8 @@ jobs:
           java-version: 21
       - run: rustup toolchain install stable --profile minimal --component clippy --component rustfmt
       - run: rustup default stable
+      - run: rustup target add x86_64-pc-windows-msvc
+      - run: cargo check --all-features --locked --target x86_64-pc-windows-msvc
       - run: make test
       - run: cargo install cargo-audit --locked
       - run: cargo audit --deny warnings

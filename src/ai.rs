@@ -2,15 +2,14 @@ use crate::{
     core::{
         AppState, CLAUDE_AI_EFFORTS, LANGUAGES, PROBLEM_NOTES_PATH, Problem, Settings,
         SyntaxLesson, UI_LANGUAGES, ensure_submission, ensure_syntax_submission,
-        normalize_ai_provider, render_problem, syntax_lesson_study_context, ui_text,
+        normalize_ai_provider, regular_file_exists, render_problem, save_user_text,
+        syntax_lesson_study_context, ui_text,
     },
     process::{run_capture, sh_quote, shell_process, unique_temp_path, which},
 };
-use anyhow::Result;
+use anyhow::{Context, Result};
 use std::{
-    env,
-    fs::{self, OpenOptions},
-    io::Write,
+    env, fs,
     path::{Path, PathBuf},
     process::Command,
     time::Duration,
@@ -52,7 +51,12 @@ pub fn run_ai_prompt(root: &Path, problem: &Problem, settings: &Settings, prompt
         Ok(path) => path,
         Err(error) => return format!("AI prompt failed\n{error}"),
     };
-    let code = fs::read_to_string(&solution).unwrap_or_default();
+    let code = match fs::read_to_string(&solution)
+        .with_context(|| format!("read {}", solution.display()))
+    {
+        Ok(code) => code,
+        Err(error) => return format!("AI prompt failed\n{error}"),
+    };
     let relative = solution
         .strip_prefix(root)
         .unwrap_or(&solution)
@@ -81,7 +85,12 @@ pub fn run_ai_lesson_prompt(
         Ok(path) => path,
         Err(error) => return format!("AI prompt failed\n{error}"),
     };
-    let code = fs::read_to_string(&exercise).unwrap_or_default();
+    let code = match fs::read_to_string(&exercise)
+        .with_context(|| format!("read {}", exercise.display()))
+    {
+        Ok(code) => code,
+        Err(error) => return format!("AI prompt failed\n{error}"),
+    };
     let relative = exercise
         .strip_prefix(root)
         .unwrap_or(&exercise)
@@ -100,12 +109,15 @@ pub fn run_ai_next(root: &Path, state: &AppState, force: bool, request: &str) ->
         return "AI next is disabled; using local problems.".to_string();
     }
     let provider = normalize_ai_provider(&state.settings.ai_provider);
-    let command = if state.settings.next_ai_command().trim().is_empty() {
-        default_ai_next_command(root, &state.settings, request)
+    let mut process = if state.settings.next_ai_command().trim().is_empty() {
+        builtin_ai_process(
+            root,
+            &state.settings,
+            &default_ai_next_prompt_with_settings(&state.settings, request),
+        )
     } else {
-        state.settings.next_ai_command().to_string()
+        shell_process(state.settings.next_ai_command())
     };
-    let mut process = shell_process(&command);
     process
         .current_dir(root)
         .env("PRACTICODE_NEXT_REQUEST", request)
@@ -160,12 +172,15 @@ pub(crate) fn run_ai_generate_result(
     request: &str,
 ) -> AiGenerationResult {
     let provider = normalize_ai_provider(&state.settings.ai_provider);
-    let command = if state.settings.next_ai_command().trim().is_empty() {
-        default_ai_generate_command(root, &state.settings, request)
+    let mut process = if state.settings.next_ai_command().trim().is_empty() {
+        builtin_ai_process(
+            root,
+            &state.settings,
+            &default_ai_generate_prompt_with_settings(&state.settings, request),
+        )
     } else {
-        state.settings.next_ai_command().to_string()
+        shell_process(state.settings.next_ai_command())
     };
-    let mut process = shell_process(&command);
     process
         .current_dir(root)
         .env("PRACTICODE_NEXT_REQUEST", request)
@@ -304,18 +319,23 @@ pub fn default_ai_generate_prompt_with_settings(settings: &Settings, request: &s
 
 pub fn append_problem_note(root: &Path, note: &str) -> Result<()> {
     let path = root.join(PROBLEM_NOTES_PATH);
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent)?;
-    }
-    let mut file = OpenOptions::new().create(true).append(true).open(path)?;
-    writeln!(file, "{}", note.trim())?;
-    Ok(())
+    let existing = read_problem_notes_file(root)?;
+    let separator = if existing.is_empty() || existing.ends_with('\n') {
+        ""
+    } else {
+        "\n"
+    };
+    save_user_text(&path, &format!("{existing}{separator}{}\n", note.trim()))
 }
 
 pub fn read_problem_notes(root: &Path) -> Result<String> {
+    Ok(read_problem_notes_file(root)?.trim_end().to_string())
+}
+
+fn read_problem_notes_file(root: &Path) -> Result<String> {
     let path = root.join(PROBLEM_NOTES_PATH);
-    if path.exists() {
-        Ok(fs::read_to_string(path)?.trim_end().to_string())
+    if regular_file_exists(&path)? {
+        fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))
     } else {
         Ok(String::new())
     }
@@ -447,20 +467,15 @@ fn run_codex_prompt(root: &Path, settings: &Settings, prompt: &str) -> String {
     let output_path = unique_temp_path("practicode-last-message", "txt");
     let mut command = Command::new("codex");
     command
-        .args([
-            "exec",
-            "--skip-git-repo-check",
-            "--cd",
-            &root.display().to_string(),
-            "--sandbox",
-            "read-only",
-        ])
+        .args(["exec", "--skip-git-repo-check", "--cd"])
+        .arg(root)
+        .args(["--sandbox", "read-only"])
         .current_dir(root);
     if let Some(model) = settings.model_arg() {
         command.args(["--model", model]);
     }
     add_codex_effort_args(&mut command, settings);
-    command.args(["-o", &output_path.display().to_string(), prompt]);
+    command.arg("-o").arg(&output_path).arg(prompt);
     let result = run_capture(&mut command, "", Duration::from_secs(600));
     let last_message = fs::read_to_string(&output_path).unwrap_or_default();
     let _ = fs::remove_file(&output_path);
@@ -513,6 +528,36 @@ fn run_claude_prompt(root: &Path, settings: &Settings, prompt: &str) -> String {
             )
         }
         Err(error) => format!("Claude prompt failed\n{error}"),
+    }
+}
+
+fn builtin_ai_process(root: &Path, settings: &Settings, prompt: &str) -> Command {
+    if normalize_ai_provider(&settings.ai_provider) == "claude" {
+        let mut command = Command::new("claude");
+        command
+            .args(["--permission-mode", "acceptEdits"])
+            .current_dir(root);
+        if let Some(model) = settings.model_arg() {
+            command.args(["--model", model]);
+        }
+        if let Some(effort) = settings.effort_arg() {
+            command.args(["--effort", effort]);
+        }
+        command.args(["-p", prompt]);
+        command
+    } else {
+        let mut command = Command::new("codex");
+        command
+            .args(["exec", "--ephemeral", "--skip-git-repo-check", "--cd"])
+            .arg(root)
+            .args(["--sandbox", "workspace-write"])
+            .current_dir(root);
+        if let Some(model) = settings.model_arg() {
+            command.args(["--model", model]);
+        }
+        add_codex_effort_args(&mut command, settings);
+        command.arg(prompt);
+        command
     }
 }
 
@@ -640,6 +685,71 @@ fn list_or_all(values: &[String], all: &[&str]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn builtin_codex_command_keeps_values_as_separate_arguments() {
+        let root = Path::new("workspace with spaces");
+        let settings = Settings {
+            ai_model: "model with spaces".to_string(),
+            ai_effort: "high".to_string(),
+            ..Settings::default()
+        };
+        let command = builtin_ai_process(root, &settings, "quote ' & percent %");
+        let args = command
+            .get_args()
+            .map(|arg| arg.to_string_lossy().to_string())
+            .collect::<Vec<_>>();
+
+        assert_eq!(command.get_program(), "codex");
+        assert_eq!(command.get_current_dir(), Some(root));
+        assert!(
+            args.windows(2)
+                .any(|pair| pair == ["--cd", "workspace with spaces"])
+        );
+        assert!(
+            args.windows(2)
+                .any(|pair| pair == ["--model", "model with spaces"])
+        );
+        assert_eq!(args.last().unwrap(), "quote ' & percent %");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn builtin_codex_command_preserves_a_non_utf8_workspace_path() {
+        use std::{ffi::OsString, os::unix::ffi::OsStringExt};
+
+        let root = PathBuf::from(OsString::from_vec(b"workspace-\xff".to_vec()));
+        let command = builtin_ai_process(&root, &Settings::default(), "prompt");
+        let args = command.get_args().collect::<Vec<_>>();
+        let cd = args.iter().position(|arg| *arg == "--cd").unwrap();
+
+        assert_eq!(args[cd + 1], root.as_os_str());
+    }
+
+    #[test]
+    fn builtin_claude_command_keeps_values_as_separate_arguments() {
+        let root = Path::new("workspace with spaces");
+        let settings = Settings {
+            ai_provider: "claude".to_string(),
+            ai_model: "model with spaces".to_string(),
+            ai_effort: "max".to_string(),
+            ..Settings::default()
+        };
+        let command = builtin_ai_process(root, &settings, "quote ' & percent %");
+        let args = command
+            .get_args()
+            .map(|arg| arg.to_string_lossy().to_string())
+            .collect::<Vec<_>>();
+
+        assert_eq!(command.get_program(), "claude");
+        assert_eq!(command.get_current_dir(), Some(root));
+        assert!(
+            args.windows(2)
+                .any(|pair| pair == ["--model", "model with spaces"])
+        );
+        assert!(args.windows(2).any(|pair| pair == ["--effort", "max"]));
+        assert_eq!(args.last().unwrap(), "quote ' & percent %");
+    }
 
     #[test]
     fn parses_codex_model_list_response() {

@@ -43,3 +43,42 @@ pub(crate) use syntax::{
     localized_syntax_prediction_prompt, localized_syntax_title, localized_syntax_transfer_trap,
     syntax_core_progress_count,
 };
+
+pub(crate) fn regular_file_exists(path: &Path) -> Result<bool> {
+    match fs::symlink_metadata(path) {
+        Ok(metadata) if metadata.file_type().is_file() => Ok(true),
+        Ok(_) => bail!("{} is not a regular file", path.display()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(false),
+        Err(error) => Err(error).with_context(|| format!("inspect {}", path.display())),
+    }
+}
+
+pub(crate) fn create_dir_all_beneath(root: &Path, directory: &Path) -> Result<()> {
+    fs::create_dir_all(root).with_context(|| format!("create data root {}", root.display()))?;
+    let relative = directory.strip_prefix(root).with_context(|| {
+        format!(
+            "directory {} is outside data root {}",
+            directory.display(),
+            root.display()
+        )
+    })?;
+    let mut current = root.to_path_buf();
+    for component in relative.components() {
+        let std::path::Component::Normal(component) = component else {
+            bail!("unsafe directory path {}", directory.display());
+        };
+        current.push(component);
+        match fs::symlink_metadata(&current) {
+            Ok(metadata) if metadata.file_type().is_dir() => {}
+            Ok(_) => bail!("{} is not a regular directory", current.display()),
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                fs::create_dir(&current)
+                    .with_context(|| format!("create directory {}", current.display()))?;
+            }
+            Err(error) => {
+                return Err(error).with_context(|| format!("inspect {}", current.display()));
+            }
+        }
+    }
+    Ok(())
+}

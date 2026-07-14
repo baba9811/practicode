@@ -37,43 +37,69 @@ impl PracticodeApp {
     }
 
     pub(super) fn check_task(&mut self) {
-        let task = self.task_rx.as_ref().and_then(|rx| rx.try_recv().ok());
-        if let Some(task) = task {
-            self.task_rx = None;
-            self.stop_busy();
-            match task {
-                TaskResult::AiPrompt(output) => self.write_output(&output),
-                TaskResult::Next {
-                    output,
-                    old_problem,
-                    fallback_to_local,
-                } => {
-                    if let Err(error) =
-                        self.finish_next_problem(output, old_problem, fallback_to_local)
-                    {
-                        self.write_text_output(&format!(
-                            "{}\n{error}",
-                            ui_text(&self.state.settings.ui_language, "next_failed")
-                        ));
+        let task = self.task_rx.as_ref().map(Receiver::try_recv);
+        match task {
+            Some(Ok(task)) => {
+                self.task_rx = None;
+                self.stop_busy();
+                match task {
+                    TaskResult::AiPrompt(output) => self.write_output(&output),
+                    TaskResult::Next {
+                        output,
+                        old_problem,
+                        fallback_to_local,
+                    } => {
+                        if let Err(error) =
+                            self.finish_next_problem(output, old_problem, fallback_to_local)
+                        {
+                            self.write_text_output(&format!(
+                                "{}\n{error}",
+                                ui_text(&self.state.settings.ui_language, "next_failed")
+                            ));
+                        }
                     }
                 }
             }
+            Some(Err(TryRecvError::Disconnected)) => {
+                self.task_rx = None;
+                self.stop_busy();
+                self.write_text_output(ui_text(&self.state.settings.ui_language, "task_failed"));
+            }
+            Some(Err(TryRecvError::Empty)) | None => {}
         }
     }
 
     pub(super) fn check_background_generation(&mut self) {
-        let output = self.generate_rx.as_ref().and_then(|rx| rx.try_recv().ok());
-        let Some(result) = output else {
-            return;
+        let result = match self.generate_rx.as_ref().map(Receiver::try_recv) {
+            Some(Ok(result)) => result,
+            Some(Err(TryRecvError::Disconnected)) => AiGenerationResult::FailedToRun(
+                ui_text(&self.state.settings.ui_language, "task_failed").to_string(),
+            ),
+            Some(Err(TryRecvError::Empty)) | None => return,
         };
         self.generate_rx = None;
         self.generate_started = None;
         let old_len = self.generate_bank_len;
         let (added, reload_error) = match load_bank(&self.root) {
+            Ok(bank)
+                if !bank
+                    .iter()
+                    .any(|problem| problem.id == self.state.current_problem) =>
+            {
+                (
+                    0,
+                    Some(format!(
+                        "current problem {} is missing from the reloaded bank",
+                        self.state.current_problem
+                    )),
+                )
+            }
             Ok(bank) => {
                 let added = bank.len().saturating_sub(old_len);
                 self.bank = bank;
-                let _ = save_state(&self.root, &self.state);
+                if let Some(cursor) = self.list_cursor.as_mut() {
+                    *cursor = (*cursor).min(self.bank.len() - 1);
+                }
                 (added, None)
             }
             Err(error) => (0, Some(error.to_string())),
@@ -104,7 +130,11 @@ impl PracticodeApp {
     }
 
     pub(super) fn check_update(&mut self) {
-        let result = self.update_rx.as_ref().and_then(|rx| rx.try_recv().ok());
+        let result = match self.update_rx.as_ref().map(Receiver::try_recv) {
+            Some(Ok(result)) => Some(result),
+            Some(Err(TryRecvError::Disconnected)) => Some(UpdateCheck::Failed),
+            Some(Err(TryRecvError::Empty)) | None => None,
+        };
         let showing_update_check =
             self.output == ui_text(&self.state.settings.ui_language, "update_checking");
         if let Some(result) = result {
@@ -161,7 +191,19 @@ impl PracticodeApp {
     }
 
     pub(super) fn check_models(&mut self) {
-        let models = self.model_rx.as_ref().and_then(|rx| rx.try_recv().ok());
+        let models = match self.model_rx.as_ref().map(Receiver::try_recv) {
+            Some(Ok(models)) => Some(models),
+            Some(Err(TryRecvError::Disconnected)) => {
+                self.available_models_provider.clear();
+                Some(ModelCatalog {
+                    models: Vec::new(),
+                    message: Some(
+                        ui_text(&self.state.settings.ui_language, "model_unavailable").to_string(),
+                    ),
+                })
+            }
+            Some(Err(TryRecvError::Empty)) | None => None,
+        };
         if let Some(catalog) = models {
             self.model_rx = None;
             self.available_models = catalog.models;
@@ -777,5 +819,43 @@ mod tests {
             app.start_background_generation(String::new());
             Ok(())
         });
+    }
+
+    #[test]
+    fn disconnected_workers_clear_their_receivers() {
+        let mut app = localized_app("practicode-disconnected-workers", "en");
+
+        let (tx, rx) = std::sync::mpsc::channel::<TaskResult>();
+        drop(tx);
+        app.task_rx = Some(rx);
+        app.start_busy("ai", "codex");
+        app.check_task();
+        assert!(app.task_rx.is_none());
+        assert!(app.busy_label.is_empty());
+
+        let (tx, rx) = std::sync::mpsc::channel::<AiGenerationResult>();
+        drop(tx);
+        app.generate_rx = Some(rx);
+        app.generate_started = Some(Instant::now());
+        app.check_background_generation();
+        assert!(app.generate_rx.is_none());
+        assert!(matches!(
+            app.generate_notice,
+            Some(GenerationNotice::Failed { .. })
+        ));
+
+        let (tx, rx) = std::sync::mpsc::channel::<UpdateCheck>();
+        drop(tx);
+        app.update_rx = Some(rx);
+        app.check_update();
+        assert!(app.update_rx.is_none());
+        assert!(matches!(app.update_check, Some(UpdateCheck::Failed)));
+
+        let (tx, rx) = std::sync::mpsc::channel::<ModelCatalog>();
+        drop(tx);
+        app.model_rx = Some(rx);
+        app.check_models();
+        assert!(app.model_rx.is_none());
+        assert!(app.model_message.is_some());
     }
 }

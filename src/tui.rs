@@ -12,7 +12,7 @@ use crate::{
         normalize_ai_effort, normalize_ai_provider, normalize_difficulty, normalize_language,
         normalize_next_source, normalize_ui_language, parse_language_list, parse_topic_list,
         parse_ui_language_list, previous_problem, problem_by_id, record_pass, record_syntax_result,
-        render_syntax_lesson, save_state, set_current_syntax_lesson, syntax_cases,
+        render_syntax_lesson, save_state, save_user_text, set_current_syntax_lesson, syntax_cases,
         syntax_core_progress_count, syntax_language_name, syntax_review_due_at, template_for,
         ui_text,
     },
@@ -21,7 +21,7 @@ use crate::{
     },
     update::{CURRENT_VERSION, UpdateCheck, check_latest_version},
 };
-use anyhow::Result;
+use anyhow::{Context, Result};
 use crossterm::event::{
     self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEvent, KeyEventKind,
     KeyModifiers, MouseButton, MouseEvent, MouseEventKind,
@@ -39,7 +39,7 @@ use std::{
     fs,
     io::stdout,
     path::PathBuf,
-    sync::mpsc::{self, Receiver},
+    sync::mpsc::{self, Receiver, TryRecvError},
     thread,
     time::{Duration, Instant},
 };
@@ -291,9 +291,9 @@ impl PracticodeApp {
                 self.busy_frame = (self.busy_frame + 1) % 32;
             }
         }
-        self.save_code().ok();
+        let save_result = self.save_code();
         self.disable_mouse_capture();
-        Ok(())
+        save_result
     }
 
     pub fn handle_command_for_test(&mut self, value: &str) -> Result<()> {

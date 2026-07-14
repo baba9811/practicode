@@ -625,6 +625,38 @@ fn profile_commands_update_saved_preferences() {
 }
 
 #[test]
+fn failed_problem_open_does_not_persist_the_new_current_problem() {
+    let root = tmp_root("failed-open-state");
+    let bank = two_problem_bank(&root);
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    let path = ensure_submission(&root, &bank[1], &Default::default()).unwrap();
+    std::fs::write(path, [0xff]).unwrap();
+
+    assert!(app.handle_command_for_test("open 2").is_err());
+
+    assert_eq!(
+        load_state(&root, &bank).unwrap().current_problem,
+        bank[0].id
+    );
+}
+
+#[test]
+fn failed_next_does_not_persist_the_new_current_problem() {
+    let root = tmp_root("failed-next-state");
+    let bank = two_problem_bank(&root);
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    let path = ensure_submission(&root, &bank[1], &Default::default()).unwrap();
+    std::fs::write(path, [0xff]).unwrap();
+
+    assert!(app.handle_command_for_test("next").is_err());
+
+    assert_eq!(
+        load_state(&root, &bank).unwrap().current_problem,
+        bank[0].id
+    );
+}
+
+#[test]
 fn profile_panel_uses_korean_user_profile_copy() {
     let root = tmp_root("profile-korean-copy");
     let mut app = PracticodeApp::new(root).unwrap();

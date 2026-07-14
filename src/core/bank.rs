@@ -76,7 +76,7 @@ pub fn localized_map(entries: &[(&str, &str)]) -> HashMap<String, String> {
 
 pub fn load_bank(root: &Path) -> Result<Vec<Problem>> {
     let path = root.join(BANK_PATH);
-    if path.exists() {
+    if regular_file_exists(&path)? {
         let text = fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
         let bank: Vec<Problem> =
             serde_json::from_str(&text).with_context(|| format!("parse {}", path.display()))?;
@@ -93,8 +93,7 @@ pub fn save_bank(root: &Path, bank: &[Problem]) -> Result<()> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)?;
     }
-    fs::write(&path, serde_json::to_string_pretty(bank)? + "\n")?;
-    Ok(())
+    save_user_text(&path, &(serde_json::to_string_pretty(bank)? + "\n"))
 }
 
 fn validate_bank(bank: &[Problem], path: &Path) -> Result<()> {

@@ -164,6 +164,37 @@ test("removes a download whose checksum does not match", async (t) => {
   );
 });
 
+test("removes a binary download that exceeds the size limit", async (t) => {
+  const cacheDir = temporaryDirectory(t);
+  const asset = assetFor(process.platform, process.arch);
+  const body = Buffer.from("fixture executable that is too large\n");
+  const { server, origin } = await listen((request, response) => {
+    if (request.url === "/release/SHA256SUMS") {
+      response.end(`${digest(body)}  ${asset}\n`);
+    } else if (request.url === `/release/${asset}`) {
+      response.end(body);
+    } else {
+      response.writeHead(404).end();
+    }
+  });
+  t.after(() => close(server));
+
+  await assert.rejects(
+    ensureBinary({
+      version,
+      cacheDir,
+      releaseBaseUrl: `${origin}/release`,
+      maxBinaryBytes: 8,
+    }),
+    /unexpectedly large/i,
+  );
+  const versionDir = path.join(cacheDir, version);
+  assert.equal(
+    existsSync(versionDir) && readdirSync(versionDir).some((name) => name.includes(".tmp-")),
+    false,
+  );
+});
+
 test("reuses a verified cached binary without network access", async (t) => {
   const cacheDir = temporaryDirectory(t);
   const expected = seedCachedBinary(cacheDir, Buffer.from("cached executable\n"));

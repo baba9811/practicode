@@ -35,6 +35,8 @@ pub fn next_problem(
     let Some(problem) = problem.cloned() else {
         return Ok(None);
     };
+    let submission = ensure_submission(root, &problem, &state.settings)?;
+    fs::read_to_string(&submission).with_context(|| format!("read {}", submission.display()))?;
     state.current_problem = problem.id.clone();
     mark_history(state, &problem.id, "assigned");
     save_state(root, state)?;
@@ -64,11 +66,14 @@ pub fn previous_problem(root: &Path, bank: &[Problem], state: &mut AppState) -> 
             .cloned()
             .ok_or_else(|| anyhow!("current problem missing"));
     }
-    state.current_problem = history[index - 1].clone();
-    save_state(root, state)?;
-    problem_by_id(bank, &state.current_problem)
+    let problem = problem_by_id(bank, &history[index - 1])
         .cloned()
-        .ok_or_else(|| anyhow!("current problem missing"))
+        .ok_or_else(|| anyhow!("previous problem missing"))?;
+    let submission = ensure_submission(root, &problem, &state.settings)?;
+    fs::read_to_string(&submission).with_context(|| format!("read {}", submission.display()))?;
+    state.current_problem = problem.id.clone();
+    save_state(root, state)?;
+    Ok(problem)
 }
 
 pub fn record_pass(root: &Path, problem: &Problem, state: &mut AppState) -> Result<()> {

@@ -6,7 +6,7 @@ impl PracticodeApp {
             return self.load_syntax_editor();
         }
         let path = ensure_submission(&self.root, &self.problem, &self.state.settings)?;
-        let text = fs::read_to_string(path).unwrap_or_default();
+        let text = fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
         self.editor.set_text(&text);
         Ok(())
     }
@@ -16,14 +16,14 @@ impl PracticodeApp {
             return self.save_syntax_code();
         }
         let path = ensure_submission(&self.root, &self.problem, &self.state.settings)?;
-        fs::write(path, self.editor.text())?;
+        save_user_text(&path, &self.editor.text())?;
         Ok(())
     }
 
     pub(super) fn load_syntax_editor(&mut self) -> Result<()> {
         let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
         let path = ensure_syntax_submission(&self.root, lesson)?;
-        let text = fs::read_to_string(path).unwrap_or_default();
+        let text = fs::read_to_string(&path).with_context(|| format!("read {}", path.display()))?;
         self.editor.set_text(&text);
         Ok(())
     }
@@ -31,7 +31,7 @@ impl PracticodeApp {
     pub(super) fn save_syntax_code(&self) -> Result<()> {
         let lesson = current_syntax_lesson(&self.state, &self.state.settings.language);
         let path = ensure_syntax_submission(&self.root, lesson)?;
-        fs::write(path, self.editor.text())?;
+        save_user_text(&path, &self.editor.text())?;
         Ok(())
     }
 
@@ -54,7 +54,8 @@ impl PracticodeApp {
             .collect::<HashMap<_, _>>();
         let cursor = self
             .list_cursor
-            .unwrap_or_else(|| self.current_problem_index());
+            .unwrap_or_else(|| self.current_problem_index())
+            .min(self.bank.len().saturating_sub(1));
         let mut lines = vec![
             ui_text(lang, "problem_list_title").to_string(),
             String::new(),
@@ -110,16 +111,18 @@ impl PracticodeApp {
         }
         let cursor = self
             .list_cursor
-            .unwrap_or_else(|| self.current_problem_index()) as isize;
+            .unwrap_or_else(|| self.current_problem_index())
+            .min(self.bank.len() - 1) as isize;
         let len = self.bank.len() as isize;
         self.list_cursor = Some(((cursor + delta).rem_euclid(len)) as usize);
         self.write_text_output(&self.render_problem_list());
     }
 
     pub(super) fn open_selected_problem(&mut self) -> Result<()> {
-        if let Some(cursor) = self.list_cursor {
-            let problem_id = self.bank[cursor].id.clone();
-            self.list_cursor = None;
+        if let Some(cursor) = self.list_cursor.take()
+            && let Some(problem) = self.bank.get(cursor).or_else(|| self.bank.last())
+        {
+            let problem_id = problem.id.clone();
             self.open_problem(&problem_id)?;
         }
         Ok(())
@@ -149,9 +152,9 @@ impl PracticodeApp {
                 status: "assigned".to_string(),
             });
         }
-        save_state(&self.root, &self.state)?;
         ensure_problem_files(&self.root, &self.problem)?;
         self.load_code_editor()?;
+        save_state(&self.root, &self.state)?;
         self.show_output = false;
         self.practice_view = PracticeView::Problem;
         self.focus = Focus::Left;
@@ -191,11 +194,19 @@ impl PracticodeApp {
             .join("submissions")
             .join(&problem.id)
             .join(format!("solution.{}", ext_for(&language)));
-        if !path.exists() {
-            return ("missing".to_string(), format!("({language})"));
-        }
-        let content = fs::read_to_string(&path).unwrap_or_default();
         let relative = path.strip_prefix(&self.root).unwrap_or(&path).display();
+        match fs::symlink_metadata(&path) {
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                return ("missing".to_string(), format!("({language})"));
+            }
+            Ok(metadata) if metadata.file_type().is_file() => {}
+            Ok(_) | Err(_) => {
+                return ("unreadable".to_string(), format!("({relative})"));
+            }
+        }
+        let Ok(content) = fs::read_to_string(&path) else {
+            return ("unreadable".to_string(), format!("({relative})"));
+        };
         if content == template_for(&language) {
             ("template".to_string(), format!("({relative})"))
         } else if content.trim().is_empty() {
@@ -259,5 +270,30 @@ mod tests {
             app.output,
             ui_text("ja", "problem_not_found").replace("{query}", "does-not-exist")
         );
+    }
+
+    #[test]
+    fn unreadable_submission_does_not_clear_the_editor() {
+        let mut app = app("en");
+        app.editor.set_text("keep this text");
+        let path = ensure_submission(&app.root, &app.problem, &app.state.settings).unwrap();
+        std::fs::write(&path, [0xff]).unwrap();
+
+        assert!(app.load_code_editor().is_err());
+        assert_eq!(app.editor.text(), "keep this text");
+        assert_eq!(std::fs::read(path).unwrap(), [0xff]);
+        assert_eq!(app.submission_status(&app.problem).0, "unreadable");
+    }
+
+    #[test]
+    fn opening_a_stale_problem_cursor_clamps_to_the_bank() {
+        let mut app = app("en");
+        let expected = app.bank.last().unwrap().id.clone();
+        app.list_cursor = Some(app.bank.len() + 10);
+
+        app.open_selected_problem().unwrap();
+
+        assert_eq!(app.problem.id, expected);
+        assert!(app.list_cursor.is_none());
     }
 }

@@ -461,11 +461,11 @@ pub fn ensure_syntax_submission(root: &Path, lesson: &SyntaxLesson) -> Result<Pa
         .join(lesson.language)
         .join(lesson.id)
         .join(format!("exercise.{}", ext_for(lesson.language)));
-    if !path.exists() {
+    if !regular_file_exists(&path)? {
         if let Some(parent) = path.parent() {
-            fs::create_dir_all(parent)?;
+            create_dir_all_beneath(root, parent)?;
         }
-        fs::write(&path, lesson.exercise.starter)?;
+        save_user_text(&path, lesson.exercise.starter)?;
     }
     Ok(path)
 }

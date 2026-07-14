@@ -2,9 +2,9 @@ use super::*;
 
 pub fn ensure_problem_files(root: &Path, problem: &Problem) -> Result<()> {
     let problem_dir = root.join("problems").join(&problem.id);
-    fs::create_dir_all(&problem_dir)?;
+    create_dir_all_beneath(root, &problem_dir)?;
     let readme = problem_dir.join("README.md");
-    if readme.exists() {
+    if regular_file_exists(&readme)? {
         return Ok(());
     }
     let examples = problem
@@ -13,9 +13,9 @@ pub fn ensure_problem_files(root: &Path, problem: &Problem) -> Result<()> {
         .map(|case| format!("input:\n{}output:\n{}", case.input, case.output))
         .collect::<Vec<_>>()
         .join("\n");
-    fs::write(
-        readme,
-        format!(
+    save_user_text(
+        &readme,
+        &format!(
             "# {}. {}\n\n난이도: {}\n\n{}\n\n## 입력\n\n{}\n\n## 출력\n\n{}\n\n## 예시\n\n```text\n{}\n```\n",
             problem.id,
             localized(&problem.title, "ko"),
@@ -25,17 +25,16 @@ pub fn ensure_problem_files(root: &Path, problem: &Problem) -> Result<()> {
             localized(&problem.output, "ko"),
             examples
         ),
-    )?;
-    Ok(())
+    )
 }
 
 pub fn upsert_problem_index(root: &Path, problem: &Problem, status: &str) -> Result<()> {
     let index = root.join("problems/INDEX.md");
     if let Some(parent) = index.parent() {
-        fs::create_dir_all(parent)?;
+        create_dir_all_beneath(root, parent)?;
     }
     let mut rows: HashMap<String, (String, String, String, String)> = HashMap::new();
-    if index.exists() {
+    if regular_file_exists(&index)? {
         for line in fs::read_to_string(&index)?.lines() {
             let parts = line
                 .trim()
@@ -82,11 +81,10 @@ pub fn upsert_problem_index(root: &Path, problem: &Problem, status: &str) -> Res
         })
         .collect::<Vec<_>>()
         .join("\n");
-    fs::write(
-        index,
-        format!(
+    save_user_text(
+        &index,
+        &format!(
             "# Problem Index\n\n| # | Slug | Difficulty | Topics | Status |\n|---|------|------------|--------|--------|\n{body}\n"
         ),
-    )?;
-    Ok(())
+    )
 }

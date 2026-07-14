@@ -4,12 +4,13 @@ use common::{tmp_root, two_problem_bank};
 use practicode::{
     core::{
         AppState, HistoryItem, JudgeFailureKind, LANGUAGES, LessonMastery, MasteryStage, Settings,
-        SyntaxKind, SyntaxTrack, due_syntax_lessons, ensure_submission, ensure_syntax_submission,
-        judge, judge_path, load_bank, load_state, localized, migrate_syntax_mastery, next_problem,
-        normalize_judge_output, parse_language_list, parse_ui_language_list, problem_by_id,
-        record_pass, record_syntax_pass, record_syntax_result, record_syntax_test_out,
-        render_problem, render_problem_tui, render_syntax_lesson, save_bank, save_state,
-        syntax_cases, syntax_lesson_completed, syntax_lessons_for, syntax_progress_count,
+        SyntaxKind, SyntaxTrack, due_syntax_lessons, ensure_problem_files, ensure_submission,
+        ensure_syntax_submission, judge, judge_path, load_bank, load_state, localized,
+        migrate_syntax_mastery, next_problem, normalize_judge_output, parse_language_list,
+        parse_ui_language_list, problem_by_id, record_pass, record_syntax_pass,
+        record_syntax_result, record_syntax_test_out, render_problem, render_problem_tui,
+        render_syntax_lesson, save_bank, save_state, syntax_cases, syntax_lesson_completed,
+        syntax_lessons_for, syntax_progress_count, upsert_problem_index,
     },
     process::which,
     text::render_markdown_plain,
@@ -406,6 +407,86 @@ fn load_bank_rejects_empty_custom_bank() {
     assert!(error.contains("at least one problem"));
 }
 
+#[cfg(unix)]
+#[test]
+fn state_and_bank_files_reject_symlinks() {
+    use std::os::unix::fs::symlink;
+
+    let source_root = tmp_root("metadata-symlink-source");
+    let bank = load_bank(&source_root).unwrap();
+    let state = test_state();
+    save_bank(&source_root, &bank).unwrap();
+    save_state(&source_root, &state).unwrap();
+
+    let root = tmp_root("metadata-symlink-destination");
+    symlink(
+        source_root.join("problem_bank.json"),
+        root.join("problem_bank.json"),
+    )
+    .unwrap();
+    symlink(
+        source_root.join("problem-state.json"),
+        root.join("problem-state.json"),
+    )
+    .unwrap();
+
+    assert!(load_bank(&root).is_err());
+    assert!(load_state(&root, &bank).is_err());
+    assert!(save_bank(&root, &bank).is_err());
+    assert!(save_state(&root, &state).is_err());
+    assert!(
+        fs::symlink_metadata(root.join("problem_bank.json"))
+            .unwrap()
+            .file_type()
+            .is_symlink()
+    );
+    assert!(
+        fs::symlink_metadata(root.join("problem-state.json"))
+            .unwrap()
+            .file_type()
+            .is_symlink()
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn generated_problem_files_do_not_follow_symlinks() {
+    use std::os::unix::fs::symlink;
+
+    let root = tmp_root("problem-file-symlinks");
+    let problem = load_bank(&root).unwrap().remove(0);
+    let outside = tmp_root("problem-file-symlinks-outside");
+    let readme = root.join("problems/001-hello-world/README.md");
+    fs::create_dir_all(readme.parent().unwrap()).unwrap();
+    symlink(outside.join("README.md"), &readme).unwrap();
+
+    assert!(ensure_problem_files(&root, &problem).is_err());
+    assert!(!outside.join("README.md").exists());
+
+    let index = root.join("problems/INDEX.md");
+    let outside_index = outside.join("INDEX.md");
+    fs::write(&outside_index, "keep\n").unwrap();
+    symlink(&outside_index, &index).unwrap();
+    assert!(upsert_problem_index(&root, &problem, "assigned").is_err());
+    assert_eq!(fs::read_to_string(outside_index).unwrap(), "keep\n");
+
+    let parent_root = tmp_root("problem-parent-symlinks");
+    let parent_outside = tmp_root("problem-parent-symlinks-outside");
+    symlink(&parent_outside, parent_root.join("problems")).unwrap();
+    assert!(ensure_problem_files(&parent_root, &problem).is_err());
+    assert!(!parent_outside.join("001-hello-world/README.md").exists());
+
+    let submission_root = tmp_root("submission-parent-symlink");
+    let submission_outside = tmp_root("submission-parent-symlink-outside");
+    symlink(&submission_outside, submission_root.join("submissions")).unwrap();
+    assert!(ensure_submission(&submission_root, &problem, &Settings::default()).is_err());
+    assert!(
+        !submission_outside
+            .join("001-hello-world/solution.py")
+            .exists()
+    );
+}
+
 #[test]
 fn load_bank_rejects_invalid_problem_shape() {
     let root = tmp_root("invalid-bank");
@@ -632,6 +713,24 @@ fn state_save_does_not_follow_a_backup_symlink_into_submissions() {
             .is_symlink()
     );
     assert_eq!(fs::read(backup).unwrap(), previous);
+}
+
+#[test]
+#[cfg(unix)]
+fn ensure_submission_rejects_a_symlink() {
+    use std::os::unix::fs::symlink;
+
+    let root = tmp_root("submission-symlink");
+    let bank = load_bank(&root).unwrap();
+    let settings = Settings::default();
+    let outside = root.join("outside.py");
+    fs::write(&outside, "secret\n").unwrap();
+    let submission = root.join("submissions/001-hello-world/solution.py");
+    fs::create_dir_all(submission.parent().unwrap()).unwrap();
+    symlink(&outside, &submission).unwrap();
+
+    assert!(ensure_submission(&root, &bank[0], &settings).is_err());
+    assert_eq!(fs::read_to_string(outside).unwrap(), "secret\n");
 }
 
 #[test]
@@ -928,6 +1027,62 @@ fn java_compiler_errors_are_compile_failures() {
 
     assert_eq!(result.failure_kind, Some(JudgeFailureKind::Compile));
     assert!(result.output.contains("Solution.java"));
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn judge_runs_a_submission_below_a_non_utf8_data_path() {
+    use std::{ffi::OsString, os::unix::ffi::OsStringExt};
+
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let parent = tmp_root("judge-non-utf8-parent");
+    let root = parent.join(OsString::from_vec(b"data-\xff".to_vec()));
+    fs::create_dir_all(&root).unwrap();
+    let path = root.join("solution.py");
+    fs::write(&path, "print('works')\n").unwrap();
+
+    let result = judge_path(
+        &root,
+        "non-utf8",
+        &path,
+        "python",
+        &[practicode::core::IoCase {
+            input: String::new(),
+            output: "works\n".to_string(),
+        }],
+    );
+
+    assert!(result.passed, "{}", result.output);
+}
+
+#[test]
+fn java_judge_does_not_run_a_stale_solution_class() {
+    if which("javac").is_none() || which("java").is_none() {
+        return;
+    }
+    let root = tmp_root("judge-java-stale-class");
+    let path = root.join("Solution.java");
+    let cases = [practicode::core::IoCase {
+        input: String::new(),
+        output: "current\n".to_string(),
+    }];
+    fs::write(
+        &path,
+        "class Solution { public static void main(String[] args) { System.out.println(\"current\"); } }\n",
+    )
+    .unwrap();
+    assert!(judge_path(&root, "stale-class", &path, "java", &cases).passed);
+
+    fs::write(
+        &path,
+        "class Other { public static void main(String[] args) { System.out.println(\"current\"); } }\n",
+    )
+    .unwrap();
+    let result = judge_path(&root, "stale-class", &path, "java", &cases);
+
+    assert!(!result.passed, "stale Solution.class was executed");
 }
 
 #[test]

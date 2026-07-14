@@ -35,20 +35,20 @@ Inside the TUI:
 
 pub fn run_cli() -> Result<()> {
     let args = env::args().skip(1).collect::<Vec<_>>();
-    if args
-        .iter()
-        .any(|arg| matches!(arg.as_str(), "-h" | "--help"))
-    {
-        println!("{}", cli_help_text());
-        return Ok(());
-    }
-    if args
-        .iter()
-        .any(|arg| matches!(arg.as_str(), "-V" | "--version"))
-    {
-        println!("practicode {}", update::CURRENT_VERSION);
-        return Ok(());
-    }
+    let smoke = match args.as_slice() {
+        [] => false,
+        [arg] if matches!(arg.as_str(), "-h" | "--help") => {
+            println!("{}", cli_help_text());
+            return Ok(());
+        }
+        [arg] if matches!(arg.as_str(), "-V" | "--version") => {
+            println!("practicode {}", update::CURRENT_VERSION);
+            return Ok(());
+        }
+        [arg] if arg == "--smoke" => true,
+        [arg] => bail!("unknown argument: {arg}"),
+        _ => bail!("expected at most one argument"),
+    };
 
     let launch_dir = env::current_dir().context("read current directory")?;
     let root = absolute_data_root(
@@ -60,7 +60,7 @@ pub fn run_cli() -> Result<()> {
         )?,
     );
     migrate_legacy_data(&launch_dir, &root)?;
-    if args.iter().any(|arg| arg == "--smoke") {
+    if smoke {
         let bank = core::load_bank(&root)?;
         let state = core::load_state(&root, &bank)?;
         let problem = core::problem_by_id(&bank, &state.current_problem).unwrap_or(&bank[0]);
@@ -75,6 +75,7 @@ pub fn run_cli() -> Result<()> {
     let mut terminal = ratatui::init();
     let _ = execute!(stdout(), SetCursorStyle::SteadyBar);
     let result = app.run(&mut terminal);
+    process::terminate_active_commands();
     ratatui::restore();
     let _ = execute!(
         stdout(),

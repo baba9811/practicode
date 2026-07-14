@@ -44,7 +44,14 @@ impl PracticodeApp {
             "language" | "lang" if arg.is_empty() => self.action_cycle_language()?,
             "language" | "lang" if LANGUAGES.contains(&arg) => self.set_language(arg)?,
             "ui" if arg.is_empty() => self.action_toggle_ui_language()?,
-            "ui" => self.set_ui_language(&normalize_ui_language(arg))?,
+            "ui" if arg
+                .to_lowercase()
+                .split(['-', '_'])
+                .next()
+                .is_some_and(|language| UI_LANGUAGES.contains(&language)) =>
+            {
+                self.set_ui_language(&normalize_ui_language(arg))?
+            }
             "theme" if arg.is_empty() => self.action_toggle_theme()?,
             "theme" if THEMES.contains(&arg) => self.set_theme(arg)?,
             "profile" | "settings" if arg.is_empty() => self.show_profile(),
@@ -230,5 +237,23 @@ mod tests {
             app.output,
             ui_text("en", "unknown_command").replace("{command}", "vimbad")
         );
+    }
+
+    #[test]
+    fn invalid_setting_commands_leave_settings_unchanged() {
+        let mut app = app("ko");
+        app.state.settings.ai_effort = "high".to_string();
+        app.state.settings.generate_languages = vec!["rust".to_string()];
+        app.state.settings.generate_ui_languages = vec!["ko".to_string()];
+
+        app.handle_command("ui klingon").unwrap();
+        app.handle_command("effort impossible").unwrap();
+        app.handle_command("generate-languages ruby").unwrap();
+        app.handle_command("generate-ui klingon").unwrap();
+
+        assert_eq!(app.state.settings.ui_language, "ko");
+        assert_eq!(app.state.settings.ai_effort, "high");
+        assert_eq!(app.state.settings.generate_languages, ["rust"]);
+        assert_eq!(app.state.settings.generate_ui_languages, ["ko"]);
     }
 }

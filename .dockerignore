@@ -21,6 +21,7 @@
 .vscode
 .worktrees
 coverage
+docs/superpowers
 node_modules
 problems
 submissions

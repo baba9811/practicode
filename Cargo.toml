@@ -12,7 +12,7 @@ categories = ["command-line-utilities", "development-tools", "text-editors"]
 include = [
     "/src/**",
     "/assets/**",
-    "/docs/**",
+    "/docs/*.md",
     "/Cargo.lock",
     "/LICENSE",
     "/README.md",

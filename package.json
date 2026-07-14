@@ -1,6 +1,6 @@
 {
   "name": "practicode",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Offline-first programming language lessons and coding practice in a Rust terminal UI.",
   "license": "MIT",
   "repository": {

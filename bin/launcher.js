@@ -142,7 +142,16 @@ async function downloadFile(url, filename, timeoutMs, maxBytes) {
       callback(null, chunk);
     },
   });
-  await pipeline(response, tap, createWriteStream(filename, { flags: "wx", mode: 0o600 }));
+  const output = createWriteStream(filename, { flags: "wx", mode: 0o600 });
+  const outputClosed = new Promise((resolve) => output.once("close", resolve));
+  try {
+    await pipeline(response, tap, output);
+  } catch (error) {
+    // pipeline can reject before an asynchronously opened file is closed. Windows
+    // cannot remove that temporary file until the handle has actually closed.
+    await outputClosed;
+    throw error;
+  }
   return hash.digest("hex");
 }
 

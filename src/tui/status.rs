@@ -13,6 +13,9 @@ impl PracticodeApp {
         if width > 120 {
             return self.status_text();
         }
+        if self.mode == AppMode::Learn {
+            return format!(" {} ", self.learning_primary_hint());
+        }
         let lang = &self.state.settings.ui_language;
         let key = match self.mode {
             AppMode::Home => "hint_home_compact",
@@ -221,15 +224,8 @@ impl PracticodeApp {
         if self.mode == AppMode::Home && !self.show_output {
             return ui_text(lang, "home_help");
         }
-        if self.mode == AppMode::Learn
-            && !self.show_output
-            && self.learning_session.view() == LearningView::Result
-            && self.focus != Focus::Command
-        {
-            return ui_text(lang, "hint_result");
-        }
         if self.mode == AppMode::Learn && !self.show_output && self.focus != Focus::Command {
-            return ui_text(lang, "hint_learn");
+            return self.learning_primary_hint();
         }
         if self.mode == AppMode::Problems && !self.show_output && self.focus != Focus::Command {
             return ui_text(lang, "hint_problem");
@@ -242,6 +238,18 @@ impl PracticodeApp {
             (Focus::Code, _, _) => ui_text(lang, "hint_problem"),
             _ => ui_text(lang, "hint_idle"),
         }
+    }
+
+    fn learning_primary_hint(&self) -> &'static str {
+        let key = match self.learning_session.step() {
+            LearningStep::Exercise if self.learning_session.view() == LearningView::Result => {
+                "learning_primary_edit"
+            }
+            LearningStep::Exercise => "learning_primary_run",
+            LearningStep::Complete => "learning_primary_home",
+            _ => "learning_primary_next",
+        };
+        ui_text(&self.state.settings.ui_language, key)
     }
 
     pub(super) fn help_text(&self) -> String {

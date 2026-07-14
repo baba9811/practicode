@@ -303,6 +303,17 @@ impl PracticodeApp {
             }
             return Ok(());
         }
+        if self.mode == AppMode::Learn && key.code == KeyCode::Enter {
+            match self.learning_session.step() {
+                LearningStep::Complete => self.action_home()?,
+                LearningStep::Exercise if self.learning_session.view() == LearningView::Result => {
+                    self.action_edit()?
+                }
+                LearningStep::Exercise => {}
+                _ => self.action_next_learning()?,
+            }
+            return Ok(());
+        }
         self.handle_global_shortcut(key)
     }
 

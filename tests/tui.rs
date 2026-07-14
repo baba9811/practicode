@@ -953,6 +953,162 @@ fn guided_session_queues_two_due_reviews_before_the_next_new_core_lesson() {
 }
 
 #[test]
+fn guided_review_shows_task_context() {
+    let root = tmp_root("guided-review-task-context");
+    let bank = load_bank(&root).unwrap();
+    let mut state = load_state(&root, &bank).unwrap();
+    state.syntax_mastery.insert(
+        "python".to_string(),
+        [(
+            "py-output".to_string(),
+            LessonMastery {
+                stage: MasteryStage::Practiced,
+                review_due_at: 0,
+                attempts: 1,
+            },
+        )]
+        .into_iter()
+        .collect(),
+    );
+    save_state(&root, &state).unwrap();
+    let mut app = PracticodeApp::new(root).unwrap();
+
+    app.handle_command_for_test("learn python").unwrap();
+
+    let output = app.output_for_test();
+    assert_eq!(app.learning_step_for_test(), LearningStep::Review);
+    assert!(output.contains("1/4"), "{output}");
+    assert!(output.contains("Read the name and score"), "{output}");
+    assert!(output.contains("Ada 7"), "{output}");
+    assert!(output.contains("Ada:7"), "{output}");
+}
+
+#[test]
+fn guided_enter_advances_reading_steps() {
+    let root = tmp_root("guided-enter-steps");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+    assert_eq!(app.learning_step_for_test(), LearningStep::Predict);
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+    assert_eq!(app.learning_step_for_test(), LearningStep::Exercise);
+}
+
+#[test]
+fn guided_enter_from_failed_result_returns_to_code() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("guided-enter-failed-result");
+    let mut app = PracticodeApp::new(root).unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::F(5), KeyModifiers::NONE))
+        .unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(
+        app.status_text_for_test().contains("ACTIVE: Code"),
+        "{}",
+        app.status_text_for_test()
+    );
+    assert_eq!(app.learning_step_for_test(), LearningStep::Exercise);
+}
+
+#[test]
+fn guided_enter_from_complete_opens_home() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("guided-enter-complete");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    let lesson = syntax_lessons_for("python")[0];
+    std::fs::write(
+        ensure_syntax_submission(&root, lesson).unwrap(),
+        PY_OUTPUT_SOLUTION,
+    )
+    .unwrap();
+    app.handle_command_for_test("code").unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::F(5), KeyModifiers::NONE))
+        .unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+    assert_eq!(app.learning_step_for_test(), LearningStep::Complete);
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    assert!(
+        app.status_text_for_test().contains("| home |"),
+        "{}",
+        app.status_text_for_test()
+    );
+}
+
+#[test]
+fn guided_enter_in_editor_inserts_newline_without_advancing() {
+    let root = tmp_root("guided-enter-editor");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    let path = ensure_syntax_submission(&root, syntax_lessons_for("python")[0]).unwrap();
+    let before = std::fs::read_to_string(&path).unwrap();
+
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+
+    let after = std::fs::read_to_string(path).unwrap();
+    assert_eq!(
+        after.matches('\n').count(),
+        before.matches('\n').count() + 1
+    );
+    assert_eq!(app.learning_step_for_test(), LearningStep::Exercise);
+}
+
+#[test]
+fn guided_status_shows_current_primary_action() {
+    if which("python3").or_else(|| which("python")).is_none() {
+        return;
+    }
+    let root = tmp_root("guided-primary-action");
+    let mut app = PracticodeApp::new(root.clone()).unwrap();
+    app.handle_command_for_test("learn python").unwrap();
+    assert!(app.status_text_for_test().contains("Enter: Next"));
+
+    app.handle_command_for_test("next").unwrap();
+    app.handle_command_for_test("next").unwrap();
+    assert!(app.status_text_for_test().contains("F5: Run"));
+    app.handle_key_for_test(KeyEvent::new(KeyCode::F(5), KeyModifiers::NONE))
+        .unwrap();
+    assert!(app.status_text_for_test().contains("Enter: Edit"));
+
+    let lesson = syntax_lessons_for("python")[0];
+    std::fs::write(
+        ensure_syntax_submission(&root, lesson).unwrap(),
+        PY_OUTPUT_SOLUTION,
+    )
+    .unwrap();
+    app.handle_command_for_test("code").unwrap();
+    app.handle_key_for_test(KeyEvent::new(KeyCode::F(5), KeyModifiers::NONE))
+        .unwrap();
+    assert!(app.status_text_for_test().contains("Enter: Next"));
+    app.handle_key_for_test(KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE))
+        .unwrap();
+    assert!(app.status_text_for_test().contains("Enter: Home"));
+}
+
+#[test]
 fn guided_session_next_cannot_bypass_an_unpassed_exercise() {
     let root = tmp_root("guided-session-gate");
     let mut app = PracticodeApp::new(root).unwrap();

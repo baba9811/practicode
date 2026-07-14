@@ -280,8 +280,24 @@ pub(super) fn render_learning_step(
         LearningStep::Reflect => crate::core::localized_syntax_transfer_trap(lesson, language),
         LearningStep::Complete => unreachable!(),
     };
+    let context = if step == LearningStep::Exercise {
+        String::new()
+    } else {
+        format!(
+            "\n\n## {}\n\n{}",
+            learning_step_label(language, LearningStep::Exercise),
+            learning_exercise(lesson, language)
+        )
+    };
+    let position = match step {
+        LearningStep::Review | LearningStep::Delta => 1,
+        LearningStep::Predict => 2,
+        LearningStep::Exercise => 3,
+        LearningStep::Reflect => 4,
+        LearningStep::Complete => unreachable!(),
+    };
     format!(
-        "# {}: {title}\n\n{body}",
+        "# {position}/4 · {}: {title}\n\n{body}{context}",
         learning_step_label(language, step)
     )
 }

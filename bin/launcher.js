@@ -63,6 +63,16 @@ function checksumFor(manifest, asset) {
   throw new Error(`SHA256SUMS does not contain ${asset}`);
 }
 
+function npmUpdateCommand(platform = process.platform, env = process.env) {
+  if (platform === "win32") {
+    return {
+      command: env.ComSpec || env.COMSPEC || "cmd.exe",
+      args: ["/d", "/s", "/c", "npm.cmd update -g practicode"],
+    };
+  }
+  return { command: "npm", args: ["update", "-g", "practicode"] };
+}
+
 function sha256File(filename) {
   return new Promise((resolve, reject) => {
     const hash = createHash("sha256");
@@ -371,7 +381,8 @@ async function main(args, root = path.resolve(__dirname, "..")) {
     throw new Error(`Failed to run cached Practicode binary: ${run.error.message}`);
   }
   if (run.status === NPM_UPDATE_EXIT_CODE) {
-    const update = spawnSync("npm", ["update", "-g", "practicode"], {
+    const npmUpdate = npmUpdateCommand();
+    const update = spawnSync(npmUpdate.command, npmUpdate.args, {
       cwd: process.cwd(),
       stdio: "inherit",
     });
@@ -390,5 +401,6 @@ module.exports = {
   checksumFor,
   ensureBinary,
   main,
+  npmUpdateCommand,
   sha256File,
 };

@@ -20,6 +20,7 @@ const test = require("node:test");
 const {
   assetFor,
   ensureBinary,
+  npmUpdateCommand,
 } = require("../bin/launcher.js");
 
 const root = path.resolve(__dirname, "..");
@@ -70,6 +71,17 @@ test("maps every published platform and rejects unsupported targets", () => {
   assert.equal(assetFor("win32", "x64"), "practicode-x86_64-pc-windows-msvc.exe");
   assert.throws(() => assetFor("freebsd", "x64"), /Unsupported platform/);
   assert.throws(() => assetFor("win32", "arm64"), /Unsupported platform/);
+});
+
+test("uses the platform command required by the npm shim", () => {
+  assert.deepEqual(npmUpdateCommand("linux", {}), {
+    command: "npm",
+    args: ["update", "-g", "practicode"],
+  });
+  assert.deepEqual(npmUpdateCommand("win32", { ComSpec: "C:\\Windows\\cmd.exe" }), {
+    command: "C:\\Windows\\cmd.exe",
+    args: ["/d", "/s", "/c", "npm.cmd update -g practicode"],
+  });
 });
 
 test("follows redirects, verifies SHA-256, and installs atomically", async (t) => {

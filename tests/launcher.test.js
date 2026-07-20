@@ -266,6 +266,65 @@ test("forwards arguments and never invokes Cargo on the native path", { skip: pr
   assert.equal(existsSync(cargoMarker), false);
 });
 
+test("native launcher identifies the cached binary as an npm install", { skip: process.platform === "win32" }, (t) => {
+  const directory = temporaryDirectory(t);
+  const cacheDir = path.join(directory, "cache");
+  const methodFile = path.join(directory, "install-method.txt");
+  seedCachedBinary(
+    cacheDir,
+    Buffer.from(
+      "#!/bin/sh\nprintf '%s' \"$PRACTICODE_INSTALL_METHOD\" > \"$PRACTICODE_METHOD_FILE\"\n",
+    ),
+  );
+
+  const result = spawnSync(process.execPath, [path.join(root, "bin", "practicode.js")], {
+    cwd: directory,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      PRACTICODE_CACHE_DIR: cacheDir,
+      PRACTICODE_METHOD_FILE: methodFile,
+      PRACTICODE_RELEASE_BASE_URL: "http://127.0.0.1:1/unreachable",
+    },
+    timeout: 5_000,
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(readFileSync(methodFile, "utf8"), "npm");
+});
+
+test("reserved native exit runs npm update and returns its status", { skip: process.platform === "win32" }, (t) => {
+  const directory = temporaryDirectory(t);
+  const cacheDir = path.join(directory, "cache");
+  const fakeBin = path.join(directory, "bin");
+  const npmArgsFile = path.join(directory, "npm-args.txt");
+  mkdirSync(fakeBin);
+  const npm = path.join(fakeBin, "npm");
+  writeFileSync(
+    npm,
+    "#!/bin/sh\nprintf '%s\\n' \"$@\" > \"$PRACTICODE_NPM_ARGS_FILE\"\nexit 17\n",
+  );
+  chmodSync(npm, 0o755);
+  seedCachedBinary(cacheDir, Buffer.from("#!/bin/sh\nexit 42\n"));
+
+  const result = spawnSync(process.execPath, [path.join(root, "bin", "practicode.js")], {
+    cwd: directory,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      PATH: `${fakeBin}${path.delimiter}${process.env.PATH || ""}`,
+      PRACTICODE_CACHE_DIR: cacheDir,
+      PRACTICODE_NPM_ARGS_FILE: npmArgsFile,
+      PRACTICODE_RELEASE_BASE_URL: "http://127.0.0.1:1/unreachable",
+    },
+    timeout: 5_000,
+  });
+
+  assert.equal(existsSync(npmArgsFile), true, result.stderr);
+  assert.equal(readFileSync(npmArgsFile, "utf8"), "update\n-g\npracticode\n");
+  assert.equal(result.status, 17, result.stderr);
+});
+
 test("docker sandbox mounts only its data home writable", { skip: process.platform === "win32" }, (t) => {
   const directory = temporaryDirectory(t);
   const fakeBin = path.join(directory, "bin");

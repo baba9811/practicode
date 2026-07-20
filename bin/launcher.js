@@ -25,6 +25,7 @@ const MAX_REDIRECTS = 5;
 const MAX_MANIFEST_BYTES = 1024 * 1024;
 const MAX_BINARY_BYTES = 128 * 1024 * 1024;
 const STALE_TEMPORARY_FILE_MS = 60 * 60 * 1000;
+const NPM_UPDATE_EXIT_CODE = 42;
 const RELEASE_ROOT = "https://github.com/baba9811/practicode/releases/download";
 
 function assetFor(platform, arch) {
@@ -361,9 +362,24 @@ async function main(args, root = path.resolve(__dirname, "..")) {
     releaseBaseUrl:
       process.env.PRACTICODE_RELEASE_BASE_URL || `${RELEASE_ROOT}/v${packageJson.version}`,
   });
-  const run = spawnSync(binary, args, { cwd: process.cwd(), stdio: "inherit" });
+  const run = spawnSync(binary, args, {
+    cwd: process.cwd(),
+    stdio: "inherit",
+    env: { ...process.env, PRACTICODE_INSTALL_METHOD: "npm" },
+  });
   if (run.error) {
     throw new Error(`Failed to run cached Practicode binary: ${run.error.message}`);
+  }
+  if (run.status === NPM_UPDATE_EXIT_CODE) {
+    const update = spawnSync("npm", ["update", "-g", "practicode"], {
+      cwd: process.cwd(),
+      stdio: "inherit",
+    });
+    if (update.error) {
+      throw new Error(`Failed to update Practicode with npm: ${update.error.message}`);
+    }
+    if (update.status === 0) console.error("practicode updated. Run practicode again.");
+    return update.status ?? 1;
   }
   return run.status ?? 1;
 }

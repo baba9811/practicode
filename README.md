@@ -207,6 +207,8 @@ npm update -g practicode
 
 Practicode checks npm for newer versions in the background. Disable that check with `PRACTICODE_NO_UPDATE_CHECK=1`.
 
+When an update is found, npm installs can apply it from the startup prompt. **Later** keeps the reminder for the current run and asks again on the next launch; **Skip this version** waits until a newer release is available. Cargo and direct binary installs show update commands instead of running an installer automatically.
+
 ## Local Data And Privacy
 
 User data lives under `~/.practicode` by default (`%USERPROFILE%\.practicode` on Windows):
